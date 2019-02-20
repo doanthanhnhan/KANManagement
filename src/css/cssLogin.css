@@ -52,15 +52,15 @@
 .label-color{
     -fx-text-fill: -fx-primarytextcolor;
 }
-.jfx-combo-box{
+/*.jfx-combo-box{
     -fx-text-fill: -fx-primarytext;
     -fx-font-size : 12pt;
     -jfx-focus-color: -fx-secondary;
     -fx-text-fill: derive(-fx-secondary, 20%);
     
     -fx-fill: -fx-secondary;
-}
-.jfx-combo-box .cell {
+}*/
+/*.jfx-combo-box .cell {
     -fx-background-color:  -fx-primary;
     -fx-text-fill: -fx-secondary;    
-}
+}*/

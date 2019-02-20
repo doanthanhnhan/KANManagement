@@ -4,17 +4,19 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="911.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLRegisterController">
+<AnchorPane id="AnchorPane" prefHeight="950.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLRegisterController">
    <children>
-      <VBox layoutY="-14.0" prefHeight="926.0" prefWidth="649.0">
+      <VBox layoutY="-14.0" prefHeight="966.0" prefWidth="649.0">
          <children>
             <HBox prefHeight="129.0" prefWidth="649.0">
                <children>
@@ -151,16 +153,35 @@
             </HBox>
             <HBox prefHeight="80.0" prefWidth="200.0">
                <children>
-                  <JFXDatePicker fx:id="newBirthday" defaultColor="#6447cd" onAction="#Format_Show_Calender" prefHeight="30.0" prefWidth="512.0" promptText="Select Birthday" styleClass="text-field" stylesheets="@../css/cssLogin.css">
+                  <JFXDatePicker fx:id="newBirthday" defaultColor="#6447cd" onAction="#Format_Show_Calender" prefHeight="30.0" prefWidth="235.0" promptText="Select Birthday">
                      <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
+                        <Insets left="80.0" top="20.0" />
                      </HBox.margin>
                   </JFXDatePicker>
+                  <JFXRadioButton fx:id="sexMale" selected="true" text="Male">
+                     <HBox.margin>
+                        <Insets left="30.0" top="30.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="newSex" />
+                     </toggleGroup>
+                  </JFXRadioButton>
+                  <JFXRadioButton fx:id="sexFemale" text="Female" toggleGroup="$newSex">
+                     <HBox.margin>
+                        <Insets left="40.0" right="80.0" top="30.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXRadioButton>
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
                <children>
-                  <JFXButton fx:id="btnRegister" buttonType="RAISED" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Register">
+                  <JFXButton buttonType="RAISED" onAction="#btnSubmitRegister" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Register">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

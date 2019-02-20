@@ -9,13 +9,16 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import models.DAO;
 import models.InfoEmployee;
 import models.formatCalender;
 
@@ -49,13 +52,40 @@ public class FXMLRegisterController implements Initializable {
     @FXML
     private JFXButton btnRegister;
     @FXML
+    private JFXRadioButton sexMale;
+    @FXML
+    private JFXRadioButton sexFemale;
+    @FXML
     public void Format_Show_Calender(){
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, newBirthday);
     }
     @FXML
     public void btnSubmitRegister(){
-        System.out.println(newSerectQuestion.getValue());
+        String User = newUsername.getText();
+        String Pass = newPassword.getText();
+        String ConPass = newConfirmPassword.getText();
+        String Id = newIdEmployee.getText();
+        String Question = (String) newSerectQuestion.getValue();
+        String Answer = newSerectAnswer.getText();
+        String FName = newFirstname.getText();
+        String MName = newMidname.getText();
+        String LName = newLastname.getText();
+        LocalDate birthday = newBirthday.getValue();
+        String Sex;
+        if(sexMale.selectedProperty().getValue())
+            Sex = sexMale.getText();
+        else
+            Sex = sexFemale.getText();
+        DAO.newEmployee(User, Pass, Id, Question, Answer, FName, MName, LName, birthday, Sex);
+        newUsername.setText("");
+        newPassword.setText("");
+        newConfirmPassword.setText("");
+        newIdEmployee.setText("");
+        newSerectAnswer.setText("");
+        newFirstname.setText("");
+        newLastname.setText("");
+        newMidname.setText("");
     }
     /**
      * Initializes the controller class.

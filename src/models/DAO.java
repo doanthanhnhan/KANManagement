@@ -13,6 +13,8 @@ import util.connectDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import static java.sql.Types.NULL;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -64,26 +66,46 @@ public class DAO {
         connection.close();
         return list_Employee;
     }
-    public void addStudent(Students student) {
+    public static void newEmployee(String User,String Pass,String Id,String Question,String Answer,String FName,String MName,String LName,LocalDate birthday,String Sex) {
         try {
-            String ex = "Insert into Student values(?,?,?,?,?)";
-            Connection connection = ConnectionUtils.getMyConnection();
-            PreparedStatement pst = connection.prepareStatement(ex);
-            pst.setString(1, student.getStudentCode());
-            pst.setString(2, student.getStudentName());
-            String tam = student.getStudentGender();
-            if (tam.equals("Nam")) {
-                pst.setInt(3, 1);
-            } else {
-                pst.setInt(3, 0);
+            Connection connection = connectDB.connectSQLServer();
+        // Tạo đối tượng Statement.
+            Statement statement = connection.createStatement();
+            String exp="select Max(ID_User) Max from Users";
+            ResultSet rs = statement.executeQuery(exp);
+            int Id_User = 0;
+            while(rs.next()){
+                Id_User = rs.getInt("Max")+1;
             }
-            pst.setInt(4, student.getStudentAge());
-            pst.setString(5, student.getStudentAddress());
+            String exm = "Insert into Employee(Employee_ID,FIRST_NAME,MID_NAME,LAST_NAME,SEX,BIRTHDATE) values(?,?,?,?,?,?)";
+            PreparedStatement pt = connection.prepareStatement(exm);
+            pt.setString(1, Id);
+            pt.setString(2, FName);
+            pt.setString(3, MName);
+            pt.setString(4, LName);
+            if("Male".equals(Sex)){
+                pt.setInt( 5 , 1 );
+            }
+            else{
+                pt.setInt(5,0);
+            }
+            pt.setString(6, String.valueOf(birthday));
+            pt.execute();
+            pt.close();
+            String ex = "Insert into Users values(?,?,?,?,?,?,?)";
+            PreparedStatement pst = connection.prepareStatement(ex);
+            pst.setInt(1, Id_User);
+            pst.setString(2, Id);
+            pst.setString(3, User);
+            pst.setString(4, Pass);
+            pst.setInt(5, 1);
+            pst.setString(6, Question);
+            pst.setString(7, Answer);
             pst.execute();
             pst.close();
             connection.close();
         } catch (SQLException | ClassNotFoundException ex1) {
-            Logger.getLogger(SMSDAOImpl.class.getName()).log(Level.SEVERE, null, ex1);
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
         }
     }
 }
