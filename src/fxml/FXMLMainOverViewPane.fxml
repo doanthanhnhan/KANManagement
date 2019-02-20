@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1366.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
+    <children>
+        <SplitPane dividerPositions="0.1590909090909091" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="220.0">
+                    <children>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                                    <children>
+                                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <HBox prefWidth="310.0">
+                                                    <children>
+                                                        <Label text="STATUS" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Reserved" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Occupied" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="4" textAlignment="CENTER" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="103.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Available" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="134.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Checked out" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="10.0" prefWidth="310.0">
+                                                    <children>
+                                                        <Label text="TYPE" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="41.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Single" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="72.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Double" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="4" textAlignment="CENTER" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="103.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Triple" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="134.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Family" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="165.0" prefWidth="310.0">
+                                                    <children>
+                                                        <Label text="HOUSE KEEPING" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="196.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Clean" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="227.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Not clean" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="4" textAlignment="CENTER" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="258.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="In progress" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox layoutX="10.0" layoutY="289.0" prefWidth="200.0" spacing="50.0">
+                                                    <children>
+                                                        <JFXCheckBox prefWidth="150.0" text="Repair" />
+                                                        <Label alignment="CENTER_RIGHT" prefWidth="50.0" text="10" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                        </ScrollPane>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0">
+                                    <children>
+                                        <VBox>
+                                            <children>
+                                                <HBox spacing="10.0">
+                                                    <children>
+                                                        <fx:include source="FXMLRoomStatusForm.fxml" />
+                                                        <fx:include source="FXMLRoomStatusForm.fxml" />
+                                                        <fx:include source="FXMLRoomStatusForm.fxml" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                        </ScrollPane>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>
