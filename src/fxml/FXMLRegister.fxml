@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="950.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLRegisterController">
+<AnchorPane id="AnchorPane" prefHeight="950.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLRegisterController">
    <children>
       <VBox layoutY="-14.0" prefHeight="966.0" prefWidth="649.0">
          <children>
@@ -24,7 +24,7 @@
                      <children>
                         <HBox prefHeight="53.0" prefWidth="624.0">
                            <children>
-                              <Label prefHeight="53.0" prefWidth="321.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="Registertration Form">
+                              <Label prefHeight="53.0" prefWidth="321.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="Registration Form">
                                  <font>
                                     <Font name="System Bold" size="27.0" />
                                  </font>
@@ -36,7 +36,7 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label prefHeight="27.0" prefWidth="352.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for registertraiton">
+                              <Label prefHeight="27.0" prefWidth="352.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for registraiton">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
@@ -153,7 +153,7 @@
             </HBox>
             <HBox prefHeight="80.0" prefWidth="200.0">
                <children>
-                  <JFXDatePicker fx:id="newBirthday" defaultColor="#6447cd" onAction="#Format_Show_Calender" prefHeight="30.0" prefWidth="235.0" promptText="Select Birthday">
+                  <JFXDatePicker fx:id="newBirthday" defaultColor="#6447cd" onAction="#Format_Show_Calender" prefHeight="30.0" prefWidth="235.0" promptText="Select Birthday" showWeekNumbers="true" styleClass="jfx-date-picker">
                      <HBox.margin>
                         <Insets left="80.0" top="20.0" />
                      </HBox.margin>

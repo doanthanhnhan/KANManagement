@@ -2,15 +2,13 @@
     -fx-primarycolor: #6747CD;
     -fx-secondarycolor: #20bf6b;
     -fx-primarytextcolor: #a3a3a3;
-/*    -fx-primary-color: #6747CD;
-    -fx-secondary-color: #6747CD;
-    -fx-primary-text-color: #a3a3a3;*/
 }
-/*.glyph-icon{
-    -fx-fill: -fx-primary-color;
-}*/
+.glyph-icon{
+    -fx-fill: -fx-primarycolor;
+}
 .parent{
     -fx-background-color: white;
+    
 }
 .slidebar{
     -fx-background-color: -fx-primarycolor;
@@ -52,15 +50,25 @@
 .label-color{
     -fx-text-fill: -fx-primarytextcolor;
 }
-/*.jfx-combo-box{
-    -fx-text-fill: -fx-primarytext;
-    -fx-font-size : 12pt;
-    -jfx-focus-color: -fx-secondary;
+
+/*REGISTRATION FORM*/
+
+.jfx-combo-box{
+    -fx-prompt-text-fill: -fx-primarytextcolor;   
+    -fx-font-size : 14px;
+    -fx-font-weight: bold;
+/*    -jfx-focus-color: -fx-secondary;
     -fx-text-fill: derive(-fx-secondary, 20%);
     
-    -fx-fill: -fx-secondary;
-}*/
+    -fx-fill: -fx-secondary;*/
+}
 /*.jfx-combo-box .cell {
     -fx-background-color:  -fx-primary;
     -fx-text-fill: -fx-secondary;    
 }*/
+.jfx-date-picker{
+    -fx-prompt-text-fill: -fx-primarytextcolor;    
+    -fx-font-size : 14px;
+    -fx-font-weight: bold;    
+}
+
