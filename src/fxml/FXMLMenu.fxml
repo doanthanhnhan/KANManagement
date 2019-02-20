@@ -7,14 +7,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="746.0" prefWidth="1043.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
+<AnchorPane id="AnchorPane" prefHeight="746.0" prefWidth="1043.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLMenuController">
    <children>
       <VBox prefHeight="746.0" prefWidth="1043.0">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <MenuBar prefHeight="25.0" prefWidth="1046.0">
+                  <MenuBar fx:id="txtMenuBar" prefHeight="25.0" prefWidth="1046.0">
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>

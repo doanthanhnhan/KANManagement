@@ -20,6 +20,12 @@ public class Login extends Application {
     public static Stage stage;
     @Override
     public void start(Stage stage) throws Exception {
+//        if( nếu có dữ liệ trong database){
+//            chạy form login
+//        }
+//        else{
+//            chạy form regis
+//        }
         this.stage=stage;
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
         stage.getIcons().add(new Image("/images/iconmanagement.png"));

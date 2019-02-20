@@ -43,8 +43,6 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private JFXPasswordField txtPassword;
     @FXML
-    private JFXButton btnLogin;
-    @FXML
     private HBox hBoxPassword;
     public static Stage stage;
 
@@ -55,7 +53,18 @@ public class FXMLLoginController implements Initializable {
         icon.setId("passIcon");
         hBoxPassword.getChildren().add(0,icon);
     }
-
+    @FXML
+    private void handleRegisterAction(ActionEvent event) throws IOException{
+        Stage stageEdit = new Stage();
+        this.stage = stageEdit;
+        Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLRegister.fxml"));
+        Scene scene1;
+        scene1 = new Scene(rootAdd);
+        stageEdit.setTitle("Registertration");
+        stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
+        stageEdit.setScene(scene1);
+        stageEdit.show();
+    }
     @FXML
     private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
         ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
