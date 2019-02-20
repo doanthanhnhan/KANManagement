@@ -1,0 +1,39 @@
+.parent{
+    -fx-background-color: white;
+}
+.slidebar{
+    -fx-background-color: #6747CD;
+}
+.forgetBtn{
+    -fx-text-fill: #a3a3a3;
+    
+}
+.forgetBtn:hover{
+  -fx-text-fill: #6747CD;
+  -fx-underline: true;
+  -fx-cursor: hand;
+}
+.loginBtn{
+    -fx-background-color: #6747CD;
+    -fx-text-fill: #FFF;
+    -fx-background-radius: 3px;
+}
+.loginBtn:hover{
+    -fx-background-color: transparent;
+    -fx-background-radius: 3px;
+    -fx-text-fill: #6747CD;
+    -fx-border-color: #6747CD;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 3px;
+    -fx-cursor: hand;
+}
+.text-field {
+    -fx-prompt-text-fill: #a3a3a3;
+    -fx-text-fill: black;
+}
+
+#passIcon{
+    -fx-fill: #6747CD;
+}
+

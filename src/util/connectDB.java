@@ -17,8 +17,8 @@ public class connectDB {
 
     static final String JDBC_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     static final String DB_URL = "jdbc:sqlserver://nhansqlserver.database.windows.net:1433;";
-    static final String AZURE_URL = "jdbc:sqlserver://nhansqlserver.database.windows.net:1433;database=StudentManagment;user=doanthanhnhan@nhansqlserver;password=abc123!!;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
-    static final String DATABASENAME = "databaseName=StudentManagement;";
+    static final String AZURE_URL = "jdbc:sqlserver://nhansqlserver.database.windows.net:1433;database=KANManagement;user=doanthanhnhan@nhansqlserver;password=abc123!!;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+    static final String DATABASENAME = "databaseName=KANManagement;";
     static final String USER = "user=doanthanhnhan;";
     static final String PASS = "password=abc123!!";
 
