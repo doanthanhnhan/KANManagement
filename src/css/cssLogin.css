@@ -1,9 +1,14 @@
 *{
-    /*#6747CD*/
     -fx-primarycolor: #6747CD;
     -fx-secondarycolor: #20bf6b;
     -fx-primarytextcolor: #a3a3a3;
+/*    -fx-primary-color: #6747CD;
+    -fx-secondary-color: #6747CD;
+    -fx-primary-text-color: #a3a3a3;*/
 }
+/*.glyph-icon{
+    -fx-fill: -fx-primary-color;
+}*/
 .parent{
     -fx-background-color: white;
 }

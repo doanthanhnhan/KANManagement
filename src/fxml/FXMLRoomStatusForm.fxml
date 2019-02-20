@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="120.0" prefWidth="200.0" stylesheets="@../css/cssLogin.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
+   <children>
+      <BorderPane prefHeight="120.0" prefWidth="200.0">
+         <top>
+            <HBox prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label prefWidth="100.0" text="Room 101" />
+                  <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="Checked out" />
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <HBox alignment="CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" prefWidth="200.0" text="Đoàn Thanh Nhân">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="USERS" size="50" />
+                     </graphic>
+                  </Label>
+               </children>
+            </HBox>
+         </center>
+         <bottom>
+            <HBox prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label prefWidth="70.0" text="4 days">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CALENDAR_CHECK_ALT" />
+                     </graphic>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="10.0" prefWidth="70.0" text="Clean">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CHECK" />
+                     </graphic>
+                  </Label>
+                  <Label layoutX="80.0" layoutY="10.0" prefWidth="70.0" text="Repair">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="WRENCH" />
+                     </graphic>
+                  </Label>
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>
