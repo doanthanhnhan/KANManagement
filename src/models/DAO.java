@@ -11,7 +11,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import util.connectDB;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Admin
@@ -20,7 +23,6 @@ public class DAO {
      private static ObservableList<InfoEmployee> getListEmployee(ResultSet rs) throws SQLException, ClassNotFoundException {
         //Declare a observable List which comprises of Employee objects
         ObservableList<InfoEmployee> List = FXCollections.observableArrayList();
-
         while (rs.next()) {
             InfoEmployee Emp = new InfoEmployee();
             Emp.setEmployee_ID(rs.getString("Employee_ID"));
@@ -61,5 +63,27 @@ public class DAO {
         ObservableList<InfoEmployee> list_Employee = getListEmployee(rs);
         connection.close();
         return list_Employee;
+    }
+    public void addStudent(Students student) {
+        try {
+            String ex = "Insert into Student values(?,?,?,?,?)";
+            Connection connection = ConnectionUtils.getMyConnection();
+            PreparedStatement pst = connection.prepareStatement(ex);
+            pst.setString(1, student.getStudentCode());
+            pst.setString(2, student.getStudentName());
+            String tam = student.getStudentGender();
+            if (tam.equals("Nam")) {
+                pst.setInt(3, 1);
+            } else {
+                pst.setInt(3, 0);
+            }
+            pst.setInt(4, student.getStudentAge());
+            pst.setString(5, student.getStudentAddress());
+            pst.execute();
+            pst.close();
+            connection.close();
+        } catch (SQLException | ClassNotFoundException ex1) {
+            Logger.getLogger(SMSDAOImpl.class.getName()).log(Level.SEVERE, null, ex1);
+        }
     }
 }

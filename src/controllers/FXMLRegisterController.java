@@ -43,6 +43,8 @@ public class FXMLRegisterController implements Initializable {
     @FXML
     private JFXTextField newLastname;
     @FXML
+    private JFXTextField newIdEmployee;
+    @FXML
     private JFXDatePicker newBirthday;
     @FXML
     private JFXButton btnRegister;

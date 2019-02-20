@@ -48,9 +48,9 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="73.0" prefWidth="643.0">
+            <HBox prefHeight="80.0" prefWidth="643.0">
                <children>
-                  <JFXTextField fx:id="newUsername" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Username" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXTextField fx:id="newUsername" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="220.0" promptText="Enter Username" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -58,9 +58,17 @@
                         <Insets left="80.0" right="80.0" top="30.0" />
                      </HBox.margin>
                   </JFXTextField>
+                  <JFXTextField fx:id="newIdEmployee" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="220.0" promptText="Enter Id Employee" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="80.0" top="30.0" />
+                     </HBox.margin>
+                  </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="71.0" prefWidth="643.0">
+            <HBox prefHeight="80.0" prefWidth="643.0">
                <children>
                   <JFXPasswordField fx:id="newPassword" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="699.0" promptText="Password" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
@@ -72,7 +80,7 @@
                   </JFXPasswordField>
                </children>
             </HBox>
-            <HBox prefHeight="71.0" prefWidth="643.0">
+            <HBox prefHeight="80.0" prefWidth="643.0">
                <children>
                   <JFXPasswordField fx:id="newConfirmPassword" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="699.0" promptText="Confirm Password" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
@@ -84,28 +92,28 @@
                   </JFXPasswordField>
                </children>
             </HBox>
-            <HBox prefHeight="71.0" prefWidth="643.0">
+            <HBox prefHeight="80.0" prefWidth="643.0">
                <children>
-                  <VBox prefHeight="71.0" prefWidth="660.0">
-                     <children>
-                        <JFXComboBox fx:id="newSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="53.0" prefWidth="649.0" promptText="Serect Question" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
-                           <padding>
-                              <Insets left="80.0" right="80.0" top="20.0" />
-                           </padding>
-                        </JFXComboBox>
-                        <JFXPasswordField fx:id="newSerectAnswer" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="699.0" promptText="Secret Answer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="20.0" left="80.0" right="80.0" top="30.0" />
-                           </VBox.margin>
-                        </JFXPasswordField>
-                     </children>
-                  </VBox>
+                  <JFXComboBox fx:id="newSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Serect Question" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" top="20.0" />
+                     </HBox.margin>
+                  </JFXComboBox>
                </children>
             </HBox>
-            <HBox prefHeight="68.0" prefWidth="649.0">
+            <HBox prefHeight="80.0" prefWidth="200.0">
+               <children>
+                  <JFXPasswordField fx:id="newSerectAnswer" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="699.0" promptText="Secret Answer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" top="20.0" />
+                     </HBox.margin>
+                  </JFXPasswordField>
+               </children>
+            </HBox>
+            <HBox prefHeight="80.0" prefWidth="649.0">
                <children>
                   <JFXTextField fx:id="newFirstname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Firstname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
@@ -117,7 +125,7 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="73.0" prefWidth="643.0">
+            <HBox prefHeight="80.0" prefWidth="643.0">
                <children>
                   <JFXTextField fx:id="newMidname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Midname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
@@ -129,7 +137,7 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="73.0" prefWidth="643.0">
+            <HBox prefHeight="80.0" prefWidth="643.0">
                <children>
                   <JFXTextField fx:id="newLastname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Lastname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
@@ -141,7 +149,7 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="80.0" prefWidth="200.0">
                <children>
                   <JFXDatePicker fx:id="newBirthday" defaultColor="#6447cd" onAction="#Format_Show_Calender" prefHeight="30.0" prefWidth="512.0" promptText="Select Birthday" styleClass="text-field" stylesheets="@../css/cssLogin.css">
                      <HBox.margin>
@@ -152,7 +160,7 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <JFXButton fx:id="btnRegister" buttonType="RAISED" onAction="#btnSubmitRegister" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Register">
+                  <JFXButton fx:id="btnRegister" buttonType="RAISED" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Register">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
