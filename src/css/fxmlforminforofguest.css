@@ -1,0 +1,12 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+#labelName{
+    -fx-background-color: white;
+    -fx-text-fill: #6467cd;
+}
+.label{
+    -fx-text-fill: #212121;
+}
+

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1366.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.FXMLFormInforOfGuestController">
+    <stylesheets>
+        <URL value="@/css/fxmlforminforofguest.css" />
+    </stylesheets>
+   <children>
+      <VBox prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: white;">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="labelName" alignment="CENTER" graphicTextGap="5.0" prefHeight="119.0" prefWidth="1737.0" stylesheets="@../css/fxmlforminforofguest.css" text="Hotel Booking" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="43.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="668.0" prefWidth="1736.0">
+               <children>
+                  <VBox prefHeight="668.0" prefWidth="868.0" spacing="50.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="84.0" prefWidth="880.0" style="-fx-text-fill: gray;" stylesheets="@../css/fxmlforminforofguest.css" text="Guest Information" textFill="#212121">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField labelFloat="true" promptText="First Name">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField labelFloat="true" promptText="Last Name">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField labelFloat="true" promptText="Email">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField labelFloat="true" promptText="Phone Number">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField labelFloat="true" promptText="Note">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="668.0" prefWidth="868.0" spacing="50.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="84.0" prefWidth="880.0" style="-fx-text-fill: gray;" stylesheets="@../css/fxmlforminforofguest.css" text="More Information" textFill="#212121">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField labelFloat="true" promptText="Note">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXComboBox fx:id="comboBoxRoom" focusColor="#6467cd" labelFloat="true" prefHeight="22.0" prefWidth="683.0" promptText="Room Type" stylesheets="@../css/fxmlforminforofguest.css">
+                           <padding>
+                              <Insets left="25.0" right="25.0" top="-9.0" />
+                           </padding>
+                        </JFXComboBox>
+                        <JFXTextField labelFloat="true" promptText="Number of Guest">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXDatePicker defaultColor="#6467cd" overLay="true" prefHeight="15.0" prefWidth="683.0" promptText="Date Arrive">
+                           <padding>
+                              <Insets left="25.0" right="25.0" top="-9.0" />
+                           </padding>
+                        </JFXDatePicker>
+                        <HBox>
+                           <children>
+                              <JFXCheckBox fx:id="check1" checkedColor="#6467cd" text="Pick up a drive!">
+                                 <padding>
+                                    <Insets left="25.0" right="25.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets top="-23.0" />
+                                 </HBox.margin>
+                              </JFXCheckBox>
+                           </children>
+                        </HBox>
+                        <JFXTextField labelFloat="true" promptText="Flight Number">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXButton fx:id="btnSubmit" onAction="#handleSubmitAction" prefHeight="90.0" prefWidth="697.0" ripplerFill="#9194d0" style="-fx-background-color: #6467cd; -fx-background-radius: 500;" text="Submit">
+                           <font>
+                              <Font name="System Bold" size="19.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="25.0" right="25.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
