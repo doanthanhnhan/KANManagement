@@ -34,13 +34,26 @@ public class InfoEmployee {
     private StringProperty Salary;
     private StringProperty Bonus;
     private StringProperty Comm;
+    private StringProperty Gmail;
+    private StringProperty Role;
+    public String getGmail() {
+        return Gmail.get();
+    }
+    public void setGmail(String Gmail) {
+        this.Gmail = new SimpleStringProperty(Gmail);
+    }
+    public String getRole() {
+        return Role.get();
+    }
+    public void setRole(String Role) {
+        this.Role = new SimpleStringProperty(Role);
+    }
     public String getEmployee_ID() {
         return Employee_ID.get();
     }
     public void setEmployee_ID(String Employee_ID) {
         this.Employee_ID = new SimpleStringProperty(Employee_ID);
     }
-
     public String getUserName() {
         return UserName.get();
     }
@@ -181,7 +194,7 @@ public class InfoEmployee {
 
     public InfoEmployee(){}
     public InfoEmployee(String Employee_ID, String UserName, String PassWord,String Active,String Serect_Question,String Serect_Answer, String First_Name, String Mid_Name, String Last_Name, String Work_Dept,String Phone_No, String Hiredate, String Job,
-            Integer EDLEVEL, String Sex, String Birthdate, String Salary, String Bonus, String Comm) {
+            Integer EDLEVEL, String Sex, String Birthdate, String Salary, String Bonus, String Comm,String Role,String Gmail) {
         this.Employee_ID = new SimpleStringProperty(Employee_ID);
         this.UserName = new SimpleStringProperty(UserName);
         this.PassWord = new SimpleStringProperty(PassWord);
@@ -201,5 +214,7 @@ public class InfoEmployee {
         this.Salary = new SimpleStringProperty(Salary);
         this.Bonus = new SimpleStringProperty(Bonus);
         this.Comm = new SimpleStringProperty(Comm);
+        this.Role = new SimpleStringProperty(Role);
+        this.Gmail = new SimpleStringProperty(Gmail);
     }
 }

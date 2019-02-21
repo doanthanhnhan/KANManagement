@@ -56,10 +56,10 @@ public class FXMLLoginController implements Initializable {
     private void handleRegisterAction(ActionEvent event) throws IOException{
         Stage stageEdit = new Stage();
         this.stage = stageEdit;
-        Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLRegister.fxml"));
+        Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
         Scene scene1;
         scene1 = new Scene(rootAdd);
-        stageEdit.setTitle("Registertration");
+        stageEdit.setTitle("NEW EMPLOYEE");
         stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
         stageEdit.setScene(scene1);
         stageEdit.show();

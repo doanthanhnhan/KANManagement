@@ -43,6 +43,8 @@ public class DAO {
             Emp.setSalary(rs.getString("SALARY"));
             Emp.setBonus(rs.getString("BONUS"));
             Emp.setComm(rs.getString("COMM"));
+            Emp.setGmail(rs.getString("Gmail"));
+            Emp.setRole(rs.getString("Position"));
             int i = rs.getInt("SEX");
             if (i == 1) {
                Emp.setSex("Nam");
@@ -58,7 +60,7 @@ public class DAO {
         // Tạo đối tượng Statement.
         Statement statement = connection.createStatement();
 
-        String sql = "select Users.*,Employee.* from Users, Employee where Users.Employee_ID = Employee.Employee_ID";
+        String sql = "select Users.*,Employee.*,[Role].* from Users, Employee,[Role] where Users.Employee_ID = Employee.Employee_ID and Employee.Id_Role=[Role].Id_Role";
 
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = statement.executeQuery(sql);
@@ -66,18 +68,10 @@ public class DAO {
         connection.close();
         return list_Employee;
     }
-    public static void newEmployee(String User,String Pass,String Id,String Question,String Answer,String FName,String MName,String LName,LocalDate birthday,String Sex) {
+    public static void AddNewEmployee(String Id,String FName,String MName,String LName,String Id_Role,String Gmail,String Sex) {
         try {
             Connection connection = connectDB.connectSQLServer();
-        // Tạo đối tượng Statement.
-            Statement statement = connection.createStatement();
-            String exp="select Max(ID_User) Max from Users";
-            ResultSet rs = statement.executeQuery(exp);
-            int Id_User = 0;
-            while(rs.next()){
-                Id_User = rs.getInt("Max")+1;
-            }
-            String exm = "Insert into Employee(Employee_ID,FIRST_NAME,MID_NAME,LAST_NAME,SEX,BIRTHDATE) values(?,?,?,?,?,?)";
+            String exm = "Insert into Employee(Employee_ID,FIRST_NAME,MID_NAME,LAST_NAME,SEX,Gmail,Id_Role) values(?,?,?,?,?,?,?)";
             PreparedStatement pt = connection.prepareStatement(exm);
             pt.setString(1, Id);
             pt.setString(2, FName);
@@ -89,23 +83,64 @@ public class DAO {
             else{
                 pt.setInt(5,0);
             }
-            pt.setString(6, String.valueOf(birthday));
+            pt.setString(6, Gmail);
+            pt.setString(7, Id_Role);
             pt.execute();
             pt.close();
-            String ex = "Insert into Users values(?,?,?,?,?,?,?)";
-            PreparedStatement pst = connection.prepareStatement(ex);
-            pst.setInt(1, Id_User);
-            pst.setString(2, Id);
-            pst.setString(3, User);
-            pst.setString(4, Pass);
-            pst.setInt(5, 1);
-            pst.setString(6, Question);
-            pst.setString(7, Answer);
-            pst.execute();
-            pst.close();
             connection.close();
         } catch (SQLException | ClassNotFoundException ex1) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
         }
+    }
+    public static ObservableList<?> getAllRole() throws SQLException, ClassNotFoundException {
+        Connection connection = connectDB.connectSQLServer();
+        // Tạo đối tượng Statement.
+        Statement statement = connection.createStatement();
+
+        String sql = "select * from Role";
+
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = statement.executeQuery(sql);
+        ObservableList ListRole = FXCollections.observableArrayList();
+        while (rs.next()) {
+            ListRole.add(rs.getString("Position"));
+        }
+        connection.close();
+        return ListRole;
+    }
+    public static String getIdRole(String Role) throws ClassNotFoundException, SQLException{
+        String Id = null;
+        Connection connection = connectDB.connectSQLServer();
+        String exp="select Id_Role from [Role] where Position = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, Role);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        while(rs.next()){
+              Id = rs.getString("Id_Role");
+        }
+        return Id;
+    }
+    public static void AddUser(String Emp_Id, String User, String Pass) throws SQLException, ClassNotFoundException{
+        Connection connection = connectDB.connectSQLServer();
+        String exp="select Max (ID_User) Max from Users";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        int Id = 0;
+        while(rs.next()){
+              Id = rs.getInt("Max")+1;
+        }
+        int active=1;
+        String ex="Insert into Users(ID_User,Employee_ID,UserName,PassWord,Active) values(?,?,?,?,?)";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setInt(1, Id);
+        pts.setString(2, Emp_Id);
+        pts.setString(3, User);
+        pts.setString(4, Pass);
+        pts.setInt(5, active);
+        pts.execute();
+        pts.close();
+        connection.close();
     }
 }

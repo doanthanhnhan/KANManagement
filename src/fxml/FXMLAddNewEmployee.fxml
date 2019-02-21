@@ -2,8 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXDatePicker?>
-<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -14,9 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="950.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLRegisterController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewEmloyeeController">
    <children>
-      <VBox layoutY="-14.0" prefHeight="966.0" prefWidth="649.0">
+      <VBox layoutY="-14.0" prefHeight="700.0" prefWidth="649.0">
          <children>
             <HBox prefHeight="129.0" prefWidth="649.0">
                <children>
@@ -24,7 +22,7 @@
                      <children>
                         <HBox prefHeight="53.0" prefWidth="624.0">
                            <children>
-                              <Label prefHeight="53.0" prefWidth="321.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="Registration Form">
+                              <Label prefHeight="53.0" prefWidth="321.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="ADD NEW EMPLOYEE">
                                  <font>
                                     <Font name="System Bold" size="27.0" />
                                  </font>
@@ -36,7 +34,7 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label prefHeight="27.0" prefWidth="352.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for registraiton">
+                              <Label prefHeight="27.0" prefWidth="352.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for add new emloyee">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
@@ -50,9 +48,9 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="643.0">
                <children>
-                  <JFXTextField fx:id="newUsername" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="220.0" promptText="Enter Username" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXTextField fx:id="newId" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="254.0" promptText="Enter Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -60,59 +58,37 @@
                         <Insets left="80.0" right="80.0" top="30.0" />
                      </HBox.margin>
                   </JFXTextField>
-                  <JFXTextField fx:id="newIdEmployee" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="220.0" promptText="Enter Id Employee" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXRadioButton fx:id="sexMale" selected="true" text="Male">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                      <HBox.margin>
-                        <Insets right="80.0" top="30.0" />
+                        <Insets right="20.0" top="40.0" />
+                     </HBox.margin>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="newSexEmployee" />
+                     </toggleGroup>
+                  </JFXRadioButton>
+                  <JFXRadioButton fx:id="sexFemale" text="Female" toggleGroup="$newSexEmployee">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="40.0" />
+                     </HBox.margin>
+                  </JFXRadioButton>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+               <children>
+                  <JFXTextField fx:id="newGmail" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="649.0" promptText="Enter Gmail" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" top="30.0" />
                      </HBox.margin>
                   </JFXTextField>
-               </children>
-            </HBox>
-            <HBox prefHeight="80.0" prefWidth="643.0">
-               <children>
-                  <JFXPasswordField fx:id="newPassword" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="699.0" promptText="Password" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
-                  </JFXPasswordField>
-               </children>
-            </HBox>
-            <HBox prefHeight="80.0" prefWidth="643.0">
-               <children>
-                  <JFXPasswordField fx:id="newConfirmPassword" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="699.0" promptText="Confirm Password" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
-                  </JFXPasswordField>
-               </children>
-            </HBox>
-            <HBox prefHeight="80.0" prefWidth="643.0">
-               <children>
-                  <JFXComboBox fx:id="newSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Serect Question" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
-                  </JFXComboBox>
-               </children>
-            </HBox>
-            <HBox prefHeight="80.0" prefWidth="200.0">
-               <children>
-                  <JFXPasswordField fx:id="newSerectAnswer" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="699.0" promptText="Secret Answer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
-                  </JFXPasswordField>
                </children>
             </HBox>
             <HBox prefHeight="80.0" prefWidth="649.0">
@@ -151,37 +127,18 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="80.0" prefWidth="200.0">
+            <HBox prefHeight="80.0" prefWidth="643.0">
                <children>
-                  <JFXDatePicker fx:id="newBirthday" defaultColor="#6447cd" onAction="#Format_Show_Calender" prefHeight="30.0" prefWidth="235.0" promptText="Select Birthday" showWeekNumbers="true" styleClass="jfx-date-picker">
+                  <JFXComboBox fx:id="newRole" focusColor="#6467cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Select Role" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <HBox.margin>
-                        <Insets left="80.0" top="20.0" />
+                        <Insets left="80.0" right="80.0" top="20.0" />
                      </HBox.margin>
-                  </JFXDatePicker>
-                  <JFXRadioButton fx:id="sexMale" selected="true" text="Male">
-                     <HBox.margin>
-                        <Insets left="30.0" top="30.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="newSex" />
-                     </toggleGroup>
-                  </JFXRadioButton>
-                  <JFXRadioButton fx:id="sexFemale" text="Female" toggleGroup="$newSex">
-                     <HBox.margin>
-                        <Insets left="40.0" right="80.0" top="30.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </JFXRadioButton>
+                  </JFXComboBox>
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
                <children>
-                  <JFXButton buttonType="RAISED" onAction="#btnSubmitRegister" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Register">
+                  <JFXButton buttonType="RAISED" onAction="#btnSubmitAddNewEmployee" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
