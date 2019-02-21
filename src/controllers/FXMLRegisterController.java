@@ -95,6 +95,9 @@ public class FXMLRegisterController implements Initializable {
         newFirstname.setText("");
         newLastname.setText("");
         newMidname.setText("");
+        newSerectQuestion.setValue(null);
+        newBirthday.setValue(null);
+        newBirthday.setPromptText("Select Birthday");
     }
     /**
      * Initializes the controller class.
