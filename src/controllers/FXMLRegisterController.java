@@ -11,7 +11,10 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import java.math.BigInteger;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -20,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import models.DAO;
 import models.InfoEmployee;
+import models.MD5Encrypt;
 import models.formatCalender;
 
 /**
@@ -77,7 +81,12 @@ public class FXMLRegisterController implements Initializable {
             Sex = sexMale.getText();
         else
             Sex = sexFemale.getText();
-        DAO.newEmployee(User, Pass, Id, Question, Answer, FName, MName, LName, birthday, Sex);
+//        hash pass
+        MD5Encrypt m = new MD5Encrypt();
+        String hashPass = m.hashPass(Pass);
+        String hashQuestion = m.hashPass(Question);
+        String hashAnswer = m.hashPass(Answer);
+        DAO.newEmployee(User, hashPass, Id, hashQuestion, hashAnswer, FName, MName, LName, birthday, Sex);
         newUsername.setText("");
         newPassword.setText("");
         newConfirmPassword.setText("");
@@ -86,10 +95,6 @@ public class FXMLRegisterController implements Initializable {
         newFirstname.setText("");
         newLastname.setText("");
         newMidname.setText("");
-        newBirthday.setValue(null);
-        newBirthday.setPromptText("Select Birthday");
-        newSerectQuestion.setValue(null);
-        
     }
     /**
      * Initializes the controller class.

@@ -30,6 +30,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import models.MD5Encrypt;
 
 /**
  *
@@ -70,7 +71,9 @@ public class FXMLLoginController implements Initializable {
         ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
         List_Employee = DAO.getAllEmployee();
         for (InfoEmployee infoEmployee : List_Employee) {
-            if(txtUserName.getText().equals(infoEmployee.getUserName())&&txtPassword.getText().equals(infoEmployee.getPassWord())){
+            MD5Encrypt m = new MD5Encrypt();
+            String hashPass = m.hashPass(txtPassword.getText());
+            if(txtUserName.getText().equals(infoEmployee.getUserName())&&hashPass.equals(infoEmployee.getPassWord())){
                 Login.stage.close();
                 Stage stageEdit = new Stage();
                 this.stage = stageEdit;
