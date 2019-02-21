@@ -31,34 +31,34 @@
             </HBox>
             <HBox prefHeight="668.0" prefWidth="1736.0">
                <children>
-                  <VBox prefHeight="668.0" prefWidth="868.0" spacing="50.0">
+                  <VBox onMouseDragged="#handleSubmitAction" prefHeight="668.0" prefWidth="868.0" spacing="50.0">
                      <children>
                         <Label alignment="CENTER" prefHeight="84.0" prefWidth="880.0" style="-fx-text-fill: gray;" stylesheets="@../css/fxmlforminforofguest.css" text="Guest Information" textFill="#212121">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <JFXTextField labelFloat="true" promptText="First Name">
+                        <JFXTextField labelFloat="true" promptText="First Name" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Last Name">
+                        <JFXTextField labelFloat="true" promptText="Last Name" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Email">
+                        <JFXTextField labelFloat="true" promptText="Email" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Phone Number">
+                        <JFXTextField labelFloat="true" promptText="Phone Number" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Note">
+                        <JFXTextField labelFloat="true" promptText="Note" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
@@ -72,22 +72,22 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <JFXTextField labelFloat="true" promptText="Note">
+                        <JFXTextField labelFloat="true" promptText="Company Name" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXComboBox fx:id="comboBoxRoom" focusColor="#6467cd" labelFloat="true" prefHeight="22.0" prefWidth="683.0" promptText="Room Type" stylesheets="@../css/fxmlforminforofguest.css">
+                        <JFXComboBox fx:id="comboBoxRoom" focusColor="#6467cd" labelFloat="true" prefHeight="22.0" prefWidth="683.0" promptText="Room Type" stylesheets="@../css/fxmlforminforofguest.css" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" top="-9.0" />
                            </padding>
                         </JFXComboBox>
-                        <JFXTextField labelFloat="true" promptText="Number of Guest">
+                        <JFXTextField labelFloat="true" promptText="Number of Guest" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXDatePicker defaultColor="#6467cd" overLay="true" prefHeight="15.0" prefWidth="683.0" promptText="Date Arrive">
+                        <JFXDatePicker defaultColor="#6467cd" overLay="true" prefHeight="15.0" prefWidth="683.0" promptText="Date Arrive" styleClass="jfx-date-picker" stylesheets="@../css/fxmlforminforofguest.css">
                            <padding>
                               <Insets left="25.0" right="25.0" top="-9.0" />
                            </padding>
@@ -104,10 +104,16 @@
                               </JFXCheckBox>
                            </children>
                         </HBox>
-                        <JFXTextField labelFloat="true" promptText="Flight Number">
+                        <JFXTextField labelFloat="true" promptText="Flight Number" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
                         </JFXTextField>
                         <JFXButton fx:id="btnSubmit" onAction="#handleSubmitAction" prefHeight="90.0" prefWidth="697.0" ripplerFill="#9194d0" style="-fx-background-color: #6467cd; -fx-background-radius: 500;" text="Submit">
                            <font>

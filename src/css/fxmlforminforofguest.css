@@ -9,4 +9,8 @@
 .label{
     -fx-text-fill: #212121;
 }
-
+.jfx-date-picker{
+    -fx-prompt-text-fill: -fx-primarytextcolor;    
+    -fx-font-size : 14px;
+    -fx-border-style: none none dotted none;
+}
