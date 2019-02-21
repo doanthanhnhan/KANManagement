@@ -27,7 +27,7 @@ public class Login extends Application {
 //            chạy form regis
 //        }
         this.stage=stage;
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
         stage.getIcons().add(new Image("/images/iconmanagement.png"));
         Scene scene = new Scene(root);
         stage.setTitle("KANManagement");

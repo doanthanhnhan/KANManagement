@@ -29,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.MD5Encrypt;
 
@@ -49,10 +50,7 @@ public class FXMLLoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        MaterialIconView icon = new MaterialIconView(MaterialIcon.VPN_KEY);
-        icon.setSize("35");
-        icon.setId("passIcon");
-        hBoxPassword.getChildren().add(0,icon);
+        
     }
     @FXML
     private void handleRegisterAction(ActionEvent event) throws IOException{
@@ -77,7 +75,7 @@ public class FXMLLoginController implements Initializable {
                 Login.stage.close();
                 Stage stageEdit = new Stage();
                 this.stage = stageEdit;
-                Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLMenu.fxml"));
+                Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
                 Scene scene1;
                 scene1 = new Scene(rootAdd);
                 stageEdit.setTitle("Management");
@@ -91,5 +89,19 @@ public class FXMLLoginController implements Initializable {
             }
         }
     }
+    @FXML
+    private void handleForgetPass() throws IOException{
+        Stage stageForget = new Stage();
+        stageForget.initModality(Modality.APPLICATION_MODAL);
+    // make its owner the existing window:
 
+        this.stage = stageForget;
+        Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLForgetPass.fxml"));
+        Scene sceneForget;
+        sceneForget = new Scene(rootAdd);
+        stageForget.setTitle("Forget Password");
+        stageForget.getIcons().add(new Image("/images/iconmanagement.png"));
+        stageForget.setScene(sceneForget);
+        stageForget.show();
+    }
 }
