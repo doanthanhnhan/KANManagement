@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialicons.MaterialIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -80,6 +81,7 @@
                   </HBox>
                   <HBox fx:id="hBoxPassword" alignment="CENTER" prefHeight="100.0" prefWidth="349.0" spacing="10.0">
                      <children>
+                        <MaterialIconView glyphName="VPN_KEY" size="35" />
                         <JFXPasswordField fx:id="txtPassword" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Password" unFocusColor="#6467cd">
                            <font>
                               <Font name="System Bold" size="14.0" />
@@ -92,13 +94,13 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="29.0" prefWidth="300.0">
                      <children>
-                        <Label styleClass="forgetBtn" stylesheets="@../css/cssLogin.css" text="Forget Password?">
+                        <Label onMouseClicked="#handleForgetPass" prefHeight="18.0" prefWidth="120.0" styleClass="forgetBtn" stylesheets="@../css/cssLogin.css" text="Forget Password?">
                            <font>
                               <Font name="Ebrima Bold" size="14.0" />
                            </font>
-                           <padding>
+                           <HBox.margin>
                               <Insets right="30.0" />
-                           </padding>
+                           </HBox.margin>
                         </Label>
                      </children>
                   </HBox>
