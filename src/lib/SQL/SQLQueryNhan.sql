@@ -7,7 +7,7 @@ CREATE TABLE Rooms(
 	RoomArea decimal NOT NULL,
 	RoomStatus varchar(10) NOT NULL,
 	Clean bit DEFAULT 1,
-	Repair bit DEFAULT 0,
+	Repaired bit DEFAULT 0,
 	InProgress bit DEFAULT 0,
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
@@ -88,7 +88,8 @@ CREATE TABLE ServiceType(
 
 CREATE TABLE UserLogs(
 	-- Create columns
-	ID int IDENTITY(1,1),	
+	ID int IDENTITY(1,1),
+	UserName varchar(20) NOT NULL,	
 	LogContent nvarchar(200) NOT NULL,
 	LogTime datetime NOT NULL,
 	Active bit DEFAULT 1 NOT NULL,
