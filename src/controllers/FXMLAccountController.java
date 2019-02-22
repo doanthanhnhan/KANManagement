@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
@@ -49,6 +50,8 @@ public class FXMLAccountController implements Initializable {
     private JFXComboBox<?> newSerectQuestion;
     @FXML
     private JFXPasswordField newSerectAnswer;
+    @FXML
+    private JFXButton btnRegister;
     /**
      * Initializes the controller class.
      * @param url
@@ -84,10 +87,12 @@ public class FXMLAccountController implements Initializable {
         Calendar cal = Calendar.getInstance();
         String logtime;
         logtime = dateFormat.format(cal.getTime());
-        System.out.println(logtime);
         DAO.SetPass(txtUsername.getText(), m.hashPass(newPassword.getText()), m.hashPass((String) newSerectQuestion.getValue()) ,m.hashPass((String) newSerectAnswer.getText()));
         String Content = "Set Password";
         DAO.setUserLogs(txtUsername.getText(), Content , logtime);
+        Stage stage = (Stage) btnRegister.getScene().getWindow();
+          // do what you have to do
+        stage.close();
         Stage stageEdit = new Stage();
         this.stage = stageEdit;
         Parent rootAdd;

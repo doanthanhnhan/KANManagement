@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,6 +40,7 @@ import utils.MD5Encrypt;
  */
 public class FXMLLoginController implements Initializable {
     public static ObservableList<InfoEmployee> List_EmployeeLogin = FXCollections.observableArrayList();
+    public static ObservableList<InfoEmployee> employeeForget = FXCollections.observableArrayList();
     @FXML
     private AnchorPane formLogin;
     @FXML
@@ -46,29 +49,28 @@ public class FXMLLoginController implements Initializable {
     private JFXPasswordField txtPassword;
     @FXML
     private HBox hBoxPassword;
-    public static Stage stage;
-
+    @FXML
+    private JFXButton btnLogin;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    
+        ConnectControllers.setfXMLLoginController(this);
+        try {
+            List_Employee = DAO.getAllEmployee();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    public static ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
     @FXML
-    private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
-        ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
-        List_Employee = DAO.getAllEmployee();
+    private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException { 
         for (InfoEmployee infoEmployee : List_Employee) {
             MD5Encrypt m = new MD5Encrypt();
             String hashPass = m.hashPass(txtPassword.getText());
             if(txtUserName.getText().equals(infoEmployee.getUserName())&&hashPass.equals(infoEmployee.getPassWord())){
                 List_EmployeeLogin.add(infoEmployee);
-                if(Login.stage.getTitle()=="Add New Employee"){
-                    FXMLAddNewEmloyeeController.stage.close();
-                }
-                else{
-                    Login.stage.close();
-                }
+                Stage stage = (Stage) btnLogin.getScene().getWindow();
+                stage.close();
                 Stage stageEdit = new Stage();
-                this.stage = stageEdit;
                 Parent rootAdd;
                 if(DAO.checkSetPass(txtUserName.getText())==0){
                     rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAccount.fxml"));
@@ -94,17 +96,31 @@ public class FXMLLoginController implements Initializable {
     }
     @FXML
     private void handleForgetPass() throws IOException{
-        Stage stageForget = new Stage();
-        stageForget.initModality(Modality.APPLICATION_MODAL);
-    // make its owner the existing window:
-
-        this.stage = stageForget;
-        Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLForgetPass.fxml"));
-        Scene sceneForget;
-        sceneForget = new Scene(rootAdd);
-        stageForget.setTitle("Forget Password");
-        stageForget.getIcons().add(new Image("/images/iconmanagement.png"));
-        stageForget.setScene(sceneForget);
-        stageForget.show();
+        if("".equals(txtUserName.getText())){
+            System.out.println("Empty");
+        }
+        else{
+            for( int i = 0 ; i < List_Employee.size();i++){
+                if(txtUserName.getText().equals(List_Employee.get(i).getUserName())){
+                    employeeForget.add(List_Employee.get(i));
+                    Stage stageForget = new Stage();
+                    stageForget.initModality(Modality.APPLICATION_MODAL);
+                // make its owner the existing window:
+  
+                    Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLForgetPass.fxml"));
+                    Scene sceneForget;
+                    sceneForget = new Scene(rootAdd);
+                    stageForget.setTitle("Forget Password");
+                    stageForget.getIcons().add(new Image("/images/iconmanagement.png"));
+                    stageForget.setScene(sceneForget);
+                    stageForget.show();
+                    break;
+                }
+                else{
+                    System.out.println("Invalid");
+                }
+            }
+        }
+        
     }
 }

@@ -138,7 +138,7 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
                <children>
-                  <JFXButton buttonType="RAISED" onAction="#btnSubmitAddNewEmployee" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                  <JFXButton fx:id="btnAddNew" buttonType="RAISED" onAction="#btnSubmitAddNewEmployee" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

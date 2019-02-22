@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
@@ -37,7 +38,6 @@ import static view.Login.stage;
  * @author Admin
  */
 public class FXMLAddNewEmloyeeController implements Initializable {
-    public static Stage stage;
     @FXML
     private JFXTextField newGmail;
     @FXML
@@ -54,6 +54,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     private JFXRadioButton sexMale;
     @FXML
     private JFXRadioButton sexFemale;
+    @FXML
+    private JFXButton btnAddNew;
     /**
      * Initializes the controller class.
      * @param url
@@ -95,15 +97,15 @@ public class FXMLAddNewEmloyeeController implements Initializable {
         newGmail.setText("");
         newId.setText("");
         if(DAO.checkFirstLogin()==1){
-            Login.stage.close();
-            Stage stageEdit = new Stage();
-            this.stage=stageEdit ;
+            Stage stage = (Stage) btnAddNew.getScene().getWindow();
+            stage.close();
+            Stage stageEdit = new Stage();;
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
-            stage.getIcons().add(new Image("/images/iconmanagement.png"));
+            stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
             Scene scene = new Scene(root);
-            stage.setTitle("KANManagement");
-            stage.setScene(scene);
-            stage.show();
+            stageEdit.setTitle("KANManagement");
+            stageEdit.setScene(scene);
+            stageEdit.show();
         }
     }
     

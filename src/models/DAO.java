@@ -39,6 +39,8 @@ public class DAO {
             Emp.setHiredate(rs.getString("HIREDATE"));
             Emp.setJob(rs.getString("JOB"));
             Emp.setEDLEVEL(rs.getInt("EDLEVEL"));
+            Emp.setSerect_Question(rs.getString("Serect_Question"));
+            Emp.setSerect_Answer(rs.getString("Serect_Answer"));
             Emp.setBirthdate(rs.getString("BIRTHDATE"));
             Emp.setSalary(rs.getString("SALARY"));
             Emp.setBonus(rs.getString("BONUS"));
@@ -169,7 +171,6 @@ public class DAO {
         return Count;
     }
     public static void SetPass(String User,String Pass,String Question,String Answer) throws ClassNotFoundException, SQLException{
-        System.out.println(Pass +"Kiên ml"+ Answer + " Kiên mặt ngu");
         Connection connection = connectDB.connectSQLServer();
         String exp="UPDATE Users SET PassWord = ?, Serect_Question = ? ,Serect_Answer = ? WHERE UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
@@ -182,7 +183,6 @@ public class DAO {
         connection.close();   
     }
     public static void setUserLogs(String User,String Content,String Logtime) throws ClassNotFoundException, SQLException{
-        System.out.println(Logtime);
         Connection connection = connectDB.connectSQLServer();
         String ex = "Insert Into UserLogs(UserName,LogContent,LogTime,Active) Values (?,?,?,?)";
         PreparedStatement pts = connection.prepareStatement(ex);
@@ -193,5 +193,15 @@ public class DAO {
         pts.execute();
         connection.close();
         pts.close();
+    }
+    public static void forgetPass(String User, String Pass) throws SQLException, ClassNotFoundException{
+        Connection connection = connectDB.connectSQLServer();
+        String exp="UPDATE Users SET PassWord = ? WHERE UserName = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, Pass);
+        pt.setString(2, User);
+        pt.execute();
+        pt.close();
+        connection.close();  
     }
 }

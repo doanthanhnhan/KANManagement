@@ -106,7 +106,7 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
                <children>
-                  <JFXButton buttonType="RAISED" onAction="#btnSubmitRegister" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Register">
+                  <JFXButton fx:id="btnRegister" buttonType="RAISED" onAction="#btnSubmitRegister" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Register">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

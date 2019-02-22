@@ -48,7 +48,7 @@
             <HBox alignment="CENTER" prefHeight="76.0" prefWidth="580.0" spacing="10.0">
                <children>
                   <FontAwesomeIconView fill="#6467cd" glyphName="USER" size="35" />
-                  <JFXTextField fx:id="txtForgetUsername" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Username" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                  <JFXTextField fx:id="txtForgetUsername" disable="true" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Username" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

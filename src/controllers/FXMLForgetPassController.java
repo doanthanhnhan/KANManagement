@@ -10,6 +10,11 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +22,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import models.DAO;
+import models.InfoEmployee;
+import utils.MD5Encrypt;
 
 /**
  * FXML Controller class
@@ -37,28 +46,52 @@ public class FXMLForgetPassController implements Initializable {
     private JFXPasswordField textSerectAnswer;
     @FXML
     private JFXButton btnSubmit;
-
     /**
      * Initializes the controller class.
      */
+    private ObservableList<InfoEmployee> employeeForget = FXCollections.observableArrayList();
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ObservableList List_Question = FXCollections.observableArrayList();
-        List_Question.add("What is your mother's name?");
-        List_Question.add("What is your girlfriend's name?");
-        List_Question.add("What is the first phone number you use?");
-        List_Question.add("Which animal do you like best?");
-        txtSerectQuestion.setItems(List_Question);
+        employeeForget = FXMLLoginController.employeeForget;
+        ObservableList list_question = FXCollections.observableArrayList();
+        ObservableList list_question_random = FXCollections.observableArrayList();
+        list_question.add("What is the first phone number you use?");
+        list_question.add("What is your first girlfriend's name?");
+        list_question.add("Which animal do you like best?");
+        list_question.add("Which subject do you like best?");
+        list_question.add("Which car company do you like best?");
+        Random rand = new Random();
+        for(int i=0;i<5;i++){
+            int randomIndex = rand.nextInt(list_question.size());
+            list_question_random.add(list_question.get(randomIndex));
+            list_question.remove(randomIndex);
+        }
+        txtSerectQuestion.setItems(list_question_random);
+        txtForgetUsername.setText(employeeForget.get(0).getUserName());
         // TODO
     }    
 
     @FXML
-    private void handleForgetAction(ActionEvent event) {
-        txtForgetUsername.setText("");
-        txtForgetPassword.setText("");
-        txtForgetConfirmPassword.setText("");
-        textSerectAnswer.setText("");
-        txtSerectQuestion.setValue(null);
+    private void handleForgetAction(ActionEvent event) throws SQLException, ClassNotFoundException {
+        MD5Encrypt m = new MD5Encrypt();
+        if(employeeForget.get(0).getSerect_Question().equals(m.hashPass((String) txtSerectQuestion.getValue()))
+                &&employeeForget.get(0).getSerect_Answer().equals(m.hashPass(textSerectAnswer.getText()))){
+            DAO.forgetPass(txtForgetUsername.getText(), m.hashPass(txtForgetPassword.getText()));
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            String logtime;
+            logtime = dateFormat.format(cal.getTime());
+            String content = "Change New Password";
+            DAO.setUserLogs(txtForgetUsername.getText(), content, logtime);
+            FXMLLoginController loginController = ConnectControllers.getfXMLLoginController();
+            loginController.List_Employee = DAO.getAllEmployee();
+            Stage stage = (Stage) btnSubmit.getScene().getWindow();
+            stage.close();
+        }
+        else{
+            System.out.println("False");
+        }
+
     }
     
 }
