@@ -38,6 +38,7 @@ import models.MD5Encrypt;
  * @author Admin
  */
 public class FXMLLoginController implements Initializable {
+    public static ObservableList<InfoEmployee> List_EmployeeLogin = FXCollections.observableArrayList();
     @FXML
     private AnchorPane formLogin;
     @FXML
@@ -53,18 +54,6 @@ public class FXMLLoginController implements Initializable {
         
     }
     @FXML
-    private void handleRegisterAction(ActionEvent event) throws IOException{
-        Stage stageEdit = new Stage();
-        this.stage = stageEdit;
-        Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
-        Scene scene1;
-        scene1 = new Scene(rootAdd);
-        stageEdit.setTitle("NEW EMPLOYEE");
-        stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
-        stageEdit.setScene(scene1);
-        stageEdit.show();
-    }
-    @FXML
     private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
         ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
         List_Employee = DAO.getAllEmployee();
@@ -72,10 +61,16 @@ public class FXMLLoginController implements Initializable {
             MD5Encrypt m = new MD5Encrypt();
             String hashPass = m.hashPass(txtPassword.getText());
             if(txtUserName.getText().equals(infoEmployee.getUserName())&&hashPass.equals(infoEmployee.getPassWord())){
-                Login.stage.close();
+                List_EmployeeLogin.add(infoEmployee);
+                if(Login.stage.getTitle()=="Add New Employee"){
+                    FXMLAddNewEmloyeeController.stage.close();
+                }
+                else{
+                    Login.stage.close();
+                }
                 Stage stageEdit = new Stage();
                 this.stage = stageEdit;
-                Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
+                Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAccount.fxml"));
                 Scene scene1;
                 scene1 = new Scene(rootAdd);
                 stageEdit.setTitle("Management");

@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,6 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import models.InfoEmployee;
 
 /**
  * FXML Controller class
@@ -44,8 +47,10 @@ public class FXMLMainFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        SimpleStringProperty userRole = new SimpleStringProperty("user");
-        if (userRole.getValue().equals("admin")) {
+        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
+        list_Employee=FXMLLoginController.List_EmployeeLogin;     
+        String userRole = list_Employee.get(0).getRole();
+        if (userRole.equals("Admin")) {
             initMenuBar();
         }
         initTabPane();
@@ -57,10 +62,10 @@ public class FXMLMainFormController implements Initializable {
             System.out.println("Registration menu item clicked!");
             try {
                 Stage stage = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLRegister.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
                 stage.getIcons().add(new Image("/images/iconmanagement.png"));
                 Scene scene = new Scene(root);
-                stage.setTitle("Registration new user");
+                stage.setTitle("Add New Employee");
                 stage.setScene(scene);
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();

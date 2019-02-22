@@ -8,6 +8,7 @@ package controllers;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -18,10 +19,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import models.DAO;
 import models.MD5Encrypt;
+import view.Login;
+import static view.Login.stage;
 
 /**
  * FXML Controller class
@@ -29,7 +37,7 @@ import models.MD5Encrypt;
  * @author Admin
  */
 public class FXMLAddNewEmloyeeController implements Initializable {
-
+    public static Stage stage;
     @FXML
     private JFXTextField newGmail;
     @FXML
@@ -64,7 +72,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     }    
 
     @FXML
-    private void btnSubmitAddNewEmployee(ActionEvent event) throws ClassNotFoundException, SQLException {
+    private void btnSubmitAddNewEmployee(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
         String Sex;
         if(sexMale.selectedProperty().getValue()){
             Sex = "Male";
@@ -86,6 +94,17 @@ public class FXMLAddNewEmloyeeController implements Initializable {
         newLastname.setText("");
         newGmail.setText("");
         newId.setText("");
+        if(DAO.checkFirstLogin()==1){
+            Login.stage.close();
+            Stage stageEdit = new Stage();
+            this.stage=stageEdit ;
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+            stage.getIcons().add(new Image("/images/iconmanagement.png"));
+            Scene scene = new Scene(root);
+            stage.setTitle("KANManagement");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
     
 }

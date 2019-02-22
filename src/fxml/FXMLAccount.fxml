@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -12,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLRegisterController">
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAccountController">
    <children>
-      <VBox layoutY="-14.0" prefHeight="700.0" prefWidth="649.0">
+      <VBox layoutY="-14.0" prefHeight="650.0" prefWidth="649.0">
          <children>
             <HBox prefHeight="129.0" prefWidth="649.0">
                <children>
@@ -50,7 +49,7 @@
             </HBox>
             <HBox prefHeight="80.0" prefWidth="643.0">
                <children>
-                  <JFXTextField fx:id="txtUsername" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="649.0" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXTextField fx:id="txtUsername" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="649.0" promptText="Username" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -103,15 +102,6 @@
                         <Insets left="80.0" right="80.0" top="20.0" />
                      </HBox.margin>
                   </JFXPasswordField>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="200.0">
-               <children>
-                  <JFXDatePicker fx:id="newBirthday" defaultColor="#6447cd" onAction="#Format_Show_Calender" prefHeight="30.0" prefWidth="649.0" promptText="Select Birthday" showWeekNumbers="true" styleClass="jfx-date-picker">
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
-                  </JFXDatePicker>
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">

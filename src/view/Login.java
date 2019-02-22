@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import models.DAO;
 
 /**
  *
@@ -20,17 +21,21 @@ public class Login extends Application {
     public static Stage stage;
     @Override
     public void start(Stage stage) throws Exception {
-//        if( nếu có dữ liệ trong database){
-//            chạy form login
-//        }
-//        else{
-//            chạy form regis
-//        }
+    
         this.stage=stage;
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+        Parent root = null;
+        if(DAO.checkFirstLogin()==0){
+            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+            stage.setTitle("Add New Employee");
+        }
+        else{
+            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+            stage.setTitle("KANManagementLogin");
+        }
         stage.getIcons().add(new Image("/images/iconmanagement.png"));
+        
         Scene scene = new Scene(root);
-        stage.setTitle("KANManagement");
+        
         stage.setScene(scene);
         stage.show();
     }

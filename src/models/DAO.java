@@ -143,4 +143,16 @@ public class DAO {
         pts.close();
         connection.close();
     }
+    public static Integer checkFirstLogin() throws ClassNotFoundException, SQLException{
+        Connection connection = connectDB.connectSQLServer();
+        String exp="select count(*) Count from Users";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        int Count = 0;
+        while(rs.next()){
+              Count = rs.getInt("Count");
+        }
+        return Count;
+    }
 }
