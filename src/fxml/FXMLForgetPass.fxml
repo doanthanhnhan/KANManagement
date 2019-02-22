@@ -15,7 +15,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLForgetPassController">
    <children>
-      <VBox prefHeight="730.0" prefWidth="742.0">
+      <VBox prefHeight="730.0" prefWidth="742.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
@@ -47,11 +47,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="76.0" prefWidth="580.0" spacing="10.0">
                <children>
-                  <FontAwesomeIconView fill="#6467cd" glyphName="USER" size="35">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </FontAwesomeIconView>
+                  <FontAwesomeIconView fill="#6467cd" glyphName="USER" size="35" />
                   <JFXTextField fx:id="txtForgetUsername" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Username" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
@@ -62,56 +58,36 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox fx:id="hBoxPassword" alignment="CENTER" prefHeight="100.0" prefWidth="349.0" spacing="10.0">
+            <HBox fx:id="hBoxPassword" alignment="CENTER" prefHeight="100.0" prefWidth="580.0" spacing="10.0">
                <children>
-                  <MaterialIconView fill="#6447cd" glyphName="VPN_KEY" size="35">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </MaterialIconView>
-                  <JFXPasswordField fx:id="txtForgetPassword" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Password" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                  <MaterialIconView fill="#6447cd" glyphName="VPN_KEY" size="35" />
+                  <JFXPasswordField fx:id="txtForgetPassword" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Password" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </JFXPasswordField>
                </children>
             </HBox>
-            <HBox fx:id="hBoxPassword1" alignment="CENTER" prefHeight="100.0" prefWidth="349.0" spacing="10.0">
+            <HBox fx:id="hBoxPassword1" alignment="CENTER" prefHeight="100.0" prefWidth="580.0" spacing="10.0">
                <children>
-                  <MaterialIconView fill="#6447cd" glyphName="VPN_KEY" size="35">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </MaterialIconView>
-                  <JFXPasswordField fx:id="txtForgetConfirmPassword" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Confirm Password" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                  <MaterialIconView fill="#6447cd" glyphName="VPN_KEY" size="35" />
+                  <JFXPasswordField fx:id="txtForgetConfirmPassword" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Confirm Password" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </JFXPasswordField>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="580.0" spacing="10.0">
                <children>
-                  <FontAwesomeIconView fill="#6467cd" glyphName="QUESTION" size="35">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </FontAwesomeIconView>
-                  <JFXComboBox fx:id="txtSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="248.0" promptText="Serect Question" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
-                  </JFXComboBox>
+                  <FontAwesomeIconView fill="#6467cd" glyphName="QUESTION" size="35" />
+                  <JFXComboBox fx:id="txtSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Serect Question" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="76.0" prefWidth="580.0" spacing="10.0">
                <children>
-                  <FontAwesomeIconView fill="#6467cd" glyphName="PENCIL" size="35">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </FontAwesomeIconView>
-                  <JFXPasswordField fx:id="textSerectAnswer" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Serect Answer" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                  <FontAwesomeIconView fill="#6467cd" glyphName="PENCIL" size="35" />
+                  <JFXPasswordField fx:id="textSerectAnswer" focusColor="#6467cd" labelFloat="true" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Serect Answer" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
