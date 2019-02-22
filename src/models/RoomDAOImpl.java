@@ -5,17 +5,8 @@
  */
 package models;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.sql.rowset.CachedRowSet;
-import util.connectDB;
 
 /**
  *
@@ -27,17 +18,18 @@ public class RoomDAOImpl implements RoomDAO {
     public ObservableList<Room> getAllRoom() {
         String sql = "SELECT * FROM Rooms";
         ObservableList<Room> listRooms = FXCollections.observableArrayList();
-        try {
-            CachedRowSet rowSet = connectDB.connectByCachedRowSet();
-            rowSet.setCommand(sql);
-            rowSet.execute();
-            while (rowSet.next()) {
-                // Generating cursor Moved event  
-                System.out.println(rowSet.getString("RoomID"));
-            }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+//                while (rs.next()) {
+////                    listRooms.add(new Room(rs.getString("roomID"), rs.getString("RoomType"), rs.getString("PhoneNumber"), rs.getInt("RoomOnFloor"), rs.getDouble("RoomArea"),                        rs.getString("RoomStatus"),
+////                            rs.getBoolean("Clean"),
+////                            rs.getBoolean("Repaired"),
+////                            rs.getBoolean("InProgress")));
+//                }
+//            }
+//        } catch (ClassNotFoundException | SQLException ex) {
+//            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         return listRooms;
     }
 
@@ -55,6 +47,7 @@ public class RoomDAOImpl implements RoomDAO {
     public void deleteRoom(Room room) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     public static void main(String[] args) {
         RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
         roomDAOImpl.getAllRoom();
