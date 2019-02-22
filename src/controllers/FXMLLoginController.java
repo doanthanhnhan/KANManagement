@@ -25,13 +25,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import models.MD5Encrypt;
+import utils.MD5Encrypt;
 
 /**
  *
@@ -51,7 +50,7 @@ public class FXMLLoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+    
     }
     @FXML
     private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
@@ -70,10 +69,19 @@ public class FXMLLoginController implements Initializable {
                 }
                 Stage stageEdit = new Stage();
                 this.stage = stageEdit;
-                Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAccount.fxml"));
+                Parent rootAdd;
+                if(DAO.checkSetPass(txtUserName.getText())==0){
+                    rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAccount.fxml"));
+                    stageEdit.setTitle("Set Password");
+                }
+                else {
+                    rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
+                    stageEdit.setTitle("KANManagementLogin");
+                }
+                
                 Scene scene1;
                 scene1 = new Scene(rootAdd);
-                stageEdit.setTitle("Management");
+                
                 stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
                 stageEdit.setScene(scene1);
                 stageEdit.show();

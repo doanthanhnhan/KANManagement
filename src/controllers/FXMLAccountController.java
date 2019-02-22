@@ -9,15 +9,28 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import models.DAO;
 import models.InfoEmployee;
+import utils.MD5Encrypt;
+import view.Login;
 
 /**
  * FXML Controller class
@@ -25,6 +38,7 @@ import models.InfoEmployee;
  * @author Admin
  */
 public class FXMLAccountController implements Initializable {
+    public static Stage stage;
     @FXML
     private JFXTextField txtUsername;
     @FXML
@@ -35,9 +49,6 @@ public class FXMLAccountController implements Initializable {
     private JFXComboBox<?> newSerectQuestion;
     @FXML
     private JFXPasswordField newSerectAnswer;
-    @FXML
-    private JFXDatePicker newBirthday;
-
     /**
      * Initializes the controller class.
      * @param url
@@ -66,7 +77,28 @@ public class FXMLAccountController implements Initializable {
         // TODO
     }    
     @FXML
-    private void btnSubmitRegister(ActionEvent event) {
+    private void btnSubmitRegister(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
+        MD5Encrypt m;
+        m = new MD5Encrypt();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        String logtime;
+        logtime = dateFormat.format(cal.getTime());
+        System.out.println(logtime);
+        DAO.SetPass(txtUsername.getText(), m.hashPass(newPassword.getText()), m.hashPass((String) newSerectQuestion.getValue()) ,m.hashPass((String) newSerectAnswer.getText()));
+        String Content = "Set Password";
+        DAO.setUserLogs(txtUsername.getText(), Content , logtime);
+        Stage stageEdit = new Stage();
+        this.stage = stageEdit;
+        Parent rootAdd;
+        rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+        Scene scene1;
+        scene1 = new Scene(rootAdd);
+        stageEdit.setTitle("KANManagementLogin");
+        stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
+        stageEdit.setScene(scene1);
+        stageEdit.show();
+        
     }
     
 }

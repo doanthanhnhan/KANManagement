@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models;
+package utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

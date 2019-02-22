@@ -27,7 +27,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.DAO;
-import models.MD5Encrypt;
+import utils.MD5Encrypt;
 import view.Login;
 import static view.Login.stage;
 

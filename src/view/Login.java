@@ -21,7 +21,6 @@ public class Login extends Application {
     public static Stage stage;
     @Override
     public void start(Stage stage) throws Exception {
-    
         this.stage=stage;
         Parent root = null;
         if(DAO.checkFirstLogin()==0){

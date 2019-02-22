@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import util.connectDB;
+import utils.connectDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -154,5 +154,44 @@ public class DAO {
               Count = rs.getInt("Count");
         }
         return Count;
+    }
+    public static Integer checkSetPass(String User) throws ClassNotFoundException, SQLException{
+        Connection connection = connectDB.connectSQLServer();
+        String exp="select count(*) Count from UserLogs where UserName = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, User);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        int Count = 0;
+        while(rs.next()){
+              Count = rs.getInt("Count");
+        }
+        return Count;
+    }
+    public static void SetPass(String User,String Pass,String Question,String Answer) throws ClassNotFoundException, SQLException{
+        System.out.println(Pass +"Kiên ml"+ Answer + " Kiên mặt ngu");
+        Connection connection = connectDB.connectSQLServer();
+        String exp="UPDATE Users SET PassWord = ?, Serect_Question = ? ,Serect_Answer = ? WHERE UserName = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, Pass);
+        pt.setString(2, Question);
+        pt.setString(3, Answer);
+        pt.setString(4, User);
+        pt.execute();
+        pt.close();
+        connection.close();   
+    }
+    public static void setUserLogs(String User,String Content,String Logtime) throws ClassNotFoundException, SQLException{
+        System.out.println(Logtime);
+        Connection connection = connectDB.connectSQLServer();
+        String ex = "Insert Into UserLogs(UserName,LogContent,LogTime,Active) Values (?,?,?,?)";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setString(1, User);
+        pts.setString(2, Content);
+        pts.setString(3, Logtime);
+        pts.setInt(4, 1);
+        pts.execute();
+        connection.close();
+        pts.close();
     }
 }
