@@ -28,7 +28,7 @@ import javax.mail.internet.MimeMultipart;
  *
  * @author Doan Thanh Nhan
  */
-public class Gmail {
+public class Email {
 
     /**
      * 
