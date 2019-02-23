@@ -24,20 +24,20 @@ import javafx.stage.Stage;
  *
  * @author Doan Thanh Nhan
  */
-public class FXMLMainFormLoader extends Application {
+public class FXMLRoomStatusFormLoader extends Application {
 
     @Override
     public void start(Stage stage) {
         try {
-            System.out.println("Kiểm tra : "+ getClass().getResource("/fxml/FXMLMainOverViewPane.fxml").getPath());
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainOverViewPane.fxml"));
+            System.out.println("Kiểm tra : "+ getClass().getResource("/fxml/FXMLRoomStatusForm.fxml").getPath());
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLRoomStatusForm.fxml"));
 
             Scene scene = new Scene(root);
 
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainFormLoader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLRoomStatusFormLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

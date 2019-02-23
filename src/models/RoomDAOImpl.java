@@ -5,8 +5,15 @@
  */
 package models;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import utils.connectDB;
 
 /**
  *
@@ -18,18 +25,25 @@ public class RoomDAOImpl implements RoomDAO {
     public ObservableList<Room> getAllRoom() {
         String sql = "SELECT * FROM Rooms";
         ObservableList<Room> listRooms = FXCollections.observableArrayList();
-//        try {
-//            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-//                while (rs.next()) {
-////                    listRooms.add(new Room(rs.getString("roomID"), rs.getString("RoomType"), rs.getString("PhoneNumber"), rs.getInt("RoomOnFloor"), rs.getDouble("RoomArea"),                        rs.getString("RoomStatus"),
-////                            rs.getBoolean("Clean"),
-////                            rs.getBoolean("Repaired"),
-////                            rs.getBoolean("InProgress")));
-//                }
-//            }
-//        } catch (ClassNotFoundException | SQLException ex) {
-//            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {                    
+                    Room room = new Room();
+                    room.setRoomID(rs.getString("roomID"));
+                    room.setRoomType(rs.getString("RoomType"));
+                    room.setRoomPhoneNumber(rs.getString("PhoneNumber"));
+                    room.setRoomOnFloor(rs.getInt("RoomOnFloor"));
+                    room.setRoomArea(rs.getFloat("RoomArea"));
+                    room.setRoomStatus(rs.getString("RoomStatus"));
+                    room.setRoomClean(rs.getBoolean("Clean"));
+                    room.setRoomRepaired(rs.getBoolean("Repaired"));
+                    room.setRoomInProgress(rs.getBoolean("InProgress"));                    
+                    listRooms.add(room);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return listRooms;
     }
 
@@ -50,6 +64,10 @@ public class RoomDAOImpl implements RoomDAO {
 
     public static void main(String[] args) {
         RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
-        roomDAOImpl.getAllRoom();
+        ObservableList<Room> listRooms = FXCollections.observableArrayList();
+        listRooms = roomDAOImpl.getAllRoom();
+        for (Room listRoom : listRooms) {            
+            System.out.println(listRoom.toString());
+        }
     }
 }

@@ -10,25 +10,22 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="roomSatusPane" prefHeight="140.0" prefWidth="260.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="roomSatusPane" fx:id="anchorPane_Room" prefHeight="140.0" prefWidth="260.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLRoomStatusFormController">
    <children>
       <BorderPane prefHeight="140.0" prefWidth="260.0" styleClass="boderPane-room-status">
          <top>
             <HBox prefWidth="260.0" styleClass="hbox-background-room-status" BorderPane.alignment="CENTER">
                <children>
-                  <Label id="label_Room_Number" prefWidth="130.0" styleClass="label-roomNumber-room-status" text="Room 101" />
-                  <Label id="label_Room_Status" alignment="CENTER_RIGHT" prefWidth="130.0" styleClass="label-roomCheckOut-room-status" text="Checked out" />
+                  <Label id="label_Room_Number" fx:id="label_Room_Number" prefWidth="130.0" styleClass="label-roomNumber-room-status" text="Room 101" />
+                  <Label id="label_Room_Status" fx:id="label_Room_Status" alignment="CENTER_RIGHT" prefWidth="130.0" styleClass="label-roomCheckOut-room-status" text="Checked out" />
                </children>
             </HBox>
          </top>
          <center>
-            <HBox alignment="CENTER" prefWidth="260.0" styleClass="hbox-background-room-status" BorderPane.alignment="CENTER">
+            <HBox id="hbox_Room_Owner_Type" alignment="CENTER" prefWidth="260.0" spacing="10.0" styleClass="hbox-background-room-status" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" prefHeight="70.0" prefWidth="260.0" styleClass="label-GuestName-room-status" text=" Đoàn Thanh Nhân">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="USERS" size="40" />
-                     </graphic>
-                  </Label>
+                  <FontAwesomeIconView id="icon_Room_Type" fx:id="icon_Room_Type" glyphName="USERS" size="40" />
+                  <Label id="label_Customer_Name" fx:id="label_Customer_Name" alignment="CENTER" prefHeight="70.0" styleClass="label-GuestName-room-status" text="Đoàn Thanh Nhân" />
                </children>
             </HBox>
          </center>
@@ -37,31 +34,34 @@
                <children>
                   <HBox alignment="CENTER" prefWidth="200.0">
                      <children>
-                        <Label prefWidth="85.0" text="4 days">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="CALENDAR_CHECK_ALT" />
-                           </graphic>
-                        </Label>
-                        <Label layoutX="10.0" layoutY="10.0" prefWidth="70.0" text="Clean">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="CHECK" />
-                           </graphic>
-                        </Label>
-                        <Label layoutX="80.0" layoutY="10.0" prefWidth="70.0" text="Repair">
-                           <graphic>
-                              <FontAwesomeIconView glyphName="WRENCH" />
-                           </graphic>
-                        </Label>
+                        <FontAwesomeIconView id="icon_Date_Remaining" glyphName="CALENDAR_CHECK_ALT">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </FontAwesomeIconView>
+                        <Label id="label_Date_Remaining" fx:id="label_Date_Remaining" text="4 days" />
+                        <FontAwesomeIconView id="icon_Clean_Status" glyphName="CHECK">
+                           <HBox.margin>
+                              <Insets left="10.0" right="5.0" />
+                           </HBox.margin>
+                        </FontAwesomeIconView>
+                        <Label id="label_Clean_Status" fx:id="label_Clean_Status" layoutX="10.0" layoutY="10.0" text="Clean" />
+                        <FontAwesomeIconView id="icon_Repaired_Status" glyphName="WRENCH">
+                           <HBox.margin>
+                              <Insets left="10.0" right="5.0" />
+                           </HBox.margin>
+                        </FontAwesomeIconView>
+                        <Label id="label_Repaired_Status" fx:id="label_Repair_Status" layoutX="80.0" layoutY="10.0" text="Repaired" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefWidth="200.0" spacing="5.0">
                      <children>
-                        <JFXButton prefWidth="125.0" styleClass="loginBtn" text="Check in">
+                        <JFXButton id="btn_CheckIn" fx:id="btn_Check_In" prefWidth="125.0" styleClass="loginBtn" text="Check in">
                            <graphic>
                               <MaterialDesignIconView glyphName="LOGIN" styleClass="glyph-icon-room-status" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton prefWidth="125.0" styleClass="loginBtn" text="Check out">
+                        <JFXButton id="btn_CheckOut" fx:id="btn_Check_Out" prefWidth="125.0" styleClass="loginBtn" text="Check out">
                            <graphic>
                               <MaterialDesignIconView glyphName="LOGOUT" styleClass="glyph-icon-room-status" />
                            </graphic>

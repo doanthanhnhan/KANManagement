@@ -127,3 +127,17 @@ CREATE TABLE Employees(
 	-- Create constraint
 	CONSTRAINT pk_EmployeeID PRIMARY KEY (EmployeeID)
 )
+
+-- CREATE DATA FOR TESTING --
+INSERT INTO Rooms (RoomID, RoomType, PhoneNumber, RoomOnFloor, RoomArea, RoomStatus, Clean, Repaired, InProgress) VALUES 
+('R0101', 'Single', '67890101',1,20,'Available',1,1,1),
+('R0102', 'Double', '67890102',1,30,'Reserved',0,1,1),
+('R0103', 'Triple', '67890103',1,40,'Occupied',1,0,0),
+('R0104', 'Family', '67890104',1,50,'Out',1,1,0),
+('R0105', 'Special', '67890105',1,60,'Available',0,0,1),
+('R0201', 'Special', '67890201',2,60,'Occupied',1,1,0),
+('R0202', 'Single', '67890202',2,20,'Out',0,1,0),
+('R0203', 'Triple', '67890203',2,40,'Reserved',1,1,0),
+('R0204', 'Double', '67890204',2,30,'Available',1,0,0),
+('R0205', 'Family', '67890205',2,50,'Available',0,1,1)
+DELETE FROM Rooms

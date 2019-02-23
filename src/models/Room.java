@@ -6,7 +6,12 @@
 package models;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -18,103 +23,136 @@ public class Room {
     private StringProperty roomID;
     private StringProperty roomType;
     private StringProperty roomPhoneNumber;
-    private StringProperty roomOnFloor;
-    private IntegerProperty roomArea;
+    private IntegerProperty roomOnFloor;
+    private FloatProperty roomArea;
     private StringProperty roomStatus;
     private BooleanProperty roomClean;
     private BooleanProperty roomRepaired;
     private BooleanProperty roomInProgress;
 
     public Room() {
+        this.roomID = new SimpleStringProperty();
+        this.roomType = new SimpleStringProperty();
+        this.roomPhoneNumber = new SimpleStringProperty();
+        this.roomOnFloor = new SimpleIntegerProperty();
+        this.roomArea = new SimpleFloatProperty();
+        this.roomStatus = new SimpleStringProperty();
+        this.roomClean = new SimpleBooleanProperty();
+        this.roomRepaired = new SimpleBooleanProperty();
+        this.roomInProgress = new SimpleBooleanProperty();                
+    }          
+
+    public final String getRoomID() {
+        return roomID.get();
     }
 
-    public Room(StringProperty roomID, StringProperty roomType, StringProperty roomPhoneNumber, StringProperty roomOnFloor, IntegerProperty roomArea, StringProperty roomStatus, BooleanProperty roomClean, BooleanProperty roomRepaired, BooleanProperty roomInProgress) {
-        this.roomID = roomID;
-        this.roomType = roomType;
-        this.roomPhoneNumber = roomPhoneNumber;
-        this.roomOnFloor = roomOnFloor;
-        this.roomArea = roomArea;
-        this.roomStatus = roomStatus;
-        this.roomClean = roomClean;
-        this.roomRepaired = roomRepaired;
-        this.roomInProgress = roomInProgress;
+    public final void setRoomID(String value) {
+        roomID.set(value);
     }
 
-    public StringProperty getRoomID() {
+    public StringProperty roomIDProperty() {
         return roomID;
     }
 
-    public void setRoomID(StringProperty roomID) {
-        this.roomID = roomID;
+    public final String getRoomType() {
+        return roomType.get();
     }
 
-    public StringProperty getRoomType() {
+    public final void setRoomType(String value) {
+        roomType.set(value);
+    }
+
+    public StringProperty roomTypeProperty() {
         return roomType;
     }
 
-    public void setRoomType(StringProperty roomType) {
-        this.roomType = roomType;
+    public final String getRoomPhoneNumber() {
+        return roomPhoneNumber.get();
     }
 
-    public StringProperty getRoomPhoneNumber() {
+    public final void setRoomPhoneNumber(String value) {
+        roomPhoneNumber.set(value);
+    }
+
+    public StringProperty roomPhoneNumberProperty() {
         return roomPhoneNumber;
     }
 
-    public void setRoomPhoneNumber(StringProperty roomPhoneNumber) {
-        this.roomPhoneNumber = roomPhoneNumber;
+    public final int getRoomOnFloor() {
+        return roomOnFloor.get();
     }
 
-    public StringProperty getRoomOnFloor() {
+    public final void setRoomOnFloor(int value) {
+        roomOnFloor.set(value);
+    }
+
+    public IntegerProperty roomOnFloorProperty() {
         return roomOnFloor;
     }
 
-    public void setRoomOnFloor(StringProperty roomOnFloor) {
-        this.roomOnFloor = roomOnFloor;
+    public final float getRoomArea() {
+        return roomArea.get();
     }
 
-    public IntegerProperty getRoomArea() {
+    public final void setRoomArea(float value) {
+        roomArea.set(value);
+    }
+
+    public FloatProperty roomAreaProperty() {
         return roomArea;
     }
 
-    public void setRoomArea(IntegerProperty roomArea) {
-        this.roomArea = roomArea;
+    public final String getRoomStatus() {
+        return roomStatus.get();
     }
 
-    public StringProperty getRoomStatus() {
+    public final void setRoomStatus(String value) {
+        roomStatus.set(value);
+    }
+
+    public StringProperty roomStatusProperty() {
         return roomStatus;
     }
 
-    public void setRoomStatus(StringProperty roomStatus) {
-        this.roomStatus = roomStatus;
+    public final boolean isRoomClean() {
+        return roomClean.get();
     }
 
-    public BooleanProperty getRoomClean() {
+    public final void setRoomClean(boolean value) {
+        roomClean.set(value);
+    }
+
+    public BooleanProperty roomCleanProperty() {
         return roomClean;
     }
 
-    public void setRoomClean(BooleanProperty roomClean) {
-        this.roomClean = roomClean;
+    public final boolean isRoomRepaired() {
+        return roomRepaired.get();
     }
 
-    public BooleanProperty getRoomRepaired() {
+    public final void setRoomRepaired(boolean value) {
+        roomRepaired.set(value);
+    }
+
+    public BooleanProperty roomRepairedProperty() {
         return roomRepaired;
     }
 
-    public void setRoomRepaired(BooleanProperty roomRepaired) {
-        this.roomRepaired = roomRepaired;
+    public final boolean isRoomInProgress() {
+        return roomInProgress.get();
     }
 
-    public BooleanProperty getRoomInProgress() {
+    public final void setRoomInProgress(boolean value) {
+        roomInProgress.set(value);
+    }
+
+    public BooleanProperty roomInProgressProperty() {
         return roomInProgress;
-    }
-
-    public void setRoomInProgress(BooleanProperty roomInProgress) {
-        this.roomInProgress = roomInProgress;
     }
 
     @Override
     public String toString() {
         return "Room{" + "roomID=" + roomID + ", roomType=" + roomType + ", roomPhoneNumber=" + roomPhoneNumber + ", roomOnFloor=" + roomOnFloor + ", roomArea=" + roomArea + ", roomStatus=" + roomStatus + ", roomClean=" + roomClean + ", roomRepaired=" + roomRepaired + ", roomInProgress=" + roomInProgress + '}';
-    }    
-
+    }  
+    
 }

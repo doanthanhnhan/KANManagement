@@ -8,7 +8,9 @@
     -fx-secondarycolor: #20bf6b;
     -fx-primarytextcolor: #a3a3a3;
     -fx-checkoutcolor: #FF2625;
-    -fx-availablecolor: #00FF25;
+    -fx-availablecolor: #7AA716;
+    -fx-reservedcolor: #009FB4;
+    -fx-occupiedcolor: #C83F06;
 }
 .glyph-icon{
     -fx-fill: -fx-primarycolor;
@@ -106,18 +108,19 @@
     -fx-font-size : 14px;
     -fx-font-weight: bold;
 }
+
 .label-roomAvailable-room-status{
-    -fx-text-fill: -fx-primarycolor;
+    -fx-text-fill: -fx-availablecolor;
     -fx-font-size : 14px;
     -fx-font-weight: bold;
 }
 .label-roomOccupied-room-status{
-    -fx-text-fill: -fx-primarycolor;
+    -fx-text-fill: -fx-occupiedcolor;
     -fx-font-size : 14px;
     -fx-font-weight: bold;
 }
 .label-roomReserved-room-status{
-    -fx-text-fill: -fx-primarycolor;
+    -fx-text-fill: -fx-reservedcolor;
     -fx-font-size : 14px;
     -fx-font-weight: bold;
 }
@@ -125,4 +128,12 @@
     -fx-text-fill: -fx-primarycolor;
     -fx-font-size : 18px;
     -fx-font-weight: bold;
+}
+.label-NotClean-Status{
+    -fx-text-fill: -fx-checkoutcolor;
+    -fx-font-size : 15px;
+    /*-fx-font-weight: regular;*/
+}
+.glyph-icon-clean-repair-inprogress-status{
+    -fx-fill: -fx-checkoutcolor;
 }

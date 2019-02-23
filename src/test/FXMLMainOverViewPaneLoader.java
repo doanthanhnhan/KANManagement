@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  *
  * @author Doan Thanh Nhan
  */
-public class FXMLMainFormLoader extends Application {
+public class FXMLMainOverViewPaneLoader extends Application {
 
     @Override
     public void start(Stage stage) {
@@ -37,7 +37,7 @@ public class FXMLMainFormLoader extends Application {
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainFormLoader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLMainOverViewPaneLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
