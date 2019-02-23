@@ -124,10 +124,18 @@ CREATE TABLE Employees(
 	Comm decimal,
 	Email varchar(100),
 	Active bit DEFAULT 1,
+	RoleID varchar(20),
 	-- Create constraint
 	CONSTRAINT pk_EmployeeID PRIMARY KEY (EmployeeID)
 )
 
+ALTER TABLE Users
+ADD CONSTRAINT FK_EmployeeID
+FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID);
+
+ALTER TABLE Employees
+ADD CONSTRAINT FK_RoleID
+FOREIGN KEY (RoleID) REFERENCES [Role](RoleID);
 -- CREATE DATA FOR TESTING --
 INSERT INTO Rooms (RoomID, RoomType, PhoneNumber, RoomOnFloor, RoomArea, RoomStatus, Clean, Repaired, InProgress) VALUES 
 ('R0101', 'Single', '67890101',1,20,'Available',1,1,1),
