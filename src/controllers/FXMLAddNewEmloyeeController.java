@@ -28,6 +28,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.DAO;
+import utils.Email;
 import utils.MD5Encrypt;
 import view.Login;
 import static view.Login.stage;
@@ -74,7 +75,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     }    
 
     @FXML
-    private void btnSubmitAddNewEmployee(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
+    private void btnSubmitAddNewEmployee(ActionEvent event) throws ClassNotFoundException, SQLException, IOException, Exception {
         String Sex;
         if(sexMale.selectedProperty().getValue()){
             Sex = "Male";
@@ -90,6 +91,9 @@ public class FXMLAddNewEmloyeeController implements Initializable {
         m = new MD5Encrypt();
         String Password = m.hashPass("123456");
         DAO.AddUser(newId.getText(), Username, Password);
+        String content = "Username: " + newId.getText() + ", Password: 123456";
+        Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
+                    "KAN@123456", "Default username and password", content);
         newRole.setValue(null);
         newFirstname.setText("");
         newMidname.setText("");

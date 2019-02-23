@@ -27,27 +27,27 @@ public class DAO {
         ObservableList<InfoEmployee> List = FXCollections.observableArrayList();
         while (rs.next()) {
             InfoEmployee Emp = new InfoEmployee();
-            Emp.setEmployee_ID(rs.getString("Employee_ID"));
+            Emp.setEmployee_ID(rs.getString("EmployeeID"));
             Emp.setUserName(rs.getString("UserName"));
             Emp.setPassWord(rs.getString("PassWord"));
             Emp.setActive(rs.getString("Active"));
-            Emp.setFirst_Name(rs.getString("FIRST_NAME"));
-            Emp.setMid_Name(rs.getString("MID_NAME"));
-            Emp.setLast_Name(rs.getString("LAST_NAME"));
-            Emp.setWork_Dept(rs.getString("WORKDEPT"));
-            Emp.setPhone_No(rs.getString("PHONENO"));
-            Emp.setHiredate(rs.getString("HIREDATE"));
-            Emp.setJob(rs.getString("JOB"));
-            Emp.setEDLEVEL(rs.getInt("EDLEVEL"));
+            Emp.setFirst_Name(rs.getString("EmployeeFirstName"));
+            Emp.setMid_Name(rs.getString("EmployeeMidName"));
+            Emp.setLast_Name(rs.getString("EmployeeLastName"));
+            Emp.setWork_Dept(rs.getString("DepartmentID"));
+            Emp.setPhone_No(rs.getString("PhoneNumber"));
+            Emp.setHiredate(rs.getString("HireDate"));
+            Emp.setJob(rs.getString("Job"));
+            Emp.setEDLEVEL(rs.getInt("EducatedLevel"));
             Emp.setSerect_Question(rs.getString("Serect_Question"));
             Emp.setSerect_Answer(rs.getString("Serect_Answer"));
-            Emp.setBirthdate(rs.getString("BIRTHDATE"));
-            Emp.setSalary(rs.getString("SALARY"));
-            Emp.setBonus(rs.getString("BONUS"));
-            Emp.setComm(rs.getString("COMM"));
-            Emp.setGmail(rs.getString("Gmail"));
+            Emp.setBirthdate(rs.getString("Birthday"));
+            Emp.setSalary(rs.getString("Salary"));
+            Emp.setBonus(rs.getString("Bonus"));
+            Emp.setComm(rs.getString("Comm"));
+            Emp.setGmail(rs.getString("Email"));
             Emp.setRole(rs.getString("Position"));
-            int i = rs.getInt("SEX");
+            int i = rs.getInt("Sex");
             if (i == 1) {
                Emp.setSex("Nam");
             } else {
@@ -62,7 +62,7 @@ public class DAO {
         // Tạo đối tượng Statement.
         Statement statement = connection.createStatement();
 
-        String sql = "select Users.*,Employee.*,[Role].* from Users, Employee,[Role] where Users.Employee_ID = Employee.Employee_ID and Employee.Id_Role=[Role].Id_Role";
+        String sql = "select Users.*,Employees.*,[Role].* from Users, Employees,[Role] where Users.EmployeeID = Employees.EmployeeID and Employees.RoleID=[Role].RoleID";
 
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = statement.executeQuery(sql);
@@ -73,7 +73,7 @@ public class DAO {
     public static void AddNewEmployee(String Id,String FName,String MName,String LName,String Id_Role,String Gmail,String Sex) {
         try {
             Connection connection = connectDB.connectSQLServer();
-            String exm = "Insert into Employee(Employee_ID,FIRST_NAME,MID_NAME,LAST_NAME,SEX,Gmail,Id_Role) values(?,?,?,?,?,?,?)";
+            String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,RoleID) values(?,?,?,?,?,?,?)";
             PreparedStatement pt = connection.prepareStatement(exm);
             pt.setString(1, Id);
             pt.setString(2, FName);
@@ -113,13 +113,13 @@ public class DAO {
     public static String getIdRole(String Role) throws ClassNotFoundException, SQLException{
         String Id = null;
         Connection connection = connectDB.connectSQLServer();
-        String exp="select Id_Role from [Role] where Position = ?";
+        String exp="select RoleID from [Role] where Position = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, Role);
         ResultSet rs;
         rs = pt.executeQuery();
         while(rs.next()){
-              Id = rs.getString("Id_Role");
+              Id = rs.getString("RoleID");
         }
         return Id;
     }
@@ -134,7 +134,7 @@ public class DAO {
               Id = rs.getInt("Max")+1;
         }
         int active=1;
-        String ex="Insert into Users(ID_User,Employee_ID,UserName,PassWord,Active) values(?,?,?,?,?)";
+        String ex="Insert into Users(ID_User,EmployeeID,UserName,PassWord,Active) values(?,?,?,?,?)";
         PreparedStatement pts = connection.prepareStatement(ex);
         pts.setInt(1, Id);
         pts.setString(2, Emp_Id);
