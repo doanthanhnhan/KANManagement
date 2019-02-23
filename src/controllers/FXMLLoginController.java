@@ -5,17 +5,17 @@
  */
 package controllers;
 
-import view.Login;
 import models.DAO;
 import models.InfoEmployee;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import de.jensd.fx.glyphs.materialicons.MaterialIcon;
-import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,62 +62,84 @@ public class FXMLLoginController implements Initializable {
     }
     public static ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
     @FXML
-    private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException { 
+    private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
         for (InfoEmployee infoEmployee : List_Employee) {
             MD5Encrypt m = new MD5Encrypt();
             String hashPass = m.hashPass(txtPassword.getText());
-            if(txtUserName.getText().equals(infoEmployee.getUserName())&&hashPass.equals(infoEmployee.getPassWord())){
-                List_EmployeeLogin.add(infoEmployee);
-                Stage stage = (Stage) btnLogin.getScene().getWindow();
-                stage.close();
-                Stage stageEdit = new Stage();
-                Parent rootAdd;
-                if(DAO.checkSetPass(txtUserName.getText())==0){
-                    rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAccount.fxml"));
-                    stageEdit.setTitle("Set Password");
+            if(txtUserName.getText().equals(infoEmployee.getUserName())){
+                if(DAO.check_Active(txtUserName.getText()).equals(0)){
+                    System.out.println("Account Blocked !!!");
                 }
-                else {
-                    rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
-                    stageEdit.setTitle("KANManagementLogin");
+                else{
+                    if(hashPass.equals(infoEmployee.getPassWord())){
+                        List_EmployeeLogin.add(infoEmployee);
+                        Stage stage = (Stage) btnLogin.getScene().getWindow();
+                        stage.close();
+                        Stage stageEdit = new Stage();
+                        Parent rootAdd;
+                        if(DAO.checkSetPass(txtUserName.getText())==0){
+                            rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAccount.fxml"));
+                            stageEdit.setTitle("Set Password");
+                        }
+                        else {
+                            rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
+                            stageEdit.setTitle("KANManagementLogin");
+                        }
+
+                        Scene scene1;
+                        scene1 = new Scene(rootAdd);
+
+                        stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
+                        stageEdit.setScene(scene1);
+                        stageEdit.show();
+                        break;
+                    }
+                    else if(!hashPass.equals(infoEmployee.getPassWord())){
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Calendar cal = Calendar.getInstance();
+                        String logtime;
+                        logtime = dateFormat.format(cal.getTime());
+                        if(!DAO.check_Time(txtUserName.getText()).equals(logtime)){
+                            DAO.reset_CheckLogin(txtUserName.getText(), logtime);
+                        }
+                        DAO.check_Login(txtUserName.getText(), logtime);
+                    }
                 }
-                
-                Scene scene1;
-                scene1 = new Scene(rootAdd);
-                
-                stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
-                stageEdit.setScene(scene1);
-                stageEdit.show();
-                break;
             }
             else{
-                System.out.println("False");
+                System.out.println("User or pass Wrong !!!");
             }
         }
     }
     @FXML
-    private void handleForgetPass() throws IOException{
+    private void handleForgetPass() throws IOException, SQLException, ClassNotFoundException{
         if("".equals(txtUserName.getText())){
             System.out.println("Empty");
         }
         else{
-            for( int i = 0 ; i < List_Employee.size();i++){
-                if(txtUserName.getText().equals(List_Employee.get(i).getUserName())){
-                    employeeForget.add(List_Employee.get(i));
-                    Stage stageForget = new Stage();
-                    stageForget.initModality(Modality.APPLICATION_MODAL);
-                // make its owner the existing window:
-  
-                    Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLForgetPass.fxml"));
-                    Scene sceneForget;
-                    sceneForget = new Scene(rootAdd);
-                    stageForget.setTitle("Forget Password");
-                    stageForget.getIcons().add(new Image("/images/iconmanagement.png"));
-                    stageForget.setScene(sceneForget);
-                    stageForget.show();
-                    break;
-                }
-                else{
-                    System.out.println("Invalid");
+            if(DAO.check_Active(txtUserName.getText()).equals(0)){
+                    System.out.println("Account Blocked !!!");
+            }
+            else{
+                for( int i = 0 ; i < List_Employee.size();i++){
+                    if(txtUserName.getText().equals(List_Employee.get(i).getUserName())){
+                        employeeForget.add(List_Employee.get(i));
+                        Stage stageForget = new Stage();
+                        stageForget.initModality(Modality.APPLICATION_MODAL);
+                    // make its owner the existing window:
+
+                        Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLForgetPass.fxml"));
+                        Scene sceneForget;
+                        sceneForget = new Scene(rootAdd);
+                        stageForget.setTitle("Forget Password");
+                        stageForget.getIcons().add(new Image("/images/iconmanagement.png"));
+                        stageForget.setScene(sceneForget);
+                        stageForget.show();
+                        break;
+                    }
+                    else{
+                        System.out.println("Invalid");
+                    }
                 }
             }
         }

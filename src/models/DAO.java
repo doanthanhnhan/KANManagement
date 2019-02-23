@@ -123,7 +123,7 @@ public class DAO {
         }
         return Id;
     }
-    public static void AddUser(String Emp_Id, String User, String Pass) throws SQLException, ClassNotFoundException{
+    public static void AddUser(String Emp_Id, String User, String Pass,String Date) throws SQLException, ClassNotFoundException{
         Connection connection = connectDB.connectSQLServer();
         String exp="select Max (ID_User) Max from Users";
         PreparedStatement pt = connection.prepareStatement(exp);
@@ -134,13 +134,15 @@ public class DAO {
               Id = rs.getInt("Max")+1;
         }
         int active=1;
-        String ex="Insert into Users(ID_User,EmployeeID,UserName,PassWord,Active) values(?,?,?,?,?)";
+        String ex="Insert into Users(ID_User,EmployeeID,UserName,PassWord,Active,Check_Login,Check_Time) values(?,?,?,?,?,?,?)";
         PreparedStatement pts = connection.prepareStatement(ex);
         pts.setInt(1, Id);
         pts.setString(2, Emp_Id);
         pts.setString(3, User);
         pts.setString(4, Pass);
         pts.setInt(5, active);
+        pts.setInt(6,0);
+        pts.setString(7, Date);
         pts.execute();
         pts.close();
         connection.close();
@@ -191,8 +193,9 @@ public class DAO {
         pts.setString(3, Logtime);
         pts.setInt(4, 1);
         pts.execute();
-        connection.close();
         pts.close();
+        connection.close();
+
     }
     public static void forgetPass(String User, String Pass) throws SQLException, ClassNotFoundException{
         Connection connection = connectDB.connectSQLServer();
@@ -203,5 +206,78 @@ public class DAO {
         pt.execute();
         pt.close();
         connection.close();  
+    }
+    public static void check_Login(String User, String Time) throws SQLException, ClassNotFoundException{
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "select Check_Login from Users where UserName = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, User);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        int Count = 0;
+        while (rs.next()) {
+            Count=rs.getInt("Check_Login");
+        }
+        Count++;
+        System.out.println(Count);
+        pt.close();
+        String ex="UPDATE Users SET Check_Login = ?,Check_Time = ? WHERE UserName = ?";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setInt(1, Count);
+        pts.setString(2, Time);
+        pts.setString(3, User);
+        pts.execute();
+        pts.close();
+        if(Count==3){
+            String e="UPDATE Users SET Active = ? WHERE UserName = ?";
+            PreparedStatement p = connection.prepareStatement(e);
+            p.setInt(1, 0);
+            p.setString(2, User);
+            p.execute();
+            p.close();
+        }
+        connection.close();  
+    }
+    public static Integer check_Active(String User) throws SQLException, ClassNotFoundException{
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "select Active from Users where UserName = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, User);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        int Count = 0;
+        while (rs.next()) {
+            Count = rs.getInt("Active");
+        }
+        pt.close();
+        connection.close();
+        return Count;
+    }
+    public static String check_Time(String User) throws SQLException, ClassNotFoundException{
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "select Check_Time from Users where UserName = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, User);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        String Count = null;
+        while (rs.next()) {
+            Count = rs.getString("Check_Time");
+        }
+        pt.close();
+        connection.close();
+        return Count;
+    }
+    public static void reset_CheckLogin(String User,String Logtime) throws ClassNotFoundException, SQLException{
+        Connection connection = connectDB.connectSQLServer();
+        String ex = "UPDATE Users SET Check_Login = ?,Check_Time = ? WHERE UserName = ?";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setInt(1, 0);
+        pts.setString(2, Logtime);
+        pts.setString(3, User);
+        pts.execute();
+        pts.close();
+        connection.close();
+
     }
 }

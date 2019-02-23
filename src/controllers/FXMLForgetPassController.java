@@ -73,6 +73,11 @@ public class FXMLForgetPassController implements Initializable {
     @FXML
     private void handleForgetAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         MD5Encrypt m = new MD5Encrypt();
+        System.out.println(employeeForget.get(0).getSerect_Question());
+        System.out.println(m.hashPass((String) txtSerectQuestion.getValue()));
+        if(DAO.check_Active(txtForgetUsername.getText()).equals(0)){
+                    System.out.println("Account Blocked !!!");
+        }
         if(employeeForget.get(0).getSerect_Question().equals(m.hashPass((String) txtSerectQuestion.getValue()))
                 &&employeeForget.get(0).getSerect_Answer().equals(m.hashPass(textSerectAnswer.getText()))){
             DAO.forgetPass(txtForgetUsername.getText(), m.hashPass(txtForgetPassword.getText()));
@@ -88,7 +93,15 @@ public class FXMLForgetPassController implements Initializable {
             stage.close();
         }
         else{
-            System.out.println("False");
+            System.out.println("Serect Question or Serect Answer Wrong !!!");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            String logtime;
+            logtime = dateFormat.format(cal.getTime());
+            if(!DAO.check_Time(txtForgetUsername.getText()).equals(logtime)){
+                DAO.reset_CheckLogin(txtForgetUsername.getText(), logtime);
+            }
+            DAO.check_Login(txtForgetUsername.getText(), logtime);
         }
 
     }

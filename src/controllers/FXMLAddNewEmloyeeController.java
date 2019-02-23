@@ -12,6 +12,9 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -90,7 +93,11 @@ public class FXMLAddNewEmloyeeController implements Initializable {
         MD5Encrypt m;
         m = new MD5Encrypt();
         String Password = m.hashPass("123456");
-        DAO.AddUser(newId.getText(), Username, Password);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar cal = Calendar.getInstance();
+        String logtime;
+        logtime = dateFormat.format(cal.getTime());
+        DAO.AddUser(newId.getText(), Username, Password,logtime);
         String content = "Username: " + newId.getText() + ", Password: 123456";
         Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                     "KAN@123456", "Default username and password", content);
