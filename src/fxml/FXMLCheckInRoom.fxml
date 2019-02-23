@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1366.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLCheckInRoomController">
+    <stylesheets>
+        <URL value="@/css/fxmlcheckinroom.css" />
+    </stylesheets>
+   <children>
+      <VBox prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: white;">
+         <children>
+            <Label alignment="CENTER" prefHeight="100.0" prefWidth="1465.0" text="Check In Table" textFill="#6447cd">
+               <font>
+                  <Font name="System Bold" size="41.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="676.0" prefWidth="1366.0">
+               <children>
+                  <VBox prefHeight="672.0" prefWidth="229.0">
+                     <children>
+                        <JFXButton prefHeight="75.0" prefWidth="237.0" ripplerFill="#9194d0" style="-fx-background-color: #6447cd; -fx-background-radius: 500;" text="Check in" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="672.0" prefWidth="1137.0" style="-fx-background-color: white;">
+                     <children>
+                        <HBox prefHeight="673.0" prefWidth="1137.0">
+                           <children>
+                              <Separator orientation="VERTICAL" prefHeight="672.0" prefWidth="0.0" />
+                              <VBox prefHeight="673.0" prefWidth="1131.0">
+                                 <children>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="100.0" prefWidth="95.0" text="ID Booking" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="25.0" right="25.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <JFXTextField focusColor="#6447cd" prefHeight="101.0" prefWidth="169.0" promptText="           bood-xxx" unFocusColor="#6447cd">
+                                             <HBox.margin>
+                                                <Insets bottom="30.0" top="30.0" />
+                                             </HBox.margin>
+                                          </JFXTextField>
+                                          <JFXButton id="searchBtn" fx:id="serachBtn" onAction="#handleSearchBtn" prefHeight="106.0" prefWidth="110.0" ripplerFill="#9194d0" style="-fx-border-color: #6447cd; -fx-border-radius: 500; -fx-border-width: 3px;" stylesheets="@../css/fxmlcheckinroom.css" text="Search">
+                                             <HBox.margin>
+                                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </JFXButton>
+                                       </children>
+                                    </HBox>
+                                    <ScrollPane prefHeight="574.0" prefWidth="1131.0">
+                                       <content>
+                                          <JFXTreeTableView prefHeight="451.0" prefWidth="1500.0" tableMenuButtonVisible="true">
+                                             <columns>
+                                                <TreeTableColumn prefWidth="132.00003051757812" text="ID Booking" />
+                                                <TreeTableColumn prefWidth="227.0" text="Name" />
+                                                <TreeTableColumn prefWidth="110.0" text="Room Type" />
+                                                <TreeTableColumn prefWidth="164.0" text="Phone " />
+                                                <TreeTableColumn prefWidth="106.0" text="Mail" />
+                                                <TreeTableColumn prefWidth="53.0" text="Drive" />
+                                                <TreeTableColumn prefWidth="48.0" text="Note" />
+                                                <TreeTableColumn prefWidth="93.0" text="Company " />
+                                                <TreeTableColumn prefWidth="60.0" text="Column X" />
+                                                <TreeTableColumn prefWidth="56.0" text="Column X" />
+                                                <TreeTableColumn prefWidth="52.0" text="Column X" />
+                                                <TreeTableColumn prefWidth="46.0" text="Column X" />
+                                                <TreeTableColumn prefWidth="95.0" text="Column X" />
+                                             </columns>
+                                             <contextMenu>
+                                                <ContextMenu>
+                                                  <items>
+                                                    <MenuItem mnemonicParsing="false" onAction="#handleEditMenu" text="Edit" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#handleDeleteMenu" text="Delete" />
+                                                  </items>
+                                                </ContextMenu>
+                                             </contextMenu>
+                                          </JFXTreeTableView>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -38,27 +38,27 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <JFXTextField labelFloat="true" promptText="First Name" unFocusColor="#4a4a4a">
+                        <JFXTextField fx:id="txtFirstName" labelFloat="true" promptText="First Name" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Last Name" unFocusColor="#4a4a4a">
+                        <JFXTextField fx:id="txtLastName" labelFloat="true" promptText="Last Name" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Email" unFocusColor="#4a4a4a">
+                        <JFXTextField fx:id="txtEmail" labelFloat="true" promptText="Email" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Phone Number" unFocusColor="#4a4a4a">
+                        <JFXTextField fx:id="txtPhoneNumber" labelFloat="true" promptText="Phone Number" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXTextField labelFloat="true" promptText="Note" unFocusColor="#4a4a4a">
+                        <JFXTextField fx:id="txtNote" labelFloat="true" promptText="Note" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
@@ -72,7 +72,7 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <JFXTextField labelFloat="true" promptText="Company Name" unFocusColor="#4a4a4a">
+                        <JFXTextField fx:id="txtCompanyName" labelFloat="true" promptText="Company Name" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
@@ -82,12 +82,12 @@
                               <Insets left="25.0" right="25.0" top="-9.0" />
                            </padding>
                         </JFXComboBox>
-                        <JFXTextField labelFloat="true" promptText="Number of Guest" unFocusColor="#4a4a4a">
+                        <JFXTextField fx:id="txtNumberofGuest" labelFloat="true" promptText="Number of Guest" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
-                        <JFXDatePicker defaultColor="#6467cd" overLay="true" prefHeight="15.0" prefWidth="683.0" promptText="Date Arrive" styleClass="jfx-date-picker" stylesheets="@../css/fxmlforminforofguest.css">
+                        <JFXDatePicker fx:id="datePickerDateArrive" defaultColor="#6467cd" prefHeight="15.0" prefWidth="683.0" promptText="Date Arrive" styleClass="jfx-date-picker">
                            <padding>
                               <Insets left="25.0" right="25.0" top="-9.0" />
                            </padding>
@@ -104,7 +104,7 @@
                               </JFXCheckBox>
                            </children>
                         </HBox>
-                        <JFXTextField labelFloat="true" promptText="Flight Number" unFocusColor="#4a4a4a">
+                        <JFXTextField fx:id="txtFlightNumber" labelFloat="true" promptText="Flight Number" unFocusColor="#4a4a4a">
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
