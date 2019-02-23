@@ -21,7 +21,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
 import models.InfoEmployee;

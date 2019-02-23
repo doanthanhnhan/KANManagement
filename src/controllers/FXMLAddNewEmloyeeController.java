@@ -99,7 +99,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
         if(DAO.checkFirstLogin()==1){
             Stage stage = (Stage) btnAddNew.getScene().getWindow();
             stage.close();
-            Stage stageEdit = new Stage();;
+            Stage stageEdit = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
             stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
             Scene scene = new Scene(root);
