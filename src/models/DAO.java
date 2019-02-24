@@ -235,6 +235,7 @@ public class DAO {
             p.setString(2, User);
             p.execute();
             p.close();
+            setUserLogs(User, "Account is Locked", Time);
         }
         connection.close();  
     }

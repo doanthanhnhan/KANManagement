@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewEmloyeeController">
+<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewEmloyeeController">
    <children>
-      <VBox layoutY="-14.0" prefHeight="700.0" prefWidth="649.0">
+      <VBox layoutY="-14.0" prefHeight="768.0" prefWidth="649.0">
          <children>
             <HBox prefHeight="129.0" prefWidth="649.0">
                <children>
@@ -91,7 +91,7 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="80.0" prefWidth="649.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="649.0">
                <children>
                   <JFXTextField fx:id="newFirstname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Firstname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
@@ -103,7 +103,7 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
                <children>
                   <JFXTextField fx:id="newMidname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Midname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
@@ -115,7 +115,7 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
                <children>
                   <JFXTextField fx:id="newLastname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Lastname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
@@ -127,7 +127,7 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
                <children>
                   <JFXComboBox fx:id="newRole" focusColor="#6467cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Select Role" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <HBox.margin>
@@ -135,6 +135,17 @@
                      </HBox.margin>
                   </JFXComboBox>
                </children>
+            </HBox>
+            <HBox fx:id="HboxContent" alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets right="50.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets right="50.0" />
+               </padding>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
                <children>
