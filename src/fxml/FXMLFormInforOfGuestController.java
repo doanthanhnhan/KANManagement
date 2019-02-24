@@ -133,7 +133,7 @@ public class FXMLFormInforOfGuestController implements Initializable {
         if (check1.isSelected()) {
             check = true;
         }
-        if (isString(txtFirstName.getText()) && isString(txtLastName.getText()) && validatePhoneNumber(txtPhoneNumber.getText()) && validateEmail(txtEmail.getText()) && validatePhoneNumber(txtNumberofGuest.getText())) {
+        if (isString(txtFirstName.getText()) && isString(txtLastName.getText()) && validatePhoneNumber(txtPhoneNumber.getText()) && validateEmail(txtEmail.getText())) {
 
             Form.AddNewBooking(txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), txtNote.getText(), txtCompanyName.getText(), comboBoxRoom.getValue(), parseInt(txtNumberofGuest.getText()), datePickerDateArrive.getValue(), check, txtFlightNumber.getText());
         }
