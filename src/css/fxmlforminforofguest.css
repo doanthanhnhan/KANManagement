@@ -12,5 +12,5 @@
 .jfx-date-picker{
     -fx-prompt-text-fill: -fx-primarytextcolor;    
     -fx-font-size : 14px;
-    -fx-border-style: none none dotted none;
+    /*-fx-border-style: none none dotted none;*/
 }
