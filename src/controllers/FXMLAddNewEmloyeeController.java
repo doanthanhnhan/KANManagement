@@ -37,6 +37,7 @@ import models.DAO;
 import utils.Email;
 import utils.MD5Encrypt;
 import java.util.regex.Pattern;
+import models.InfoEmployee;
 
 /**
  * FXML Controller class
@@ -53,7 +54,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     @FXML
     private JFXTextField newLastname;
     @FXML
-    private JFXComboBox<?> newRole;
+    private JFXComboBox newRole;
     @FXML
     private JFXTextField newId;
     @FXML
@@ -72,6 +73,14 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            if(DAO.checkFirstLogin()==0){
+                newRole.setValue("Admin");
+                newRole.setDisable(true);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         newId.setOnKeyPressed(event -> {
             newId.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
             HboxContent.getChildren().clear();
@@ -180,45 +189,88 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             newId.requestFocus();
         }
         else{
-            String Sex;
-            if(sexMale.selectedProperty().getValue()){
-                Sex = "Male";
+            ObservableList<InfoEmployee> List_Check_Employee = FXCollections.observableArrayList();
+            List_Check_Employee = FXMLLoginController.List_Employee;
+            boolean check = true;
+            for (InfoEmployee infoEmployee : List_Check_Employee) {
+                if(newId.getText().equals(infoEmployee.getEmployee_ID())){
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(582, 35);
+                    label.setText("ID ALREADY EXIST !!!");
+                    newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                    HboxContent.setAlignment(Pos.CENTER);
+                    HboxContent.setSpacing(10);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
+                    newId.requestFocus();
+                    check = false;
+                    break;
+                }
+                else if(newGmail.getText().equals(infoEmployee.getGmail())){
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(582, 35);
+                    label.setText("EMAIL ALREADY EXIST !!!");
+                    newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                    HboxContent.setAlignment(Pos.CENTER);
+                    HboxContent.setSpacing(10);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
+                    newGmail.requestFocus();
+                    check = false;
+                    break;
+                }
             }
-            else{
-                Sex = "Female";
+            if(check==true){
+                String Sex;
+                if(sexMale.selectedProperty().getValue()){
+                    Sex = "Male";
+                }
+                else{
+                    Sex = "Female";
+                }
+                String Id_Role;
+                Id_Role = DAO.getIdRole((String) newRole.getValue());
+                DAO.AddNewEmployee(newId.getText(), newFirstname.getText(), newMidname.getText(), newLastname.getText(), Id_Role, newGmail.getText(), Sex);
+                String Username = newId.getText();
+                MD5Encrypt m;
+                m = new MD5Encrypt();
+                String Password = m.hashPass("123456");
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                Calendar cal = Calendar.getInstance();
+                String logtime;
+                logtime = dateFormat.format(cal.getTime());
+                DAO.AddUser(newId.getText(), Username, Password,logtime);
+                String content = "Username: " + newId.getText() + ", Password: 123456";
+                Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
+                            "KAN@123456", "Default username and password", content);
+                newRole.setValue(null);
+                newFirstname.setText("");
+                newMidname.setText("");
+                newLastname.setText("");
+                newGmail.setText("");
+                newId.setText("");
+                if(DAO.checkFirstLogin()==1){
+                    Stage stage = (Stage) btnAddNew.getScene().getWindow();
+                    stage.close();
+                    Stage stageEdit = new Stage();
+                    Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+                    stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
+                    Scene scene = new Scene(root);
+                    stageEdit.setTitle("KANManagement");
+                    stageEdit.setScene(scene);
+                    stageEdit.show();
+                }
             }
-            String Id_Role;
-            Id_Role = DAO.getIdRole((String) newRole.getValue());
-            DAO.AddNewEmployee(newId.getText(), newFirstname.getText(), newMidname.getText(), newLastname.getText(), Id_Role, newGmail.getText(), Sex);
-            String Username = newId.getText();
-            MD5Encrypt m;
-            m = new MD5Encrypt();
-            String Password = m.hashPass("123456");
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            Calendar cal = Calendar.getInstance();
-            String logtime;
-            logtime = dateFormat.format(cal.getTime());
-            DAO.AddUser(newId.getText(), Username, Password,logtime);
-            String content = "Username: " + newId.getText() + ", Password: 123456";
-            Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
-                        "KAN@123456", "Default username and password", content);
-            newRole.setValue(null);
-            newFirstname.setText("");
-            newMidname.setText("");
-            newLastname.setText("");
-            newGmail.setText("");
-            newId.setText("");
-            if(DAO.checkFirstLogin()==1){
-                Stage stage = (Stage) btnAddNew.getScene().getWindow();
-                stage.close();
-                Stage stageEdit = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
-                stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
-                Scene scene = new Scene(root);
-                stageEdit.setTitle("KANManagement");
-                stageEdit.setScene(scene);
-                stageEdit.show();
-             }
         }
     }
 }

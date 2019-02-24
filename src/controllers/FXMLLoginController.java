@@ -50,6 +50,7 @@ public class FXMLLoginController implements Initializable {
 
     public static ObservableList<InfoEmployee> List_EmployeeLogin = FXCollections.observableArrayList();
     public static ObservableList<InfoEmployee> employeeForget = FXCollections.observableArrayList();
+    public static ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
     @FXML
     private AnchorPane formLogin;
     @FXML
@@ -82,7 +83,6 @@ public class FXMLLoginController implements Initializable {
             Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public static ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
 
     @FXML
     private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
