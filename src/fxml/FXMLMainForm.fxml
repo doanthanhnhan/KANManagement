@@ -1,39 +1,200 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLMainFormController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <top>
-            <MenuBar fx:id="mainMenuBar" BorderPane.alignment="CENTER">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </top>
          <center>
             <JFXTabPane fx:id="mainTabPane" BorderPane.alignment="CENTER" />
          </center>
+         <top>
+            <VBox BorderPane.alignment="CENTER">
+               <children>
+                  <MenuBar fx:id="mainMenuBar">
+                     <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Close" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Delete" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="About" />
+                           </items>
+                        </Menu>
+                     </menus>
+                  </MenuBar>
+                  <ToolBar>
+                     <items>
+                        <Button fx:id="btn_Toolbar_Home" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#homeAction">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/go-home.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Home" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_Booking" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/applications-office.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Booking" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_Checkin" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/application-pgp.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Check in" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_Checkout" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/appointment-soon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Check out" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_Services" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/wine-notepad.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Services" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_Employees" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/user-info.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Employees" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_Charts" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/gnumeric.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Charts" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_Accounting" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/emblem-documents.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Accounting" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_Settings" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/preferences-desktop-personal.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Settings" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Pane>
+                           <children>
+                              <HBox prefWidth="400.0" />
+                           </children>
+                        </Pane>
+                        <Button alignment="CENTER" mnemonicParsing="false" text="Date and Time" textAlignment="CENTER">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/gcrontab.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="Date and Time" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="btn_Toolbar_User_Logout" alignment="CENTER" mnemonicParsing="false" onAction="#userLogOutAction" text="Đoàn Thanh Nhân" textAlignment="CENTER">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/gnome-shutdown.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip contentDisplay="TOP" text="User logout" textAlignment="CENTER" />
+                           </tooltip>
+                        </Button>
+                     </items>
+                  </ToolBar>
+               </children>
+            </VBox>
+         </top>
+         <bottom>
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <ProgressBar fx:id="progressBar_MainTask" prefWidth="200.0" progress="0.0" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

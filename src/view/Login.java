@@ -31,7 +31,7 @@ public class Login extends Application {
             root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
             stage.setTitle("KANManagementLogin");
         }
-        stage.getIcons().add(new Image("/images/iconmanagement.png"));
+        stage.getIcons().add(new Image("/images/KAN2.png"));
         
         Scene scene = new Scene(root);
         
