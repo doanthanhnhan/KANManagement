@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -189,11 +190,14 @@
             </VBox>
          </top>
          <bottom>
-            <AnchorPane BorderPane.alignment="CENTER">
+            <HBox fx:id="hbox_Bottom" alignment="CENTER_RIGHT" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                  <ProgressBar fx:id="progressBar_MainTask" prefWidth="200.0" progress="0.0" AnchorPane.rightAnchor="0.0" />
+                  <ProgressBar fx:id="progressBar_MainTask" prefWidth="200.0" progress="0.0" visible="false" />
                </children>
-            </AnchorPane>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </HBox>
          </bottom>
       </BorderPane>
    </children>
