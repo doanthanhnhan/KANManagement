@@ -120,12 +120,15 @@ public class FXMLMainFormController implements Initializable {
 //        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
 //        list_Employee = FXMLLoginController.List_EmployeeLogin;
 //        String userRole = list_Employee.get(0).getRole();
-        Label label_Task_Status = new Label();
+        Label label_Task_Status = new Label();        
+        
+        //Set timer and start
         MyTimer myTimer = new MyTimer();
         myTimer.create_myTimer(label_Task_Status);
+        
+        //Add label to bottom
         hbox_Bottom.getChildren().add(0, label_Task_Status);
-
-//        label_Task_Status.setStyle("-fx-text-fill: -fx-primarycolor;");
+        
         String userRole = "Admin";
         if (userRole.equals("Admin")) {
             initMenuBar();
@@ -146,6 +149,7 @@ public class FXMLMainFormController implements Initializable {
                     Platform.runLater(() -> {
                         mainTabPane.getTabs().add(overViewTab);
                         btn_Toolbar_Home.setDisable(true);
+                        //Stop timer
                         myTimer.stop_Timer(label_Task_Status);
                     });
 
