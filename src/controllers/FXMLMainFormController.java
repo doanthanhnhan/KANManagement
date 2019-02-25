@@ -111,6 +111,7 @@ public class FXMLMainFormController implements Initializable {
             // Add fxml content to a tab
             Tab overViewTab = new Tab("Overview");
             overViewTab.setContent(overviewPane);
+            
             mainTabPane.getTabs().add(overViewTab);
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);

@@ -6,20 +6,28 @@
 package controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import models.Room;
 import models.RoomDAOImpl;
 
@@ -35,6 +43,64 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
     @FXML
     private AnchorPane aPane_Rooms;
+    @FXML
+    private JFXButton btn_OverView_Submit;
+    @FXML
+    private JFXCheckBox checkBox_Reserved;
+    @FXML
+    private Label label_Reserved_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Occupied;
+    @FXML
+    private Label label_Occupied_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Available;
+    @FXML
+    private Label label_Available_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Checkout;
+    @FXML
+    private Label label_Checkout_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Single;
+    @FXML
+    private Label label_Single_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Double;
+    @FXML
+    private Label label_Double_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Triple;
+    @FXML
+    private Label label_Triple_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Family;
+    @FXML
+    private Label label_Family_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Deluxe;
+    @FXML
+    private Label label_Deluxe_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Clean;
+    @FXML
+    private Label label_Clean_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_NotClean;
+    @FXML
+    private Label label_NotClean_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_InProgress;
+    @FXML
+    private Label label_InProgress_Rooms;
+    @FXML
+    private JFXCheckBox checkBox_Repair;
+    @FXML
+    private Label label_Repair_Rooms;
+    @FXML
+    private JFXComboBox<String> comboBox_FromFloor;
+    @FXML
+    private JFXComboBox<String> comboBox_ToFloor;
 
     /**
      * Initializes the controller class.
@@ -46,9 +112,92 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
     public void initAddRooms() {
         listRooms = roomDAOImpl.getAllRoom();
+        ArrayList<String> array_Status = new ArrayList<>(Arrays.asList("Available", "Reserved", "Occupied", "Check out"));
+        ArrayList<String> array_Type = new ArrayList<>(Arrays.asList("Single", "Double", "Triple", "Family", "Deluxe"));
+        ArrayList<String> array_HouseKeeping = new ArrayList<>(Arrays.asList("Clean", "Not clean", "Repair", "In progress"));
+        FlowPane flowPane = new FlowPane();
+        flowPane.setHgap(10);
+        flowPane.setVgap(10);
 
-        HBox hbox = new HBox();
-        hbox.setSpacing(20);
+        add_Rooms_With_Condition(flowPane, array_Status, array_Type, array_HouseKeeping);
+
+        aPane_Rooms.getChildren().add(flowPane);
+        aPane_Rooms.setTopAnchor(flowPane, 0.0);
+        aPane_Rooms.setBottomAnchor(flowPane, 0.0);
+        aPane_Rooms.setLeftAnchor(flowPane, 0.0);
+        aPane_Rooms.setRightAnchor(flowPane, 0.0);
+
+        aPane_Rooms.getChildren().setAll(flowPane);
+
+    }
+
+    @FXML
+    private void submit_Loading_Overview(ActionEvent event) {
+        listRooms = roomDAOImpl.getAllRoom();
+        System.out.println("Button clicked.");
+        FlowPane flowPane = new FlowPane();
+        flowPane.setHgap(10);
+        flowPane.setVgap(10);
+        ArrayList<String> listStatus = new ArrayList<>();
+        if (checkBox_Available.isSelected()) {
+            listStatus.add("Available");
+        }
+        if (checkBox_Reserved.isSelected()) {
+            listStatus.add("Reserved");
+        }
+        if (checkBox_Occupied.isSelected()) {
+            listStatus.add("Occupied");
+        }
+        if (checkBox_Checkout.isSelected()) {
+            listStatus.add("Check out");
+        }
+        ArrayList<String> listTypes = new ArrayList<>();
+        if (checkBox_Single.isSelected()) {
+            listTypes.add("Single");
+        }
+        if (checkBox_Double.isSelected()) {
+            listTypes.add("Double");
+        }
+        if (checkBox_Triple.isSelected()) {
+            listTypes.add("Triple");
+        }
+        if (checkBox_Family.isSelected()) {
+            listTypes.add("Family");
+        }
+        if (checkBox_Deluxe.isSelected()) {
+            listTypes.add("Deluxe");
+        }
+        ArrayList<String> listHouseKeeping = new ArrayList<>();
+        if (checkBox_Clean.isSelected()) {
+            listHouseKeeping.add("Clean");
+        }
+        if (checkBox_NotClean.isSelected()) {
+            listHouseKeeping.add("Not clean");
+        }
+        if (checkBox_Repair.isSelected()) {
+            listHouseKeeping.add("Repair");
+        }
+        if (checkBox_InProgress.isSelected()) {
+            listHouseKeeping.add("In progress");
+        }
+        add_Rooms_With_Condition(flowPane, listStatus, listTypes, listHouseKeeping);
+
+        aPane_Rooms.getChildren().add(flowPane);
+        aPane_Rooms.setTopAnchor(flowPane, 0.0);
+        aPane_Rooms.setBottomAnchor(flowPane, 0.0);
+        aPane_Rooms.setLeftAnchor(flowPane, 0.0);
+        aPane_Rooms.setRightAnchor(flowPane, 0.0);
+
+        aPane_Rooms.getChildren().setAll(flowPane);
+        System.out.println("Number of child node : " + aPane_Rooms.getChildren().size());
+
+    }
+
+    public void add_Rooms_With_Condition(
+            Pane parentPane,
+            ArrayList<String> roomStatus,
+            ArrayList<String> roomType,
+            ArrayList<String> roomHouseKeeping) {
         try {
             for (Room listRoom : listRooms) {
                 AnchorPane pane = (AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/FXMLRoomStatusForm.fxml"));
@@ -126,19 +275,62 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     icon_Repaired_Status.getStyleClass().add("glyph-icon-clean-repair-inprogress-status");
                 }
                 if (!listRoom.isRoomClean()) {
-                    label_Clean_Status.setText("N.Repair");
+                    label_Clean_Status.setText("N.Clean");
                     label_Clean_Status.getStyleClass().removeAll();
                     label_Clean_Status.getStyleClass().add("label-NotClean-Status");
                     icon_Clean_Status.setGlyphName("CLOSE");
                     icon_Clean_Status.getStyleClass().removeAll();
                     icon_Clean_Status.getStyleClass().add("glyph-icon-clean-repair-inprogress-status");
                 }
-
-                hbox.getChildren().add(pane);
+                // Convert HouseKeeping to String list
+                ArrayList<String> listHouseKeeping = new ArrayList<>();
+                if (listRoom.isRoomClean()) {
+                    listHouseKeeping.add("Clean");
+                }
+                if (!listRoom.isRoomClean()) {
+                    listHouseKeeping.add("Not clean");
+                }
+                if (listRoom.isRoomRepaired()) {
+                    listHouseKeeping.add("Repair");
+                }
+                if (listRoom.isRoomInProgress()) {
+                    listHouseKeeping.add("In progress");
+                }
+                //Check room status and add to specific Pane
+                Boolean checkListHK = false, checkType = false, checkHouseKeeping = false;
+                for (String status : roomStatus) {
+                    for (String type : roomType) {
+                        for (String houseKeeping : roomHouseKeeping) {
+                            for (String stringHouseKeeping : listHouseKeeping) {
+                                if (status.equalsIgnoreCase(listRoom.getRoomStatus()) && type.equals(listRoom.getRoomType()) && houseKeeping.equalsIgnoreCase(stringHouseKeeping)) {
+                                    parentPane.getChildren().add(pane);
+                                    checkListHK = true;
+                                    break;
+                                }
+                            }
+                            if (checkListHK) {
+                                checkHouseKeeping = true;
+                                break;
+                            }
+                        }
+                        // Dùng để test trường hợp 2 thuộc tính
+//                        if (status.equalsIgnoreCase(listRoom.getRoomStatus()) && type.equals(listRoom.getRoomType())) {
+//                            parentPane.getChildren().add(pane);
+//                            checkType = true;
+//                            break;
+//                        }
+                        if (checkHouseKeeping) {
+                            checkType = true;
+                            break;
+                        }
+                    }
+                    if (checkType) {
+                        break;
+                    }
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainOverViewPaneController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        aPane_Rooms.getChildren().add(hbox);
     }
 }

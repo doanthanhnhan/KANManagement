@@ -5,7 +5,6 @@
  */
 package utils;
 
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,30 +23,38 @@ public class MyTimer {
     private final IntegerProperty timeSeconds = new SimpleIntegerProperty(0);
 
     public MyTimer() {
-    }    
+    }
 
     public void updateTime() {
         // increment seconds
         int seconds = timeSeconds.get();
-        timeSeconds.set(seconds+1);
+        timeSeconds.set(seconds + 1);
     }
+
     public void create_myTimer(Label timerLabel) {
-        myTimer = new Timeline(new KeyFrame(Duration.seconds(1), evt -> updateTime())); 
+        myTimer = new Timeline(new KeyFrame(Duration.seconds(1), evt -> updateTime()));
         myTimer.setCycleCount(Animation.INDEFINITE); // repeat over and over again
         timeSeconds.set(1);
         myTimer.play();
-        
+
         timerLabel.textProperty().unbind();
         timerLabel.textProperty().bind(timeSeconds.asString().concat(" s Loading..."));
-        
+
         //Vẫn chưa có tác dụng...
-        timerLabel.getStyleClass().removeAll();
+        System.out.println("Old Style class name: " + timerLabel.getStyleClass());
+//        int indexOf = timerLabel.getStyleClass().indexOf("label");
+//        if (indexOf != -1) {
+//            timerLabel.getStyleClass().remove(indexOf);
+//        }
+        timerLabel.getStyleClass().removeAll("label");
         timerLabel.getStyleClass().add("label-task-status");
+        System.out.println("New Style class name: " + timerLabel.getStyleClass());
+        //timerLabel.setStyle("-fx-text-fill: -fx-primarycolor;");
     }
 
     public void stop_Timer(Label timerLabel) {
         timerLabel.textProperty().unbind();
         myTimer.stop();
     }
-        
+
 }
