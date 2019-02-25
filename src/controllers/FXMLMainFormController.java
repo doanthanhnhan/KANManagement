@@ -23,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -30,8 +31,12 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import utils.MyTimer;
+
 
 /**
  * FXML Controller class
@@ -66,6 +71,8 @@ public class FXMLMainFormController implements Initializable {
     private Button btn_Toolbar_User_Logout;
     @FXML
     private ProgressBar progressBar_MainTask;
+    @FXML
+    private HBox hbox_Bottom;
 
     /**
      * Initializes the controller class.
@@ -115,18 +122,22 @@ public class FXMLMainFormController implements Initializable {
 //        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
 //        list_Employee = FXMLLoginController.List_EmployeeLogin;
 //        String userRole = list_Employee.get(0).getRole();
+        Label label_Task_Status = new Label();
+        MyTimer myTimer = new MyTimer();
+        myTimer.create_myTimer(label_Task_Status);
+        hbox_Bottom.getChildren().add(0, label_Task_Status);
+
+//        label_Task_Status.setStyle("-fx-text-fill: -fx-primarycolor;");
         String userRole = "Admin";
         if (userRole.equals("Admin")) {
             initMenuBar();
         }
-//        progressBar_MainTask = new ProgressBar();
-//        progressBar_MainTask.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+
         Task loadOverview = new Task() {
             @Override
             protected Object call() throws Exception {
                 System.out.println("Loading...");
-//                progressBar_MainTask.progressProperty().unbind();
-//                progressBar_MainTask.setProgress(0.2);
+
                 try {
                     // Get content from fxml file
                     AnchorPane overviewPane = (AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/FXMLMainOverViewPane.fxml"));
@@ -135,11 +146,9 @@ public class FXMLMainFormController implements Initializable {
                     Tab overViewTab = new Tab("Overview");
                     overViewTab.setContent(overviewPane);
                     Platform.runLater(() -> {
-//                        progressBar_MainTask.progressProperty().unbind();
-//                        progressBar_MainTask.setProgress(0.6);
                         mainTabPane.getTabs().add(overViewTab);
-
                         btn_Toolbar_Home.setDisable(true);
+                        myTimer.stop_Timer(label_Task_Status);
                     });
 
                 } catch (IOException ex) {
@@ -148,6 +157,7 @@ public class FXMLMainFormController implements Initializable {
                 return null;
             }
         };
+        progressBar_MainTask.setVisible(true);
         progressBar_MainTask.progressProperty().unbind();
         progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
 
@@ -156,9 +166,13 @@ public class FXMLMainFormController implements Initializable {
             public void handle(Event event) {
                 System.out.println("Finished");
                 Platform.runLater(() -> {
+                    label_Task_Status.setText("Finished");
                     progressBar_MainTask.progressProperty().unbind();
-                    progressBar_MainTask.setProgress(1);
+                    progressBar_MainTask.setProgress(0);
+                    progressBar_MainTask.setVisible(false);
+                    hbox_Bottom.getChildren().remove(label_Task_Status);
                     btn_Toolbar_Home.setDisable(false);
+
                 });
             }
         });

@@ -50,6 +50,7 @@
     -fx-prompt-text-fill: -fx-primarytextcolor;
     -fx-text-fill: black;
 }
+
 #passIcon{
     -fx-fill: -fx-primarycolor;
 }
@@ -136,4 +137,7 @@
 }
 .glyph-icon-clean-repair-inprogress-status{
     -fx-fill: -fx-checkoutcolor;
+}
+.label{
+    -fx-text-fill: -fx-primarycolor;
 }
