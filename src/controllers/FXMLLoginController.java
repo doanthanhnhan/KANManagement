@@ -206,13 +206,38 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private void handleForgetPass() throws IOException, SQLException, ClassNotFoundException {
         if ("".equals(txtUserName.getText())) {
-            System.out.println("Empty");
+            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+            icon.setSize("16");
+            icon.setStyleClass("jfx-glyhp-icon");
+            Label label = new Label();
+            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+            label.setPrefSize(300, 35);
+            label.setText("USER MUST NOT EMPTY !!!");
+            txtUserName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            hboxContent.setAlignment(Pos.CENTER);
+            hboxContent.setSpacing(10);
+            hboxContent.getChildren().clear();
+            hboxContent.getChildren().add(icon);
+            hboxContent.getChildren().add(label);
+            txtUserName.requestFocus();
         } else {
-            if (DAO.check_Active(txtUserName.getText()).equals(0)) {
-                System.out.println("Account Blocked !!!");
-            } else {
-                for (int i = 0; i < List_Employee.size(); i++) {
-                    if (txtUserName.getText().equals(List_Employee.get(i).getUserName())) {
+            for (int i = 0; i < List_Employee.size(); i++) {
+                if (txtUserName.getText().equals(List_Employee.get(i).getUserName())) {
+                    if (DAO.check_Active(txtUserName.getText()).equals(0)) {
+                        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                        icon.setSize("16");
+                        icon.setStyleClass("jfx-glyhp-icon");
+                        Label label = new Label();
+                        label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                        label.setPrefSize(300, 35);
+                        label.setText("ACCOUNT IS LOCKED !!!");
+                        hboxContent.setAlignment(Pos.CENTER);
+                        hboxContent.setSpacing(10);
+                        hboxContent.getChildren().clear();
+                        hboxContent.getChildren().add(icon);
+                        hboxContent.getChildren().add(label);  
+                    }
+                    else{
                         employeeForget.add(List_Employee.get(i));
                         Stage stageForget = new Stage();
                         stageForget.initModality(Modality.APPLICATION_MODAL);
@@ -226,17 +251,25 @@ public class FXMLLoginController implements Initializable {
                         stageForget.setScene(sceneForget);
                         stageForget.show();
                         break;
-                    } else {
-                        System.out.println("Invalid");
                     }
+                } else {
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(300, 35);
+                    label.setText("ACCOUNT INVALID !!!");
+                    hboxContent.setAlignment(Pos.CENTER);
+                    hboxContent.setSpacing(10);
+                    hboxContent.getChildren().clear();
+                    hboxContent.getChildren().add(icon);
+                    hboxContent.getChildren().add(label);  
+                    txtUserName.requestFocus();
                 }
+                
             }
         }
-
-    }
-
-    @FXML
-    private void checkInputUserName(InputMethodEvent event) {
 
     }
 }

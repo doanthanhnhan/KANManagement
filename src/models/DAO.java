@@ -219,7 +219,7 @@ public class DAO {
             Count=rs.getInt("Check_Login");
         }
         Count++;
-        System.out.println(Count);
+    
         pt.close();
         String ex="UPDATE Users SET Check_Login = ?,Check_Time = ? WHERE UserName = ?";
         PreparedStatement pts = connection.prepareStatement(ex);

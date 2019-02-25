@@ -65,7 +65,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     private JFXButton btnAddNew;
     @FXML
     private HBox HboxContent;
-    private Pattern pattern; 
+    private Pattern pattern;
+    private Pattern patternEmail;
     /**
      * Initializes the controller class.
      * @param url
@@ -111,17 +112,18 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     private void btnSubmitAddNewEmployee(ActionEvent event) throws ClassNotFoundException, SQLException, IOException, Exception {
 //        valided texfield
         pattern = Pattern.compile("^(?=.{4,12}$)[a-zA-Z][a-zA-Z0-9_]+$");
+        patternEmail=Pattern.compile("^[a-z][a-z0-9_\\.]{5,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$");
         if (newId.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(582, 35);
+            label.setPrefSize(465, 35);
             label.setText("ID MUST NOT EMPTY !!!");
             newId.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            
             HboxContent.setSpacing(10);
+            HboxContent.setAlignment(Pos.CENTER);
             HboxContent.getChildren().clear();
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
@@ -132,7 +134,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(582, 35);
+            label.setPrefSize(465, 35);
             label.setText("GMAIL MUST NOT EMPTY !!!");
             newGmail.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setAlignment(Pos.CENTER);
@@ -147,7 +149,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(582, 35);
+            label.setPrefSize(465, 35);
             label.setText("FIRST NAME MUST NOT EMPTY !!!");
             newFirstname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setAlignment(Pos.CENTER);
@@ -162,7 +164,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(582, 35);
+            label.setPrefSize(465, 35);
             label.setText("LAST NAME MUST NOT EMPTY !!!");
             newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setAlignment(Pos.CENTER);
@@ -178,15 +180,31 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(582, 35);
+            label.setPrefSize(465, 35);
             label.setText("ID MUST 4-12 CHARACTER, NOT BEGIN NUMBER AND CHARACTER SPECIAL !!!");
-            newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            newId.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setAlignment(Pos.CENTER);
             HboxContent.setSpacing(10);
             HboxContent.getChildren().clear();
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             newId.requestFocus();
+        }
+        else if(!patternEmail.matcher(newGmail.getText()).matches()){
+            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+            icon.setSize("16");
+            icon.setStyleClass("jfx-glyhp-icon");
+            Label label = new Label();
+            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+            label.setPrefSize(465, 35);
+            label.setText("INVALID EMAIL !!!");
+            newGmail.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            HboxContent.setAlignment(Pos.CENTER);
+            HboxContent.setSpacing(10);
+            HboxContent.getChildren().clear();
+            HboxContent.getChildren().add(icon);
+            HboxContent.getChildren().add(label);
+            newGmail.requestFocus();
         }
         else{
             ObservableList<InfoEmployee> List_Check_Employee = FXCollections.observableArrayList();
@@ -199,7 +217,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                     icon.setStyleClass("jfx-glyhp-icon");
                     Label label = new Label();
                     label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                    label.setPrefSize(582, 35);
+                    label.setPrefSize(465, 35);
                     label.setText("ID ALREADY EXIST !!!");
                     newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
                     HboxContent.setAlignment(Pos.CENTER);
@@ -217,7 +235,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                     icon.setStyleClass("jfx-glyhp-icon");
                     Label label = new Label();
                     label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                    label.setPrefSize(582, 35);
+                    label.setPrefSize(465, 35);
                     label.setText("EMAIL ALREADY EXIST !!!");
                     newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
                     HboxContent.setAlignment(Pos.CENTER);
