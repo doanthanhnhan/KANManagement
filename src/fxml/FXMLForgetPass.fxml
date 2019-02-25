@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLForgetPassController">
+<AnchorPane id="AnchorPane" prefHeight="750.0" prefWidth="742.0" styleClass="parent" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLForgetPassController">
    <children>
-      <VBox prefHeight="730.0" prefWidth="742.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="750.0" prefWidth="742.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
@@ -23,7 +23,7 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <MaterialIconView fill="#6447cd" glyphName="LOCK_OPEN" size="80" />
+                              <MaterialIconView fill="#6447cd" glyphName="LOCK_OPEN" size="60" />
                            </children>
                            <padding>
                               <Insets top="25.0" />
@@ -55,7 +55,7 @@
                   </JFXTextField>
                </children>
                <VBox.margin>
-                  <Insets top="10.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
             <HBox fx:id="hBoxPassword" alignment="CENTER" prefHeight="100.0" prefWidth="580.0" spacing="10.0">
@@ -81,7 +81,10 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="580.0" spacing="10.0">
                <children>
                   <FontAwesomeIconView fill="#6467cd" glyphName="QUESTION" size="35" />
-                  <JFXComboBox fx:id="txtSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Serect Question" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd" />
+                  <JFXComboBox fx:id="txtSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Serect Question" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin></JFXComboBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="76.0" prefWidth="580.0" spacing="10.0">
@@ -94,6 +97,7 @@
                   </JFXPasswordField>
                </children>
             </HBox>
+            <HBox fx:id="HboxContent" alignment="CENTER" layoutX="10.0" layoutY="516.0" prefHeight="76.0" prefWidth="580.0" spacing="10.0" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <JFXButton fx:id="btnSubmit" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleForgetAction" prefHeight="50.0" prefWidth="340.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
@@ -105,6 +109,9 @@
                      </opaqueInsets>
                   </JFXButton>
                </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </HBox>
          </children>
       </VBox>

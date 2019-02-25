@@ -72,7 +72,7 @@
                   <HBox alignment="CENTER" prefHeight="76.0" prefWidth="400.0" spacing="10.0">
                      <children>
                         <FontAwesomeIconView fill="#6467cd" glyphName="USER" size="35" />
-                        <JFXTextField fx:id="txtUserName" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onInputMethodTextChanged="#checkInputUserName" prefHeight="35.0" prefWidth="300.0" promptText="Username" unFocusColor="#6467cd">
+                        <JFXTextField fx:id="txtUserName" focusColor="#6467cd" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Username" unFocusColor="#6467cd">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>

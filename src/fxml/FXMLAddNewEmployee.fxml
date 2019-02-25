@@ -81,7 +81,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
                <children>
-                  <JFXTextField fx:id="newGmail" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="649.0" promptText="Enter Gmail" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXTextField fx:id="newGmail" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Gmail" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -129,7 +129,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
                <children>
-                  <JFXComboBox fx:id="newRole" focusColor="#6467cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Select Role" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                  <JFXComboBox fx:id="newRole" focusColor="#6467cd" labelFloat="true" prefHeight="30.0" prefWidth="582.0" promptText="Select Role" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <HBox.margin>
                         <Insets left="80.0" right="80.0" top="20.0" />
                      </HBox.margin>
@@ -141,11 +141,8 @@
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets right="50.0" />
+                  <Insets />
                </VBox.margin>
-               <padding>
-                  <Insets right="50.0" />
-               </padding>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
                <children>

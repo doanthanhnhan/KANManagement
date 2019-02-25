@@ -54,6 +54,8 @@
 /*REGISTRATION FORM*/
 
 .jfx-combo-box{
+    -jfx-focus-color:#6747CD;
+    -jfx-unfocus-color:#6747CD;
     -fx-prompt-text-fill: -fx-primarytextcolor;   
     -fx-font-size : 14px;
     -fx-font-weight: bold;
@@ -74,4 +76,12 @@
 .jfx-glyhp-icon{
     -fx-fill: #FF2625;
 }
-
+.jfx-combo-box-fault{
+    -jfx-focus-color:#FF2625;
+    -jfx-unfocus-color:#FF2625;
+    
+}
+/*.jfx-combo-box .cell {
+    -jfx-focus-color:#6747CD;
+    -jfx-unfocus-color:#6747CD;
+}*/
