@@ -138,6 +138,6 @@
 .glyph-icon-clean-repair-inprogress-status{
     -fx-fill: -fx-checkoutcolor;
 }
-.label{
+.label-task-status{
     -fx-text-fill: -fx-primarycolor;
 }

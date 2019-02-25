@@ -35,9 +35,14 @@ public class MyTimer {
         myTimer = new Timeline(new KeyFrame(Duration.seconds(1), evt -> updateTime())); 
         myTimer.setCycleCount(Animation.INDEFINITE); // repeat over and over again
         timeSeconds.set(1);
-        myTimer.play();       
+        myTimer.play();
+        
         timerLabel.textProperty().unbind();
         timerLabel.textProperty().bind(timeSeconds.asString().concat(" s Loading..."));
+        
+        //Vẫn chưa có tác dụng...
+        timerLabel.getStyleClass().removeAll();
+        timerLabel.getStyleClass().add("label-task-status");
     }
 
     public void stop_Timer(Label timerLabel) {
