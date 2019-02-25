@@ -51,6 +51,8 @@ public class FXMLAccountController implements Initializable {
     @FXML
     private JFXPasswordField newSerectAnswer;
     @FXML
+    private JFXPasswordField ConfirmAnswer;
+    @FXML
     private JFXButton btnRegister;
     /**
      * Initializes the controller class.

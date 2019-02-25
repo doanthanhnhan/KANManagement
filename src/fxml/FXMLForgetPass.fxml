@@ -81,7 +81,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="580.0" spacing="10.0">
                <children>
                   <FontAwesomeIconView fill="#6467cd" glyphName="QUESTION" size="35" />
-                  <JFXComboBox fx:id="txtSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Serect Question" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                  <JFXComboBox fx:id="txtSerectQuestion" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Serect Question" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <HBox.margin>
                         <Insets left="15.0" />
                      </HBox.margin></JFXComboBox>

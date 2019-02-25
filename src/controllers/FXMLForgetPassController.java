@@ -46,7 +46,7 @@ public class FXMLForgetPassController implements Initializable {
     @FXML
     private JFXPasswordField txtForgetConfirmPassword;
     @FXML
-    private JFXComboBox<?> txtSerectQuestion;
+    private JFXComboBox<String> txtSerectQuestion;
     @FXML
     private JFXPasswordField textSerectAnswer;
     @FXML
@@ -58,9 +58,28 @@ public class FXMLForgetPassController implements Initializable {
      * Initializes the controller class.
      */
     private ObservableList<InfoEmployee> employeeForget = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        patternPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,20}$");
+        txtForgetPassword.setOnKeyPressed(event -> {
+            txtForgetPassword.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+
+            HboxContent.getChildren().clear();
+        });
+        textSerectAnswer.setOnKeyPressed(event -> {
+            textSerectAnswer.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+
+            HboxContent.getChildren().clear();
+        });
+        txtSerectQuestion.valueProperty().addListener((obs, oldItem, newItem) -> {
+
+            if (newItem != null) {
+               txtSerectQuestion.setStyle("-jfx-focus-color:#6747CD; -jfx-unfocus-color:#6747CD;");
+            }
+
+
+        });
+        patternPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z#$^+=!*()@%&])(?=.*\\d).{8,20}$");
         employeeForget = FXMLLoginController.employeeForget;
         ObservableList list_question = FXCollections.observableArrayList();
         ObservableList list_question_random = FXCollections.observableArrayList();
@@ -70,7 +89,7 @@ public class FXMLForgetPassController implements Initializable {
         list_question.add("Which subject do you like best?");
         list_question.add("Which car company do you like best?");
         Random rand = new Random();
-        for(int i=0;i<5;i++){
+        for (int i = 0; i < 5; i++) {
             int randomIndex = rand.nextInt(list_question.size());
             list_question_random.add(list_question.get(randomIndex));
             list_question.remove(randomIndex);
@@ -78,12 +97,12 @@ public class FXMLForgetPassController implements Initializable {
         txtSerectQuestion.setItems(list_question_random);
         txtForgetUsername.setText(employeeForget.get(0).getUserName());
         // TODO
-    }    
+    }
 
     @FXML
     private void handleForgetAction(ActionEvent event) throws SQLException, ClassNotFoundException {
-        
-        if(txtForgetPassword.getText().equals("")){
+
+        if (txtForgetPassword.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -98,8 +117,7 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             txtForgetPassword.requestFocus();
-        }
-        else if(txtForgetConfirmPassword.getText().equals("")){
+        } else if (txtForgetConfirmPassword.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -114,15 +132,30 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             txtForgetConfirmPassword.requestFocus();
-        }
-        else if(textSerectAnswer.getText().equals("")){
+        } else if (txtSerectQuestion.getSelectionModel().isEmpty()) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
             label.setPrefSize(300, 35);
-            label.setText("SERECT ANSWER MUST NOT EMPTY !!!");
+            label.setText("SERECT QUESTION MUST NOT EMPTY !!!");
+            txtSerectQuestion.getStyleClass().removeAll();
+            txtSerectQuestion.getStyleClass().add("jfx-combo-box-fault");
+            HboxContent.setSpacing(10);
+            HboxContent.setAlignment(Pos.CENTER);
+            HboxContent.getChildren().clear();
+            HboxContent.getChildren().add(icon);
+            HboxContent.getChildren().add(label);
+            txtSerectQuestion.requestFocus();
+        } else if (textSerectAnswer.getText().equals("")) {
+            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+            icon.setSize("16");
+            icon.setStyleClass("jfx-glyhp-icon");
+            Label label = new Label();
+            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+            label.setPrefSize(300, 35);
+            label.setText("CONFIRM PASSWORD MUST NOT EMPTY !!!");
             textSerectAnswer.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setSpacing(10);
             HboxContent.setAlignment(Pos.CENTER);
@@ -130,8 +163,7 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             textSerectAnswer.requestFocus();
-        }
-        else if(!txtForgetPassword.getText().equals(txtForgetConfirmPassword.getText())){
+        } else if (!txtForgetPassword.getText().equals(txtForgetConfirmPassword.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -146,8 +178,7 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             txtForgetPassword.requestFocus();
-        }
-        else if(!patternPassword.matcher(txtForgetPassword.getText()).matches()){
+        } else if (!patternPassword.matcher(txtForgetPassword.getText()).matches()) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -198,5 +229,5 @@ public class FXMLForgetPassController implements Initializable {
         }
 
     }
-    
+
 }
