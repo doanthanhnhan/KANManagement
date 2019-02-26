@@ -159,14 +159,14 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="10.0">
                                        <children>
-                                          <Label prefWidth="100.0" text="From" />
-                                          <JFXComboBox fx:id="comboBox_FromFloor" />
+                                          <Label prefWidth="80.0" text="From" />
+                                          <JFXComboBox fx:id="comboBox_FromFloor" promptText="Min" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="10.0">
                                        <children>
-                                          <Label prefWidth="100.0" text="To" />
-                                          <JFXComboBox fx:id="comboBox_ToFloor" />
+                                          <Label prefWidth="80.0" text="To" />
+                                          <JFXComboBox fx:id="comboBox_ToFloor" promptText="Max" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" spacing="10.0">

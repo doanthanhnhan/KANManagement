@@ -11,25 +11,26 @@
     -fx-availablecolor: #7AA716;
     -fx-reservedcolor: #009FB4;
     -fx-occupiedcolor: #C83F06;
+    -fx-fault-color: #FF2625;
 }
 .glyph-icon{
     -fx-fill: -fx-primarycolor;
 }
 .parent{
     -fx-background-color: white;
-    
+
 }
 .slidebar{
     -fx-background-color: -fx-primarycolor;
 }
 .forgetBtn{
     -fx-text-fill: -fx-primarytextcolor;
-    
+
 }
 .forgetBtn:hover{
-  -fx-text-fill: -fx-primarycolor;
-  -fx-underline: true;
-  -fx-cursor: hand;
+    -fx-text-fill: -fx-primarycolor;
+    -fx-underline: true;
+    -fx-cursor: hand;
 }
 .loginBtn{
     -fx-background-color: -fx-primarycolor;
@@ -67,15 +68,19 @@
     -fx-prompt-text-fill: -fx-primarytextcolor;   
     -fx-font-size : 14px;
     -fx-font-weight: bold;
-/*    -jfx-focus-color: -fx-secondary;
-    -fx-text-fill: derive(-fx-secondary, 20%);
-    
-    -fx-fill: -fx-secondary;*/
+    /*    -jfx-focus-color: -fx-secondary;
+        -fx-text-fill: derive(-fx-secondary, 20%);
+        
+        -fx-fill: -fx-secondary;*/
 }
 /*.jfx-combo-box .cell {
     -fx-background-color:  -fx-primary;
     -fx-text-fill: -fx-secondary;    
 }*/
+.jfx-combo-box{
+    -jfx-focus-color: -fx-fault-color; 
+    -jfx-unfocus-color: -fx-fault-color;
+}
 .jfx-date-picker{
     -fx-prompt-text-fill: -fx-primarytextcolor;    
     -fx-font-size : 14px;
@@ -90,7 +95,7 @@
     -fx-fill: -fx-primarycolor;
 }
 .hbox-background-room-status{
-    
+
 }
 .boderPane-room-status{
     -fx-border-color: -fx-primarycolor;
