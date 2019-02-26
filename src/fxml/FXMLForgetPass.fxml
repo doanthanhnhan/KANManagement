@@ -61,7 +61,7 @@
             <HBox fx:id="hBoxPassword" alignment="CENTER" prefHeight="100.0" prefWidth="580.0" spacing="10.0">
                <children>
                   <MaterialIconView fill="#6447cd" glyphName="VPN_KEY" size="35" />
-                  <JFXPasswordField fx:id="txtForgetPassword" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Password" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
+                  <JFXPasswordField fx:id="txtForgetPassword" focusColor="#6467cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Password ( 8 - 20 exam: Abc12345)" stylesheets="@../css/cssLogin.css" unFocusColor="#6467cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

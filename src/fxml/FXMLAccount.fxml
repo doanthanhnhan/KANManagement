@@ -61,7 +61,7 @@
             </HBox>
             <HBox prefHeight="65.0" prefWidth="643.0">
                <children>
-                  <JFXPasswordField fx:id="newPassword" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Password" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXPasswordField fx:id="newPassword" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Password ( 8 - 20 exam: Abc12345)" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -94,7 +94,7 @@
             </HBox>
             <HBox prefHeight="65.0" prefWidth="200.0">
                <children>
-                  <JFXPasswordField fx:id="newSerectAnswer" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Secret Answer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXPasswordField fx:id="newSerectAnswer" focusColor="#6447cd" labelFloat="true" prefHeight="30.0" prefWidth="649.0" promptText="Secret Answer ( 4 - 20 exam: abcd )" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
