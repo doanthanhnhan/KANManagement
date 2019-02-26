@@ -26,6 +26,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -35,6 +36,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -66,15 +69,33 @@ public class FXMLLoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        txtUserName.setOnKeyPressed(event -> {
-            txtUserName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-
-            hboxContent.getChildren().clear();
+        txtUserName.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                txtUserName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                hboxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    try {
+                        handleLoginAction();
+                    } catch (ClassNotFoundException | SQLException | IOException ex) {
+                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
         });
-        txtPassword.setOnKeyPressed(event -> {
-            txtPassword.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-
-            hboxContent.getChildren().clear();
+        txtPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                txtPassword.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                hboxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    try {
+                        handleLoginAction();
+                    } catch (ClassNotFoundException | SQLException | IOException ex) {
+                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
         });
         ConnectControllers.setfXMLLoginController(this);
         try {
@@ -85,7 +106,7 @@ public class FXMLLoginController implements Initializable {
     }
 
     @FXML
-    private void handleLoginAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
+    private void handleLoginAction() throws ClassNotFoundException, SQLException, IOException {
         if (txtUserName.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
@@ -121,7 +142,7 @@ public class FXMLLoginController implements Initializable {
                 MD5Encrypt m = new MD5Encrypt();
                 String hashPass = m.hashPass(txtPassword.getText());
                 if (txtUserName.getText().equals(infoEmployee.getUserName())) {
-                    if (DAO.check_Active(txtUserName.getText()).equals(0)) {
+                    if (DAO.check_Active(txtUserName.getText()).equals(0)) {                       
                         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                         icon.setSize("16");
                         icon.setStyleClass("jfx-glyhp-icon");
@@ -133,7 +154,7 @@ public class FXMLLoginController implements Initializable {
                         hboxContent.setSpacing(10);
                         hboxContent.getChildren().clear();
                         hboxContent.getChildren().add(icon);
-                        hboxContent.getChildren().add(label);   
+                        hboxContent.getChildren().add(label);
                     } else {
                         if (hashPass.equals(infoEmployee.getPassWord())) {
                             List_EmployeeLogin.add(infoEmployee);
@@ -142,6 +163,7 @@ public class FXMLLoginController implements Initializable {
                             Stage stageEdit = new Stage();
                             Parent rootAdd;
                             if (DAO.checkSetPass(txtUserName.getText()) == 0) {
+                                stageEdit.resizableProperty().setValue(Boolean.FALSE);
                                 rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAccount.fxml"));
                                 stageEdit.setTitle("Set Password");
                             } else {
@@ -151,17 +173,16 @@ public class FXMLLoginController implements Initializable {
                                 logtime = dateFormat.format(cal.getTime());
                                 DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
                                 DAO.reset_CheckLogin(txtUserName.getText(), logtime);
+
                                 rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
                                 stageEdit.setTitle("KANManagementLogin");
                             }
-
                             Scene scene1;
                             scene1 = new Scene(rootAdd);
 
                             stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
                             stageEdit.setScene(scene1);
                             stageEdit.show();
-                            break;
                         } else if (!hashPass.equals(infoEmployee.getPassWord())) {
                             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                             icon.setSize("16");
@@ -183,9 +204,10 @@ public class FXMLLoginController implements Initializable {
                                 DAO.reset_CheckLogin(txtUserName.getText(), logtime);
                             }
                             DAO.check_Login(txtUserName.getText(), logtime);
-                        }
+                        }                    
                     }
-                } else {
+                    break;
+                } else{
                     FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                     icon.setSize("16");
                     icon.setStyleClass("jfx-glyhp-icon");
@@ -235,14 +257,13 @@ public class FXMLLoginController implements Initializable {
                         hboxContent.setSpacing(10);
                         hboxContent.getChildren().clear();
                         hboxContent.getChildren().add(icon);
-                        hboxContent.getChildren().add(label);  
-                    }
-                    else{
+                        hboxContent.getChildren().add(label);
+                    } else {
                         employeeForget.add(List_Employee.get(i));
                         Stage stageForget = new Stage();
                         stageForget.initModality(Modality.APPLICATION_MODAL);
                         // make its owner the existing window:
-
+                        stageForget.resizableProperty().setValue(Boolean.FALSE);
                         Parent rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLForgetPass.fxml"));
                         Scene sceneForget;
                         sceneForget = new Scene(rootAdd);
@@ -264,10 +285,10 @@ public class FXMLLoginController implements Initializable {
                     hboxContent.setSpacing(10);
                     hboxContent.getChildren().clear();
                     hboxContent.getChildren().add(icon);
-                    hboxContent.getChildren().add(label);  
+                    hboxContent.getChildren().add(label);
                     txtUserName.requestFocus();
                 }
-                
+
             }
         }
 

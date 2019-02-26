@@ -88,6 +88,7 @@ public class FXMLMainFormController implements Initializable {
             System.out.println("Registration menu item clicked!");
             try {
                 Stage stage = new Stage();
+                stage.resizableProperty().setValue(Boolean.FALSE);
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
                 stage.getIcons().add(new Image("/images/iconmanagement.png"));
                 Scene scene = new Scene(root);

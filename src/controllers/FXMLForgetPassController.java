@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -18,14 +19,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
@@ -61,23 +69,67 @@ public class FXMLForgetPassController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        txtForgetPassword.setOnKeyPressed(event -> {
-            txtForgetPassword.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-
-            HboxContent.getChildren().clear();
-        });
-        textSerectAnswer.setOnKeyPressed(event -> {
-            textSerectAnswer.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-
-            HboxContent.getChildren().clear();
-        });
-        txtSerectQuestion.valueProperty().addListener((obs, oldItem, newItem) -> {
-
-            if (newItem != null) {
-               txtSerectQuestion.setStyle("-jfx-focus-color:#6747CD; -jfx-unfocus-color:#6747CD;");
+        txtForgetPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                txtForgetPassword.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    try {
+                        handleForgetAction();
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
-
-
+        });
+        txtForgetConfirmPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                txtForgetConfirmPassword.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    try {
+                        handleForgetAction();
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        textSerectAnswer.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                textSerectAnswer.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    try {
+                        handleForgetAction();
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);           
+                    }
+                }}
+        });
+        txtSerectQuestion.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                textSerectAnswer.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    try {
+                        handleForgetAction();
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);           
+                    }
+                }}
+        });
+        txtSerectQuestion.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> obs, String oldItem, String newItem) {
+                if (newItem != null) {
+                    txtSerectQuestion.setStyle("-jfx-focus-color:#6747CD; -jfx-unfocus-color:#6747CD;");
+                }
+            }
         });
         patternPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z#$^+=!*()@%&])(?=.*\\d).{8,20}$");
         employeeForget = FXMLLoginController.employeeForget;
@@ -100,7 +152,7 @@ public class FXMLForgetPassController implements Initializable {
     }
 
     @FXML
-    private void handleForgetAction(ActionEvent event) throws SQLException, ClassNotFoundException {
+    private void handleForgetAction() throws SQLException, ClassNotFoundException {
 
         if (txtForgetPassword.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
@@ -163,14 +215,14 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             textSerectAnswer.requestFocus();
-        } else if (!txtForgetPassword.getText().equals(txtForgetConfirmPassword.getText())) {
+        }else if (!patternPassword.matcher(txtForgetPassword.getText()).matches()) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
             label.setPrefSize(300, 35);
-            label.setText("PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
+            label.setText("PASSWORD INVALID !!! (EXAM:Abc12345,aBc@1234,...(6-20 CHARACTERS) !!! ");
             txtForgetPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setSpacing(10);
             HboxContent.setAlignment(Pos.CENTER);
@@ -178,14 +230,15 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             txtForgetPassword.requestFocus();
-        } else if (!patternPassword.matcher(txtForgetPassword.getText()).matches()) {
+        }
+        else if (!txtForgetPassword.getText().equals(txtForgetConfirmPassword.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
             label.setPrefSize(300, 35);
-            label.setText("PASSWORD MUST CONTAIN UPPERCASE,LOWERCASE CHARACTERS AND NUMERIC (6-20 CHARACTERS) !!! ");
+            label.setText("PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
             txtForgetPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setSpacing(10);
             HboxContent.setAlignment(Pos.CENTER);
