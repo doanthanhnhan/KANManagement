@@ -29,6 +29,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -121,6 +122,8 @@ public class FXMLMainFormController implements Initializable {
 
     @FXML
     private void homeAction(ActionEvent event) {
+        btn_Toolbar_Home.setDisable(true);
+        
 //        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
 //        list_Employee = FXMLLoginController.List_EmployeeLogin;
 //        String userRole = list_Employee.get(0).getRole();
@@ -148,11 +151,11 @@ public class FXMLMainFormController implements Initializable {
                     AnchorPane overviewPane = (AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/FXMLMainOverViewPane.fxml"));
 
                     // Add fxml content to a tab
-                    Tab overViewTab = new Tab("Overview");
+                    Tab overViewTab = new Tab("Overview");                    
                     overViewTab.setContent(overviewPane);
                     Platform.runLater(() -> {
                         mainTabPane.getTabs().add(overViewTab);
-                        btn_Toolbar_Home.setDisable(true);
+                        
                         //Stop timer
                         myTimer.stop_Timer(label_Task_Status);
                     });

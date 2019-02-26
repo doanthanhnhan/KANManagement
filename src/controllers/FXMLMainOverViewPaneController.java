@@ -114,6 +114,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
     }
 
     public void initAddRooms() {
+        System.out.println("Test chạy không????");
         listRooms = roomDAOImpl.getAllRoom();
         ArrayList<String> array_Status = new ArrayList<>(Arrays.asList("Available", "Reserved", "Occupied", "Check out"));
         ArrayList<String> array_Type = new ArrayList<>(Arrays.asList("Single", "Double", "Triple", "Family", "Deluxe"));

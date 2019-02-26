@@ -31,7 +31,7 @@ public class Test1 extends Application {
 //            stage.setTitle("Add New Employee");
 //        }
 //        else{
-        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLFormInforOfGuest.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLTestChokuKien.fxml"));
 //            stage.setTitle("KANManagementLogin");
 //        }
 //        stage.getIcons().add(new Image("/images/iconmanagement.png"));
