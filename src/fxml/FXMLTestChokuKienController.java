@@ -109,30 +109,30 @@ public class FXMLTestChokuKienController implements Initializable {
         //Chạy đa luồng yêu cầu em phải kiểm soát (tức là đoán được code của mình nó chạy như thế nào để debug)
         
         // Đoạn này làm đa luồng.
-//        Task loadOverview = new Task() {
-//            @Override
-//            protected Object call() throws Exception {
-//                System.out.println("Loading...");
-//                for (int i = 0; i < 100000; i++) {
-//                    System.out.println("Loading..." + i);
-//                }
-//                return null;
-//            }
-//        };
-//
-//        loadOverview.setOnSucceeded(new EventHandler<Event>() {
-//            @Override
-//            public void handle(Event event) {
-//                System.out.println("Finished");
-//                Platform.runLater(() -> {
-//
-//                    btn.setDisable(false);
-//
-//                });
-//            }
-//        });
-//
-//        new Thread(loadOverview).start();
+        Task loadOverview = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                System.out.println("Loading...");
+                for (int i = 0; i < 50000; i++) {
+                    System.out.println("Loading..." + i);
+                }
+                return null;
+            }
+        };
+
+        loadOverview.setOnSucceeded(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                System.out.println("Finished");
+                Platform.runLater(() -> {
+                    btn.setDisable(false);
+                    timeline.stop();
+                    stage.close();
+                });
+            }
+        });
+
+        new Thread(loadOverview).start();
   
     }
 
