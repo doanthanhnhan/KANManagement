@@ -228,7 +228,7 @@ public class DAO {
         pts.setString(3, User);
         pts.execute();
         pts.close();
-        if(Count==3){
+        if(Count==5){
             String e="UPDATE Users SET Active = ? WHERE UserName = ?";
             PreparedStatement p = connection.prepareStatement(e);
             p.setInt(1, 0);
