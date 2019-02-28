@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLInfoEmployeeController">
+   <children>
+      <VBox fx:id="vBox_Employee_Info" layoutY="-14.0">
+         <children>
+            <HBox prefHeight="129.0" prefWidth="649.0">
+               <children>
+                  <VBox prefHeight="100.0" prefWidth="655.0">
+                     <children>
+                        <HBox prefHeight="53.0" prefWidth="624.0">
+                           <children>
+                              <Label prefHeight="53.0" prefWidth="321.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="FORM INFO EMPLOYEE">
+                                 <font>
+                                    <Font name="System Bold" size="27.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" top="60.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label prefHeight="27.0" prefWidth="352.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for info employee">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" top="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+               <children>
+                  <JFXTextField fx:id="newPhone" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Phone Number" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" top="30.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="649.0">
+               <children>
+                  <JFXDatePicker fx:id="birthday" defaultColor="#6467cd" onAction="#Format_Show_Calender" prefHeight="35.0" prefWidth="582.0" promptText="Date Of Birth">
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" top="30.0" />
+                     </HBox.margin>
+                  </JFXDatePicker>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+               <children>
+                  <JFXTextField fx:id="newMidname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Midname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" top="20.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+               <children>
+                  <JFXTextField fx:id="newLastname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Lastname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" top="20.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+               </children>
+            </HBox>
+            <HBox fx:id="HboxContent" alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
+               <children>
+                  <JFXButton fx:id="btnInfo" buttonType="RAISED" onAction="#btnInfoEmployee" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="50.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

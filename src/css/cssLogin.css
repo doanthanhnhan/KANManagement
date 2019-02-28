@@ -71,7 +71,8 @@
 .jfx-date-picker{
     -fx-prompt-text-fill: -fx-primarytextcolor;    
     -fx-font-size : 14px;
-    -fx-font-weight: bold;    
+    -fx-font-weight: bold;
+  
 }
 .jfx-glyhp-icon{
     -fx-fill: #FF2625;
