@@ -31,13 +31,13 @@ public class Test1 extends Application {
 //            stage.setTitle("Add New Employee");
 //        }
 //        else{
-        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLFormInforOfGuest.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCustomer.fxml"));
 //            stage.setTitle("KANManagementLogin");
 //        }
 //        stage.getIcons().add(new Image("/images/iconmanagement.png"));
 
         Scene scene = new Scene(root);
-
+//        scene.getStylesheets().add("/css/fxmlcheckinroom.css");
         stage.setScene(scene);
         stage.show();
     }

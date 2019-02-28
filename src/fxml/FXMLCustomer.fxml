@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLCustomerController">
+    <stylesheets>
+        <URL value="@/css/fxmlcustomer.css" />
+    </stylesheets>
+    <children>
+      <VBox prefHeight="621.0" prefWidth="1366.0" style="-fx-background-color: white;">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="labelName" alignment="CENTER" graphicTextGap="5.0" prefHeight="119.0" prefWidth="1737.0" stylesheets="@../css/fxmlforminforofguest.css" text="Customer" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="43.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="25.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="668.0" prefWidth="1736.0">
+               <children>
+                  <VBox prefHeight="668.0" prefWidth="868.0" spacing="50.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="84.0" prefWidth="880.0" style="-fx-text-fill: gray;" stylesheets="@../css/fxmlforminforofguest.css" text="Required Information" textFill="#212121">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="txtFirstName" labelFloat="true" promptText="First Name" unFocusColor="#4a4a4a">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="txtLastName" labelFloat="true" promptText="Last Name" unFocusColor="#4a4a4a">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="txtEmail" labelFloat="true" promptText="Email" unFocusColor="#4a4a4a">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <HBox fx:id="HBoxContent" prefHeight="100.0" prefWidth="200.0" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="668.0" prefWidth="868.0" spacing="50.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="84.0" prefWidth="880.0" style="-fx-text-fill: gray;" stylesheets="@../css/fxmlforminforofguest.css" text="More Information" textFill="#212121">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="txtPassport" labelFloat="true" promptText="Passport" unFocusColor="#4a4a4a">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXTextField fx:id="txtPhoneNumber" labelFloat="true" promptText="Phone Number" unFocusColor="#4a4a4a">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <JFXDatePicker fx:id="dateBirthDay" defaultColor="#6467cd" prefHeight="15.0" prefWidth="683.0" promptText="Birth Day" styleClass="jfx-date-picker">
+                           <padding>
+                              <Insets left="25.0" right="25.0" top="-9.0" />
+                           </padding>
+                        </JFXDatePicker>
+                        <HBox />
+                        <JFXButton fx:id="btnSubmit" onAction="#handleSubmit" prefHeight="90.0" prefWidth="697.0" ripplerFill="#9194d0" style="-fx-background-color: #6467cd; -fx-background-radius: 500;" text="Submit">
+                           <font>
+                              <Font name="System Bold" size="19.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="25.0" right="25.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

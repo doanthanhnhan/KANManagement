@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ContextMenu?>
@@ -10,7 +9,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DisplacementMap?>
+<?import javafx.scene.effect.FloatMap?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -59,7 +60,7 @@
                                                 <Insets left="25.0" right="25.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <JFXTextField focusColor="#6447cd" prefHeight="101.0" prefWidth="169.0" promptText="           bood-xxx" unFocusColor="#6447cd">
+                                          <JFXTextField fx:id="txtID" focusColor="#6447cd" prefHeight="101.0" prefWidth="169.0" promptText="           bood-xxx" unFocusColor="#6447cd">
                                              <HBox.margin>
                                                 <Insets bottom="30.0" top="30.0" />
                                              </HBox.margin>
@@ -76,31 +77,26 @@
                                     </HBox>
                                     <ScrollPane prefHeight="574.0" prefWidth="1131.0">
                                        <content>
-                                          <JFXTreeTableView prefHeight="451.0" prefWidth="1500.0" tableMenuButtonVisible="true">
-                                             <columns>
-                                                <TreeTableColumn prefWidth="132.00003051757812" text="ID Booking" />
-                                                <TreeTableColumn prefWidth="227.0" text="Name" />
-                                                <TreeTableColumn prefWidth="110.0" text="Room Type" />
-                                                <TreeTableColumn prefWidth="164.0" text="Phone " />
-                                                <TreeTableColumn prefWidth="106.0" text="Mail" />
-                                                <TreeTableColumn prefWidth="53.0" text="Drive" />
-                                                <TreeTableColumn prefWidth="48.0" text="Note" />
-                                                <TreeTableColumn prefWidth="93.0" text="Company " />
-                                                <TreeTableColumn prefWidth="60.0" text="Column X" />
-                                                <TreeTableColumn prefWidth="56.0" text="Column X" />
-                                                <TreeTableColumn prefWidth="52.0" text="Column X" />
-                                                <TreeTableColumn prefWidth="46.0" text="Column X" />
-                                                <TreeTableColumn prefWidth="95.0" text="Column X" />
-                                             </columns>
+                                          <TableView fx:id="TableViewData" accessibleRole="IMAGE_VIEW" prefHeight="574.0" prefWidth="1500.0" stylesheets="@../css/fxmlcheckinroom.css">
                                              <contextMenu>
                                                 <ContextMenu>
                                                   <items>
-                                                    <MenuItem mnemonicParsing="false" onAction="#handleEditMenu" text="Edit" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#handleDeleteMenu" text="Delete" />
+                                                    <MenuItem fx:id="DeleteBtn" mnemonicParsing="false" onAction="#handleDeleteMenu" text="Delete" />
+                                                      <MenuItem fx:id="EditBtn" mnemonicParsing="false" onAction="#handleEditMenu" text="Edit" />
                                                   </items>
                                                 </ContextMenu>
                                              </contextMenu>
-                                          </JFXTreeTableView>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                             <effect>
+                                                <DisplacementMap>
+                                                   <mapData>
+                                                      <FloatMap />
+                                                   </mapData>
+                                                </DisplacementMap>
+                                             </effect>
+                                          </TableView>
                                        </content>
                                     </ScrollPane>
                                  </children>

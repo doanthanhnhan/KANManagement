@@ -84,41 +84,7 @@ public class FXMLFormInforOfGuestController implements Initializable {
         check1.setSelected(true);
     }
     
-    //validate String
-    private static boolean isString(String str) {
-        String expression = "^[a-zA-Z\\s]+";
-        return str.matches(expression);
-    }
     
-    //validate Number
-    private static boolean validatePhoneNumber(String phoneNo) {
-        //validate phone numbers of format "1234567890"
-        if (phoneNo.matches("\\d{10}")) {
-            return true;
-        } //validating phone number with -, . or spaces
-        else if (phoneNo.matches("\\d{3}[-\\.\\s]\\d{3}[-\\.\\s]\\d{4}")) {
-            return true;
-        } //validating phone number with extension length from 3 to 5
-        else if (phoneNo.matches("\\d{3}-\\d{3}-\\d{4}\\s(x|(ext))\\d{3,5}")) {
-            return true;
-        } //validating phone number where area code is in braces ()
-        else if (phoneNo.matches("\\(\\d{3}\\)-\\d{3}-\\d{4}")) {
-            return true;
-        } //return false if nothing matches the input
-        else {
-            return false;
-        }
-
-    }
-    
-    //validate Email
-    private static final Pattern VALID_EMAIL_ADDRESS_REGEX
-            = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
-    private static boolean validateEmail(String emailStr) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-        return matcher.find();
-    }
 
     @FXML
     private void handleSubmitAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException, Exception {
@@ -133,7 +99,7 @@ public class FXMLFormInforOfGuestController implements Initializable {
         if (check1.isSelected()) {
             check = true;
         }
-        if (isString(txtFirstName.getText()) && isString(txtLastName.getText()) && validatePhoneNumber(txtPhoneNumber.getText()) && validateEmail(txtEmail.getText())) {
+        if (Form.isString(txtFirstName.getText()) && Form.isString(txtLastName.getText()) && Form.validatePhoneNumber(txtPhoneNumber.getText()) && Form.validateEmail(txtEmail.getText())) {
 
             Form.AddNewBooking(txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), txtNote.getText(), txtCompanyName.getText(), comboBoxRoom.getValue(), parseInt(txtNumberofGuest.getText()), datePickerDateArrive.getValue(), check, txtFlightNumber.getText());
         }
