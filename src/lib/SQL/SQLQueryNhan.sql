@@ -108,17 +108,19 @@ CREATE TABLE Departments(
 
 CREATE TABLE Employees(
 -- Create columns
-	EmployeeID varchar(10) UNIQUE NOT NULL,	
+	EmployeeID varchar(20) UNIQUE NOT NULL,	
 	EmployeeFirstName nvarchar(15) NOT NULL,
 	EmployeeMidName nvarchar(25),
 	EmployeeLastName nvarchar(15) NOT NULL,
 	DepartmentID varchar(10),
 	PhoneNumber varchar(20),
+	[Address] nvarchar(100),
+	IDNumber varchar(20),
 	HireDate date,
 	Job varchar(20),
 	EducatedLevel smallint,
 	Sex bit NOT NULL,
-	Birthday date NOT NULL,
+	Birthday date,
 	Salary decimal,
 	Bonus decimal,
 	Comm decimal,
