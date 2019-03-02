@@ -5,12 +5,14 @@
  */
 package fxml;
 
+import com.jfoenix.controls.JFXTextField;
 import static controllers.FXMLAccountController.stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -28,6 +30,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import utils.QRWebCam;
 
 /**
  * FXML Controller class
@@ -40,13 +43,20 @@ public class FXMLTestChokuKienController implements Initializable {
     private Button btnTest;
     @FXML
     private AnchorPane mainPane;
+    @FXML
+    private JFXTextField txtInput;
+    @FXML
+    private Label labelDisplay;
+    @FXML
+    private Button btnWebCam;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
+        
     }
 
     @FXML
@@ -68,12 +78,13 @@ public class FXMLTestChokuKienController implements Initializable {
         
         // Khai báo stage nhìn xuyên thấu
         final Stage stage = new Stage(StageStyle.TRANSPARENT);
-        
+        stage.setOpacity(0.5);
         // Chỗ này set khi mở cửa sổ con lên thì cha bị vô hiệu
         stage.initModality(Modality.APPLICATION_MODAL);
         
         final Label status = new Label("Loading");
         final ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
+        indicator.setPrefSize(100, 100);
         final Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), new EventHandler() {
                     @Override
@@ -95,7 +106,7 @@ public class FXMLTestChokuKienController implements Initializable {
             layout.setSpacing(10);
             layout.getChildren().addAll(indicator, status);
             layout.setStyle("-fx-padding: 10;");
-            stage.setScene(new Scene(layout, 100, 100));
+            stage.setScene(new Scene(layout, 300, 300));
             stage.show();
         });
 
@@ -134,6 +145,22 @@ public class FXMLTestChokuKienController implements Initializable {
 
         new Thread(loadOverview).start();
   
+    }
+
+    @FXML
+    private void CallWebCam(ActionEvent event) {
+        QRWebCam qrWebCam = new QRWebCam(); 
+        qrWebCam.txtQR.addListener((observable, oldValue, newValue) -> {
+            if (newValue!=null){
+                txtInput.setText(newValue);
+            }
+        });   
+        
+        
+    }
+    
+    public void setTextField(String string){        
+        
     }
 
 }

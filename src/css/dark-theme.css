@@ -65,6 +65,8 @@
 /*REGISTRATION FORM*/
 
 .jfx-combo-box{
+    -jfx-focus-color: -fx-primarycolor; 
+    -jfx-unfocus-color: -fx-primarycolor;
     -fx-prompt-text-fill: -fx-primarytextcolor;   
     -fx-font-size : 14px;
     -fx-font-weight: bold;
@@ -77,7 +79,7 @@
     -fx-background-color:  -fx-primary;
     -fx-text-fill: -fx-secondary;    
 }*/
-.jfx-combo-box{
+.jfx-combo-box-fault{
     -jfx-focus-color: -fx-fault-color; 
     -jfx-unfocus-color: -fx-fault-color;
 }

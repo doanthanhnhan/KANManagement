@@ -27,6 +27,7 @@ public class Test1 extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         Parent root = null;
+
 //        if(DAO.checkFirstLogin()==0){khi 
 //            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
 //            stage.setTitle("Add New Employee");
@@ -41,8 +42,12 @@ public class Test1 extends Application {
 //        }
 //        stage.getIcons().add(new Image("/images/iconmanagement.png"));
 
+
+        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+
+
         Scene scene = new Scene(root);
-//        scene.getStylesheets().add("/css/fxmlcheckinroom.css");
+
         stage.setScene(scene);
         stage.show();
     }

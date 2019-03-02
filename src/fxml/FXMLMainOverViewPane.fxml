@@ -22,7 +22,7 @@
                             <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0">
                                     <children>
-                                        <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <VBox fx:id="vBox_Filters" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                     <children>
@@ -142,9 +142,19 @@
                                           </Label>
                                                     </children>
                                                 </HBox>
+                                    <HBox alignment="CENTER_LEFT">
+                                       <children>
+                                          <JFXCheckBox fx:id="checkBox_Remaining_Days" prefWidth="120.0" text="R.Days" />
+                                          <Label fx:id="label_Remaining_Days" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                             <graphic>
+                                                <FontAwesomeIconView glyphName="CALENDAR_CHECK_ALT" size="20" />
+                                             </graphic>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="289.0">
                                                     <children>
-                                                        <JFXCheckBox fx:id="checkBox_Repair" prefWidth="120.0" text="Repair" />
+                                                        <JFXCheckBox fx:id="checkBox_Repair" prefWidth="120.0" text="Repaired" />
                                           <Label fx:id="label_Repair_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="WRENCH" size="20" />
@@ -152,6 +162,16 @@
                                           </Label>
                                                     </children>
                                                 </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="475.0">
+                                       <children>
+                                          <JFXCheckBox fx:id="checkBox_Not_Repair" prefWidth="120.0" text="N.Repair" />
+                                          <Label fx:id="label_Not_Repair_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                             <graphic>
+                                                <FontAwesomeIconView glyphName="WRENCH" size="20" />
+                                             </graphic>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="10.0">
                                        <children>
                                           <Label text="FLOORS" />
