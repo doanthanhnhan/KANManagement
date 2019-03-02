@@ -27,6 +27,8 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -44,14 +46,16 @@ public class QRWebCam extends JFrame implements Runnable, ThreadFactory {
     
     //Declare txtQR to reference from another form
     public ReadOnlyObjectWrapper<String> txtQR = new ReadOnlyObjectWrapper<>();
+    public SimpleStringProperty txtQR_test;
     
     //Send back data function to the form call this method
     public ReadOnlyObjectProperty<String> txtQRProperty() {
         return txtQR.getReadOnlyProperty();
     }
+
     
     public QRWebCam() {
-        super();        
+        super();                
         
         setLayout(new FlowLayout());
         setTitle("Read QR / Bar Code With Webcam");
@@ -114,6 +118,7 @@ public class QRWebCam extends JFrame implements Runnable, ThreadFactory {
                 //System.out.println(result.getText());
                 //Setting value for txtQR
                 txtQR.set(result.getText());
+                txtQR_test.set(result.getText());
             }
             
         } while (true);
