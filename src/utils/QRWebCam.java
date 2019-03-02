@@ -117,7 +117,7 @@ public class QRWebCam extends JFrame implements Runnable, ThreadFactory {
                 //System.out.println(result.getText());
                 //Setting value for txtQR
                 txtQR.set(result.getText());
-                txtQR_test.set(result.getText());
+                //txtQR_test.set(result.getText());
             }
             
         } while (true);

@@ -148,10 +148,10 @@ public class FXMLTestChokuKienController implements Initializable {
                 txtInput.setText(newValue);
             }
         });
-        qrWebCam.txtQR_test.addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                labelDisplay.setText(newValue);
-            }
-        });
+//        qrWebCam.txtQR_test.addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null) {
+//                labelDisplay.setText(newValue);
+//            }
+//        });
     }
 }
