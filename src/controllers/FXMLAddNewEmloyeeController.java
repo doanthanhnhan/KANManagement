@@ -108,7 +108,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Platform.runLater(() -> {
                     HboxContent.getChildren().clear();
                     newId.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                  
+
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -127,7 +127,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Platform.runLater(() -> {
                     HboxContent.getChildren().clear();
                     newGmail.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-               
+
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -146,7 +146,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Platform.runLater(() -> {
                     HboxContent.getChildren().clear();
                     newFirstname.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                 
+
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -165,7 +165,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Platform.runLater(() -> {
                     HboxContent.getChildren().clear();
                     newLastname.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                    
+
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -183,7 +183,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             public void handle(KeyEvent event) {
                 Platform.runLater(() -> {
                     HboxContent.getChildren().clear();
-                    newMidname.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");              
+                    newMidname.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -215,7 +215,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             if (newItem != null) {
                 Platform.runLater(() -> {
                     HboxContent.getChildren().clear();
-                    newRole.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");                 
+                    newRole.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
                 });
             }
         });
@@ -561,6 +561,12 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                         "KAN@123456", "Default username and password", content);
                 Platform.runLater(() -> {
+                    try {
+                        FXMLLoginController loginController = ConnectControllers.getfXMLLoginController();
+                        loginController.List_Employee = DAO.getAllEmployee();
+                    } catch (SQLException | ClassNotFoundException ex) {
+                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     newRole.setValue(null);
                     newFirstname.setText("");
                     newMidname.setText("");
@@ -569,6 +575,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                     newId.setText("");
                     newId.requestFocus();
                 });
+
                 if (DAO.checkFirstLogin() == 1) {
                     Platform.runLater(() -> {
                         Stage stage = (Stage) btnAddNew.getScene().getWindow();

@@ -55,8 +55,7 @@ public class FXMLTestChokuKienController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        
+
     }
 
     @FXML
@@ -64,10 +63,6 @@ public class FXMLTestChokuKienController implements Initializable {
         functiona();
     }
 
-    /**
-     * Để anh cố gắng tạo 1 class chạy loading chung để lấy ra dùng nhiều lần cho nó dễ
-     * Đã có loading đẹp, nhưng chưa hiểu code nên chưa ném vào đây ^_^
-     */
     public void functiona() {
         System.out.println(mainPane.lookup("#btn_test"));
 
@@ -75,13 +70,12 @@ public class FXMLTestChokuKienController implements Initializable {
         btn.setDisable(true);
 
         // Đoạn này làm loading (đang làm chạy vô tận)
-        
         // Khai báo stage nhìn xuyên thấu
         final Stage stage = new Stage(StageStyle.TRANSPARENT);
         stage.setOpacity(0.5);
         // Chỗ này set khi mở cửa sổ con lên thì cha bị vô hiệu
         stage.initModality(Modality.APPLICATION_MODAL);
-        
+
         final Label status = new Label("Loading");
         final ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
         indicator.setPrefSize(100, 100);
@@ -112,13 +106,12 @@ public class FXMLTestChokuKienController implements Initializable {
 
         timeline.play();
         //Hết đoạn loading
-        
+
         //Muốn làm loading dừng lại thì phải chạy 1 luồng khác tắt cái timelime.stop() -- Xem bên main form anh làm.
         //Khuya rồi nên làm demo vầy cho em xem rồi tính tiếp.
         //Cách dưới là 1 nhiệm vụ chạy 1 luồng, em muốn nhiều nhiệm vụ chạy cùng 1 lúc thì tạo nhiều task, và new Thread(Tên task).start()
         //để chạy luồng mới.
         //Chạy đa luồng yêu cầu em phải kiểm soát (tức là đoán được code của mình nó chạy như thế nào để debug)
-        
         // Đoạn này làm đa luồng.
         Task loadOverview = new Task() {
             @Override
@@ -144,28 +137,21 @@ public class FXMLTestChokuKienController implements Initializable {
         });
 
         new Thread(loadOverview).start();
-  
+
     }
 
     @FXML
     private void CallWebCam(ActionEvent event) {
-        QRWebCam qrWebCam = new QRWebCam(); 
+        QRWebCam qrWebCam = new QRWebCam();
         qrWebCam.txtQR.addListener((observable, oldValue, newValue) -> {
-            if (newValue!=null){
+            if (newValue != null) {
                 txtInput.setText(newValue);
             }
         });
-        
         qrWebCam.txtQR_test.addListener((observable, oldValue, newValue) -> {
-            if (newValue!=null){
+            if (newValue != null) {
                 labelDisplay.setText(newValue);
             }
-        });       
-        
+        });
     }
-    
-    public void setTextField(String string){        
-        
-    }
-
 }

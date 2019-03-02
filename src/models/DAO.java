@@ -13,16 +13,16 @@ import utils.connectDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import static java.sql.Types.NULL;
-import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author Admin
  */
 public class DAO {
-     private static ObservableList<InfoEmployee> getListEmployee(ResultSet rs) throws SQLException, ClassNotFoundException {
+
+    private static ObservableList<InfoEmployee> getListEmployee(ResultSet rs) throws SQLException, ClassNotFoundException {
         //Declare a observable List which comprises of Employee objects
         ObservableList<InfoEmployee> List = FXCollections.observableArrayList();
         while (rs.next()) {
@@ -47,16 +47,19 @@ public class DAO {
             Emp.setComm(rs.getString("Comm"));
             Emp.setGmail(rs.getString("Email"));
             Emp.setRole(rs.getString("Position"));
+            Emp.setAddress(rs.getString("Address"));
+            Emp.setId_number(rs.getString("IDNumber"));
             int i = rs.getInt("Sex");
             if (i == 1) {
-               Emp.setSex("Nam");
+                Emp.setSex("Male");
             } else {
-                Emp.setSex("Nữ");
+                Emp.setSex("Female");
             }
             List.add(Emp);
         }
         return List;
     }
+
     public static ObservableList<InfoEmployee> getAllEmployee() throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         // Tạo đối tượng Statement.
@@ -70,7 +73,8 @@ public class DAO {
         connection.close();
         return list_Employee;
     }
-    public static void AddNewEmployee(String Id,String FName,String MName,String LName,String Id_Role,String Gmail,String Sex) {
+
+    public static void AddNewEmployee(String Id, String FName, String MName, String LName, String Id_Role, String Gmail, String Sex) {
         try {
             Connection connection = connectDB.connectSQLServer();
             String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,RoleID) values(?,?,?,?,?,?,?)";
@@ -79,11 +83,10 @@ public class DAO {
             pt.setString(2, FName);
             pt.setString(3, MName);
             pt.setString(4, LName);
-            if("Male".equals(Sex)){
-                pt.setInt( 5 , 1 );
-            }
-            else{
-                pt.setInt(5,0);
+            if ("Male".equals(Sex)) {
+                pt.setInt(5, 1);
+            } else {
+                pt.setInt(5, 0);
             }
             pt.setString(6, Gmail);
             pt.setString(7, Id_Role);
@@ -94,6 +97,7 @@ public class DAO {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
         }
     }
+
     public static ObservableList<?> getAllRole() throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         // Tạo đối tượng Statement.
@@ -110,71 +114,76 @@ public class DAO {
         connection.close();
         return ListRole;
     }
-    public static String getIdRole(String Role) throws ClassNotFoundException, SQLException{
+
+    public static String getIdRole(String Role) throws ClassNotFoundException, SQLException {
         String Id = null;
         Connection connection = connectDB.connectSQLServer();
-        String exp="select RoleID from [Role] where Position = ?";
+        String exp = "select RoleID from [Role] where Position = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, Role);
         ResultSet rs;
         rs = pt.executeQuery();
-        while(rs.next()){
-              Id = rs.getString("RoleID");
+        while (rs.next()) {
+            Id = rs.getString("RoleID");
         }
         return Id;
     }
-    public static void AddUser(String Emp_Id, String User, String Pass,String Date) throws SQLException, ClassNotFoundException{
+
+    public static void AddUser(String Emp_Id, String User, String Pass, String Date) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
-        String exp="select Max (ID_User) Max from Users";
+        String exp = "select Max (ID_User) Max from Users";
         PreparedStatement pt = connection.prepareStatement(exp);
         ResultSet rs;
         rs = pt.executeQuery();
         int Id = 0;
-        while(rs.next()){
-              Id = rs.getInt("Max")+1;
+        while (rs.next()) {
+            Id = rs.getInt("Max") + 1;
         }
-        int active=1;
-        String ex="Insert into Users(ID_User,EmployeeID,UserName,PassWord,Active,Check_Login,Check_Time) values(?,?,?,?,?,?,?)";
+        int active = 1;
+        String ex = "Insert into Users(ID_User,EmployeeID,UserName,PassWord,Active,Check_Login,Check_Time) values(?,?,?,?,?,?,?)";
         PreparedStatement pts = connection.prepareStatement(ex);
         pts.setInt(1, Id);
         pts.setString(2, Emp_Id);
         pts.setString(3, User);
         pts.setString(4, Pass);
         pts.setInt(5, active);
-        pts.setInt(6,0);
+        pts.setInt(6, 0);
         pts.setString(7, Date);
         pts.execute();
         pts.close();
         connection.close();
     }
-    public static Integer checkFirstLogin() throws ClassNotFoundException, SQLException{
+
+    public static Integer checkFirstLogin() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp="select count(*) Count from Users";
+        String exp = "select count(*) Count from Users";
         PreparedStatement pt = connection.prepareStatement(exp);
         ResultSet rs;
         rs = pt.executeQuery();
         int Count = 0;
-        while(rs.next()){
-              Count = rs.getInt("Count");
+        while (rs.next()) {
+            Count = rs.getInt("Count");
         }
         return Count;
     }
-    public static Integer checkSetPass(String User) throws ClassNotFoundException, SQLException{
+
+    public static Integer checkSetPass(String User) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp="select count(*) Count from UserLogs where UserName = ?";
+        String exp = "select count(*) Count from UserLogs where UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, User);
         ResultSet rs;
         rs = pt.executeQuery();
         int Count = 0;
-        while(rs.next()){
-              Count = rs.getInt("Count");
+        while (rs.next()) {
+            Count = rs.getInt("Count");
         }
         return Count;
     }
-    public static void SetPass(String User,String Pass,String Question,String Answer) throws ClassNotFoundException, SQLException{
+
+    public static void SetPass(String User, String Pass, String Question, String Answer) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp="UPDATE Users SET PassWord = ?, Serect_Question = ? ,Serect_Answer = ? WHERE UserName = ?";
+        String exp = "UPDATE Users SET PassWord = ?, Serect_Question = ? ,Serect_Answer = ? WHERE UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, Pass);
         pt.setString(2, Question);
@@ -182,9 +191,10 @@ public class DAO {
         pt.setString(4, User);
         pt.execute();
         pt.close();
-        connection.close();   
+        connection.close();
     }
-    public static void setUserLogs(String User,String Content,String Logtime) throws ClassNotFoundException, SQLException{
+
+    public static void setUserLogs(String User, String Content, String Logtime) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String ex = "Insert Into UserLogs(UserName,LogContent,LogTime,Active) Values (?,?,?,?)";
         PreparedStatement pts = connection.prepareStatement(ex);
@@ -197,17 +207,19 @@ public class DAO {
         connection.close();
 
     }
-    public static void forgetPass(String User, String Pass) throws SQLException, ClassNotFoundException{
+
+    public static void forgetPass(String User, String Pass) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
-        String exp="UPDATE Users SET PassWord = ? WHERE UserName = ?";
+        String exp = "UPDATE Users SET PassWord = ? WHERE UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, Pass);
         pt.setString(2, User);
         pt.execute();
         pt.close();
-        connection.close();  
+        connection.close();
     }
-    public static void check_Login(String User, String Time) throws SQLException, ClassNotFoundException{
+
+    public static void check_Login(String User, String Time) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "select Check_Login from Users where UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
@@ -216,20 +228,20 @@ public class DAO {
         rs = pt.executeQuery();
         int Count = 0;
         while (rs.next()) {
-            Count=rs.getInt("Check_Login");
+            Count = rs.getInt("Check_Login");
         }
         Count++;
-    
+
         pt.close();
-        String ex="UPDATE Users SET Check_Login = ?,Check_Time = ? WHERE UserName = ?";
+        String ex = "UPDATE Users SET Check_Login = ?,Check_Time = ? WHERE UserName = ?";
         PreparedStatement pts = connection.prepareStatement(ex);
         pts.setInt(1, Count);
         pts.setString(2, Time);
         pts.setString(3, User);
         pts.execute();
         pts.close();
-        if(Count==5){
-            String e="UPDATE Users SET Active = ? WHERE UserName = ?";
+        if (Count == 5) {
+            String e = "UPDATE Users SET Active = ? WHERE UserName = ?";
             PreparedStatement p = connection.prepareStatement(e);
             p.setInt(1, 0);
             p.setString(2, User);
@@ -237,9 +249,10 @@ public class DAO {
             p.close();
             setUserLogs(User, "Account is Locked", Time);
         }
-        connection.close();  
+        connection.close();
     }
-    public static Integer check_Active(String User) throws SQLException, ClassNotFoundException{
+
+    public static Integer check_Active(String User) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "select Active from Users where UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
@@ -254,7 +267,8 @@ public class DAO {
         connection.close();
         return Count;
     }
-    public static String check_Time(String User) throws SQLException, ClassNotFoundException{
+
+    public static String check_Time(String User) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "select Check_Time from Users where UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
@@ -269,7 +283,8 @@ public class DAO {
         connection.close();
         return Count;
     }
-    public static void reset_CheckLogin(String User,String Logtime) throws ClassNotFoundException, SQLException{
+
+    public static void reset_CheckLogin(String User, String Logtime) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String ex = "UPDATE Users SET Check_Login = ?,Check_Time = ? WHERE UserName = ?";
         PreparedStatement pts = connection.prepareStatement(ex);
@@ -280,5 +295,19 @@ public class DAO {
         pts.close();
         connection.close();
 
+    }
+
+    public static void UpdateInfoEmployee(String User, String Phone, String Birthday, String Address, String IdNumber) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE Employees SET PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ? WHERE EmployeeID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, Phone);
+        pt.setString(2, Birthday);
+        pt.setString(3, Address);
+        pt.setString(4, IdNumber);
+        pt.setString(5, User);
+        pt.execute();
+        pt.close();
+        connection.close();
     }
 }

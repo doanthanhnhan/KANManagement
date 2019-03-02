@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.DAO;
 
 /**
@@ -27,7 +28,23 @@ public class Test1 extends Application {
         this.stage = stage;
         Parent root = null;
 
+//        if(DAO.checkFirstLogin()==0){khi 
+//            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+//            stage.setTitle("Add New Employee");
+//        }
+//        else{
+
+
+
+        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
+
+//            stage.setTitle("KANManagementLogin");
+//        }
+//        stage.getIcons().add(new Image("/images/iconmanagement.png"));
+
+
         root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+
 
         Scene scene = new Scene(root);
 
