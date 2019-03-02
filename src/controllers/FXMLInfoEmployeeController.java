@@ -160,6 +160,7 @@ public class FXMLInfoEmployeeController implements Initializable {
         }
         if (FXMLLoginController.checkLoginRegis) {
             hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
+            Hboxbtn.getChildren().remove(btnCancel);
             boxId.setDisable(true);
             boxId.setValue(list_login.get(0).getUserName());
             check_delete = true;
