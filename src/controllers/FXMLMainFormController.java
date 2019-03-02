@@ -75,6 +75,8 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private HBox hbox_Bottom;
 
+    public static Boolean checkRegis=false;
+    
     /**
      * Initializes the controller class.
      */
@@ -86,11 +88,12 @@ public class FXMLMainFormController implements Initializable {
     private void initMenuBar() {
         MenuItem regis = new MenuItem("Registration User");
         regis.setOnAction((event) -> {
+            checkRegis = true;
             System.out.println("Registration menu item clicked!");
             try {
                 Stage stage = new Stage();
                 stage.resizableProperty().setValue(Boolean.FALSE);
-                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
                 stage.getIcons().add(new Image("/images/iconmanagement.png"));
                 Scene scene = new Scene(root);
                 stage.setTitle("Add New Employee");
@@ -104,6 +107,7 @@ public class FXMLMainFormController implements Initializable {
         Menu menuRegistration = new Menu("Registration");
         menuRegistration.getItems().add(regis);
         mainMenuBar.getMenus().add(menuRegistration);
+        
     }
 
     private void initTabPane() {

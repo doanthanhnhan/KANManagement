@@ -47,11 +47,13 @@ public class DAO {
             Emp.setComm(rs.getString("Comm"));
             Emp.setGmail(rs.getString("Email"));
             Emp.setRole(rs.getString("Position"));
+            Emp.setAddress(rs.getString("Address"));
+            Emp.setId_number(rs.getString("IDNumber"));
             int i = rs.getInt("Sex");
             if (i == 1) {
-               Emp.setSex("Nam");
+               Emp.setSex("Male");
             } else {
-                Emp.setSex("Nữ");
+                Emp.setSex("Female");
             }
             List.add(Emp);
         }

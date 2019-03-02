@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.DAO;
 
 /**
@@ -31,11 +32,11 @@ public class Test1 extends Application {
 //            stage.setTitle("Add New Employee");
 //        }
 //        else{
-<<<<<<< HEAD
-        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCustomer.fxml"));
-=======
-        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
->>>>>>> 96de5cadb4c826a32f8141563fecab96bde39cb4
+
+
+
+        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
+
 //            stage.setTitle("KANManagementLogin");
 //        }
 //        stage.getIcons().add(new Image("/images/iconmanagement.png"));

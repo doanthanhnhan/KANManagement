@@ -10,8 +10,10 @@ package controllers;
  * @author Admin
  */
 public class ConnectControllers {
+
     public static FXMLLoginController fXMLLoginController;
     public static FXMLForgetPassController fXMLForgetPassController;
+    public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController;
 
     public static FXMLLoginController getfXMLLoginController() {
         return fXMLLoginController;
@@ -28,5 +30,14 @@ public class ConnectControllers {
 
     public static void setfXMLForgetPassController(FXMLForgetPassController fXMLForgetPassController) {
         ConnectControllers.fXMLForgetPassController = fXMLForgetPassController;
+    }
+
+    public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController() {
+
+        return fXMLAddNewEmloyeeController;
+    }
+
+    public static void setfXMLAddNewEmloyeeController(FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController) {
+        ConnectControllers.fXMLAddNewEmloyeeController = fXMLAddNewEmloyeeController;
     }
 }
