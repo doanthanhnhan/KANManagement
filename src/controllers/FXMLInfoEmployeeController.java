@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -31,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -223,7 +225,6 @@ public class FXMLInfoEmployeeController implements Initializable {
     private void Format_Show_Calender() {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, birthday);
-        formatCalender.format(pattern, Hiredate);
     }
 
     @FXML
@@ -476,7 +477,14 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(label);
             LastName.requestFocus();
         } else {
-            validateInfoEmployee = true;
+            try {
+                validateInfoEmployee = true;
+                String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                System.out.println(date);
+                DAO.UpdateInfoEmployee(boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText());
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

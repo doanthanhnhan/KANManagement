@@ -30,7 +30,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import utils.QRWebCam;
 
 /**
  * FXML Controller class
@@ -65,8 +64,6 @@ public class FXMLTestChokuKienController implements Initializable {
     }
 
     /**
-     * Để anh cố gắng tạo 1 class chạy loading chung để lấy ra dùng nhiều lần cho nó dễ
-     * Đã có loading đẹp, nhưng chưa hiểu code nên chưa ném vào đây ^_^
      */
     public void functiona() {
         System.out.println(mainPane.lookup("#btn_test"));
@@ -147,17 +144,10 @@ public class FXMLTestChokuKienController implements Initializable {
   
     }
 
-    @FXML
-    private void CallWebCam(ActionEvent event) {
-        QRWebCam qrWebCam = new QRWebCam(); 
-        qrWebCam.txtQR.addListener((observable, oldValue, newValue) -> {
-            if (newValue!=null){
-                txtInput.setText(newValue);
-            }
-        });   
+ 
         
         
-    }
+    
     
     public void setTextField(String string){        
         
