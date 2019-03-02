@@ -4,12 +4,12 @@
 */
 
 *{
-    /*    -fx-primarycolor: #6747CD;
-        -fx-secondarycolor: #20bf6b;
-        -fx-primarytextcolor: #a3a3a3;*/
-    -fx-primarycolor: #2A2E37;
+    -fx-primarycolor: #6747CD;
+    -fx-secondarycolor: #20bf6b;
+    -fx-primarytextcolor: #a3a3a3;
+/*    -fx-primarycolor: #2A2E37;
     -fx-secondarycolor: #FFFF8D;
-    -fx-primarytextcolor: #B2B2B2;
+    -fx-primarytextcolor: #B2B2B2;*/
     -fx-checkoutcolor: #FF2625;
     -fx-availablecolor: #7AA716;
     -fx-reservedcolor: #009FB4;
@@ -17,6 +17,7 @@
     -fx-fault-color: #FF2625;
 }
 
+/*GENERAL NODE*/
 /*.root{
     -fx-background-color: -fx-primarycolor;
 }*/
@@ -65,11 +66,14 @@
 }
 .label-text{
     -fx-text-fill:-fx-primarycolor;
+    -fx-border-color: -fx-primarycolor;
 }
 .label-color{
     -fx-text-fill: -fx-primarytextcolor;
 }
-
+.image-view:border{
+    -fx-border-color: -fx-primarycolor;    
+}
 /*REGISTRATION FORM*/
 
 .jfx-combo-box{

@@ -24,12 +24,12 @@
                      <children>
                         <VBox prefHeight="200.0" spacing="20.0">
                            <children>
-                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Check in ID" />
-                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Check out ID" />
-                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Customer ID" />
-                              <JFXTextField editable="false" labelFloat="true" prefWidth="500.0" promptText="Customer full name" />
-                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Room ID" />
-                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Total Guests" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Check in ID" styleClass="te" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Check out ID" styleClass="te" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Customer ID" styleClass="te" />
+                              <JFXTextField editable="false" labelFloat="true" prefWidth="500.0" promptText="Customer full name" styleClass="te" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Room ID" styleClass="te" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Total Guests" styleClass="te" />
                            </children>
                         </VBox>
                         <VBox prefHeight="200.0" spacing="20.0">
@@ -39,7 +39,7 @@
                               <JFXComboBox labelFloat="true" prefWidth="500.0" promptText="Customer payment method" />
                               <JFXComboBox labelFloat="true" layoutX="10.0" layoutY="112.0" prefWidth="500.0" promptText="Tax" />
                               <JFXComboBox labelFloat="true" layoutX="10.0" layoutY="214.0" prefWidth="500.0" promptText="Discount" />
-                              <JFXTextField editable="false" labelFloat="true" prefWidth="500.0" promptText="Total Bill amount" />
+                              <JFXTextField editable="false" labelFloat="true" prefWidth="500.0" promptText="Total Bill amount" styleClass="te" />
                            </children>
                         </VBox>
                      </children>
@@ -88,7 +88,7 @@
          <top>
             <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="CHECK OUT FORM">
+                  <Label styleClass="label-text" text="CHECK OUT FORM">
                      <font>
                         <Font name="System Bold" size="35.0" />
                      </font>
