@@ -20,7 +20,9 @@
                <contextMenu>
                   <ContextMenu>
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                      <MenuItem mnemonicParsing="false" text="Edit" />
+                        <MenuItem mnemonicParsing="false" text="Add new" />
+                        <MenuItem mnemonicParsing="false" text="Delete" />
                     </items>
                   </ContextMenu>
                </contextMenu>
