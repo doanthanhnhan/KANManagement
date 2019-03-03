@@ -113,7 +113,7 @@ CREATE TABLE Employees(
 	EmployeeFirstName nvarchar(15) NOT NULL,
 	EmployeeMidName nvarchar(25),
 	EmployeeLastName nvarchar(15) NOT NULL,
-	DepartmentID varchar(10),
+	DepartmentID varchar(20),
 	PhoneNumber varchar(20),
 	[Address] nvarchar(100),
 	IDNumber varchar(20),

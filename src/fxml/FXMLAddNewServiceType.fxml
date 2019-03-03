@@ -96,7 +96,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0" spacing="20.0">
                <children>
-                  <JFXButton fx:id="btnInsertImage" styleClass="loginBtn" text="Insert image" />
+                  <JFXButton fx:id="btnInsertImage" onAction="#handle_Button_Insert_Image_Action" styleClass="loginBtn" text="Insert image" />
                   <Label contentDisplay="TOP" styleClass="label-text" text="Service Image">
                      <graphic>
                         <ImageView fx:id="imgService" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
@@ -110,7 +110,7 @@
                   <Insets bottom="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="HboxContent" alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+            <HBox fx:id="hBoxContent" alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
