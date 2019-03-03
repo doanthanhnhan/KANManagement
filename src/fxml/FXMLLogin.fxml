@@ -18,9 +18,9 @@
    <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="slidebar" stylesheets="@../css/cssLogin.css">
          <children>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" smooth="false">
+            <ImageView fitHeight="221.0" fitWidth="311.0" pickOnBounds="true" smooth="false">
                <image>
-                  <Image url="@../images/Java.png" />
+                  <Image url="@../images/KAN%20Logo.png" />
                </image>
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -31,7 +31,7 @@
                   <Font name="Ebrima Bold" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="169.0" layoutY="361.0" text="Java" textFill="WHITE">
+            <Label layoutX="169.0" layoutY="361.0" text="KAN Management" textFill="WHITE">
                <font>
                   <Font name="Impact" size="24.0" />
                </font>
@@ -44,7 +44,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label contentDisplay="CENTER" prefHeight="53.0" prefWidth="259.0" text="MANAGEMENT EXAM " textFill="#6467cd">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="53.0" prefWidth="259.0" text="LOGIN" textFill="#6467cd">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
