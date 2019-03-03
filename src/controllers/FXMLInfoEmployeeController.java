@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -132,6 +133,9 @@ public class FXMLInfoEmployeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        validateInfoEmployee = false;
+        check_delete = false;
+        System.out.println("kiem tra validate Init" + validateInfoEmployee);
         list_info = FXMLLoginController.List_Employee;
         list_login = FXMLLoginController.List_EmployeeLogin;
         for (InfoEmployee infoEmployee : list_info) {
@@ -145,14 +149,17 @@ public class FXMLInfoEmployeeController implements Initializable {
         });
         if (FXMLMainFormController.checkRegis) {
             FXMLMainFormController.checkRegis = false;
+            System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
             if (!list_login_update.get(0).getRole().equals("Admin")) {
                 hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
                 boxId.setDisable(true);
-                boxId.setValue(list_login_update.get(0).getUserName());
-                check_delete = true;
+                boxId.setValue(list_login_update.get(0).getUserName());                
                 newPhone.setText(list_login_update.get(0).getPhone_No());
                 address.setText(list_login_update.get(0).getAddress());
                 IdNumber.setText(list_login_update.get(0).getId_number());
+                
+                System.out.println("submit click");
+                System.out.println("Check delete "+check_delete);
                 if (list_login_update.get(0).getBirthdate() != null) {
                     birthday.setValue(LocalDate.parse(list_login_update.get(0).getBirthdate()));
                 }
@@ -165,7 +172,9 @@ public class FXMLInfoEmployeeController implements Initializable {
                     Female.setSelected(true);
                 }
                 btnInfo.setOnAction((event) -> {
-                    validateForm();
+                    check_delete = true;
+                    System.out.println("Submit khong phai Admin");
+                    validateForm();                    
                     check_delete = false;
                     if (validateInfoEmployee) {
                         // get a handle to the stage
@@ -269,6 +278,7 @@ public class FXMLInfoEmployeeController implements Initializable {
 
     @FXML
     private void select_Id() {
+        list_info = FXMLLoginController.List_Employee;
         for (InfoEmployee infoEmployee : list_info) {
             if (boxId.getValue().equals(infoEmployee.getEmployee_ID())) {
                 newPhone.setText(infoEmployee.getPhone_No());
@@ -303,16 +313,18 @@ public class FXMLInfoEmployeeController implements Initializable {
 
     @FXML
     private void btnInfoEmployee() {
-        validateForm();
+        //validateForm();
     }
 
     private void validateForm() {
+        System.out.println("kiem tra validate method" + validateInfoEmployee);
         pattern = Pattern.compile("^([0-9][0-9]{1,19}$)|\\+84[0-9]{1,17}$");
         patternEmail = Pattern.compile("^[a-z][a-z0-9_\\.]{5,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$");
         patternFLName = Pattern.compile("^\\pL+[\\pL\\pZ]{1,25}$");
         patternIDNumber = Pattern.compile("[\\d\\D]{0,20}");
         patternELevel = Pattern.compile("[\\d]{0,2}");
         patternSalary = Pattern.compile("[\\d,]{0,18}");
+        System.out.println("check_delete: " + check_delete);
         if (boxId.getValue() == null) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
@@ -322,7 +334,6 @@ public class FXMLInfoEmployeeController implements Initializable {
             label.setPrefSize(350, 35);
             label.setText("ID MUST NOT EMPTY !!!");
             label.setAlignment(Pos.CENTER_LEFT);
-
             boxId.getStyleClass().removeAll();
             boxId.getStyleClass().add("jfx-combo-box-fault");
             HboxContent.setSpacing(10);
@@ -332,21 +343,26 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(label);
             boxId.requestFocus();
         } else if (newPhone.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(465, 35);
-            label.setText("PHONE NUMBER MUST NOT EMPTY !!!");
-            newPhone.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newPhone.requestFocus();
+            System.out.println("Neu ID khong null -- Vao else if");
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(465, 35);
+                label.setText("PHONE NUMBER MUST NOT EMPTY !!!");
+                newPhone.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                HboxContent.setAlignment(Pos.CENTER);
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                newPhone.requestFocus();
+            });
+            System.out.println("Chay het cau newPhone");
         } else if (birthday.getValue() == null) {
+            System.out.println("Neu ID khong null -- Vao else if 1");
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("131"
                     + "6");
@@ -363,6 +379,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(label);
             birthday.requestFocus();
         } else if (address.getText().equals("")) {
+            System.out.println("Neu ID khong null -- Vao else if 2");
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -378,6 +395,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(label);
             address.requestFocus();
         } else if (IdNumber.getText().equals("")) {
+            System.out.println("Neu ID khong null -- Vao else if 3");
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -393,13 +411,14 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(label);
             IdNumber.requestFocus();
         } else if (FirstName.getText().equals("") && !check_delete) {
+            
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
             label.setPrefSize(465, 35);
-            label.setText("FIRT NAME MUST NOT EMPTY !!!");
+            label.setText("FIRST NAME MUST NOT EMPTY !!!");
             FirstName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setAlignment(Pos.CENTER);
             HboxContent.setSpacing(10);
@@ -536,7 +555,6 @@ public class FXMLInfoEmployeeController implements Initializable {
             }
             if (FXMLMainFormController.checkRegis && check && list_login.get(0).getRole().equals("Admin")) {
                 try {
-                    validateInfoEmployee = true;
                     FXMLMainFormController.checkRegis = false;
                     String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     String date_hire = null;
