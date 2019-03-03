@@ -43,7 +43,7 @@ public class Test1 extends Application {
 //        stage.getIcons().add(new Image("/images/iconmanagement.png"));
 
 
-        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+
 
 
         Scene scene = new Scene(root);

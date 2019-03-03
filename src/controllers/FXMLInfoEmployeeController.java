@@ -44,6 +44,7 @@ import javafx.stage.Stage;
 import models.DAO;
 import models.InfoEmployee;
 import models.formatCalender;
+import utils.FormatName;
 
 /**
  * FXML Controller class
@@ -66,6 +67,9 @@ public class FXMLInfoEmployeeController implements Initializable {
     private Pattern pattern;
     private Pattern patternEmail;
     private Pattern patternFLName;
+    private Pattern patternIDNumber;
+    private Pattern patternELevel;
+    private Pattern patternSalary;
     @FXML
     private VBox vBox_Employee_Info;
     @FXML
@@ -115,6 +119,7 @@ public class FXMLInfoEmployeeController implements Initializable {
     private ObservableList<InfoEmployee> list_info = FXCollections.observableArrayList();
     private ObservableList<String> list_User = FXCollections.observableArrayList();
     private ObservableList<InfoEmployee> list_login = FXCollections.observableArrayList();
+    private ObservableList<InfoEmployee> list_login_update = FXCollections.observableArrayList();
     private ObservableList<String> list_Role = FXCollections.observableArrayList();
     public static Boolean validateInfoEmployee = false;
     public static Boolean check_delete = false;
@@ -129,16 +134,36 @@ public class FXMLInfoEmployeeController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         list_info = FXMLLoginController.List_Employee;
         list_login = FXMLLoginController.List_EmployeeLogin;
+        for (InfoEmployee infoEmployee : list_info) {
+            if (infoEmployee.getUserName().equals(list_login.get(0).getUserName())) {
+                list_login_update.add(infoEmployee);
+            }
+        }
+
         list_info.forEach((InfoEmployee infoEmployee) -> {
             list_User.add(infoEmployee.getUserName());
         });
         if (FXMLMainFormController.checkRegis) {
             FXMLMainFormController.checkRegis = false;
-            if (!list_login.get(0).getRole().equals("Admin")) {
+            if (!list_login_update.get(0).getRole().equals("Admin")) {
                 hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
                 boxId.setDisable(true);
-                boxId.setValue(list_login.get(0).getUserName());
+                boxId.setValue(list_login_update.get(0).getUserName());
                 check_delete = true;
+                newPhone.setText(list_login_update.get(0).getPhone_No());
+                address.setText(list_login_update.get(0).getAddress());
+                IdNumber.setText(list_login_update.get(0).getId_number());
+                if (list_login_update.get(0).getBirthdate() != null) {
+                    birthday.setValue(LocalDate.parse(list_login_update.get(0).getBirthdate()));
+                }
+                if (list_login_update.get(0).getHiredate() != null) {
+                    Hiredate.setValue(LocalDate.parse(list_login_update.get(0).getBirthdate()));
+                }
+                if (list_login_update.get(0).getSex().equals("Male")) {
+                    Male.setSelected(true);
+                } else {
+                    Female.setSelected(true);
+                }
                 btnInfo.setOnAction((event) -> {
                     validateForm();
                     check_delete = false;
@@ -152,6 +177,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                 });
             } else {
                 btnInfo.setOnAction((event) -> {
+                    FXMLMainFormController.checkRegis = true;
                     validateForm();
                     check_delete = false;
                 });
@@ -187,10 +213,10 @@ public class FXMLInfoEmployeeController implements Initializable {
 
         }
 
-        if (!list_login.get(0).getRole().equals("Admin")) {
+        if (!list_login_update.get(0).getRole().equals("Admin")) {
             hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
             boxId.setDisable(true);
-            boxId.setValue(list_login.get(0).getUserName());
+            boxId.setValue(list_login_update.get(0).getUserName());
             Hboxbtn.getChildren().remove(btnCancel);
         }
         try {
@@ -249,6 +275,9 @@ public class FXMLInfoEmployeeController implements Initializable {
                 if (infoEmployee.getBirthdate() != null) {
                     birthday.setValue(LocalDate.parse(infoEmployee.getBirthdate()));
                 }
+                if (infoEmployee.getHiredate() != null) {
+                    Hiredate.setValue(LocalDate.parse(infoEmployee.getBirthdate()));
+                }
                 if (infoEmployee.getSex().equals("Male")) {
                     Male.setSelected(true);
                 } else {
@@ -281,18 +310,23 @@ public class FXMLInfoEmployeeController implements Initializable {
         pattern = Pattern.compile("^([0-9][0-9]{1,19}$)|\\+84[0-9]{1,17}$");
         patternEmail = Pattern.compile("^[a-z][a-z0-9_\\.]{5,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$");
         patternFLName = Pattern.compile("^\\pL+[\\pL\\pZ]{1,25}$");
-        if (boxId.getSelectionModel().isEmpty()) {
+        patternIDNumber = Pattern.compile("[\\d\\D]{0,20}");
+        patternELevel = Pattern.compile("[\\d]{0,2}");
+        patternSalary = Pattern.compile("[\\d,]{0,18}");
+        if (boxId.getValue() == null) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
+            label.setPrefSize(350, 35);
             label.setText("ID MUST NOT EMPTY !!!");
+            label.setAlignment(Pos.CENTER_LEFT);
+
             boxId.getStyleClass().removeAll();
             boxId.getStyleClass().add("jfx-combo-box-fault");
             HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
+            HboxContent.setAlignment(Pos.CENTER_LEFT);
             HboxContent.getChildren().clear();
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
@@ -314,7 +348,8 @@ public class FXMLInfoEmployeeController implements Initializable {
             newPhone.requestFocus();
         } else if (birthday.getValue() == null) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
+            icon.setSize("131"
+                    + "6");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
@@ -417,21 +452,6 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             newPhone.requestFocus();
-        } else if (!patternEmail.matcher(Email.getText()).matches() && !check_delete) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(465, 35);
-            label.setText("INVALID EMAIL !!!");
-            Email.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            Email.requestFocus();
         } else if (!patternFLName.matcher(FirstName.getText()).matches() && !check_delete) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
@@ -477,14 +497,119 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             LastName.requestFocus();
+        } else if (!patternEmail.matcher(Email.getText()).matches() && !check_delete) {
+            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+            icon.setSize("16");
+            icon.setStyleClass("jfx-glyhp-icon");
+            Label label = new Label();
+            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+            label.setPrefSize(465, 35);
+            label.setText("INVALID EMAIL !!!");
+            Email.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            HboxContent.setSpacing(10);
+            HboxContent.setAlignment(Pos.CENTER);
+            HboxContent.getChildren().clear();
+            HboxContent.getChildren().add(icon);
+            HboxContent.getChildren().add(label);
+            Email.requestFocus();
         } else {
-            try {
-                validateInfoEmployee = true;
-                String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                System.out.println(date);
-                DAO.UpdateInfoEmployee(boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText());
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            boolean check = true;
+            for (InfoEmployee infoEmployee : list_info) {
+                if (Email.getText().equals(infoEmployee.getGmail()) && !check_delete && !list_login.get(0).getUserName().equals(infoEmployee.getUserName())) {
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(465, 35);
+                    label.setText("EMAIL ALREADY EXIST !!!");
+                    Email.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                    HboxContent.setSpacing(10);
+                    HboxContent.setAlignment(Pos.CENTER);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
+                    Email.requestFocus();
+                    check = false;
+                    break;
+                }
+            }
+            if (FXMLMainFormController.checkRegis && check && list_login.get(0).getRole().equals("Admin")) {
+                try {
+                    validateInfoEmployee = true;
+                    FXMLMainFormController.checkRegis = false;
+                    String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String date_hire = null;
+                    if (Hiredate.getValue() != null) {
+                        date_hire = Hiredate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    }
+                    String Sex;
+                    String Id_Role;
+                    Id_Role = DAO.getIdRole((String) boxRole.getValue());
+                    if (Male.selectedProperty().getValue()) {
+                        Sex = "Male";
+                    } else {
+                        Sex = "Female";
+                    }
+                    DAO.UpdateAllInfoEmployee(
+                            boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
+                            FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
+                            Email.getText(), DepartmentId.getText(), date_hire, Job.getText(), EducatedLevel.getText(),
+                            Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Id_Role, Sex
+                    );
+                    FXMLLoginController loginController = ConnectControllers.getfXMLLoginController();
+                    loginController.List_Employee = DAO.getAllEmployee();
+                    newPhone.setText("");
+                    boxId.setValue(null);
+                    boxRole.setValue(null);
+                    birthday.setValue(null);
+                    Hiredate.setValue(null);
+                    FirstName.setText("");
+                    MidName.setText("");
+                    LastName.setText("");
+                    Email.setText("");
+                    IdNumber.setText("");
+                    address.setText("");
+                    DepartmentId.setText("");
+                    Job.setText("");
+                    EducatedLevel.setText("");
+                    Salary.setText("");
+                    Comm.setText("");
+                    Bonus.setText("");
+                    Male.setSelected(true);
+                    boxId.requestFocus();
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon-finish");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(465, 35);
+                    label.setText("UPDATE INFO " + boxId.getValue() + " COMPLETE!!!");
+                    HboxContent.setSpacing(10);
+                    HboxContent.setAlignment(Pos.CENTER);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } else {
+                try {
+                    String Sex;
+                    if (Male.selectedProperty().getValue()) {
+                        Sex = "Male";
+                    } else {
+                        Sex = "Female";
+                    }
+                    validateInfoEmployee = true;
+                    String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    DAO.UpdateInfoEmployee(boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), Sex);
+                    FXMLLoginController loginController = ConnectControllers.getfXMLLoginController();
+                    loginController.List_Employee = DAO.getAllEmployee();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

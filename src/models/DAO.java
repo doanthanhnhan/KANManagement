@@ -297,15 +297,52 @@ public class DAO {
 
     }
 
-    public static void UpdateInfoEmployee(String User, String Phone, String Birthday, String Address, String IdNumber) throws ClassNotFoundException, SQLException {
+    public static void UpdateInfoEmployee(String User, String Phone, String Birthday, String Address, String IdNumber, String Sex) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp = "UPDATE Employees SET PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ? WHERE EmployeeID = ?";
+        String exp = "UPDATE Employees SET PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ?,Sex=? WHERE EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, Phone);
         pt.setString(2, Birthday);
         pt.setString(3, Address);
         pt.setString(4, IdNumber);
-        pt.setString(5, User);
+        if (Sex.equals("Male")) {
+            pt.setInt(5, 1);
+        } else {
+            pt.setInt(5, 0);
+        }
+        pt.setString(6, User);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+
+    public static void UpdateAllInfoEmployee(String User, String Phone, String Birthday, String Address, String IdNumber, String FName, String MName, String LName, String Email,
+            String DepartId, String Hiredate, String Job, String EducatedLevel, Double Salary, Double Bonus, Double Comm, String Role, String Sex) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE Employees SET EmployeeFirstName=?,EmployeeMidName=?,EmployeeLastName=?,DepartmentId=?,"
+                + " PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ?,HireDate=?,Job=?,EducatedLevel=?,Salary=?,Bonus=?,Comm=?,RoleID=?,Sex=? WHERE EmployeeID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, FName);
+        pt.setString(2, MName);
+        pt.setString(3, LName);
+        pt.setString(4, DepartId);
+        pt.setString(5, Phone);
+        pt.setString(6, Birthday);
+        pt.setString(7, Address);
+        pt.setString(8, IdNumber);
+        pt.setString(9, Hiredate);
+        pt.setString(10, Job);
+        pt.setString(11, EducatedLevel);
+        pt.setDouble(12, Salary);
+        pt.setDouble(13, Bonus);
+        pt.setDouble(14, Comm);
+        pt.setString(15, Role);
+        if (Sex.equals("Male")) {
+            pt.setInt(16, 1);
+        } else {
+            pt.setInt(16, 0);
+        }
+        pt.setString(17, User);
         pt.execute();
         pt.close();
         connection.close();

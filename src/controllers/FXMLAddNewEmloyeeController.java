@@ -379,7 +379,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 newLastname.requestFocus();
             });
 
-        } else if (newRole.getSelectionModel().isEmpty()) {
+        } else if (newRole.getValue()==null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -597,6 +597,5 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 }
             }
         }
-        System.out.println("thoát if");
     }
 }

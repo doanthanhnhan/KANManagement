@@ -275,13 +275,16 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox fx:id="HboxContent" alignment="CENTER" prefHeight="80.0">
+            <HBox fx:id="HboxContent" alignment="CENTER_LEFT">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
                   <Insets />
                </VBox.margin>
+               <padding>
+                  <Insets bottom="20.0" left="80.0" top="20.0" />
+               </padding>
             </HBox>
             <HBox fx:id="Hboxbtn" alignment="CENTER">
                <children>

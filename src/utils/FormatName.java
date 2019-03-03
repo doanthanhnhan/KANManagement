@@ -31,4 +31,11 @@ public class FormatName {
             return str;
         }
     }
+    
+    public static void main(String[] args) {
+        String str = "338/32 hoàng     diỆU  đà     NẵnG     ";
+        str = format(str);
+        System.out.println(str);
+//        
+    }
 }

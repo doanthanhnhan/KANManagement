@@ -77,6 +77,9 @@
 .jfx-glyhp-icon{
     -fx-fill: #FF2625;
 }
+.jfx-glyhp-icon-finish{
+    -fx-fill: #6447cd;
+}
 .jfx-combo-box-fault{
     -jfx-focus-color:#FF2625;
     -jfx-unfocus-color:#FF2625;
