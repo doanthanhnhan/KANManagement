@@ -156,7 +156,8 @@ public class FXMLMainFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        //Set close button for selected TAB
+        mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
     }
 
     private void initMenuBar() {
@@ -272,76 +273,132 @@ public class FXMLMainFormController implements Initializable {
         System.exit(0);
     }
 
+    // =============== START VIEW ACTIONS ===============
+    @FXML
+    private void handle_MenuItem_List_Service_Type_Action(ActionEvent event) {
+        System.out.println("List Service Type menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceType.fxml", "Service type");
+    }
+    // ############### END VIEW ACTIONS ###############
+
+    // =============== START ADD ACTIONS ===============
     @FXML
     private void handle_MenuItem_Add_Employee_Action(ActionEvent event) {
         System.out.println("Add new Employee menu item clicked!");
-        try {
-            Stage stage = new Stage();
-            stage.resizableProperty().setValue(Boolean.FALSE);
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
-            stage.getIcons().add(new Image("/images/KAN Logo.png"));
-            Scene scene = new Scene(root);
-            stage.setTitle("Add New Employee");
-            stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New Employee");
     }
 
     @FXML
     private void handle_MenuItem_Add_User_Action(ActionEvent event) {
         System.out.println("Add new User menu item clicked!");
-        try {
-            Stage stage = new Stage();
-            stage.resizableProperty().setValue(Boolean.FALSE);
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
-            stage.getIcons().add(new Image("/images/KAN Logo.png"));
-            Scene scene = new Scene(root);
-            stage.setTitle("Add New User");
-            stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New User");
     }
 
     @FXML
+    private void handle_MenuItem_Add_Service_Type_Action(ActionEvent event) {
+        System.out.println("Add new Service Type menu item clicked!");
+        formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit User Informations");
+    }
+    // ############### END ADD ACTIONS ###############
+
+    // =============== EDIT ACTIONS ===============
+    @FXML
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
         System.out.println("Edit Employee Informations menu item clicked!");
-        try {
-            Stage stage = new Stage();
-            stage.resizableProperty().setValue(Boolean.FALSE);
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
-            stage.getIcons().add(new Image("/images/KAN Logo.png"));
-            Scene scene = new Scene(root);
-            stage.setTitle("Edit Employee Informations");
-            stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
     @FXML
     private void handle_MenuItem_Edit_User_Action(ActionEvent event) {
         System.out.println("Edit User Informations menu item clicked!");
+        formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit User Informations");
+    }
+    // ############### END VIEW ACTIONS ###############
+
+    /**
+     *
+     * @param fxmlPath
+     * @param iconPath
+     * @param title
+     */
+    public void formLoader(String fxmlPath, String iconPath, String title) {
         try {
             Stage stage = new Stage();
             stage.resizableProperty().setValue(Boolean.FALSE);
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
-            stage.getIcons().add(new Image("/images/KAN Logo.png"));
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            stage.getIcons().add(new Image(iconPath));
             Scene scene = new Scene(root);
-            stage.setTitle("Edit User Informations");
+            stage.setTitle(title);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     *
+     * @param formPath
+     * @param tabName
+     */
+    public void task_Insert_Tab_With_Indicator(String formPath, String tabName) {
+        Label label_Task_Status = new Label();
+
+        //Set timer and start
+        MyTimer myTimer = new MyTimer();
+        myTimer.create_myTimer(label_Task_Status);
+
+        //Add label to bottom
+        hbox_Bottom.getChildren().add(0, label_Task_Status);
+
+        //Create new task
+        Task loadOverview = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                System.out.println("Loading...");
+
+                try {
+                    // Get content from fxml file
+                    AnchorPane subPane = (AnchorPane) FXMLLoader.load(getClass().getResource(formPath));
+
+                    // Add fxml content to a tab
+                    Tab subTab = new Tab(tabName);                    
+                    subTab.setContent(subPane);
+                    Platform.runLater(() -> {
+                        mainTabPane.getTabs().add(subTab);
+
+                        //Stop timer
+                        myTimer.stop_Timer(label_Task_Status);
+                    });
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return null;
+            }
+        };
+        progressBar_MainTask.setVisible(true);
+        progressBar_MainTask.progressProperty().unbind();
+        progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
+
+        loadOverview.setOnSucceeded(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                System.out.println("Finished");
+                Platform.runLater(() -> {
+                    label_Task_Status.setText("Finished");
+                    progressBar_MainTask.progressProperty().unbind();
+                    progressBar_MainTask.setProgress(0);
+                    progressBar_MainTask.setVisible(false);
+                    hbox_Bottom.getChildren().remove(label_Task_Status);
+                    btn_Toolbar_Home.setDisable(false);
+
+                });
+            }
+        });
+
+        new Thread(loadOverview).start();
     }
 
 }

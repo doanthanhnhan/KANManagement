@@ -42,7 +42,7 @@
                               <MenuItem fx:id="menuItem_List_Customers" mnemonicParsing="false" text="List Customers" />
                               <MenuItem fx:id="menuItem_List_Employees" mnemonicParsing="false" text="List Employees" />
                               <MenuItem fx:id="menuItem_List_Rooms" mnemonicParsing="false" text="List Rooms" />
-                              <MenuItem fx:id="menuItem_List_Service_Type" mnemonicParsing="false" text="List Service Type" />
+                              <MenuItem fx:id="menuItem_List_Service_Type" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Type_Action" text="List Service Type" />
                               <MenuItem fx:id="menuItem_List_Service_Orders" mnemonicParsing="false" text="List Service Orders" />
                               <MenuItem fx:id="menuItem_List_Users" mnemonicParsing="false" text="List Users" />
                               <MenuItem fx:id="menuItem_List_User_Role" mnemonicParsing="false" text="List User Role" />
@@ -56,7 +56,7 @@
                               <MenuItem fx:id="menuItem_Add_Customer" mnemonicParsing="false" text="Add new Customer" />
                               <MenuItem fx:id="menuItem_Add_Employee" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Employee_Action" text="Add new Employee" />
                               <MenuItem fx:id="menuItem_Add_Room" mnemonicParsing="false" text="Add new Room" />
-                              <MenuItem fx:id="menuItem_Add_Service_Type" mnemonicParsing="false" text="Add new Service Type" />
+                              <MenuItem fx:id="menuItem_Add_Service_Type" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Service_Type_Action" text="Add new Service Type" />
                               <MenuItem fx:id="menuItem_Add_Service_Order" mnemonicParsing="false" text="Add new Service Order" />
                               <MenuItem fx:id="menuItem_Add_User" mnemonicParsing="false" onAction="#handle_MenuItem_Add_User_Action" text="Add new User" />
                               <MenuItem fx:id="menuItem_Add_User_Role" mnemonicParsing="false" text="Add new User Role" />
