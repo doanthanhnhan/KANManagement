@@ -255,7 +255,7 @@ public class FXMLLoginController implements Initializable {
                                 public void run() {
                                     try {
                                         stage.close();
-                                        Stage stageEdit = new Stage();
+                                        Stage stageEdit = new Stage();                                        
                                         Parent rootAdd = null;
                                         if (DAO.checkSetPass(txtUserName.getText()) == 0) {
                                             stageEdit.resizableProperty().setValue(Boolean.FALSE);
@@ -282,11 +282,11 @@ public class FXMLLoginController implements Initializable {
                                             DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
                                             DAO.reset_CheckLogin(txtUserName.getText(), logtime);
                                             rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
-                                            stageEdit.setTitle("KANManagementLogin");
+                                            stageEdit.setTitle("KANManagement");
                                         }
                                         Scene scene1;
                                         scene1 = new Scene(rootAdd);
-                                        stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
+                                        stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));                                        
                                         stageEdit.setScene(scene1);
                                         stageEdit.show();
                                     } catch (ClassNotFoundException | SQLException | IOException ex) {
