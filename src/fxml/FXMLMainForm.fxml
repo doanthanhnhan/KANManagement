@@ -54,11 +54,11 @@
                               <MenuItem fx:id="menuItem_Add_Check_In" mnemonicParsing="false" text="Add new Check In" />
                               <MenuItem fx:id="menuItem_Add_Check_out" mnemonicParsing="false" text="Add new Check Out" />
                               <MenuItem fx:id="menuItem_Add_Customer" mnemonicParsing="false" text="Add new Customer" />
-                              <MenuItem fx:id="menuItem_Add_Employee" mnemonicParsing="false" text="Add new Employee" />
+                              <MenuItem fx:id="menuItem_Add_Employee" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Employee_Action" text="Add new Employee" />
                               <MenuItem fx:id="menuItem_Add_Room" mnemonicParsing="false" text="Add new Room" />
                               <MenuItem fx:id="menuItem_Add_Service_Type" mnemonicParsing="false" text="Add new Service Type" />
                               <MenuItem fx:id="menuItem_Add_Service_Order" mnemonicParsing="false" text="Add new Service Order" />
-                              <MenuItem fx:id="menuItem_Add_User" mnemonicParsing="false" text="Add new User" />
+                              <MenuItem fx:id="menuItem_Add_User" mnemonicParsing="false" onAction="#handle_MenuItem_Add_User_Action" text="Add new User" />
                               <MenuItem fx:id="menuItem_Add_User_Role" mnemonicParsing="false" text="Add new User Role" />
                            </items>
                         </Menu>
@@ -68,11 +68,11 @@
                               <MenuItem fx:id="menuItem_Edit_Check_In" mnemonicParsing="false" text="Edit Check In" />
                               <MenuItem fx:id="menuItem_Edit_Check_Out" mnemonicParsing="false" text="Edit Check Out" />
                               <MenuItem fx:id="menuItem_Edit_Customer" mnemonicParsing="false" text="Edit Customer" />
-                              <MenuItem fx:id="menuItem_Edit_Employee" mnemonicParsing="false" text="Edit Employee" />
+                              <MenuItem fx:id="menuItem_Edit_Employee" mnemonicParsing="false" onAction="#handle_MenuItem_Edit_Employee_Action" text="Edit Employee" />
                               <MenuItem fx:id="menuItem_Edit_Room" mnemonicParsing="false" text="Edit Room" />
                               <MenuItem fx:id="menuItem_Edit_Service_Type" mnemonicParsing="false" text="Edit Service Type" />
                               <MenuItem fx:id="menuItem_Edit_Service_Order" mnemonicParsing="false" text="Edit Service Order" />
-                              <MenuItem fx:id="menuItem_Edit_User" mnemonicParsing="false" text="Edit User" />
+                              <MenuItem fx:id="menuItem_Edit_User" mnemonicParsing="false" onAction="#handle_MenuItem_Edit_User_Action" text="Edit User" />
                               <MenuItem fx:id="menuItem_Edit_User_Role" mnemonicParsing="false" text="Edit User Role" />
                            </items>
                         </Menu>

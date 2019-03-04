@@ -38,13 +38,14 @@ import javafx.stage.Stage;
 
 import utils.MyTimer;
 
-
 /**
  * FXML Controller class
  *
  * @author Doan Thanh Nhan
  */
 public class FXMLMainFormController implements Initializable {
+
+    public static Boolean checkRegis = false;
 
     @FXML
     private MenuBar mainMenuBar;
@@ -75,8 +76,81 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private HBox hbox_Bottom;
 
-    public static Boolean checkRegis=false;
-    
+    @FXML
+    private Menu menu_File;
+    @FXML
+    private MenuItem menuItem_Settings;
+    @FXML
+    private MenuItem menuItem_Close;
+    @FXML
+    private Menu menu_View;
+    @FXML
+    private MenuItem menuItem_List_Booking;
+    @FXML
+    private MenuItem menuItem_List_Check_In;
+    @FXML
+    private MenuItem menuItem_List_Check_Out;
+    @FXML
+    private MenuItem menuItem_List_Customers;
+    @FXML
+    private MenuItem menuItem_List_Employees;
+    @FXML
+    private MenuItem menuItem_List_Rooms;
+    @FXML
+    private MenuItem menuItem_List_Service_Type;
+    @FXML
+    private MenuItem menuItem_List_Service_Orders;
+    @FXML
+    private MenuItem menuItem_List_Users;
+    @FXML
+    private MenuItem menuItem_List_User_Role;
+    @FXML
+    private Menu menu_Add;
+    @FXML
+    private MenuItem menuItem_Add_Booking;
+    @FXML
+    private MenuItem menuItem_Add_Check_In;
+    @FXML
+    private MenuItem menuItem_Add_Check_out;
+    @FXML
+    private MenuItem menuItem_Add_Customer;
+    @FXML
+    private MenuItem menuItem_Add_Employee;
+    @FXML
+    private MenuItem menuItem_Add_Room;
+    @FXML
+    private MenuItem menuItem_Add_Service_Type;
+    @FXML
+    private MenuItem menuItem_Add_Service_Order;
+    @FXML
+    private MenuItem menuItem_Add_User;
+    @FXML
+    private MenuItem menuItem_Add_User_Role;
+    @FXML
+    private Menu menu_Edit;
+    @FXML
+    private MenuItem menuItem_Edit_Booking;
+    @FXML
+    private MenuItem menuItem_Edit_Check_In;
+    @FXML
+    private MenuItem menuItem_Edit_Check_Out;
+    @FXML
+    private MenuItem menuItem_Edit_Customer;
+    @FXML
+    private MenuItem menuItem_Edit_Employee;
+    @FXML
+    private MenuItem menuItem_Edit_Room;
+    @FXML
+    private MenuItem menuItem_Edit_Service_Type;
+    @FXML
+    private MenuItem menuItem_Edit_Service_Order;
+    @FXML
+    private MenuItem menuItem_Edit_User;
+    @FXML
+    private MenuItem menuItem_Edit_User_Role;
+    @FXML
+    private Menu About;
+
     /**
      * Initializes the controller class.
      */
@@ -107,7 +181,7 @@ public class FXMLMainFormController implements Initializable {
         Menu menuRegistration = new Menu("Registration");
         menuRegistration.getItems().add(regis);
         mainMenuBar.getMenus().add(menuRegistration);
-        
+
     }
 
     private void initTabPane() {
@@ -117,7 +191,7 @@ public class FXMLMainFormController implements Initializable {
             // Add fxml content to a tab
             Tab overViewTab = new Tab("Overview");
             overViewTab.setContent(overviewPane);
-            
+
             mainTabPane.getTabs().add(overViewTab);
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,19 +201,19 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void homeAction(ActionEvent event) {
         btn_Toolbar_Home.setDisable(true);
-        
+
 //        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
 //        list_Employee = FXMLLoginController.List_EmployeeLogin;
 //        String userRole = list_Employee.get(0).getRole();
-        Label label_Task_Status = new Label();        
-        
+        Label label_Task_Status = new Label();
+
         //Set timer and start
         MyTimer myTimer = new MyTimer();
         myTimer.create_myTimer(label_Task_Status);
-        
+
         //Add label to bottom
         hbox_Bottom.getChildren().add(0, label_Task_Status);
-        
+
         String userRole = "Admin";
         if (userRole.equals("Admin")) {
             initMenuBar();
@@ -155,11 +229,11 @@ public class FXMLMainFormController implements Initializable {
                     AnchorPane overviewPane = (AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/FXMLMainOverViewPane.fxml"));
 
                     // Add fxml content to a tab
-                    Tab overViewTab = new Tab("Overview");                    
+                    Tab overViewTab = new Tab("Overview");
                     overViewTab.setContent(overviewPane);
                     Platform.runLater(() -> {
                         mainTabPane.getTabs().add(overViewTab);
-                        
+
                         //Stop timer
                         myTimer.stop_Timer(label_Task_Status);
                     });
@@ -196,6 +270,78 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void userLogOutAction(ActionEvent event) {
         System.exit(0);
+    }
+
+    @FXML
+    private void handle_MenuItem_Add_Employee_Action(ActionEvent event) {
+        System.out.println("Add new Employee menu item clicked!");
+        try {
+            Stage stage = new Stage();
+            stage.resizableProperty().setValue(Boolean.FALSE);
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+            stage.getIcons().add(new Image("/images/KAN Logo.png"));
+            Scene scene = new Scene(root);
+            stage.setTitle("Add New Employee");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void handle_MenuItem_Add_User_Action(ActionEvent event) {
+        System.out.println("Add new User menu item clicked!");
+        try {
+            Stage stage = new Stage();
+            stage.resizableProperty().setValue(Boolean.FALSE);
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+            stage.getIcons().add(new Image("/images/KAN Logo.png"));
+            Scene scene = new Scene(root);
+            stage.setTitle("Add New User");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
+        System.out.println("Edit Employee Informations menu item clicked!");
+        try {
+            Stage stage = new Stage();
+            stage.resizableProperty().setValue(Boolean.FALSE);
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
+            stage.getIcons().add(new Image("/images/KAN Logo.png"));
+            Scene scene = new Scene(root);
+            stage.setTitle("Edit Employee Informations");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void handle_MenuItem_Edit_User_Action(ActionEvent event) {
+        System.out.println("Edit User Informations menu item clicked!");
+        try {
+            Stage stage = new Stage();
+            stage.resizableProperty().setValue(Boolean.FALSE);
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
+            stage.getIcons().add(new Image("/images/KAN Logo.png"));
+            Scene scene = new Scene(root);
+            stage.setTitle("Edit User Informations");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
