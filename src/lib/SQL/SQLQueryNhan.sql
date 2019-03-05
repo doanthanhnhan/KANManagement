@@ -128,6 +128,7 @@ CREATE TABLE Employees(
 	Email varchar(100),
 	Active bit DEFAULT 1,
 	RoleID varchar(20),
+	[Image] varbinary(MAX),
 	-- Create constraint
 	CONSTRAINT pk_EmployeeID PRIMARY KEY (EmployeeID)
 )

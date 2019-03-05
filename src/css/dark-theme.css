@@ -7,9 +7,9 @@
     -fx-primarycolor: #6747CD;
     -fx-secondarycolor: #20bf6b;
     -fx-primarytextcolor: #a3a3a3;
-/*    -fx-primarycolor: #2A2E37;
-    -fx-secondarycolor: #FFFF8D;
-    -fx-primarytextcolor: #B2B2B2;*/
+    /*    -fx-primarycolor: #2A2E37;
+        -fx-secondarycolor: #FFFF8D;
+        -fx-primarytextcolor: #B2B2B2;*/
     -fx-checkoutcolor: #FF2625;
     -fx-availablecolor: #7AA716;
     -fx-reservedcolor: #009FB4;
@@ -24,6 +24,16 @@
 
 .glyph-icon{
     -fx-fill: -fx-primarycolor;
+}
+.jfx-glyhp-icon{
+    -fx-fill: -fx-checkoutcolor;
+}
+.jfx-glyhp-icon-finish{
+    -fx-fill: -fx-primarycolor;
+}
+.jfx-combo-box-fault{
+    -jfx-focus-color:-fx-checkoutcolor;
+    -jfx-unfocus-color:-fx-checkoutcolor;
 }
 .parent{
     -fx-background-color: white;

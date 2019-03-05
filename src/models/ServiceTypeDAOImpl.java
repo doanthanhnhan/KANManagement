@@ -81,13 +81,35 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
     }
 
     @Override
-    public void editServiceType(ServiceType serviceType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void editServiceType(ServiceType serviceType, Boolean active) {
+        String sql = "UPDATE ServiceType SET ServiceID=?, ServiceName=?, ServiceUnit=?, ServicePrice=?, Image=?, Active=?) WHERE ServiceID=?";
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, serviceType.getServiceID());
+                stmt.setString(2, serviceType.getServiceName());
+                stmt.setString(3, serviceType.getServiceUnit());
+                stmt.setFloat(4, serviceType.getServicePrice());
+                stmt.setBlob(5, serviceType.getServiceImage());
+                stmt.setBoolean(6, active);
+                stmt.setString(7, serviceType.getServiceID());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void deleteServiceType(ServiceType serviceType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "DELETE FROM ServiceType WHERE ServiceID=?";
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, serviceType.getServiceID());                
+                stmt.executeUpdate();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

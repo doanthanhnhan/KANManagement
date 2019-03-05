@@ -11,8 +11,10 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -21,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import models.ServiceType;
 import models.ServiceTypeDAOImpl;
+import utils.StageLoader;
 
 /**
  * FXML Controller class
@@ -31,9 +34,17 @@ public class FXMLListServiceTypeController implements Initializable {
 
     ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
     ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
+    
+    Boolean check_Edit_Action;
 
     @FXML
     private TableView<ServiceType> table_ServiceType;
+    @FXML
+    private MenuItem menuItem_Edit;
+    @FXML
+    private MenuItem menuItem_Add;
+    @FXML
+    private MenuItem menuItem_Delete;
 
     /**
      * Initializes the controller class.
@@ -88,23 +99,18 @@ public class FXMLListServiceTypeController implements Initializable {
         table_ServiceType.setItems(listServiceTypes);
     }
 
-    /**
-     * Custom image class
-     */
-    public class CustomImage {
-
-        private ImageView image;
-
-        public CustomImage(ImageView img) {
-            this.image = img;
-        }
-
-        public void setImage(ImageView value) {
-            image = value;
-        }
-
-        public ImageView getImage() {
-            return image;
-        }
+    @FXML
+    private void handle_MenuItem_Edit_Action(ActionEvent event) {
+        StageLoader stageLoader = new StageLoader();
+        stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
     }
+
+    @FXML
+    private void handle_MenuItem_Add_Action(ActionEvent event) {
+    }
+
+    @FXML
+    private void handle_MenuItem_Delete_Action(ActionEvent event) {
+    }
+    
 }

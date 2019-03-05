@@ -14,6 +14,6 @@ import java.util.List;
 public interface ServiceTypeDAO {
     List<ServiceType> getAllServiceType();
     void addServiceType(ServiceType serviceType);
-    void editServiceType(ServiceType serviceType);
+    void editServiceType(ServiceType serviceType, Boolean active);
     void deleteServiceType(ServiceType serviceType);
 }
