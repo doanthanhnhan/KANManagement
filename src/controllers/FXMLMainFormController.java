@@ -401,4 +401,10 @@ public class FXMLMainFormController implements Initializable {
         new Thread(loadOverview).start();
     }
 
+    @FXML
+    private void handle_Toolbar_CheckOut_Action(ActionEvent event) {
+        System.out.println("List Service Type menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOutForm.fxml", "Check Out");
+    }
+
 }

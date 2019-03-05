@@ -24,7 +24,7 @@
                      <children>
                         <VBox prefHeight="200.0" spacing="20.0">
                            <children>
-                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Check in ID" styleClass="te" />
+                              <JFXTextField fx:id="txt_Check_In_ID" labelFloat="true" prefWidth="500.0" promptText="Check in ID" styleClass="te" />
                               <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Check out ID" styleClass="te" />
                               <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Customer ID" styleClass="te" />
                               <JFXTextField editable="false" labelFloat="true" prefWidth="500.0" promptText="Customer full name" styleClass="te" />
@@ -64,7 +64,7 @@
          <bottom>
             <HBox alignment="CENTER" spacing="50.0" BorderPane.alignment="CENTER">
                <children>
-                  <JFXButton prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="QR Code Scanner">
+                  <JFXButton fx:id="btn_QR_Code_Scanner" onAction="#handle_QRScanner_Action" prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="QR Code Scanner">
                      <graphic>
                         <FontAwesomeIconView glyphName="VIDEO_CAMERA" size="20" styleClass="glyph-icon-checkout" />
                      </graphic>
