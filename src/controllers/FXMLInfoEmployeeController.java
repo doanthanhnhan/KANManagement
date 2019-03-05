@@ -232,7 +232,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                     Bonus.setText("0");
                     Comm.setText("0");
                     //Hiredate.set("");
-                    
+
                     validateForm();
                     check_delete = false;
                 });
@@ -712,25 +712,22 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Email.requestFocus();
-        } else if (!(DepartmentId.getText().equals("")) && !check_delete) {
-            if (!patternIDNumber.matcher(DepartmentId.getText()).matches()) {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(350, 35);
-                label.setText("DEPARTMENT ID IS INCORRECT !!!");
-                label.setAlignment(Pos.CENTER_LEFT);
-                DepartmentId.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setAlignment(Pos.CENTER_LEFT);
-                HboxContent.setSpacing(10);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                DepartmentId.requestFocus();
-            }
-
+        } else if (!(DepartmentId.getText().equals("")) && !check_delete && !patternIDNumber.matcher(DepartmentId.getText()).matches()) {
+            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+            icon.setSize("16");
+            icon.setStyleClass("jfx-glyhp-icon");
+            Label label = new Label();
+            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+            label.setPrefSize(350, 35);
+            label.setText("DEPARTMENT ID IS INCORRECT !!!");
+            label.setAlignment(Pos.CENTER_LEFT);
+            DepartmentId.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            HboxContent.setAlignment(Pos.CENTER_LEFT);
+            HboxContent.setSpacing(10);
+            HboxContent.getChildren().clear();
+            HboxContent.getChildren().add(icon);
+            HboxContent.getChildren().add(label);
+            DepartmentId.requestFocus();
         } else if (!patternFLName.matcher(Job.getText()).matches() && !check_delete && !Job.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
