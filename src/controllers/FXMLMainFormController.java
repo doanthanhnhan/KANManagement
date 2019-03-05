@@ -393,7 +393,6 @@ public class FXMLMainFormController implements Initializable {
                     progressBar_MainTask.setVisible(false);
                     hbox_Bottom.getChildren().remove(label_Task_Status);
                     btn_Toolbar_Home.setDisable(false);
-
                 });
             }
         });
