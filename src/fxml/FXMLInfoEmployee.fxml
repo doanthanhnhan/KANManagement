@@ -18,7 +18,7 @@
    <children>
       <VBox fx:id="vBox_Employee_Info" layoutX="-6.0" layoutY="-7.0">
          <children>
-            <HBox>
+            <HBox fx:id="HboxHeader">
                <children>
                   <HBox prefHeight="129.0" prefWidth="560.0">
                      <children>
@@ -52,7 +52,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <HBox alignment="BOTTOM_RIGHT" prefWidth="560.0" spacing="20.0">
+                  <HBox fx:id="HboxImage" alignment="BOTTOM_RIGHT" prefWidth="560.0" spacing="20.0">
                      <children>
                         <JFXButton fx:id="btnInsertImage" onAction="#handle_Button_Insert_Image_Action" styleClass="loginBtn" text="Insert image" />
                         <Label contentDisplay="TOP" styleClass="label-text" stylesheets="@../css/dark-theme.css" text="Employee Image">

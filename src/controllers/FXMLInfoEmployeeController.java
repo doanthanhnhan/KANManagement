@@ -66,6 +66,11 @@ public class FXMLInfoEmployeeController implements Initializable {
     @FXML
     private JFXTextField newPhone;
     @FXML
+    private HBox HboxImage;
+    @FXML
+    private HBox HboxHeader;
+
+    @FXML
     private JFXDatePicker birthday;
     private JFXTextField newMidname;
     @FXML
@@ -184,6 +189,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
             if (!list_login_update.get(0).getRole().equals("Admin")) {
                 hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
+                HboxHeader.getChildren().remove(HboxImage);
                 boxId.setDisable(true);
                 boxId.setValue(list_login_update.get(0).getUserName());
                 newPhone.setText(list_login_update.get(0).getPhone_No());
@@ -228,6 +234,7 @@ public class FXMLInfoEmployeeController implements Initializable {
         if (FXMLLoginController.checkLoginRegis) {
             hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
             Hboxbtn.getChildren().remove(btnCancel);
+            HboxHeader.getChildren().remove(HboxImage);
             boxId.setDisable(true);
             boxId.setValue(list_login.get(0).getUserName());
             FXMLLoginController.checkLoginRegis = false;
@@ -698,7 +705,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Email.requestFocus();
-        } else if ((DepartmentId.getText().length()!=0) && !check_delete&&!patternIDNumber.matcher(DepartmentId.getText()).matches()) {
+        } else if ((DepartmentId.getText().length() != 0) && !check_delete && !patternIDNumber.matcher(DepartmentId.getText()).matches()) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -714,7 +721,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             DepartmentId.requestFocus();
-        } else if (!patternFLName.matcher(Job.getText()).matches() && !check_delete && Job.getText() != null) {
+        } else if (!patternFLName.matcher(Job.getText()).matches() && !check_delete && !Job.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -730,7 +737,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Job.requestFocus();
-        } else if (!patternELevel.matcher(EducatedLevel.getText()).matches() && !check_delete && EducatedLevel.getText() != null) {
+        } else if (!patternELevel.matcher(EducatedLevel.getText()).matches() && !check_delete && !EducatedLevel.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -746,7 +753,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             EducatedLevel.requestFocus();
-        } else if (!patternSalary.matcher(Salary.getText()).matches() && !check_delete && Salary.getText() != null) {
+        } else if (!patternSalary.matcher(Salary.getText()).matches() && !check_delete && !Salary.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -762,7 +769,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Salary.requestFocus();
-        } else if (!patternSalary.matcher(Bonus.getText()).matches() && !check_delete && Bonus.getText() != null) {
+        } else if (!patternSalary.matcher(Bonus.getText()).matches() && !check_delete && !Bonus.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -778,7 +785,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Bonus.requestFocus();
-        } else if (!patternSalary.matcher(Comm.getText()).matches() && !check_delete && Comm.getText() != null) {
+        } else if (!patternSalary.matcher(Comm.getText()).matches() && !check_delete && !Comm.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -854,8 +861,8 @@ public class FXMLInfoEmployeeController implements Initializable {
                         }
                     } else {
                         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
-                        
-                        BufferedImage bImage = SwingFXUtils.fromFXImage(new Image(currentPath+"/src/images/Java.png"), null);
+
+                        BufferedImage bImage = SwingFXUtils.fromFXImage(new Image(currentPath + "/src/images/Java.png"), null);
                         byte[] res;
                         try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
                             ImageIO.write(bImage, "png", s);
