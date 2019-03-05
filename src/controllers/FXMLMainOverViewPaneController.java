@@ -31,6 +31,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import models.Room;
 import models.RoomDAOImpl;
 
@@ -104,6 +105,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
     private JFXComboBox<String> comboBox_FromFloor;
     @FXML
     private JFXComboBox<String> comboBox_ToFloor;
+    @FXML
+    private VBox vBox_Filters;
 
     /**
      * Initializes the controller class.
@@ -132,19 +135,24 @@ public class FXMLMainOverViewPaneController implements Initializable {
         aPane_Rooms.setRightAnchor(flowPane, 0.0);
 
         aPane_Rooms.getChildren().setAll(flowPane);
-        checkBox_Available.setSelected(true);
-        checkBox_Reserved.setSelected(true);
-        checkBox_Occupied.setSelected(true);
-        checkBox_Checkout.setSelected(true);
-        checkBox_Single.setSelected(true);
-        checkBox_Double.setSelected(true);
-        checkBox_Triple.setSelected(true);
-        checkBox_Family.setSelected(true);
-        checkBox_Deluxe.setSelected(true);
-        checkBox_Clean.setSelected(true);
-        checkBox_NotClean.setSelected(true);
-        checkBox_Repair.setSelected(true);
-        checkBox_InProgress.setSelected(true);
+        
+        // Make all check boxes bean ticked
+//        checkBox_Available.setSelected(true);
+//        checkBox_Reserved.setSelected(true);
+//        checkBox_Occupied.setSelected(true);
+//        checkBox_Checkout.setSelected(true);
+//        checkBox_Single.setSelected(true);
+//        checkBox_Double.setSelected(true);
+//        checkBox_Triple.setSelected(true);
+//        checkBox_Family.setSelected(true);
+//        checkBox_Deluxe.setSelected(true);
+//        checkBox_Clean.setSelected(true);
+//        checkBox_NotClean.setSelected(true);
+//        checkBox_Repair.setSelected(true);
+//        checkBox_InProgress.setSelected(true);
+        
+        // Test checking role and removing node
+        vBox_Filters.getChildren().remove(checkBox_InProgress.getParent());
 
         ObservableList<String> listFromFloor = FXCollections.observableArrayList();
         //Finding max floor
@@ -157,26 +165,28 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
         comboBox_FromFloor.getItems().addAll(listFromFloor);
         comboBox_ToFloor.getItems().addAll(listFromFloor);
-        
+
         // Validating when comboBox change value
         comboBox_FromFloor.valueProperty().addListener((obs, oldItem, newItem) -> {
             System.out.println("Min floor changed");
-            if (Integer.parseInt(comboBox_FromFloor.getValue()) > Integer.parseInt(comboBox_ToFloor.getValue())) {                
-                
+            if (Integer.parseInt(comboBox_FromFloor.getValue()) > Integer.parseInt(comboBox_ToFloor.getValue())) {
+
                 System.out.println("Min > Max : " + comboBox_FromFloor.getStyleClass());
                 comboBox_FromFloor.getStyleClass().add("jfx-combo-box-fault");
             } else {
-                comboBox_FromFloor.getStyleClass().removeAll("jfx-combo-box-fault");
+                comboBox_FromFloor.getStyleClass().remove("jfx-combo-box-fault");
+                comboBox_FromFloor.getStyleClass().remove("jfx-combo-box");
             }
         });
         comboBox_ToFloor.valueProperty().addListener((obs, oldItem, newItem) -> {
             System.out.println("Max floor changed");
-            if (Integer.parseInt(comboBox_FromFloor.getValue()) > Integer.parseInt(comboBox_ToFloor.getValue())) {                
-                //comboBox_ToFloor.getStyleClass().removeAll("jfx-combo-box");
+            if (Integer.parseInt(comboBox_FromFloor.getValue()) > Integer.parseInt(comboBox_ToFloor.getValue())) {
+                
                 System.out.println("Max < Min : " + comboBox_ToFloor.getStyleClass());
                 comboBox_ToFloor.getStyleClass().add("jfx-combo-box-fault");
             } else {
-                comboBox_ToFloor.getStyleClass().removeAll("jfx-combo-box-fault");
+                comboBox_ToFloor.getStyleClass().remove("jfx-combo-box-fault");
+                comboBox_ToFloor.getStyleClass().add("jfx-combo-box");
             }
         });
     }
@@ -184,10 +194,12 @@ public class FXMLMainOverViewPaneController implements Initializable {
     @FXML
     private void submit_Loading_Overview(ActionEvent event) {
         listRooms = roomDAOImpl.getAllRoom();
+        
         System.out.println("Button clicked.");
         FlowPane flowPane = new FlowPane();
         flowPane.setHgap(10);
         flowPane.setVgap(10);
+        
         ArrayList<String> listStatus = new ArrayList<>();
         if (!checkBox_Available.isSelected() && !checkBox_Reserved.isSelected() && !checkBox_Occupied.isSelected() && !checkBox_Checkout.isSelected()) {
             System.out.println("None selected type");
@@ -405,13 +417,14 @@ public class FXMLMainOverViewPaneController implements Initializable {
         }
     }
 
-    /**
-     * CompareRoom:
-     *
-     * @return: Max floor.
-     */
     public class CompareRoom implements Comparator<Room> {
 
+        /**
+         *
+         * @param r1 Room
+         * @param r2 Room
+         * @return: 0: = ; 1 = max ; -1 = min;
+         */
         @Override
         public int compare(Room r1, Room r2) {
 

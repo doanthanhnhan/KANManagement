@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import de.jensd.fx.glyphs.weathericons.WeatherIconView?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" fx:id="mainPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.FXMLTestChokuKienController">
@@ -10,5 +12,8 @@
       <WeatherIconView layoutX="173.0" layoutY="143.0" size="60" />
       <MaterialDesignIconView layoutX="180.0" layoutY="209.0" size="50" />
       <Button id="btn_test" fx:id="btnTest" layoutX="322.0" layoutY="159.0" mnemonicParsing="false" onAction="#TestFunction" text="Button" />
+      <JFXTextField fx:id="txtInput" labelFloat="true" layoutX="280.0" layoutY="215.0" promptText="Input here" />
+      <Label fx:id="labelDisplay" layoutX="337.0" layoutY="286.0" text="Label" />
+      <Button id="btn_test" fx:id="btnWebCam" layoutX="417.0" layoutY="159.0" mnemonicParsing="false" onAction="#CallWebCam" text="WebCam" />
    </children>
 </AnchorPane>

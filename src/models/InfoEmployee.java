@@ -5,16 +5,21 @@
  */
 package models;
 
+import java.sql.Blob;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.image.ImageView;
 
 /**
  *
  * @author Admin
  */
 public class InfoEmployee {
+
+    private Blob serviceImage;
+    private ImageView imageView;
     private StringProperty Employee_ID;
     private StringProperty UserName;
     private StringProperty PassWord;
@@ -24,6 +29,7 @@ public class InfoEmployee {
     private StringProperty First_Name;
     private StringProperty Mid_Name;
     private StringProperty Last_Name;
+    private StringProperty Address;
     private StringProperty Work_Dept;
     private StringProperty Phone_No;
     private StringProperty Hiredate;
@@ -36,24 +42,48 @@ public class InfoEmployee {
     private StringProperty Comm;
     private StringProperty Gmail;
     private StringProperty Role;
+    private StringProperty Id_number;
+
     public String getGmail() {
         return Gmail.get();
     }
+
     public void setGmail(String Gmail) {
         this.Gmail = new SimpleStringProperty(Gmail);
     }
+
+    public String getId_number() {
+        return Id_number.get();
+    }
+
+    public void setId_number(String Id_number) {
+        this.Id_number = new SimpleStringProperty(Id_number);
+    }
+
+    public String getAddress() {
+        return Address.get();
+    }
+
+    public void setAddress(String Address) {
+        this.Address = new SimpleStringProperty(Address);
+    }
+
     public String getRole() {
         return Role.get();
     }
+
     public void setRole(String Role) {
         this.Role = new SimpleStringProperty(Role);
     }
+
     public String getEmployee_ID() {
         return Employee_ID.get();
     }
+
     public void setEmployee_ID(String Employee_ID) {
         this.Employee_ID = new SimpleStringProperty(Employee_ID);
     }
+
     public String getUserName() {
         return UserName.get();
     }
@@ -69,6 +99,7 @@ public class InfoEmployee {
     public void setPassWord(String PassWord) {
         this.PassWord = new SimpleStringProperty(PassWord);
     }
+
     public String getActive() {
         return Active.get();
     }
@@ -76,6 +107,7 @@ public class InfoEmployee {
     public void setActive(String Active) {
         this.Active = new SimpleStringProperty(Active);
     }
+
     public String getSerect_Question() {
         return Serect_Question.get();
     }
@@ -83,6 +115,7 @@ public class InfoEmployee {
     public void setSerect_Question(String Serect_Question) {
         this.Serect_Question = new SimpleStringProperty(Serect_Question);
     }
+
     public String getSerect_Answer() {
         return Serect_Answer.get();
     }
@@ -90,6 +123,7 @@ public class InfoEmployee {
     public void setSerect_Answer(String Serect_Answer) {
         this.Serect_Answer = new SimpleStringProperty(Serect_Answer);
     }
+
     public String getFirst_Name() {
         return First_Name.get();
     }
@@ -103,7 +137,7 @@ public class InfoEmployee {
     }
 
     public void setMid_Name(String Mid_Name) {
-        this.Mid_Name =new SimpleStringProperty(Mid_Name);
+        this.Mid_Name = new SimpleStringProperty(Mid_Name);
     }
 
     public String getLast_Name() {
@@ -121,6 +155,7 @@ public class InfoEmployee {
     public void setWork_Dept(String Work_Dept) {
         this.Work_Dept = new SimpleStringProperty(Work_Dept);
     }
+
     public String getPhone_No() {
         return Phone_No.get();
     }
@@ -128,6 +163,7 @@ public class InfoEmployee {
     public void setPhone_No(String Phone_No) {
         this.Phone_No = new SimpleStringProperty(Phone_No);
     }
+
     public String getHiredate() {
         return Hiredate.get();
     }
@@ -192,12 +228,32 @@ public class InfoEmployee {
         this.Comm = new SimpleStringProperty(Comm);
     }
 
-    public InfoEmployee(){}
-    public InfoEmployee(String Employee_ID, String UserName, String PassWord,String Active,String Serect_Question,String Serect_Answer, String First_Name, String Mid_Name, String Last_Name, String Work_Dept,String Phone_No, String Hiredate, String Job,
-            Integer EDLEVEL, String Sex, String Birthdate, String Salary, String Bonus, String Comm,String Role,String Gmail) {
+    public Blob getServiceImage() {
+        return serviceImage;
+    }
+
+    public void setServiceImage(Blob serviceImage) {
+        this.serviceImage = serviceImage;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    public InfoEmployee() {
+    }
+
+    public InfoEmployee(String Employee_ID, String UserName, String PassWord, String Id_number, String Address, String Active, String Serect_Question, String Serect_Answer, String First_Name, String Mid_Name, String Last_Name, String Work_Dept, String Phone_No, String Hiredate, String Job,
+            Integer EDLEVEL, String Sex, String Birthdate, String Salary, String Bonus, String Comm, String Role, String Gmail, Blob serviceImage) {
         this.Employee_ID = new SimpleStringProperty(Employee_ID);
         this.UserName = new SimpleStringProperty(UserName);
         this.PassWord = new SimpleStringProperty(PassWord);
+        this.Id_number = new SimpleStringProperty(Id_number);
+        this.Address = new SimpleStringProperty(Address);
         this.Active = new SimpleStringProperty(Active);
         this.Serect_Question = new SimpleStringProperty(Serect_Question);
         this.Serect_Answer = new SimpleStringProperty(Serect_Answer);
@@ -216,5 +272,6 @@ public class InfoEmployee {
         this.Comm = new SimpleStringProperty(Comm);
         this.Role = new SimpleStringProperty(Role);
         this.Gmail = new SimpleStringProperty(Gmail);
+        this.serviceImage = serviceImage;
     }
 }

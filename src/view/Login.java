@@ -32,7 +32,7 @@ public class Login extends Application {
             stage.setTitle("KANManagementLogin");
         }
         stage.resizableProperty().setValue(Boolean.FALSE);
-        stage.getIcons().add(new Image("/images/KAN2.png"));
+        stage.getIcons().add(new Image("/images/KAN Logo.png"));
         
         Scene scene = new Scene(root);
         

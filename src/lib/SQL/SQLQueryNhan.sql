@@ -78,9 +78,10 @@ CREATE TABLE ServiceType(
 	-- Create columns
 	ID int IDENTITY(1,1),	
 	ServiceID varchar(50) UNIQUE NOT NULL,
-	ServiceName varchar(200) NOT NULL,	
+	ServiceName varchar(200) UNIQUE NOT NULL,	
 	ServiceUnit varchar(10) NOT NULL,
-	ServicePrice decimal NOT NULL,	
+	ServicePrice decimal NOT NULL,
+	[Image] varbinary(MAX),	
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
 	CONSTRAINT pk_ServiceID PRIMARY KEY (ID)	
@@ -108,23 +109,26 @@ CREATE TABLE Departments(
 
 CREATE TABLE Employees(
 -- Create columns
-	EmployeeID varchar(10) UNIQUE NOT NULL,	
+	EmployeeID varchar(20) UNIQUE NOT NULL,	
 	EmployeeFirstName nvarchar(15) NOT NULL,
 	EmployeeMidName nvarchar(25),
 	EmployeeLastName nvarchar(15) NOT NULL,
-	DepartmentID varchar(10),
+	DepartmentID varchar(20),
 	PhoneNumber varchar(20),
+	[Address] nvarchar(100),
+	IDNumber varchar(20),
 	HireDate date,
 	Job varchar(20),
 	EducatedLevel smallint,
 	Sex bit NOT NULL,
-	Birthday date NOT NULL,
+	Birthday date,
 	Salary decimal,
 	Bonus decimal,
 	Comm decimal,
 	Email varchar(100),
 	Active bit DEFAULT 1,
 	RoleID varchar(20),
+	[Image] varbinary(MAX),
 	-- Create constraint
 	CONSTRAINT pk_EmployeeID PRIMARY KEY (EmployeeID)
 )

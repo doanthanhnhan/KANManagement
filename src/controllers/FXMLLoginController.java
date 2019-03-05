@@ -24,12 +24,9 @@ import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -41,13 +38,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -60,9 +55,10 @@ import utils.MD5Encrypt;
  */
 public class FXMLLoginController implements Initializable {
 
+    public static ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
     public static ObservableList<InfoEmployee> List_EmployeeLogin = FXCollections.observableArrayList();
     public static ObservableList<InfoEmployee> employeeForget = FXCollections.observableArrayList();
-    public static ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
+    private ObservableList<InfoEmployee> List_Check_Login = FXCollections.observableArrayList();
     @FXML
     private AnchorPane formLogin;
     @FXML
@@ -76,13 +72,17 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private HBox hboxContent;
 
+    public static Boolean checkLoginRegis = false;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         txtUserName.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                txtUserName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                hboxContent.getChildren().clear();
+                Platform.runLater(() -> {
+                    hboxContent.getChildren().clear();
+                    txtUserName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
                         handleLoginAction();
@@ -95,8 +95,10 @@ public class FXMLLoginController implements Initializable {
         txtPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                txtPassword.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                hboxContent.getChildren().clear();
+                Platform.runLater(() -> {
+                    hboxContent.getChildren().clear();
+                    txtPassword.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
                         handleLoginAction();
@@ -159,7 +161,12 @@ public class FXMLLoginController implements Initializable {
         Task loadOverview = new Task() {
             @Override
             protected Object call() throws Exception {
-                System.out.println("Loading...");
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        hboxContent.getChildren().clear();
+                    }
+                });
                 loginAction();
                 return null;
             }
@@ -183,46 +190,46 @@ public class FXMLLoginController implements Initializable {
 
     public void loginAction() throws ClassNotFoundException, SQLException, IOException {
         if (txtUserName.getText().equals("")) {
-            System.out.println("test 1");
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("USER MUST NOT EMPTY !!!");
-            txtUserName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(300, 35);
+                label.setText("USER MUST NOT EMPTY !!!");
+                txtUserName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
                 hboxContent.setAlignment(Pos.CENTER);
                 hboxContent.setSpacing(10);
                 hboxContent.getChildren().clear();
                 hboxContent.getChildren().add(icon);
                 hboxContent.getChildren().add(label);
+                txtUserName.requestFocus();
             });
-            txtUserName.requestFocus();
         } else if (txtPassword.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("PASSWORD MUST NOT EMPTY !!!");
-            txtPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(300, 35);
+                label.setText("PASSWORD MUST NOT EMPTY !!!");
+                txtPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
                 hboxContent.setAlignment(Pos.CENTER);
                 hboxContent.setSpacing(10);
                 hboxContent.getChildren().clear();
                 hboxContent.getChildren().add(icon);
                 hboxContent.getChildren().add(label);
+                txtPassword.requestFocus();
             });
-            txtPassword.requestFocus();
-
         } else {
-            for (InfoEmployee infoEmployee : List_Employee) {
+            boolean checklogin = false;
+            List_Check_Login = DAO.getAllEmployee();
+            for (InfoEmployee infoEmployee : List_Check_Login) {
                 MD5Encrypt m = new MD5Encrypt();
                 String hashPass = m.hashPass(txtPassword.getText());
-                if (txtUserName.getText().equals(infoEmployee.getUserName())) {
+                if (txtUserName.getText().equals(infoEmployee.getUserName()) && hashPass.equals(infoEmployee.getPassWord())) {
                     if (DAO.check_Active(txtUserName.getText()).equals(0)) {
                         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                         icon.setSize("16");
@@ -238,20 +245,34 @@ public class FXMLLoginController implements Initializable {
                             hboxContent.getChildren().add(icon);
                             hboxContent.getChildren().add(label);
                         });
-
                     } else {
-                        if (hashPass.equals(infoEmployee.getPassWord())) {
-                            List_EmployeeLogin.add(infoEmployee);
-                            Stage stage = (Stage) btnLogin.getScene().getWindow();
-                            Platform.runLater(() -> {
+                        checklogin = true;
+                        List_EmployeeLogin.add(infoEmployee);
+                        Stage stage = (Stage) btnLogin.getScene().getWindow();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
                                 try {
                                     stage.close();
                                     Stage stageEdit = new Stage();
-                                    Parent rootAdd;
+                                    Parent rootAdd = null;
                                     if (DAO.checkSetPass(txtUserName.getText()) == 0) {
                                         stageEdit.resizableProperty().setValue(Boolean.FALSE);
-                                        rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLAccount.fxml"));
+                                        rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLAccount.fxml"));
                                         stageEdit.setTitle("Set Password");
+                                    } else if (infoEmployee.getId_number() == null || infoEmployee.getAddress() == null
+                                            || infoEmployee.getBirthdate() == null || infoEmployee.getPhone_No() == null) {
+                                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        Calendar cal = Calendar.getInstance();
+                                        String logtime;
+                                        logtime = dateFormat.format(cal.getTime());
+                                        DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
+                                        DAO.reset_CheckLogin(txtUserName.getText(), logtime);
+                                        checkLoginRegis = true;
+                                        rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
+                                        stageEdit.setTitle("Add Info Employee");
+                                        stageEdit.initStyle(StageStyle.UNDECORATED);
+
                                     } else {
                                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                         Calendar cal = Calendar.getInstance();
@@ -259,58 +280,29 @@ public class FXMLLoginController implements Initializable {
                                         logtime = dateFormat.format(cal.getTime());
                                         DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
                                         DAO.reset_CheckLogin(txtUserName.getText(), logtime);
-                                        rootAdd = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
-                                        stageEdit.setTitle("KANManagementLogin");
+                                        rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
+                                        stageEdit.setTitle("KANManagement");
                                     }
                                     Scene scene1;
                                     scene1 = new Scene(rootAdd);
-                                    stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
+                                    stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
                                     stageEdit.setScene(scene1);
                                     stageEdit.show();
-                                } catch (ClassNotFoundException ex) {
-                                    Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (SQLException ex) {
-                                    Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (IOException ex) {
+                                } catch (ClassNotFoundException | SQLException | IOException ex) {
                                     Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            });
-
-                        } else if (!hashPass.equals(infoEmployee.getPassWord())) {
-                            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                            icon.setSize("16");
-                            icon.setStyleClass("jfx-glyhp-icon");
-                            Label label = new Label();
-                            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                            label.setPrefSize(300, 35);
-                            label.setText("USER OR PASSWORD WRONG !!!");
-                            Platform.runLater(() -> {
-                                hboxContent.setAlignment(Pos.CENTER);
-                                hboxContent.setSpacing(10);
-                                hboxContent.getChildren().clear();
-                                hboxContent.getChildren().add(icon);
-                                hboxContent.getChildren().add(label);
-                            });
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                            Calendar cal = Calendar.getInstance();
-                            String logtime;
-                            logtime = dateFormat.format(cal.getTime());
-
-                            if (!DAO.check_Time(txtUserName.getText()).equals(logtime)) {
-                                DAO.reset_CheckLogin(txtUserName.getText(), logtime);
                             }
-                            DAO.check_Login(txtUserName.getText(), logtime);
-                        }
+                        });
                     }
                     break;
-                } else {
+                } else if (txtUserName.getText().equals(infoEmployee.getUserName()) && !hashPass.equals(infoEmployee.getPassWord())) {
                     FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                     icon.setSize("16");
                     icon.setStyleClass("jfx-glyhp-icon");
                     Label label = new Label();
                     label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                     label.setPrefSize(300, 35);
-                    label.setText("USER OR PASSWORD WRONG !!!");
+                    label.setText("USER OR PASSWORD WRONG!!!");
                     Platform.runLater(() -> {
                         hboxContent.setAlignment(Pos.CENTER);
                         hboxContent.setSpacing(10);
@@ -318,7 +310,33 @@ public class FXMLLoginController implements Initializable {
                         hboxContent.getChildren().add(icon);
                         hboxContent.getChildren().add(label);
                     });
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar cal = Calendar.getInstance();
+                    String logtime;
+                    logtime = dateFormat.format(cal.getTime());
+
+                    if (!DAO.check_Time(txtUserName.getText()).equals(logtime)) {
+                        DAO.reset_CheckLogin(txtUserName.getText(), logtime);
+                    }
+                    DAO.check_Login(txtUserName.getText(), logtime);
+                    break;
                 }
+            }
+            if (!checklogin) {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(300, 35);
+                label.setText("USER OR PASSWORD WRONG!!!");
+                Platform.runLater(() -> {
+                    hboxContent.setAlignment(Pos.CENTER);
+                    hboxContent.setSpacing(10);
+                    hboxContent.getChildren().clear();
+                    hboxContent.getChildren().add(icon);
+                    hboxContent.getChildren().add(label);
+                });
             }
         }
     }
@@ -340,7 +358,7 @@ public class FXMLLoginController implements Initializable {
             hboxContent.getChildren().add(icon);
             hboxContent.getChildren().add(label);
             txtUserName.requestFocus();
-        }else if (DAO.checkSetPass(txtUserName.getText()) == 0){
+        } else if (DAO.checkSetPass(txtUserName.getText()) == 0) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -355,8 +373,7 @@ public class FXMLLoginController implements Initializable {
             hboxContent.getChildren().add(icon);
             hboxContent.getChildren().add(label);
             txtUserName.requestFocus();
-        } 
-        else {
+        } else {
             System.out.println(List_Employee.size());
             for (int i = 0; i < List_Employee.size(); i++) {
                 if (txtUserName.getText().equals(List_Employee.get(i).getUserName())) {

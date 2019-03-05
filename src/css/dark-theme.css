@@ -7,14 +7,33 @@
     -fx-primarycolor: #6747CD;
     -fx-secondarycolor: #20bf6b;
     -fx-primarytextcolor: #a3a3a3;
+    /*    -fx-primarycolor: #2A2E37;
+        -fx-secondarycolor: #FFFF8D;
+        -fx-primarytextcolor: #B2B2B2;*/
     -fx-checkoutcolor: #FF2625;
     -fx-availablecolor: #7AA716;
     -fx-reservedcolor: #009FB4;
     -fx-occupiedcolor: #C83F06;
     -fx-fault-color: #FF2625;
 }
+
+/*GENERAL NODE*/
+/*.root{
+    -fx-background-color: -fx-primarycolor;
+}*/
+
 .glyph-icon{
     -fx-fill: -fx-primarycolor;
+}
+.jfx-glyhp-icon{
+    -fx-fill: -fx-checkoutcolor;
+}
+.jfx-glyhp-icon-finish{
+    -fx-fill: -fx-primarycolor;
+}
+.jfx-combo-box-fault{
+    -jfx-focus-color:-fx-checkoutcolor;
+    -jfx-unfocus-color:-fx-checkoutcolor;
 }
 .parent{
     -fx-background-color: white;
@@ -57,14 +76,19 @@
 }
 .label-text{
     -fx-text-fill:-fx-primarycolor;
+    -fx-border-color: -fx-primarycolor;
 }
 .label-color{
     -fx-text-fill: -fx-primarytextcolor;
 }
-
+.image-view:border{
+    -fx-border-color: -fx-primarycolor;    
+}
 /*REGISTRATION FORM*/
 
 .jfx-combo-box{
+    -jfx-focus-color: -fx-primarycolor; 
+    -jfx-unfocus-color: -fx-primarycolor;
     -fx-prompt-text-fill: -fx-primarytextcolor;   
     -fx-font-size : 14px;
     -fx-font-weight: bold;
@@ -77,7 +101,7 @@
     -fx-background-color:  -fx-primary;
     -fx-text-fill: -fx-secondary;    
 }*/
-.jfx-combo-box{
+.jfx-combo-box-fault{
     -jfx-focus-color: -fx-fault-color; 
     -jfx-unfocus-color: -fx-fault-color;
 }
@@ -145,4 +169,28 @@
 }
 .label-task-status{
     -fx-text-fill: -fx-primarycolor;
+}
+
+/*CHECK OUT FORM*/
+.button-checkout{
+    -fx-background-color: -fx-primarycolor;
+    -fx-text-fill: -fx-primarytextcolor;
+    -fx-background-radius: 3px;
+}
+.button-checkout:hover{
+    -fx-background-color: transparent;
+    -fx-background-radius: 3px;
+    -fx-text-fill: -fx-primarycolor;
+    -fx-border-color: -fx-primarycolor;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 3px;
+    -fx-cursor: hand;
+}
+
+.glyph-icon-checkout {
+    -fx-fill: -fx-primarytextcolor;
+}
+.button-checkout:hover .glyph-icon{
+    -fx-fill: -fx-primarycolor;
 }

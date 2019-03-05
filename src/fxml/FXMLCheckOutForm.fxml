@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLCheckOutFormController">
+   <children>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                     <children>
+                        <VBox prefHeight="200.0" spacing="20.0">
+                           <children>
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Check in ID" styleClass="te" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Check out ID" styleClass="te" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Customer ID" styleClass="te" />
+                              <JFXTextField editable="false" labelFloat="true" prefWidth="500.0" promptText="Customer full name" styleClass="te" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Room ID" styleClass="te" />
+                              <JFXTextField labelFloat="true" prefWidth="500.0" promptText="Total Guests" styleClass="te" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" spacing="20.0">
+                           <children>
+                              <JFXDatePicker prefWidth="500.0" promptText="Check in date" showWeekNumbers="true" />
+                              <JFXDatePicker layoutX="10.0" layoutY="10.0" prefWidth="500.0" promptText="Check out date" showWeekNumbers="true" />
+                              <JFXComboBox labelFloat="true" prefWidth="500.0" promptText="Customer payment method" />
+                              <JFXComboBox labelFloat="true" layoutX="10.0" layoutY="112.0" prefWidth="500.0" promptText="Tax" />
+                              <JFXComboBox labelFloat="true" layoutX="10.0" layoutY="214.0" prefWidth="500.0" promptText="Discount" />
+                              <JFXTextField editable="false" labelFloat="true" prefWidth="500.0" promptText="Total Bill amount" styleClass="te" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                     <children>
+                        <VBox spacing="20.0">
+                           <children>
+                              <JFXTreeTableView prefWidth="500.0" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="20.0">
+                           <children>
+                              <JFXTreeTableView prefWidth="500.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </center>
+         <bottom>
+            <HBox alignment="CENTER" spacing="50.0" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXButton prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="QR Code Scanner">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="VIDEO_CAMERA" size="20" styleClass="glyph-icon-checkout" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="Save">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SAVE" size="20" styleClass="glyph-icon-checkout" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="593.0" layoutY="20.0" prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="Cancel">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" size="20" styleClass="glyph-icon-checkout" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </bottom>
+         <top>
+            <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+                  <Label styleClass="label-text" text="CHECK OUT FORM">
+                     <font>
+                        <Font name="System Bold" size="35.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+            </HBox>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
