@@ -14,9 +14,12 @@ import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -34,6 +37,9 @@ import models.FormInfo;
  * @author ASUS
  */
 public class FXMLCustomerController implements Initializable {
+
+    @FXML
+    private Label LabelContent;
 
     @FXML
     private JFXTextField txtFirstName;
@@ -55,30 +61,34 @@ public class FXMLCustomerController implements Initializable {
 
     @FXML
     private JFXButton btnSubmit;
-    
+
     @FXML
     private Label labelName;
-    
+
     @FXML
     private HBox hboxContent;
 
     @FXML
-    void handleSubmit(ActionEvent event) {
+    void handleSubmit(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
         FormInfo Form = new FormInfo();
-
-        //define check
-        if (Form.isString(txtFirstName.getText()) && Form.isString(txtLastName.getText()) && Form.validatePhoneNumber(txtPhoneNumber.getText()) && Form.validateEmail(txtEmail.getText())) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//                if (FormInfo.isString(txtLastName.getText()) && FormInfo.isString(txtFirstName.getText()) && FormInfo.validatePhoneNumber(txtPhoneNumber.getText()) && FormInfo.validateEmail(txtEmail.getText()) && FormInfo.isDateValid(dateFormat.format(dateBirthDay.getValue())))
+        if (FormInfo.isString(txtLastName.getText()) && FormInfo.isString(txtFirstName.getText()) && FormInfo.validatePhoneNumber(txtPhoneNumber.getText()) && FormInfo.validateEmail(txtEmail.getText())) {
             Form.AddNewCustomer(txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), txtPassport.getText(), dateBirthDay.getValue());
+            txtFirstName.setText("");
+            txtLastName.setText("");
+            txtEmail.setText("");
+            txtPhoneNumber.setText("");
+            txtPassport.setText("");
+            dateBirthDay.setValue(null);
+            
+            LabelContent.setStyle("-fx-text-fill: green;");
+            LabelContent.setText("Success");
 
         } else {
+            handleValidAction();
             System.out.println("false");
         }
-        txtFirstName.setText("");
-        txtLastName.setText("");
-        txtEmail.setText("");
-        txtPhoneNumber.setText("");
-        txtPassport.setText("");
-        dateBirthDay.setValue(null);
     }
 
     /**
@@ -86,128 +96,28 @@ public class FXMLCustomerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        txtFirstName.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                hboxContent.getChildren().clear();
-                txtFirstName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                if (event.getCode() == KeyCode.ENTER) {
-                    try {
-                        handleAction();
-                    } catch (ClassNotFoundException | SQLException | IOException ex) {
-                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
-        txtLastName.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                txtLastName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                hboxContent.getChildren().clear();
-                if (event.getCode() == KeyCode.ENTER) {
-                    try {
-                        handleAction();
-                    } catch (ClassNotFoundException | SQLException | IOException ex) {
-                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
-        txtEmail.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                txtEmail.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                hboxContent.getChildren().clear();
-                if (event.getCode() == KeyCode.ENTER) {
-                    try {
-                        handleAction();
-                    } catch (ClassNotFoundException | SQLException | IOException ex) {
-                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
-        txtPhoneNumber.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                txtPhoneNumber.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                hboxContent.getChildren().clear();
-                if (event.getCode() == KeyCode.ENTER) {
-                    try {
-                        handleAction();
-                    } catch (ClassNotFoundException | SQLException | IOException ex) {
-                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
+        // TODO  
     }
 
-    @FXML
-    private void handleAction() throws ClassNotFoundException, SQLException, IOException {
-        FormInfo Form = new FormInfo();
-        if (Form.isString(txtFirstName.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("Opps! String please!");
+    private void handleValidAction() throws ClassNotFoundException, SQLException, IOException {
+        if (txtFirstName.getText().equals("")) {
+            LabelContent.setText("Opps! Insert please!");
             txtFirstName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            hboxContent.setAlignment(Pos.CENTER);
-            hboxContent.setSpacing(10);
-            hboxContent.getChildren().clear();
-            hboxContent.getChildren().add(icon);
-            hboxContent.getChildren().add(label);
             txtFirstName.requestFocus();
-        }else if(txtFirstName.getText().equals("")){
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("Opps! Insert please!");
-            txtFirstName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            hboxContent.setAlignment(Pos.CENTER);
-            hboxContent.setSpacing(10);
-            hboxContent.getChildren().clear();
-            hboxContent.getChildren().add(icon);
-            hboxContent.getChildren().add(label);
-            txtFirstName.requestFocus();
-        }else if(Form.isString(txtLastName.getText())){
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("Opps! String please!");
+        } else if (txtLastName.getText().equals("")) {
+            LabelContent.setText("Opps! Insert please!");
             txtLastName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            hboxContent.setAlignment(Pos.CENTER);
-            hboxContent.setSpacing(10);
-            hboxContent.getChildren().clear();
-            hboxContent.getChildren().add(icon);
-            hboxContent.getChildren().add(label);
             txtLastName.requestFocus();
-        }else if(txtLastName.getText().equals("")){
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("Opps! Insert please!");
-            txtLastName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            hboxContent.setAlignment(Pos.CENTER);
-            hboxContent.setSpacing(10);
-            hboxContent.getChildren().clear();
-            hboxContent.getChildren().add(icon);
-            hboxContent.getChildren().add(label);
-            txtLastName.requestFocus();
+        } else if (txtEmail.getText().equals("")) {
+            LabelContent.setText("Opps! Insert please!");
+            txtEmail.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            txtEmail.requestFocus();
+        } else if (txtPhoneNumber.getText().equals("")) {
+            LabelContent.setText("Opps! Insert please!");
+            txtPhoneNumber.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            txtPhoneNumber.requestFocus();
+        } else{
+            LabelContent.setText("Opps! String please!");
         }
     }
 }

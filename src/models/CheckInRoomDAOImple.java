@@ -12,11 +12,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import utils.connectDB;
 
@@ -37,7 +40,7 @@ public class CheckInRoomDAOImple {
             conn = connectDB.connectSQLServer();
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
-            
+
             return rs;
 
         } catch (SQLException ex) {
@@ -48,11 +51,6 @@ public class CheckInRoomDAOImple {
         return null;
     }
     
-    public void createTableCol(){
-        TableColumn<CheckInRoom, String> col_ID = new TableColumn<>("ID");
-            col_ID.setMinWidth(50);
-            col_ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
-    }
     
     public static ResultSet getAllDataCustomer() {
         try {
@@ -65,22 +63,38 @@ public class CheckInRoomDAOImple {
             conn = connectDB.connectSQLServer();
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
-            
+
             return rs;
-//            while (rs.next()) {
-//
-//                //Define Date
-//                String Date;
-//                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-//                Date = dateFormat.format(rs.getDate("CustomerBirthDay"));
-//
-//                checkin.add(new CheckInRoom(rs.getString("BookingID"), rs.getString("FirstName") + rs.getString("LastName"), rs.getString("Phone"), rs.getString("Email"), rs.getString("Company"), rs.getString("Note"), rs.getString("RoomType"), rs.getString("Flight"), Drive, Integer.toString(rs.getInt("NumberGuest")), Date));
-//            }
         } catch (SQLException ex) {
             Logger.getLogger(FXMLCheckInRoomController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(FXMLCheckInRoomController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public static ObservableList<CheckInRoom> listCheckIn() throws SQLException {
+
+        ObservableList<CheckInRoom> list = FXCollections.observableArrayList();
+
+        ResultSet rs = getAllDataBooking();
+
+        String check;
+
+        while (rs.next()) {
+            if (rs.getBoolean("BookDrive")) {
+                check = "Yes";
+            } else {
+                check = "No";
+            }
+            Date date = rs.getDate("DateBook");
+            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+            String strDate = dateFormat.format(date);
+            
+            list.add(new CheckInRoom(rs.getString("BookingID"), rs.getString("FirstName") + " " + rs.getString("LastName"), rs.getString("Phone"), rs.getString("Email"), rs.getString("Company"), rs.getString("Note"), rs.getString("RoomType"), rs.getString("Flight"), check, Integer.toString(rs.getInt("NumberGuest")), strDate));
+        }
+
+        return list;
+
     }
 }

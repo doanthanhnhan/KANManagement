@@ -8,6 +8,9 @@ package models;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -31,7 +34,7 @@ public class FormInfo implements DAOFormInfo {
             String exm = "Insert into BookingInfo(BookingID,FirstName,LastName,Email,Phone,Note,Company,RoomType,NumberGuest,DateBook,BookDrive,Flight) values(?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = connection.prepareStatement(exm);
 
-            String ID = "BOO" + (new Random().nextInt(999)) + "test";
+            String ID = "BOO" + Integer.toString(new Random().nextInt(999)) + Integer.toString(new Random().nextInt(99)) + "test";
             ps.setString(1, ID);
             ps.setString(2, FName);
             ps.setString(3, LName);
@@ -61,7 +64,7 @@ public class FormInfo implements DAOFormInfo {
 
             String ID = "CUS" + Integer.toString(new Random().nextInt(999)) + Integer.toString(new Random().nextInt(99)) + "test";
             boolean Check = true;
-            
+
             ps.setString(1, ID);
             ps.setString(2, FName);
             ps.setString(3, LName);
@@ -75,14 +78,15 @@ public class FormInfo implements DAOFormInfo {
             connection.close();
         } catch (SQLException | ClassNotFoundException ex1) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
-        }  
+        }
     }
+
     //validate String
     public static boolean isString(String str) {
-        String expression = "^[a-zA-Z\\s]+";
+        String expression = "^\\pL+[\\pL\\pZ]{1,25}$";
         return str.matches(expression);
     }
-    
+
     //validate Number
     public static boolean validatePhoneNumber(String phoneNo) {
         //validate phone numbers of format "1234567890"
@@ -103,7 +107,30 @@ public class FormInfo implements DAOFormInfo {
         }
 
     }
-    
+
+    //validate Number
+    public static boolean validateNumber(String phoneNo) {
+        //validate phone numbers of format "1234567890"
+        if (phoneNo.matches("\\d{1,2}")) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    //validate Date
+    public static boolean isDateValid(String date) {
+        try {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            df.setLenient(false);
+            df.parse(date);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
     //validate Email
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX
             = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);

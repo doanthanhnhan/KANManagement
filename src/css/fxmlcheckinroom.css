@@ -34,13 +34,12 @@
 .table-view .cell{
    -fx-cell-size: 35;
   -fx-alignment: center-left;
-  -fx-background-color: #white;
-  -fx-border-color: #29292D;
-  -fx-text-fill: lightgray;
+  -fx-border-color: white;
+  -fx-text-fill: black;
   -fx-alignment: CENTER_LEFT;
    
 }
 .table-row-cell:selected {
-   -fx-background-color: whitesmoke; 
+   -fx-background-color: #a3a3a3; 
    -fx-text-background-color:  #6622CC;     
 }

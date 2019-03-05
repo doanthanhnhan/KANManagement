@@ -70,7 +70,8 @@ public class FXMLFormInforOfGuestController implements Initializable {
     private JFXTextField txtFlightNumber;
     @FXML
     private JFXButton btnSubmit;
-
+    @FXML
+    private Label LabelContent;
     /**
      * Initializes the controller class.
      */
@@ -83,8 +84,6 @@ public class FXMLFormInforOfGuestController implements Initializable {
 
         check1.setSelected(true);
     }
-    
-    
 
     @FXML
     private void handleSubmitAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException, Exception {
@@ -93,34 +92,75 @@ public class FXMLFormInforOfGuestController implements Initializable {
 //            System.out.println("Empty");
 //        }
         FormInfo Form = new FormInfo();
+        
+        LabelContent.setStyle("-fx-text-fill: red;");
 
         //define check
         boolean check = false;
         if (check1.isSelected()) {
             check = true;
         }
-        if (Form.isString(txtFirstName.getText()) && Form.isString(txtLastName.getText()) && Form.validatePhoneNumber(txtPhoneNumber.getText()) && Form.validateEmail(txtEmail.getText())) {
-
+        if (Form.isString(txtFirstName.getText()) && Form.isString(txtLastName.getText()) && Form.validatePhoneNumber(txtPhoneNumber.getText()) && Form.validateEmail(txtEmail.getText()) && !comboBoxRoom.getValue().isEmpty() && FormInfo.validateNumber(txtNumberofGuest.getText()) && !datePickerDateArrive.getValue().equals(null)) {
+            
             Form.AddNewBooking(txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), txtNote.getText(), txtCompanyName.getText(), comboBoxRoom.getValue(), parseInt(txtNumberofGuest.getText()), datePickerDateArrive.getValue(), check, txtFlightNumber.getText());
-        }
-        else{
+            
+            txtFirstName.setText("");
+            txtLastName.setText("");
+            txtEmail.setText("");
+            txtPhoneNumber.setText("");
+            txtNote.setText("");
+            txtCompanyName.setText("");
+            comboBoxRoom.setValue(null);
+            txtNumberofGuest.setText("");
+            datePickerDateArrive.setValue(null);
+            txtFlightNumber.setText("");
+            
+            LabelContent.setStyle("-fx-text-fill: green;");
+            LabelContent.setText("Success");
+        } else {
+            handleValidAction();
             System.out.println("false");
+            System.out.println(FormInfo.isString(txtFirstName.getText()));
+            System.out.println(FormInfo.validatePhoneNumber(txtPhoneNumber.getText()));
+            System.out.println(FormInfo.validateEmail(txtEmail.getText()));
+            System.out.println(!comboBoxRoom.getValue().isEmpty());
+            System.out.println(FormInfo.validateNumber(txtNumberofGuest.getText()));
+            System.out.println(!datePickerDateArrive.getValue().equals(null));
         }
-        txtFirstName.setText("");
-        txtLastName.setText("");
-        txtEmail.setText("");
-        txtPhoneNumber.setText("");
-        txtNote.setText("");
-        txtCompanyName.setText("");
-        comboBoxRoom.setValue(null);
-        txtNumberofGuest.setText("");
-        datePickerDateArrive.setValue(null);
-        txtFlightNumber.setText("");
 
     }
 
-    @FXML
-    private void handleSubmitAction(MouseEvent event) {
+    private void handleValidAction() throws ClassNotFoundException, SQLException, IOException {
+        if (txtFirstName.getText().isEmpty() || !FormInfo.isString(txtFirstName.getText())) {
+            LabelContent.setText("Opps! First Name has some problems!");
+            txtFirstName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            txtFirstName.requestFocus();
+        } else if (txtLastName.getText().isEmpty() || !FormInfo.isString(txtLastName.getText())) {
+            LabelContent.setText("Opps! Last Name has some problems!");
+            txtLastName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            txtLastName.requestFocus();
+        } else if (txtEmail.getText().isEmpty() || !FormInfo.validateEmail(txtEmail.getText())) {
+            LabelContent.setText("Opps! Email has some problems!");
+            txtEmail.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            txtEmail.requestFocus();
+        } else if (txtPhoneNumber.getText().isEmpty() || !FormInfo.validatePhoneNumber(txtPhoneNumber.getText())) {
+            LabelContent.setText("Opps! Phone Number wrong!");
+            txtPhoneNumber.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            txtPhoneNumber.requestFocus();
+        } else if (txtNumberofGuest.getText().isEmpty() || !FormInfo.validateNumber(txtNumberofGuest.getText())){
+            LabelContent.setText("Opps! Number of Guests can not be wrong!");
+            txtNumberofGuest.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            txtNumberofGuest.requestFocus();
+        } else if(comboBoxRoom.getValue().isEmpty()){
+            LabelContent.setText("Opps! Pick a room!");
+            comboBoxRoom.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            comboBoxRoom.requestFocus();
+        } else if(datePickerDateArrive.getValue().equals(null)){
+            LabelContent.setText("Opps! Date wrong!");
+            datePickerDateArrive.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+            datePickerDateArrive.requestFocus();
+        } else {
+            LabelContent.setText("Opps! Something went wrong!");
+        }
     }
-
 }

@@ -63,6 +63,14 @@
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
+                        <Label fx:id="LabelContent" alignment="CENTER" prefHeight="181.0" prefWidth="688.0" style="-fx-text-fill: red;" textFill="RED">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets top="30.0" />
+                           </padding>
+                        </Label>
                      </children>
                   </VBox>
                   <VBox prefHeight="668.0" prefWidth="868.0" spacing="50.0">
