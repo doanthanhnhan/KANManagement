@@ -5,6 +5,16 @@
  */
 package models;
 
+import controllers.FXMLAddNewServiceTypeController;
+import controllers.FXMLInfoEmployeeController;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Paths;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
@@ -15,6 +25,12 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
+import utils.FormatName;
 
 /**
  *
@@ -49,6 +65,21 @@ public class DAO {
             Emp.setRole(rs.getString("Position"));
             Emp.setAddress(rs.getString("Address"));
             Emp.setId_number(rs.getString("IDNumber"));
+            Emp.setServiceImage(rs.getBlob("Image"));
+            System.out.println(rs.getBlob("Image"));
+            if (rs.getBlob("Image") != null) {
+                try {
+                    byte[] bytes = Emp.getServiceImage().getBytes(1l, (int) Emp.getServiceImage().length());
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+                    Image image = SwingFXUtils.toFXImage(img, null);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(50);
+                    imageView.setFitWidth(50);
+                    Emp.setImageView(imageView);
+                } catch (IOException ex) {
+                    Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             int i = rs.getInt("Sex");
             if (i == 1) {
                 Emp.setSex("Male");
@@ -74,10 +105,10 @@ public class DAO {
         return list_Employee;
     }
 
-    public static void AddNewEmployee(String Id, String FName, String MName, String LName, String Id_Role, String Gmail, String Sex) {
+    public static void AddNewEmployee(String Id, String FName, String MName, String LName, String Id_Role, String Gmail, String Sex) throws MalformedURLException {
         try {
             Connection connection = connectDB.connectSQLServer();
-            String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,RoleID) values(?,?,?,?,?,?,?)";
+            String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,RoleID,Image) values(?,?,?,?,?,?,?,?)";
             PreparedStatement pt = connection.prepareStatement(exm);
             pt.setString(1, Id);
             pt.setString(2, FName);
@@ -90,6 +121,24 @@ public class DAO {
             }
             pt.setString(6, Gmail);
             pt.setString(7, Id_Role);
+            String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
+            System.out.println(currentPath + "/src/images/Java.png");
+            File file = new File(currentPath + "/src/images/Java.png");
+            BufferedImage bImage;
+            bImage = SwingFXUtils.fromFXImage(new Image(file.toURI().toString()), null);
+            System.out.println("Buffer anh xong!");
+            byte[] res;
+            try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
+                ImageIO.write(bImage, "png", s);
+                res = s.toByteArray();
+                Blob blob = new SerialBlob(res);
+                pt.setBlob(8, blob);
+            } catch (SQLException ex) {
+                Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             pt.execute();
             pt.close();
             connection.close();
@@ -317,10 +366,11 @@ public class DAO {
     }
 
     public static void UpdateAllInfoEmployee(String User, String Phone, String Birthday, String Address, String IdNumber, String FName, String MName, String LName, String Email,
-            String DepartId, String Hiredate, String Job, String EducatedLevel, Double Salary, Double Bonus, Double Comm, String Role, String Sex) throws ClassNotFoundException, SQLException {
+            String DepartId, String Hiredate, String Job, String EducatedLevel, Double Salary, Double Bonus, Double Comm, String Role, String Sex, Blob Image) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "UPDATE Employees SET EmployeeFirstName=?,EmployeeMidName=?,EmployeeLastName=?,DepartmentId=?,"
-                + " PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ?,HireDate=?,Job=?,EducatedLevel=?,Salary=?,Bonus=?,Comm=?,RoleID=?,Sex=? WHERE EmployeeID = ?";
+                + " PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ?,HireDate=?,Job=?,EducatedLevel=?,Salary=?,"
+                + "Bonus=?,Comm=?,RoleID=?,Sex=?,Image=? WHERE EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, FName);
         pt.setString(2, MName);
@@ -342,7 +392,8 @@ public class DAO {
         } else {
             pt.setInt(16, 0);
         }
-        pt.setString(17, User);
+        pt.setBlob(17, Image);
+        pt.setString(18, User);
         pt.execute();
         pt.close();
         connection.close();

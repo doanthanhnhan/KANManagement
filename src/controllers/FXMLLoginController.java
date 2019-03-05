@@ -58,7 +58,7 @@ public class FXMLLoginController implements Initializable {
     public static ObservableList<InfoEmployee> List_Employee = FXCollections.observableArrayList();
     public static ObservableList<InfoEmployee> List_EmployeeLogin = FXCollections.observableArrayList();
     public static ObservableList<InfoEmployee> employeeForget = FXCollections.observableArrayList();
-
+    private ObservableList<InfoEmployee> List_Check_Login = FXCollections.observableArrayList();
     @FXML
     private AnchorPane formLogin;
     @FXML
@@ -225,11 +225,11 @@ public class FXMLLoginController implements Initializable {
             });
         } else {
             boolean checklogin = false;
-            for (InfoEmployee infoEmployee : List_Employee) {
+            List_Check_Login = DAO.getAllEmployee();
+            for (InfoEmployee infoEmployee : List_Check_Login) {
                 MD5Encrypt m = new MD5Encrypt();
                 String hashPass = m.hashPass(txtPassword.getText());
-                if (txtUserName.getText().equals(infoEmployee.getUserName())) {
-                    checklogin = true;
+                if (txtUserName.getText().equals(infoEmployee.getUserName()) && hashPass.equals(infoEmployee.getPassWord())) {
                     if (DAO.check_Active(txtUserName.getText()).equals(0)) {
                         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                         icon.setSize("16");
@@ -245,81 +245,80 @@ public class FXMLLoginController implements Initializable {
                             hboxContent.getChildren().add(icon);
                             hboxContent.getChildren().add(label);
                         });
-
                     } else {
-                        if (hashPass.equals(infoEmployee.getPassWord())) {
-                            List_EmployeeLogin.add(infoEmployee);
-                            Stage stage = (Stage) btnLogin.getScene().getWindow();
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        stage.close();
-                                        Stage stageEdit = new Stage();                                        
-                                        Parent rootAdd = null;
-                                        if (DAO.checkSetPass(txtUserName.getText()) == 0) {
-                                            stageEdit.resizableProperty().setValue(Boolean.FALSE);
-                                            rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLAccount.fxml"));
-                                            stageEdit.setTitle("Set Password");
-                                        } else if (infoEmployee.getId_number() == null || infoEmployee.getAddress() == null
-                                                || infoEmployee.getBirthdate() == null || infoEmployee.getPhone_No() == null) {
-                                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                            Calendar cal = Calendar.getInstance();
-                                            String logtime;
-                                            logtime = dateFormat.format(cal.getTime());
-                                            DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
-                                            DAO.reset_CheckLogin(txtUserName.getText(), logtime);
-                                            checkLoginRegis = true;
-                                            rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
-                                            stageEdit.setTitle("Add Info Employee");
-                                            stageEdit.initStyle(StageStyle.UNDECORATED);
+                        checklogin = true;
+                        List_EmployeeLogin.add(infoEmployee);
+                        Stage stage = (Stage) btnLogin.getScene().getWindow();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    stage.close();
+                                    Stage stageEdit = new Stage();
+                                    Parent rootAdd = null;
+                                    if (DAO.checkSetPass(txtUserName.getText()) == 0) {
+                                        stageEdit.resizableProperty().setValue(Boolean.FALSE);
+                                        rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLAccount.fxml"));
+                                        stageEdit.setTitle("Set Password");
+                                    } else if (infoEmployee.getId_number() == null || infoEmployee.getAddress() == null
+                                            || infoEmployee.getBirthdate() == null || infoEmployee.getPhone_No() == null) {
+                                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        Calendar cal = Calendar.getInstance();
+                                        String logtime;
+                                        logtime = dateFormat.format(cal.getTime());
+                                        DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
+                                        DAO.reset_CheckLogin(txtUserName.getText(), logtime);
+                                        checkLoginRegis = true;
+                                        rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
+                                        stageEdit.setTitle("Add Info Employee");
+                                        stageEdit.initStyle(StageStyle.UNDECORATED);
 
-                                        } else {
-                                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                            Calendar cal = Calendar.getInstance();
-                                            String logtime;
-                                            logtime = dateFormat.format(cal.getTime());
-                                            DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
-                                            DAO.reset_CheckLogin(txtUserName.getText(), logtime);
-                                            rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
-                                            stageEdit.setTitle("KANManagement");
-                                        }
-                                        Scene scene1;
-                                        scene1 = new Scene(rootAdd);
-                                        stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));                                        
-                                        stageEdit.setScene(scene1);
-                                        stageEdit.show();
-                                    } catch (ClassNotFoundException | SQLException | IOException ex) {
-                                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                                    } else {
+                                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        Calendar cal = Calendar.getInstance();
+                                        String logtime;
+                                        logtime = dateFormat.format(cal.getTime());
+                                        DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
+                                        DAO.reset_CheckLogin(txtUserName.getText(), logtime);
+                                        rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
+                                        stageEdit.setTitle("KANManagement");
                                     }
+                                    Scene scene1;
+                                    scene1 = new Scene(rootAdd);
+                                    stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                                    stageEdit.setScene(scene1);
+                                    stageEdit.show();
+                                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                                    Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            });
-                        } else if (!hashPass.equals(infoEmployee.getPassWord())) {
-                            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                            icon.setSize("16");
-                            icon.setStyleClass("jfx-glyhp-icon");
-                            Label label = new Label();
-                            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                            label.setPrefSize(300, 35);
-                            label.setText("USER OR PASSWORD WRONG!!!");
-                            Platform.runLater(() -> {
-                                hboxContent.setAlignment(Pos.CENTER);
-                                hboxContent.setSpacing(10);
-                                hboxContent.getChildren().clear();
-                                hboxContent.getChildren().add(icon);
-                                hboxContent.getChildren().add(label);
-                            });
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                            Calendar cal = Calendar.getInstance();
-                            String logtime;
-                            logtime = dateFormat.format(cal.getTime());
-
-                            if (!DAO.check_Time(txtUserName.getText()).equals(logtime)) {
-                                DAO.reset_CheckLogin(txtUserName.getText(), logtime);
                             }
-                            DAO.check_Login(txtUserName.getText(), logtime);
-                        }
+                        });
                     }
+                    break;
+                } else if (txtUserName.getText().equals(infoEmployee.getUserName()) && !hashPass.equals(infoEmployee.getPassWord())) {
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(300, 35);
+                    label.setText("USER OR PASSWORD WRONG!!!");
+                    Platform.runLater(() -> {
+                        hboxContent.setAlignment(Pos.CENTER);
+                        hboxContent.setSpacing(10);
+                        hboxContent.getChildren().clear();
+                        hboxContent.getChildren().add(icon);
+                        hboxContent.getChildren().add(label);
+                    });
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar cal = Calendar.getInstance();
+                    String logtime;
+                    logtime = dateFormat.format(cal.getTime());
+
+                    if (!DAO.check_Time(txtUserName.getText()).equals(logtime)) {
+                        DAO.reset_CheckLogin(txtUserName.getText(), logtime);
+                    }
+                    DAO.check_Login(txtUserName.getText(), logtime);
                     break;
                 }
             }

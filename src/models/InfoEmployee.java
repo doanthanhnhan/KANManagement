@@ -5,10 +5,12 @@
  */
 package models;
 
+import java.sql.Blob;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -16,6 +18,8 @@ import javafx.beans.property.StringProperty;
  */
 public class InfoEmployee {
 
+    private Blob serviceImage;
+    private ImageView imageView;
     private StringProperty Employee_ID;
     private StringProperty UserName;
     private StringProperty PassWord;
@@ -224,11 +228,27 @@ public class InfoEmployee {
         this.Comm = new SimpleStringProperty(Comm);
     }
 
+    public Blob getServiceImage() {
+        return serviceImage;
+    }
+
+    public void setServiceImage(Blob serviceImage) {
+        this.serviceImage = serviceImage;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
     public InfoEmployee() {
     }
 
-    public InfoEmployee(String Employee_ID, String UserName, String PassWord,String Id_number,String Address, String Active, String Serect_Question, String Serect_Answer, String First_Name, String Mid_Name, String Last_Name, String Work_Dept, String Phone_No, String Hiredate, String Job,
-            Integer EDLEVEL, String Sex, String Birthdate, String Salary, String Bonus, String Comm, String Role, String Gmail) {
+    public InfoEmployee(String Employee_ID, String UserName, String PassWord, String Id_number, String Address, String Active, String Serect_Question, String Serect_Answer, String First_Name, String Mid_Name, String Last_Name, String Work_Dept, String Phone_No, String Hiredate, String Job,
+            Integer EDLEVEL, String Sex, String Birthdate, String Salary, String Bonus, String Comm, String Role, String Gmail, Blob serviceImage) {
         this.Employee_ID = new SimpleStringProperty(Employee_ID);
         this.UserName = new SimpleStringProperty(UserName);
         this.PassWord = new SimpleStringProperty(PassWord);
@@ -252,5 +272,6 @@ public class InfoEmployee {
         this.Comm = new SimpleStringProperty(Comm);
         this.Role = new SimpleStringProperty(Role);
         this.Gmail = new SimpleStringProperty(Gmail);
+        this.serviceImage = serviceImage;
     }
 }

@@ -8,6 +8,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -17,36 +18,56 @@
    <children>
       <VBox fx:id="vBox_Employee_Info" layoutX="-6.0" layoutY="-7.0">
          <children>
-            <HBox prefHeight="129.0">
+            <HBox>
                <children>
-                  <VBox alignment="CENTER" prefHeight="129.0">
+                  <HBox prefHeight="129.0" prefWidth="560.0">
                      <children>
-                        <HBox prefHeight="53.0" prefWidth="400.0">
+                        <VBox prefHeight="129.0">
                            <children>
-                              <Label prefHeight="53.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="FORM INFO EMPLOYEE">
-                                 <font>
-                                    <Font name="System Bold" size="27.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="80.0" top="60.0" />
-                                 </HBox.margin>
-                              </Label>
+                              <HBox prefHeight="53.0" prefWidth="400.0">
+                                 <children>
+                                    <Label prefHeight="53.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="FORM INFO EMPLOYEE">
+                                       <font>
+                                          <Font name="System Bold" size="27.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="60.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label prefHeight="27.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for info employee">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <Label prefHeight="27.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for info employee">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="80.0" top="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
+                        </VBox>
                      </children>
-                  </VBox>
+                  </HBox>
+                  <HBox alignment="BOTTOM_RIGHT" prefWidth="560.0" spacing="20.0">
+                     <children>
+                        <JFXButton fx:id="btnInsertImage" onAction="#handle_Button_Insert_Image_Action" styleClass="loginBtn" text="Insert image" />
+                        <Label contentDisplay="TOP" styleClass="label-text" stylesheets="@../css/dark-theme.css" text="Employee Image">
+                           <graphic>
+                              <ImageView fx:id="imgService" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" right="80.0" top="10.0" />
+                     </padding>
+                  </HBox>
                </children>
             </HBox>
             <HBox fx:id="hBox_Info_Parent">
@@ -55,7 +76,7 @@
                      <children>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXComboBox fx:id="boxId" editable="true" labelFloat="true" onAction="#select_Id" prefHeight="35.0" prefWidth="400.0" promptText="Select Id Employee">
+                              <JFXComboBox fx:id="boxId" editable="true" labelFloat="true" onAction="#select_ID" prefHeight="35.0" prefWidth="400.0" promptText="Select Id Employee">
                                  <HBox.margin>
                                     <Insets left="80.0" right="80.0" top="20.0" />
                                  </HBox.margin>
@@ -288,7 +309,7 @@
             </HBox>
             <HBox fx:id="Hboxbtn" alignment="CENTER">
                <children>
-                  <JFXButton fx:id="btnInfo" buttonType="RAISED" onAction="#btnInfoEmployee" prefHeight="50.0" prefWidth="400.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                  <JFXButton fx:id="btnInfo" buttonType="RAISED" onAction="#btnInfoEmployee" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -296,7 +317,7 @@
                         <Insets left="80.0" right="80.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="btnCancel" buttonType="RAISED" onAction="#Cancel" prefHeight="50.0" prefWidth="400.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Cancel">
+                  <JFXButton fx:id="btnCancel" buttonType="RAISED" onAction="#Cancel" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Cancel">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
