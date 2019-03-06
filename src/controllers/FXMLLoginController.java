@@ -17,6 +17,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -59,6 +60,8 @@ public class FXMLLoginController implements Initializable {
     public static ObservableList<InfoEmployee> List_EmployeeLogin = FXCollections.observableArrayList();
     public static ObservableList<InfoEmployee> employeeForget = FXCollections.observableArrayList();
     private ObservableList<InfoEmployee> List_Check_Login = FXCollections.observableArrayList();
+    private ArrayList<InfoEmployee> List_User_Login = new ArrayList<>();
+    public static InfoEmployee Emp = new InfoEmployee();
     @FXML
     private AnchorPane formLogin;
     @FXML
@@ -224,44 +227,106 @@ public class FXMLLoginController implements Initializable {
                 txtPassword.requestFocus();
             });
         } else {
-            boolean checklogin = false;
-            List_Check_Login = DAO.getAllEmployee();
-            for (InfoEmployee infoEmployee : List_Check_Login) {
+
+            try {
                 MD5Encrypt m = new MD5Encrypt();
                 String hashPass = m.hashPass(txtPassword.getText());
-                if (txtUserName.getText().equals(infoEmployee.getUserName()) && hashPass.equals(infoEmployee.getPassWord())) {
-                    if (DAO.check_Active(txtUserName.getText()).equals(0)) {
-                        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        icon.setSize("16");
-                        icon.setStyleClass("jfx-glyhp-icon");
-                        Label label = new Label();
-                        label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                        label.setPrefSize(300, 35);
-                        label.setText("ACCOUNT IS LOCKED !!!");
-                        Platform.runLater(() -> {
+                String user = txtUserName.getText();
+
+                Emp = DAO.getListCheckLogin(txtUserName.getText());
+
+//      Xử lý trường hợp user ko tồn tại
+                if (Emp == null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                            icon.setSize("16");
+                            icon.setStyleClass("jfx-glyhp-icon");
+                            Label label = new Label();
+                            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                            label.setPrefSize(300, 35);
+                            label.setText("USER OR PASSWORD WRONG!!!");
                             hboxContent.setAlignment(Pos.CENTER);
                             hboxContent.setSpacing(10);
                             hboxContent.getChildren().clear();
                             hboxContent.getChildren().add(icon);
                             hboxContent.getChildren().add(label);
+                        }
+                    });
+
+                } else {
+                    System.out.println("Vao day");
+                    System.out.println(Emp.getActive());
+                    if (Emp.getActive().equals(0)) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                                icon.setSize("16");
+                                icon.setStyleClass("jfx-glyhp-icon");
+                                Label label = new Label();
+                                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                                label.setPrefSize(300, 35);
+                                label.setText("ACCOUNT IS LOCKED !!!");
+                                hboxContent.setAlignment(Pos.CENTER);
+                                hboxContent.setSpacing(10);
+                                hboxContent.getChildren().clear();
+                                hboxContent.getChildren().add(icon);
+                                hboxContent.getChildren().add(label);
+                            }
+                        });
+                    } //          Xử lý trường hợp sai pass
+                    else if (!hashPass.equals(Emp.getPassWord())) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                    Calendar cal = Calendar.getInstance();
+                                    String logtime;
+                                    logtime = dateFormat.format(cal.getTime());
+//                    Xử lý reset lại Check Login nếu qua 1 ngày mới
+if (!DAO.check_Time(user).equals(logtime)) {
+    DAO.reset_CheckLogin(user, logtime);
+}
+FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+icon.setSize("16");
+icon.setStyleClass("jfx-glyhp-icon");
+Label label = new Label();
+label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+label.setPrefSize(300, 35);
+label.setText("USER OR PASSWORD WRONG!!!");
+hboxContent.setAlignment(Pos.CENTER);
+hboxContent.setSpacing(10);
+hboxContent.getChildren().clear();
+hboxContent.getChildren().add(icon);
+hboxContent.getChildren().add(label);
+DAO.check_Login(txtUserName.getText(), logtime);
+System.out.println("xu ly xong sai pass");
+                                } catch (SQLException | ClassNotFoundException ex) {
+                                    Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
                         });
                     } else {
-                        checklogin = true;
-                        List_EmployeeLogin.add(infoEmployee);
-                        Stage stage = (Stage) btnLogin.getScene().getWindow();
                         Platform.runLater(new Runnable() {
+                            Stage stage = (Stage) btnLogin.getScene().getWindow();
+
                             @Override
                             public void run() {
                                 try {
                                     stage.close();
                                     Stage stageEdit = new Stage();
                                     Parent rootAdd = null;
+//                                Xử lý trường hợp đăng nhập lần đầu tiên
                                     if (DAO.checkSetPass(txtUserName.getText()) == 0) {
                                         stageEdit.resizableProperty().setValue(Boolean.FALSE);
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLAccount.fxml"));
                                         stageEdit.setTitle("Set Password");
-                                    } else if (infoEmployee.getId_number() == null || infoEmployee.getAddress() == null
-                                            || infoEmployee.getBirthdate() == null || infoEmployee.getPhone_No() == null) {
+                                    } //     Xử lý trường hợp thông tin cơ bản của emloyees null
+                                    else if (List_User_Login.get(0).getId_number() == null || List_User_Login.get(0).getAddress() == null
+                                            || List_User_Login.get(0).getBirthdate() == null || List_User_Login.get(0).getPhone_No() == null) {
                                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                         Calendar cal = Calendar.getInstance();
                                         String logtime;
@@ -294,51 +359,17 @@ public class FXMLLoginController implements Initializable {
                             }
                         });
                     }
-                    break;
-                } else if (txtUserName.getText().equals(infoEmployee.getUserName()) && !hashPass.equals(infoEmployee.getPassWord())) {
-                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                    icon.setSize("16");
-                    icon.setStyleClass("jfx-glyhp-icon");
-                    Label label = new Label();
-                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                    label.setPrefSize(300, 35);
-                    label.setText("USER OR PASSWORD WRONG!!!");
-                    Platform.runLater(() -> {
-                        hboxContent.setAlignment(Pos.CENTER);
-                        hboxContent.setSpacing(10);
-                        hboxContent.getChildren().clear();
-                        hboxContent.getChildren().add(icon);
-                        hboxContent.getChildren().add(label);
-                    });
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Calendar cal = Calendar.getInstance();
-                    String logtime;
-                    logtime = dateFormat.format(cal.getTime());
 
-                    if (!DAO.check_Time(txtUserName.getText()).equals(logtime)) {
-                        DAO.reset_CheckLogin(txtUserName.getText(), logtime);
-                    }
-                    DAO.check_Login(txtUserName.getText(), logtime);
-                    break;
+//              Xử lý trường hợp User tồn tại nhưng đã bị block
                 }
+            } catch (SQLException ex) {
+                Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (!checklogin) {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(300, 35);
-                label.setText("USER OR PASSWORD WRONG!!!");
-                Platform.runLater(() -> {
-                    hboxContent.setAlignment(Pos.CENTER);
-                    hboxContent.setSpacing(10);
-                    hboxContent.getChildren().clear();
-                    hboxContent.getChildren().add(icon);
-                    hboxContent.getChildren().add(label);
-                });
-            }
+
         }
+
     }
 
     @FXML

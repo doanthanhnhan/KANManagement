@@ -7,6 +7,7 @@ package models;
 
 import controllers.FXMLAddNewServiceTypeController;
 import controllers.FXMLInfoEmployeeController;
+import static controllers.FXMLLoginController.Emp;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,9 +24,12 @@ import utils.connectDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
@@ -37,6 +41,36 @@ import utils.FormatName;
  * @author Admin
  */
 public class DAO {
+
+    public static InfoEmployee getListCheckLogin(String User) throws SQLException, ClassNotFoundException {
+        Connection connection = connectDB.connectSQLServer();
+        // Tạo đối tượng Statement.
+
+        String sql = "select UserName,Users.Active,PassWord,IdNumber,Address,Birthday,PhoneNumber from Users,Employees where UserName = ? and Employees.EmployeeID = Users.EmployeeID";
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        PreparedStatement pt = connection.prepareStatement(sql);
+        pt.setString(1, User);
+
+        ResultSet rs = pt.executeQuery();
+        if (!rs.next()) {
+            pt.close();
+            connection.close();
+            return null;
+        } else {
+            InfoEmployee Emp = new InfoEmployee();
+            Emp.setUserName(rs.getString("UserName"));
+            Emp.setActive(rs.getString("Active"));
+            Emp.setPhone_No(rs.getString("PhoneNumber"));
+            Emp.setBirthdate(rs.getString("Birthday"));
+            Emp.setAddress(rs.getString("Address"));
+            Emp.setId_number(rs.getString("IDNumber"));
+            Emp.setPassWord(rs.getString("PassWord"));
+            pt.close();
+            connection.close();
+            rs.close();
+            return Emp;
+        }
+    }
 
     private static ObservableList<InfoEmployee> getListEmployee(ResultSet rs) throws SQLException, ClassNotFoundException {
         //Declare a observable List which comprises of Employee objects
