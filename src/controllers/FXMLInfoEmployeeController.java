@@ -185,6 +185,12 @@ public class FXMLInfoEmployeeController implements Initializable {
             list_User.add(infoEmployee.getUserName());
         });
         if (FXMLMainFormController.checkRegis) {
+            DepartmentId.setText("");
+            Job.setText("");
+            Salary.setText("0");
+            Bonus.setText("0");
+            Comm.setText("0");
+            
             FXMLMainFormController.checkRegis = false;
             System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
             if (!list_login_update.get(0).getRole().equals("Admin")) {
@@ -226,12 +232,6 @@ public class FXMLInfoEmployeeController implements Initializable {
                 btnInfo.setOnAction((event) -> {
                     System.out.println("run");
                     FXMLMainFormController.checkRegis = true;
-                    DepartmentId.setText("");
-                    Job.setText("");
-                    Salary.setText("0");
-                    Bonus.setText("0");
-                    Comm.setText("0");
-                    //Hiredate.set("");
 
                     validateForm();
                     check_delete = false;
@@ -478,9 +478,9 @@ public class FXMLInfoEmployeeController implements Initializable {
         pattern = Pattern.compile("^([0-9][0-9]{1,19}$)|\\+84[0-9]{1,17}$");
         patternEmail = Pattern.compile("^[a-z][a-z0-9_\\.]{5,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$");
         patternFLName = Pattern.compile("^\\pL+[\\pL\\pZ]{1,25}$");
-        patternIDNumber = Pattern.compile("[\\da-zA-Z]{0,20}");
+        patternIDNumber = Pattern.compile("^(?=.{4,20}$)[a-zA-Z][a-zA-Z0-9_]+$");
         patternELevel = Pattern.compile("[\\d]{0,2}");
-        patternSalary = Pattern.compile("[\\d,]{0,18}");
+        patternSalary = Pattern.compile("^[\\d][\\d]*\\.?[\\d]*$");
         System.out.println("check_delete: " + check_delete);
         if (boxId.getValue() == null) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
@@ -760,7 +760,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             EducatedLevel.requestFocus();
-        } else if (!patternSalary.matcher(Salary.getText()).matches() && !check_delete && !Salary.getText().equals("")) {
+        } else if (!patternSalary.matcher(Salary.getText()).matches() && !check_delete && !Salary.getText().equals("0")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -776,7 +776,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Salary.requestFocus();
-        } else if (!patternSalary.matcher(Bonus.getText()).matches() && !check_delete && !Bonus.getText().equals("")) {
+        } else if (!patternSalary.matcher(Bonus.getText()).matches() && !check_delete && !Bonus.getText().equals("0")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -792,7 +792,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Bonus.requestFocus();
-        } else if (!patternSalary.matcher(Comm.getText()).matches() && !check_delete && !Comm.getText().equals("")) {
+        } else if (!patternSalary.matcher(Comm.getText()).matches() && !check_delete && !Comm.getText().equals("0")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
