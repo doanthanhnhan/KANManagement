@@ -76,7 +76,7 @@
                      <children>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXComboBox fx:id="boxId" editable="true" labelFloat="true" onAction="#select_ID" prefHeight="35.0" prefWidth="400.0" promptText="Select Id Employee">
+                              <JFXComboBox fx:id="boxId" editable="true" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Id Employee">
                                  <HBox.margin>
                                     <Insets left="80.0" right="80.0" top="20.0" />
                                  </HBox.margin>

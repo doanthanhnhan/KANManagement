@@ -161,20 +161,7 @@ public class FXMLInfoEmployeeController implements Initializable {
         System.out.println("kiem tra validate Init" + validateInfoEmployee);
         list_info = FXMLLoginController.List_Employee;
         list_login = FXMLLoginController.List_EmployeeLogin;
-//        boxId.setOnKeyPressed((KeyEvent event) -> {
-//            if (event.getCode() == KeyCode.ENTER) {
-//                btnInfoEmployee();
-//            }
-//        });
-//        boxId.getEditor().addEventFilter(Event.ANY, e -> System.out.println("event bat ky: " + e));
-        boxId.getEditor().addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            System.out.println("key: " + e.getCode());
-            if (e.getCode() == KeyCode.ENTER) {
-                System.out.println("Enter pressed");
-                btnInfoEmployee();
-            }
 
-        });
         for (InfoEmployee infoEmployee : list_info) {
             if (infoEmployee.getUserName().equals(list_login.get(0).getUserName())) {
                 list_login_update.add(infoEmployee);
@@ -190,7 +177,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             Salary.setText("0");
             Bonus.setText("0");
             Comm.setText("0");
-            
+
             FXMLMainFormController.checkRegis = false;
             System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
             if (!list_login_update.get(0).getRole().equals("Admin")) {
@@ -284,9 +271,48 @@ public class FXMLInfoEmployeeController implements Initializable {
         boxRole.setItems(list_Role);
         boxId.setItems(list_User);
 
-// add enter key
+        // add enter key
+        boxId.setOnKeyPressed((KeyEvent event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                System.out.println("Enter pressed");
+                btnInfoEmployee();
+            }
+        });
+
         boxId.valueProperty().addListener((obs, oldItem, newItem) -> {
             if (newItem != null) {
+                list_info = FXMLLoginController.List_Employee;
+                for (InfoEmployee infoEmployee : list_info) {
+                    if (boxId.getValue().equals(infoEmployee.getEmployee_ID())) {
+                        newPhone.setText(infoEmployee.getPhone_No());
+                        if (infoEmployee.getBirthdate() != null) {
+                            birthday.setValue(LocalDate.parse(infoEmployee.getBirthdate()));
+                        }
+                        if (infoEmployee.getHiredate() != null) {
+                            Hiredate.setValue(LocalDate.parse(infoEmployee.getBirthdate()));
+                        }
+                        if (infoEmployee.getSex().equals("Male")) {
+                            Male.setSelected(true);
+                        } else {
+                            Female.setSelected(true);
+                        }
+                        address.setText(infoEmployee.getAddress());
+                        IdNumber.setText(infoEmployee.getId_number());
+                        FirstName.setText(infoEmployee.getFirst_Name());
+                        LastName.setText(infoEmployee.getLast_Name());
+                        MidName.setText(infoEmployee.getMid_Name());
+                        Email.setText(infoEmployee.getGmail());
+                        DepartmentId.setText(infoEmployee.getWork_Dept());
+                        Job.setText(infoEmployee.getJob());
+                        EducatedLevel.setText(String.valueOf(infoEmployee.getEDLEVEL()));
+                        Salary.setText(infoEmployee.getSalary());
+                        Bonus.setText(infoEmployee.getBonus());
+                        Comm.setText(infoEmployee.getComm());
+                        boxRole.setValue(infoEmployee.getRole());
+                        imgService.setImage(infoEmployee.getImageView().getImage());
+                        break;
+                    }
+                }
                 HboxContent.getChildren().clear();
                 boxId.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
             }
@@ -429,42 +455,6 @@ public class FXMLInfoEmployeeController implements Initializable {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         // do what you have to do
         stage.hide();
-    }
-
-    @FXML
-    private void select_ID(ActionEvent event) {
-        list_info = FXMLLoginController.List_Employee;
-        for (InfoEmployee infoEmployee : list_info) {
-            if (boxId.getValue().equals(infoEmployee.getEmployee_ID())) {
-                newPhone.setText(infoEmployee.getPhone_No());
-                if (infoEmployee.getBirthdate() != null) {
-                    birthday.setValue(LocalDate.parse(infoEmployee.getBirthdate()));
-                }
-                if (infoEmployee.getHiredate() != null) {
-                    Hiredate.setValue(LocalDate.parse(infoEmployee.getBirthdate()));
-                }
-                if (infoEmployee.getSex().equals("Male")) {
-                    Male.setSelected(true);
-                } else {
-                    Female.setSelected(true);
-                }
-                address.setText(infoEmployee.getAddress());
-                IdNumber.setText(infoEmployee.getId_number());
-                FirstName.setText(infoEmployee.getFirst_Name());
-                LastName.setText(infoEmployee.getLast_Name());
-                MidName.setText(infoEmployee.getMid_Name());
-                Email.setText(infoEmployee.getGmail());
-                DepartmentId.setText(infoEmployee.getWork_Dept());
-                Job.setText(infoEmployee.getJob());
-                EducatedLevel.setText(String.valueOf(infoEmployee.getEDLEVEL()));
-                Salary.setText(infoEmployee.getSalary());
-                Bonus.setText(infoEmployee.getBonus());
-                Comm.setText(infoEmployee.getComm());
-                boxRole.setValue(infoEmployee.getRole());
-                imgService.setImage(infoEmployee.getImageView().getImage());
-                break;
-            }
-        }
     }
 
     @FXML
