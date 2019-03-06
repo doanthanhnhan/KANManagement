@@ -258,6 +258,7 @@ public class FXMLLoginController implements Initializable {
                 } else {
                     System.out.println("Vao day");
                     System.out.println(Emp.getActive());
+                    //              Xử lý trường hợp User tồn tại nhưng đã bị block
                     if (Emp.getActive().equals(0)) {
                         Platform.runLater(new Runnable() {
                             @Override
@@ -287,23 +288,23 @@ public class FXMLLoginController implements Initializable {
                                     String logtime;
                                     logtime = dateFormat.format(cal.getTime());
 //                    Xử lý reset lại Check Login nếu qua 1 ngày mới
-if (!DAO.check_Time(user).equals(logtime)) {
-    DAO.reset_CheckLogin(user, logtime);
-}
-FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-icon.setSize("16");
-icon.setStyleClass("jfx-glyhp-icon");
-Label label = new Label();
-label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-label.setPrefSize(300, 35);
-label.setText("USER OR PASSWORD WRONG!!!");
-hboxContent.setAlignment(Pos.CENTER);
-hboxContent.setSpacing(10);
-hboxContent.getChildren().clear();
-hboxContent.getChildren().add(icon);
-hboxContent.getChildren().add(label);
-DAO.check_Login(txtUserName.getText(), logtime);
-System.out.println("xu ly xong sai pass");
+                                    if (!DAO.check_Time(user).equals(logtime)) {
+                                        DAO.reset_CheckLogin(user, logtime);
+                                    }
+                                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                                    icon.setSize("16");
+                                    icon.setStyleClass("jfx-glyhp-icon");
+                                    Label label = new Label();
+                                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                                    label.setPrefSize(300, 35);
+                                    label.setText("USER OR PASSWORD WRONG!!!");
+                                    hboxContent.setAlignment(Pos.CENTER);
+                                    hboxContent.setSpacing(10);
+                                    hboxContent.getChildren().clear();
+                                    hboxContent.getChildren().add(icon);
+                                    hboxContent.getChildren().add(label);
+                                    DAO.check_Login(txtUserName.getText(), logtime);
+                                    System.out.println("xu ly xong sai pass");
                                 } catch (SQLException | ClassNotFoundException ex) {
                                     Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -360,7 +361,6 @@ System.out.println("xu ly xong sai pass");
                         });
                     }
 
-//              Xử lý trường hợp User tồn tại nhưng đã bị block
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
