@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import models.CheckInRoom;
 import models.CheckInRoomDAOImple;
+import models.FormInfo;
 
 /**
  * FXML Controller class
@@ -57,13 +59,47 @@ public class FXMLCheckInRoomController implements Initializable {
 
     @FXML
     void handleSearchBtn(ActionEvent event) throws SQLException {
-        ObservableList<CheckInRoom> list = CheckInRoomDAOImple.listCheckIn();
-        System.out.println(list);
+        ObservableList<CheckInRoom> list = CheckInRoomDAOImple.listCheckIn(CheckInRoomDAOImple.getAllDataBooking());
+        
+        TableViewData.getItems().clear();
+        
+        char[] textField = txtID.getText().toCharArray();
+
+        if (FormInfo.isString(txtID.getText())) {
+            ObservableList<CheckInRoom> list1 = null;
+            for (CheckInRoom cir : list) {
+//                String name = CheckInRoomDAOImple.removeAccent(cir.getName().toLowerCase());
+//                System.out.println(cir.getName().toLowerCase());
+//                System.out.println(name);
+//                if (name.equals(cir.getName().toLowerCase())) {
+                
+//                }
+                System.out.println(cir.getID());
+                list1 = FXCollections.observableArrayList();
+                list1.add(cir);
+                
+            }
+            System.out.println("\n List" + list);
+            System.out.println("\n List 1" + list1);
+            TableViewData.setItems(list1);
+        } else if (FormInfo.validateNumber(txtID.getText())) {
+            for (CheckInRoom cir : list) {
+
+            }
+        } else if (FormInfo.validateEmail(txtID.getText())) {
+            for (CheckInRoom cir : list) {
+
+            }
+        } else {
+            TableViewData.setItems(CheckInRoomDAOImple.listAddTableCheckIn());
+        };
+        
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         //define table 
         TableColumn<CheckInRoom, String> col_ID = new TableColumn<>("ID");
         col_ID.setMinWidth(50);
@@ -98,12 +134,12 @@ public class FXMLCheckInRoomController implements Initializable {
         TableColumn<CheckInRoom, String> col_note = new TableColumn<>("Note");
         col_note.setMinWidth(150);
         col_note.setCellValueFactory(new PropertyValueFactory<>("Note"));
-        
+
         TableViewData.getColumns().clear();
         TableViewData.getColumns().addAll(col_ID, col_name, col_phone, col_mail, col_room, col_num, col_drive, col_date, col_company, col_flight, col_note);
-        
+
         try {
-            TableViewData.setItems(CheckInRoomDAOImple.listCheckIn());
+            TableViewData.setItems(CheckInRoomDAOImple.listAddTableCheckIn());
         } catch (SQLException ex) {
             Logger.getLogger(FXMLCheckInRoomController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -111,7 +111,7 @@ public class FormInfo implements DAOFormInfo {
     //validate Number
     public static boolean validateNumber(String phoneNo) {
         //validate phone numbers of format "1234567890"
-        if (phoneNo.matches("\\d{1,2}")) {
+        if (phoneNo.matches("\\d")) {
             return true;
         } else {
             return false;

@@ -698,7 +698,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Email.requestFocus();
-        } else if ((DepartmentId.getText().length()!=0) && !check_delete&&!patternIDNumber.matcher(DepartmentId.getText()).matches()) {
+        } else if ((!DepartmentId.getText().isEmpty()) && !check_delete&&!patternIDNumber.matcher(DepartmentId.getText()).matches()) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
