@@ -194,3 +194,17 @@
 .button-checkout:hover .glyph-icon{
     -fx-fill: -fx-primarycolor;
 }
+
+/*LIST SERVICE TYPE FORM*/
+.glyph-525icons-add{
+    -fx-fill: -fx-primarycolor;
+}
+.glyph-525icons-edit{
+    -fx-fill: -fx-occupiedcolor;
+}
+.glyph-525icons-remove{
+    -fx-fill: -fx-fault-color;
+}
+.glyph-525icons-refresh{
+    -fx-fill: -fx-secondarycolor;
+}

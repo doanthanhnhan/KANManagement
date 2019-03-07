@@ -7,7 +7,6 @@ package controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -15,6 +14,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -24,7 +25,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.ServiceType;
 import models.ServiceTypeDAOImpl;
@@ -40,7 +40,7 @@ public class FXMLListServiceTypeController implements Initializable {
     ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
     ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
 
-    public static Boolean check_Edit_Action = false;
+    public Boolean check_Edit_Action = false;
     public static ServiceType serviceTypeItem;
 
     @FXML
@@ -66,9 +66,15 @@ public class FXMLListServiceTypeController implements Initializable {
         ConnectControllers.setfXMLListServiceTypeController(this);
         // Check item when click on table
         table_ServiceType.setOnMouseClicked((MouseEvent event) -> {
-            if (event.getButton().equals(MouseButton.PRIMARY)) {
+            if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY)) 
+                    && table_ServiceType.getSelectionModel().getSelectedItem() != null) {
+                menuItem_Edit.setDisable(false);
+                menuItem_Delete.setDisable(false);
                 System.out.println(table_ServiceType.getSelectionModel().getSelectedItem().getServiceID());
                 serviceTypeItem = table_ServiceType.getSelectionModel().getSelectedItem();
+            } else {
+                menuItem_Edit.setDisable(true);
+                menuItem_Delete.setDisable(true);
             }
         });
     }
@@ -115,41 +121,41 @@ public class FXMLListServiceTypeController implements Initializable {
     public void showUsersData() {
         listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
         table_ServiceType.getItems().clear();
-        table_ServiceType.setItems(listServiceTypes);        
+        table_ServiceType.setItems(listServiceTypes);
     }
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
-        check_Edit_Action = true;
-        FXMLAddNewServiceTypeController controller = new FXMLAddNewServiceTypeController();
-        controller.check_Btn_Update_Clicked.addListener((observable, oldValue, newValue) -> {
-            System.out.println(oldValue + " and " + newValue);
-            if (newValue != null) {
-                Platform.runLater(() -> {
-                    showUsersData();
-                    System.out.println("Update clicked");
-                });
-            }
-        });
+        check_Edit_Action = true;        
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");        
+        stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
 
     }
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
+        check_Edit_Action = false;        
+        StageLoader stageLoader = new StageLoader();
+        stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
     }
 
     @FXML
     private void handle_MenuItem_Delete_Action(ActionEvent event) {
-    }
-
-    public void updateTableValue() {
-        showUsersData();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Comfirm");
+        alert.setContentText("Do you want to delete this?");
+        alert.showAndWait();
+        System.out.println(alert.getResult());
+        if (alert.getResult() == ButtonType.OK) {
+            serviceTypeDAOImpl.deleteServiceType(serviceTypeItem);
+            System.out.println("Delete successful");
+            showUsersData();
+        }
     }
 
     @FXML
     private void handle_MenuItem_Refresh_Action(ActionEvent event) {
         showUsersData();
     }
+
 }
