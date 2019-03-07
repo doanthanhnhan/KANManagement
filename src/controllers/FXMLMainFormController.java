@@ -393,12 +393,17 @@ public class FXMLMainFormController implements Initializable {
                     progressBar_MainTask.setVisible(false);
                     hbox_Bottom.getChildren().remove(label_Task_Status);
                     btn_Toolbar_Home.setDisable(false);
-
                 });
             }
         });
 
         new Thread(loadOverview).start();
+    }
+
+    @FXML
+    private void handle_Toolbar_CheckOut_Action(ActionEvent event) {
+        System.out.println("List Service Type menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOutForm.fxml", "Check Out");
     }
 
 }

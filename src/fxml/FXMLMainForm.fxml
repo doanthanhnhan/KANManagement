@@ -121,7 +121,7 @@
                               <Tooltip contentDisplay="TOP" text="Check in" textAlignment="CENTER" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="btn_Toolbar_Checkout" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                        <Button fx:id="btn_Toolbar_Checkout" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_CheckOut_Action">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

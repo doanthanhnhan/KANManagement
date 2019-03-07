@@ -24,6 +24,9 @@ import java.util.regex.Pattern;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -60,7 +63,11 @@ public class FXMLAddNewServiceTypeController implements Initializable {
 
     public static ObservableList<ServiceType> listServiceType;
     ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
+    private FXMLListServiceTypeController listServiceTypeController;
     final FileChooser fileChooser = new FileChooser();
+
+    //Declare variable to reference from another form
+    public ReadOnlyObjectWrapper<String> check_Btn_Update_Clicked = new ReadOnlyObjectWrapper<>();
 
     @FXML
     private JFXTextField serviceID;
@@ -78,18 +85,113 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     private HBox hBoxContent;
     @FXML
     private JFXButton btnAddNew;
+    @FXML
+    private Label label_Title;
+    @FXML
+    private Label label_Description;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        listServiceTypeController = ConnectControllers.getfXMLListServiceTypeController();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif, *.bmp)", "*.jpg", "*.png", "*.gif", "*.bmp");
 
         fileChooser.getExtensionFilters().add(extFilter);
         // Set path for fileChooser
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
+
+        //Check form was call from List ServiceType Form
+        if (FXMLListServiceTypeController.check_Edit_Action) {
+
+            //Setting values for new form
+            serviceID.setDisable(true);
+            label_Title.setText("EDITING SERVICE TYPE");
+            label_Description.setText("Filling the infomations for editting service type");
+            ServiceType serviceType = FXMLListServiceTypeController.serviceTypeItem;
+            serviceID.setText(serviceType.getServiceID());
+            serviceName.setText(serviceType.getServiceName());
+            serviceUnit.setText(serviceType.getServiceUnit());
+            servicePrice.setText(serviceType.getServicePrice().toString());
+            imgService.setImage(serviceType.getImageView().getImage());
+            btnAddNew.setText("Update");
+
+            //Setting Update button function
+            btnAddNew.setOnAction((event) -> {
+                // Đoạn này làm loading (đang làm chạy vô tận)
+                // Khai báo stage nhìn xuyên thấu
+                final Stage stage = new Stage(StageStyle.TRANSPARENT);
+
+                // Chỗ này set khi mở cửa sổ con lên thì cha bị vô hiệu
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setOpacity(0.5);
+
+                final Label status = new Label("Updating Service Type");
+                status.setStyle("-fx-text-fill: #008FC0; -fx-font-size : 20px; -fx-font-weight: bold;");
+                final ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
+                indicator.setPrefSize(100, 100);
+                //indicator.setProgress(-1d);
+                final Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.seconds(1), new EventHandler() {
+                            @Override
+                            public void handle(Event event) {
+                                String statusText = status.getText();
+                                status.setText(
+                                        ("Updating Service Type . . .".equals(statusText))
+                                        ? "Updating Service Type ."
+                                        : statusText + " ."
+                                );
+                            }
+                        }),
+                        new KeyFrame(Duration.millis(1000))
+                );
+                timeline.setCycleCount(Timeline.INDEFINITE);
+                //Platform.runLater(() -> {
+                VBox layout = new VBox();
+                layout.setAlignment(Pos.CENTER);
+                layout.setSpacing(10);
+                layout.getChildren().addAll(indicator, status);
+                layout.setStyle("-fx-padding: 10;");
+                stage.setScene(new Scene(layout, 300, 150));
+                stage.show();
+                //});
+
+                timeline.play();
+                Task loadOverview;
+                loadOverview = new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        System.out.println("Loading...");
+                        Platform.runLater(() -> {
+                            hBoxContent.getChildren().clear();
+                        });
+                        ServiceType updateServiceType = getDataFromForm();
+                        //Updating to DB
+                        serviceTypeDAOImpl.editServiceType(updateServiceType, true);
+                        System.out.println("Updating successful!");
+
+                        return null;
+                    }
+                };
+
+                loadOverview.setOnSucceeded((Event event1) -> {
+                    Platform.runLater(() -> {
+                        check_Btn_Update_Clicked.set("Clicked");
+                        timeline.stop();
+                        stage.close();
+                        listServiceTypeController.updateTableValue();
+                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+                        stageUpdate.close();
+                    });
+                    System.out.println("Finished");
+                });
+
+                new Thread(loadOverview).start();
+
+            });
+        }
     }
 
     @FXML
@@ -182,6 +284,11 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     }
 
     public void addNewServiceType() {
+        ServiceType serviceType = getDataFromForm();
+        serviceTypeDAOImpl.addServiceType(serviceType);
+    }
+
+    public ServiceType getDataFromForm() {
         ServiceType serviceType = new ServiceType();
         serviceType.setServiceID(serviceID.getText());
         serviceType.setServiceName(serviceName.getText());
@@ -198,8 +305,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         } catch (SQLException | IOException ex) {
             Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        serviceTypeDAOImpl.addServiceType(serviceType);
+        return serviceType;
     }
 
     public void validateForm() {
@@ -283,5 +389,10 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             check = false;
         }
         return check;
+    }
+
+    //Send back data function to the form call this method
+    public ReadOnlyObjectProperty<String> checkUpdateProperty() {
+        return check_Btn_Update_Clicked.getReadOnlyProperty();
     }
 }

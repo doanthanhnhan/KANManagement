@@ -82,7 +82,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public void editServiceType(ServiceType serviceType, Boolean active) {
-        String sql = "UPDATE ServiceType SET ServiceID=?, ServiceName=?, ServiceUnit=?, ServicePrice=?, Image=?, Active=?) WHERE ServiceID=?";
+        String sql = "UPDATE ServiceType SET ServiceID=?, ServiceName=?, ServiceUnit=?, ServicePrice=?, Image=?, Active=? WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceType.getServiceID());
