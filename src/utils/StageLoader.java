@@ -46,11 +46,11 @@ public class StageLoader {
             stage.setTitle(title);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
+            stage.showAndWait();
         } catch (IOException ex) {
             Logger.getLogger(StageLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }   
 
     public void loadingIndicator(Stage stage, Timeline timeline, String title) {
         // Khai báo stage nhìn xuyên thấu
