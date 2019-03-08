@@ -11,7 +11,6 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -26,7 +25,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,6 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
 import models.InfoEmployee;
+import utils.PatternValided;
 import utils.MD5Encrypt;
 
 /**
@@ -61,14 +60,15 @@ public class FXMLForgetPassController implements Initializable {
     private JFXButton btnSubmit;
     @FXML
     private HBox HboxContent;
-    private Pattern patternPassword;
+    private String UserForget = FXMLLoginController.User_Login;
+    private InfoEmployee Emp = new InfoEmployee();
     /**
      * Initializes the controller class.
      */
-    private ObservableList<InfoEmployee> employeeForget = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         txtForgetPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -106,9 +106,10 @@ public class FXMLForgetPassController implements Initializable {
                     try {
                         handleForgetAction();
                     } catch (ClassNotFoundException | SQLException ex) {
-                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);           
+                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }}
+                }
+            }
         });
         txtSerectQuestion.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -119,9 +120,10 @@ public class FXMLForgetPassController implements Initializable {
                     try {
                         handleForgetAction();
                     } catch (ClassNotFoundException | SQLException ex) {
-                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);           
+                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }}
+                }
+            }
         });
         txtSerectQuestion.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -131,8 +133,6 @@ public class FXMLForgetPassController implements Initializable {
                 }
             }
         });
-        patternPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z#$^+=!*()@%&])(?=.*\\d).{8,20}$");
-        employeeForget = FXMLLoginController.employeeForget;
         ObservableList list_question = FXCollections.observableArrayList();
         ObservableList list_question_random = FXCollections.observableArrayList();
         list_question.add("What is the first phone number you use?");
@@ -147,13 +147,12 @@ public class FXMLForgetPassController implements Initializable {
             list_question.remove(randomIndex);
         }
         txtSerectQuestion.setItems(list_question_random);
-        txtForgetUsername.setText(employeeForget.get(0).getUserName());
+        txtForgetUsername.setText(UserForget);
         // TODO
     }
 
     @FXML
     private void handleForgetAction() throws SQLException, ClassNotFoundException {
-
         if (txtForgetPassword.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
@@ -215,14 +214,14 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             textSerectAnswer.requestFocus();
-        }else if (!patternPassword.matcher(txtForgetPassword.getText()).matches()) {
+        } else if (!PatternValided.PatternPassword(txtForgetPassword.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
             label.setPrefSize(300, 35);
-            label.setText("PASSWORD INVALID !!! (EXAM:Abc12345,aBc@1234,...(6-20 CHARACTERS) !!! ");
+            label.setText("PASSWORD INVALID (EXAM:Abc12345,... (6-20 CHARACTERS) !!!");
             txtForgetPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setSpacing(10);
             HboxContent.setAlignment(Pos.CENTER);
@@ -230,8 +229,7 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             txtForgetPassword.requestFocus();
-        }
-        else if (!txtForgetPassword.getText().equals(txtForgetConfirmPassword.getText())) {
+        } else if (!txtForgetPassword.getText().equals(txtForgetConfirmPassword.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -246,16 +244,28 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             txtForgetPassword.requestFocus();
-        }
-        else{
+        } else {
+            Emp = DAO.getInfoForgetPassEmployee(UserForget);
             MD5Encrypt m = new MD5Encrypt();
-            System.out.println(employeeForget.get(0).getSerect_Question());
-            System.out.println(m.hashPass((String) txtSerectQuestion.getValue()));
-            if(DAO.check_Active(txtForgetUsername.getText()).equals(0)){
-                        System.out.println("Account Blocked !!!");
-            }
-            if(employeeForget.get(0).getSerect_Question().equals(m.hashPass((String) txtSerectQuestion.getValue()))
-                    &&employeeForget.get(0).getSerect_Answer().equals(m.hashPass(textSerectAnswer.getText()))){
+//            Kiểm tra account block thì ko cho thực hiện bất kì điều gì nữa
+            if (!Emp.getActive()) {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(300, 35);
+                label.setText("ACCOUNT IS LOCKED !!!");
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                txtForgetPassword.requestFocus();
+            } //          Xử lý  khi câu hỏi và câu trả lời chính xác
+            else if (Emp.getSerect_Question().equals(m.hashPass(txtSerectQuestion.getValue()))
+                    && Emp.getSerect_Answer().equals(m.hashPass(textSerectAnswer.getText()))) {
+
                 DAO.forgetPass(txtForgetUsername.getText(), m.hashPass(txtForgetPassword.getText()));
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Calendar cal = Calendar.getInstance();
@@ -263,18 +273,27 @@ public class FXMLForgetPassController implements Initializable {
                 logtime = dateFormat.format(cal.getTime());
                 String content = "Change New Password";
                 DAO.setUserLogs(txtForgetUsername.getText(), content, logtime);
-                FXMLLoginController loginController = ConnectControllers.getfXMLLoginController();
-                loginController.List_Employee = DAO.getAllEmployee();
                 Stage stage = (Stage) btnSubmit.getScene().getWindow();
                 stage.close();
-            }
-            else{
-                System.out.println("Serect Question or Serect Answer Wrong !!!");
+            } else {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(300, 35);
+                label.setText("QUESTION OR ANSWER WRONG!!!");
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                txtSerectQuestion.requestFocus();
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Calendar cal = Calendar.getInstance();
                 String logtime;
                 logtime = dateFormat.format(cal.getTime());
-                if(!DAO.check_Time(txtForgetUsername.getText()).equals(logtime)){
+                if (!DAO.check_Time(txtForgetUsername.getText()).equals(logtime)) {
                     DAO.reset_CheckLogin(txtForgetUsername.getText(), logtime);
                 }
                 DAO.check_Login(txtForgetUsername.getText(), logtime);

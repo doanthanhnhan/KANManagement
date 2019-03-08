@@ -6,7 +6,9 @@
 package models;
 
 import java.sql.Blob;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -23,7 +25,7 @@ public class InfoEmployee {
     private StringProperty Employee_ID;
     private StringProperty UserName;
     private StringProperty PassWord;
-    private StringProperty Active;
+    private BooleanProperty Active;
     private StringProperty Serect_Question;
     private StringProperty Serect_Answer;
     private StringProperty First_Name;
@@ -35,7 +37,7 @@ public class InfoEmployee {
     private StringProperty Hiredate;
     private StringProperty Job;
     private IntegerProperty EDLEVEL;
-    private StringProperty Sex;
+    private BooleanProperty Sex;
     private StringProperty Birthdate;
     private StringProperty Salary;
     private StringProperty Bonus;
@@ -100,12 +102,12 @@ public class InfoEmployee {
         this.PassWord = new SimpleStringProperty(PassWord);
     }
 
-    public String getActive() {
+    public Boolean getActive() {
         return Active.get();
     }
 
-    public void setActive(String Active) {
-        this.Active = new SimpleStringProperty(Active);
+    public void setActive(Boolean Active) {
+        this.Active = new SimpleBooleanProperty(Active);
     }
 
     public String getSerect_Question() {
@@ -187,14 +189,14 @@ public class InfoEmployee {
     public void setEDLEVEL(Integer EDLEVEL) {
         this.EDLEVEL = new SimpleIntegerProperty(EDLEVEL);
     }
-
-    public String getSex() {
+    public Boolean getSex() {
         return Sex.get();
     }
 
-    public void setSex(String Sex) {
-        this.Sex = new SimpleStringProperty(Sex);
+    public void setSex(Boolean Sex) {
+        this.Sex = new SimpleBooleanProperty(Sex);
     }
+
 
     public String getBirthdate() {
         return Birthdate.get();
@@ -247,14 +249,14 @@ public class InfoEmployee {
     public InfoEmployee() {
     }
 
-    public InfoEmployee(String Employee_ID, String UserName, String PassWord, String Id_number, String Address, String Active, String Serect_Question, String Serect_Answer, String First_Name, String Mid_Name, String Last_Name, String Work_Dept, String Phone_No, String Hiredate, String Job,
-            Integer EDLEVEL, String Sex, String Birthdate, String Salary, String Bonus, String Comm, String Role, String Gmail, Blob serviceImage) {
+    public InfoEmployee(String Employee_ID, String UserName, String PassWord, String Id_number, String Address, Boolean Active, String Serect_Question, String Serect_Answer, String First_Name, String Mid_Name, String Last_Name, String Work_Dept, String Phone_No, String Hiredate, String Job,
+            Integer EDLEVEL, Boolean Sex, String Birthdate, String Salary, String Bonus, String Comm, String Role, String Gmail, Blob serviceImage) {
         this.Employee_ID = new SimpleStringProperty(Employee_ID);
         this.UserName = new SimpleStringProperty(UserName);
         this.PassWord = new SimpleStringProperty(PassWord);
         this.Id_number = new SimpleStringProperty(Id_number);
         this.Address = new SimpleStringProperty(Address);
-        this.Active = new SimpleStringProperty(Active);
+        this.Active = new SimpleBooleanProperty(Active);
         this.Serect_Question = new SimpleStringProperty(Serect_Question);
         this.Serect_Answer = new SimpleStringProperty(Serect_Answer);
         this.First_Name = new SimpleStringProperty(First_Name);
@@ -265,7 +267,7 @@ public class InfoEmployee {
         this.Hiredate = new SimpleStringProperty(Hiredate);
         this.Job = new SimpleStringProperty(Job);
         this.EDLEVEL = new SimpleIntegerProperty(EDLEVEL);
-        this.Sex = new SimpleStringProperty(Sex);
+        this.Sex = new SimpleBooleanProperty(Sex);
         this.Birthdate = new SimpleStringProperty(Birthdate);
         this.Salary = new SimpleStringProperty(Salary);
         this.Bonus = new SimpleStringProperty(Bonus);

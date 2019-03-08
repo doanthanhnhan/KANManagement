@@ -22,7 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -51,8 +50,8 @@ import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import models.InfoEmployee;
+import utils.PatternValided;
 import utils.FormatName;
-// regex first last ^[A-Z](?:[a-z]*){2,15}+$
 
 /**
  * FXML Controller class
@@ -60,7 +59,6 @@ import utils.FormatName;
  * @author Admin
  */
 public class FXMLAddNewEmloyeeController implements Initializable {
-
     @FXML
     private JFXTextField newGmail;
     @FXML
@@ -81,10 +79,6 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     private JFXButton btnAddNew;
     @FXML
     private HBox HboxContent;
-    private Pattern pattern;
-    private Pattern patternEmail;
-    private Pattern patternFLName;
-
     /**
      * Initializes the controller class.
      *
@@ -93,7 +87,6 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         try {
             if (DAO.checkFirstLogin() == 0) {
                 newRole.setValue("Admin");
@@ -306,9 +299,6 @@ public class FXMLAddNewEmloyeeController implements Initializable {
 
     private void AddNewEmployee() throws ClassNotFoundException, SQLException, IOException, Exception {
 //        valided texfield
-        pattern = Pattern.compile("^(?=.{4,12}$)[a-zA-Z][a-zA-Z0-9_]+$");
-        patternEmail = Pattern.compile("^[a-z][a-z0-9_\\.]{5,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$");
-        patternFLName = Pattern.compile("^\\pL+[\\pL\\pZ]{1,25}$");
         if (newId.getText().equals("")) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
@@ -379,7 +369,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 newLastname.requestFocus();
             });
 
-        } else if (newRole.getValue()==null) {
+        } else if (newRole.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -397,7 +387,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 HboxContent.getChildren().add(label);
                 newRole.requestFocus();
             });
-        } else if (!pattern.matcher(newId.getText()).matches()) {
+        } else if (!PatternValided.PatternID(newId.getText())) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -415,8 +405,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 newId.requestFocus();
             });
 
-        } else if (!patternEmail.matcher(newGmail.getText()).matches()) {
-
+        } else if (!PatternValided.PatternEmail(newGmail.getText())) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -424,7 +413,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(465, 35);
-                label.setText("INVALID EMAIL !!!");
+                label.setText("EMAIL DOES NOT EXIST!!!");
                 newGmail.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
                 HboxContent.setSpacing(10);
                 HboxContent.setAlignment(Pos.CENTER);
@@ -433,8 +422,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 HboxContent.getChildren().add(label);
                 newGmail.requestFocus();
             });
-
-        } else if (!patternFLName.matcher(newFirstname.getText()).matches()) {
+        } else if (!PatternValided.PatternName(newFirstname.getText())) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -442,7 +430,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(465, 35);
-                label.setText("FIRSTNAME INVALID !!! (Example: Nguyễn, John,...) ");
+                label.setText("FIRSTNAME DOES NOT EXIST !!! (Example: Nguyễn, John,...) ");
                 newFirstname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
                 HboxContent.setSpacing(10);
                 HboxContent.setAlignment(Pos.CENTER);
@@ -452,7 +440,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 newFirstname.requestFocus();
             });
 
-        } else if (!patternFLName.matcher(newMidname.getText()).matches() && !newMidname.getText().equals("")) {
+        } else if (!PatternValided.PatternName(newMidname.getText()) && !newMidname.getText().equals("")) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -460,7 +448,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(465, 35);
-                label.setText("MIDNAME INVALID !!!(Example: Thị, Rooney,...");
+                label.setText("MIDNAME DOES NOT EXIST !!!(Example: Thị, Rooney,...");
                 newMidname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
                 HboxContent.setSpacing(10);
                 HboxContent.setAlignment(Pos.CENTER);
@@ -470,7 +458,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 newMidname.requestFocus();
             });
 
-        } else if (!patternFLName.matcher(newLastname.getText()).matches()) {
+        } else if (!PatternValided.PatternName(newLastname.getText())) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -478,7 +466,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(465, 35);
-                label.setText("LASTNAME INVALID !!!(Example: Toàn, Văn,...");
+                label.setText("LASTNAME DOES NOT EXIST !!!(Example: Toàn, Văn,...");
                 newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
                 HboxContent.setSpacing(10);
                 HboxContent.setAlignment(Pos.CENTER);
@@ -489,112 +477,108 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             });
 
         } else {
-
-            ObservableList<InfoEmployee> List_Check_Employee = FXCollections.observableArrayList();
-            List_Check_Employee = FXMLLoginController.List_Employee;
-            boolean check = true;
-            for (InfoEmployee infoEmployee : List_Check_Employee) {
-                if (newId.getText().equals(infoEmployee.getEmployee_ID())) {
-
-                    Platform.runLater(() -> {
-                        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        icon.setSize("16");
-                        icon.setStyleClass("jfx-glyhp-icon");
-                        Label label = new Label();
-                        label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                        label.setPrefSize(465, 35);
-                        label.setText("ID ALREADY EXIST !!!");
-                        newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                        HboxContent.setSpacing(10);
-                        HboxContent.setAlignment(Pos.CENTER);
-                        HboxContent.getChildren().clear();
-                        HboxContent.getChildren().add(icon);
-                        HboxContent.getChildren().add(label);
-                        newId.requestFocus();
-                    });
-
-                    check = false;
-                    break;
-                } else if (newGmail.getText().equals(infoEmployee.getGmail())) {
-
-                    Platform.runLater(() -> {
-                        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                        icon.setSize("16");
-                        icon.setStyleClass("jfx-glyhp-icon");
-                        Label label = new Label();
-                        label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                        label.setPrefSize(465, 35);
-                        label.setText("EMAIL ALREADY EXIST !!!");
-                        newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                        HboxContent.setSpacing(10);
-                        HboxContent.setAlignment(Pos.CENTER);
-                        HboxContent.getChildren().clear();
-                        HboxContent.getChildren().add(icon);
-                        HboxContent.getChildren().add(label);
-                        newGmail.requestFocus();
-                    });
-
-                    check = false;
-                    break;
-                }
-            }
-            if (check == true) {
-                String Sex;
-                if (sexMale.selectedProperty().getValue()) {
-                    Sex = "Male";
-                } else {
-                    Sex = "Female";
-                }
-                String Id_Role;
-                Id_Role = DAO.getIdRole((String) newRole.getValue());
-                DAO.AddNewEmployee(newId.getText(), FormatName.format(newFirstname.getText()), FormatName.format(newMidname.getText()), FormatName.format(newLastname.getText()), Id_Role, newGmail.getText(), Sex);
-                String Username = newId.getText();
-                MD5Encrypt m;
-                m = new MD5Encrypt();
-                String Password = m.hashPass("123456");
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                Calendar cal = Calendar.getInstance();
-                String logtime;
-                logtime = dateFormat.format(cal.getTime());
-                DAO.AddUser(newId.getText(), Username, Password, logtime);
-                String content = "Username: " + newId.getText() + ", Password: 123456";
-                Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
-                        "KAN@123456", "Default username and password", content);
+            if (DAO.check_Id(newId.getText())) {
                 Platform.runLater(() -> {
-                    try {
-                        FXMLLoginController loginController = ConnectControllers.getfXMLLoginController();
-                        loginController.List_Employee = DAO.getAllEmployee();
-                    } catch (SQLException | ClassNotFoundException ex) {
-                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    newRole.setValue(null);
-                    newFirstname.setText("");
-                    newMidname.setText("");
-                    newLastname.setText("");
-                    newGmail.setText("");
-                    newId.setText("");
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(465, 35);
+                    label.setText("ID ALREADY EXIST !!!");
+                    newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                    HboxContent.setSpacing(10);
+                    HboxContent.setAlignment(Pos.CENTER);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
                     newId.requestFocus();
                 });
-
-                if (DAO.checkFirstLogin() == 1) {
-                    Platform.runLater(() -> {
-                        Stage stage = (Stage) btnAddNew.getScene().getWindow();
-                        stage.close();
-                        Stage stageEdit = new Stage();
-                        stageEdit.resizableProperty().setValue(Boolean.FALSE);
-                        Parent root = null;
+            } else if (DAO.check_Email(newGmail.getText())) {
+                System.out.println("vao else if gmail");
+                Platform.runLater(() -> {
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(465, 35);
+                    label.setText("EMAIL ALREADY EXIST !!!");
+                    newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                    HboxContent.setSpacing(10);
+                    HboxContent.setAlignment(Pos.CENTER);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
+                    newGmail.requestFocus();
+                });
+            } else {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
                         try {
-                            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
-                        } catch (IOException ex) {
+                            Boolean Sex;
+                            Sex = sexMale.selectedProperty().getValue();
+                            String Id_Role;
+                            Id_Role = DAO.getIdRole((String) newRole.getValue());
+                            InfoEmployee Emp = new InfoEmployee();
+                            Emp.setId_number(newId.getText());
+                            Emp.setFirst_Name(FormatName.format(newFirstname.getText()));
+                            Emp.setMid_Name(FormatName.format(newMidname.getText()));
+                            Emp.setLast_Name(FormatName.format(newLastname.getText()));
+                            Emp.setGmail(newGmail.getText());
+                            Emp.setSex(Sex);
+                            DAO.AddNewEmployee(Emp, Id_Role);
+                            String Username = newId.getText();
+                            MD5Encrypt m;
+                            m = new MD5Encrypt();
+                            String Password = m.hashPass("123456");
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            Calendar cal = Calendar.getInstance();
+                            String logtime;
+                            logtime = dateFormat.format(cal.getTime());
+                            DAO.AddUser(newId.getText(), Username, Password, logtime);
+                            String content = "Username: " + newId.getText() + ", Password: 123456";
+                            Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
+                                    "KAN@123456", "Default username and password", content);
+                            if(DAO.checkFirstLogin() != 1){
+                                DAO.setUserLogs(FXMLLoginController.User_Login, "Create "+Username, logtime);
+                            }
+                            newRole.setValue(null);
+                            newFirstname.setText("");
+                            newMidname.setText("");
+                            newLastname.setText("");
+                            newGmail.setText("");
+                            newId.setText("");
+                            newId.requestFocus();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (Exception ex) {
                             Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
-                        Scene scene = new Scene(root);
-                        stageEdit.setTitle("KANManagement");
-                        stageEdit.setScene(scene);
-                        stageEdit.show();
-                    });
-                }
+                    }
+                });
+            }
+            if (DAO.checkFirstLogin().equals(0)) {
+                Platform.runLater(() -> {
+                    Stage stage = (Stage) btnAddNew.getScene().getWindow();
+                    stage.close();
+                    Stage stageEdit = new Stage();
+                    stageEdit.resizableProperty().setValue(Boolean.FALSE);
+                    Parent root = null;
+                    try {
+                        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
+                    Scene scene = new Scene(root);
+                    stageEdit.setTitle("KANManagement");
+                    stageEdit.setScene(scene);
+                    stageEdit.show();
+                });
             }
         }
     }

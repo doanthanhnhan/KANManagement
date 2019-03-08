@@ -7,7 +7,6 @@ package controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -25,7 +24,6 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,8 +39,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
 import models.InfoEmployee;
+import utils.PatternValided;
 import utils.MD5Encrypt;
-import view.Login;
 
 /**
  * FXML Controller class
@@ -50,6 +48,7 @@ import view.Login;
  * @author Admin
  */
 public class FXMLAccountController implements Initializable {
+
     public static Stage stage;
     @FXML
     private JFXTextField txtUsername;
@@ -67,10 +66,10 @@ public class FXMLAccountController implements Initializable {
     private JFXButton btnRegister;
     @FXML
     private HBox HboxContent;
-    private Pattern patternPassword;
-    private Pattern patternAnswer;
+
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
@@ -157,31 +156,27 @@ public class FXMLAccountController implements Initializable {
         });
         newSerectQuestion.valueProperty().addListener((obs, oldItem, newItem) -> {
             if (newItem != null) {
-               newSerectQuestion.setStyle("-jfx-focus-color:#6747CD; -jfx-unfocus-color:#6747CD;");
+                newSerectQuestion.setStyle("-jfx-focus-color:#6747CD; -jfx-unfocus-color:#6747CD;");
             }
         });
         ObservableList list_question = FXCollections.observableArrayList();
         ObservableList list_question_random = FXCollections.observableArrayList();
-        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
-        list_Employee=FXMLLoginController.List_EmployeeLogin;
         list_question.add("What is the first phone number you use?");
         list_question.add("What is your first girlfriend's name?");
         list_question.add("Which animal do you like best?");
         list_question.add("Which subject do you like best?");
         list_question.add("Which car company do you like best?");
         Random rand = new Random();
-        for(int i=0;i<5;i++){
+        for (int i = 0; i < 5; i++) {
             int randomIndex = rand.nextInt(list_question.size());
             list_question_random.add(list_question.get(randomIndex));
             list_question.remove(randomIndex);
         }
         newSerectQuestion.setItems(list_question_random);
-        String username = list_Employee.get(0).getUserName();
-        txtUsername.setText(username);
+        txtUsername.setText(FXMLLoginController.User_Login);
         // TODO
-        patternPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z#$^+=!*()@%&])(?=.*\\d).{8,20}$");
-        patternAnswer = Pattern.compile("^.{4,20}$");
-    }    
+    }
+
     @FXML
     private void btnSubmitRegister() throws ClassNotFoundException, SQLException, IOException {
         if (newPassword.getText().equals("")) {
@@ -245,7 +240,7 @@ public class FXMLAccountController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             newSerectAnswer.requestFocus();
-        }else if (ConfirmAnswer.getText().equals("")) {
+        } else if (ConfirmAnswer.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -260,14 +255,14 @@ public class FXMLAccountController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             ConfirmAnswer.requestFocus();
-        }else if (!patternPassword.matcher(newPassword.getText()).matches()) {
+        } else if (!PatternValided.PatternPassword(newPassword.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
             label.setPrefSize(470, 35);
-            label.setText("PASSWORD INVALID !!! (EXAM:Abc12345,aBc@1234,...(6-20 CHARACTERS) !!! ");
+            label.setText("PASSWORD INCORRECT (EXAM:Abc12345 (6-20 CHARACTERS) !!! ");
             newPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setSpacing(10);
             HboxContent.setAlignment(Pos.CENTER);
@@ -275,7 +270,7 @@ public class FXMLAccountController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             newPassword.requestFocus();
-        }else if (!newPassword.getText().equals(newConfirmPassword.getText())) {
+        } else if (!newPassword.getText().equals(newConfirmPassword.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -291,14 +286,14 @@ public class FXMLAccountController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             newPassword.requestFocus();
-        }else if (!patternAnswer.matcher(newSerectAnswer.getText()).matches()) {
+        } else if (!PatternValided.PatternAnswer(newSerectAnswer.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
             Label label = new Label();
             label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
             label.setPrefSize(470, 35);
-            label.setText("ANSWER INVALID !!! (ANSWER MUST HAVE 4-20 CHARACTER)");
+            label.setText("ANSWER INCORRECT (ANSWER MUST HAVE 4-20 CHARACTER) !!!");
             newSerectAnswer.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
             HboxContent.setSpacing(10);
             HboxContent.setAlignment(Pos.CENTER);
@@ -306,7 +301,7 @@ public class FXMLAccountController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             newSerectAnswer.requestFocus();
-        }else if (!newSerectAnswer.getText().equals(ConfirmAnswer.getText())) {
+        } else if (!newSerectAnswer.getText().equals(ConfirmAnswer.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -322,18 +317,18 @@ public class FXMLAccountController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             newSerectAnswer.requestFocus();
-        }else{
+        } else {
             MD5Encrypt m;
             m = new MD5Encrypt();
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
             String logtime;
             logtime = dateFormat.format(cal.getTime());
-            DAO.SetPass(txtUsername.getText(), m.hashPass(newPassword.getText()), m.hashPass((String) newSerectQuestion.getValue()) ,m.hashPass((String) newSerectAnswer.getText()));
+            DAO.SetPass(txtUsername.getText(), m.hashPass(newPassword.getText()), m.hashPass((String) newSerectQuestion.getValue()), m.hashPass((String) newSerectAnswer.getText()));
             String Content = "Set Password";
-            DAO.setUserLogs(txtUsername.getText(), Content , logtime);
+            DAO.setUserLogs(txtUsername.getText(), Content, logtime);
             Stage stage = (Stage) btnRegister.getScene().getWindow();
-              // do what you have to do
+            // do what you have to do
             stage.close();
             Stage stageEdit = new Stage();
             this.stage = stageEdit;
@@ -347,5 +342,4 @@ public class FXMLAccountController implements Initializable {
             stageEdit.show();
         }
     }
-    
 }
