@@ -38,10 +38,11 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 while (rs.next()) {
                     ServiceType serviceType = new ServiceType();
                     serviceType.setServiceID(rs.getString("ServiceID"));
-                    serviceType.setServiceName(rs.getString("ServiceName"));
-                    serviceType.setServiceUnit(rs.getString("ServiceUnit"));
+                    serviceType.setServiceName(rs.getNString("ServiceName"));
+                    serviceType.setServiceUnit(rs.getNString("ServiceUnit"));
                     serviceType.setServicePrice(rs.getFloat("ServicePrice"));
                     serviceType.setServiceImage(rs.getBlob("Image"));
+                    serviceType.setServiceDescription(rs.getNString("ServiceDescription"));
 
                     byte[] bytes = serviceType.getServiceImage().getBytes(1l, (int) serviceType.getServiceImage().length());
                     BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
@@ -64,15 +65,16 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public void addServiceType(ServiceType serviceType) {
-        String sql = "INSERT INTO ServiceType (ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, Active) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO ServiceType (ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, Active, ServiceDescription) VALUES (?,?,?,?,?,?,?)";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceType.getServiceID());
-                stmt.setString(2, serviceType.getServiceName());
-                stmt.setString(3, serviceType.getServiceUnit());
+                stmt.setNString(2, serviceType.getServiceName());
+                stmt.setNString(3, serviceType.getServiceUnit());
                 stmt.setFloat(4, serviceType.getServicePrice());
-                stmt.setBlob(5, serviceType.getServiceImage());
+                stmt.setBlob(5, serviceType.getServiceImage());                
                 stmt.setBoolean(6, true);
+                stmt.setNString(7, serviceType.getServiceDescription());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -82,16 +84,17 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public void editServiceType(ServiceType serviceType, Boolean active) {
-        String sql = "UPDATE ServiceType SET ServiceID=?, ServiceName=?, ServiceUnit=?, ServicePrice=?, Image=?, Active=? WHERE ServiceID=?";
+        String sql = "UPDATE ServiceType SET ServiceID=?, ServiceName=?, ServiceUnit=?, ServicePrice=?, Image=?, Active=?, ServiceDescription=?  WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceType.getServiceID());
-                stmt.setString(2, serviceType.getServiceName());
-                stmt.setString(3, serviceType.getServiceUnit());
+                stmt.setNString(2, serviceType.getServiceName());
+                stmt.setNString(3, serviceType.getServiceUnit());
                 stmt.setFloat(4, serviceType.getServicePrice());
                 stmt.setBlob(5, serviceType.getServiceImage());
                 stmt.setBoolean(6, active);
-                stmt.setString(7, serviceType.getServiceID());
+                stmt.setNString(7, serviceType.getServiceDescription());
+                stmt.setNString(8, serviceType.getServiceID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {

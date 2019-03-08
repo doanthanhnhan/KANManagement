@@ -85,6 +85,7 @@ public class FXMLListServiceTypeController implements Initializable {
         TableColumn<ServiceType, String> serviceUnitCol = new TableColumn<>("Service unit");
         TableColumn<ServiceType, Float> servicePriceCol = new TableColumn<>("Service price");
         TableColumn<ServiceType, ImageView> serviceImageCol = new TableColumn<>("Service image");
+        TableColumn<ServiceType, String> serviceDescriptionCol = new TableColumn<>("Service description");
 
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<CellDataFeatures<ServiceType, String>, ObservableValue<String>>() {
@@ -102,17 +103,19 @@ public class FXMLListServiceTypeController implements Initializable {
         serviceUnitCol.setCellValueFactory(new PropertyValueFactory<>("serviceUnit"));
         servicePriceCol.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
         serviceImageCol.setCellValueFactory(new PropertyValueFactory<>("imageView"));
+        serviceDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("serviceDescription"));
 
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceUnitCol.setStyle("-fx-alignment: CENTER-LEFT;");
         servicePriceCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceDescriptionCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceImageCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         table_ServiceType.getColumns().clear();
-        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol, servicePriceCol, serviceImageCol);
+        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol, servicePriceCol,serviceDescriptionCol, serviceImageCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);

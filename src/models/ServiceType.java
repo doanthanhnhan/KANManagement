@@ -13,23 +13,27 @@ import javafx.scene.image.ImageView;
  * @author Doan Thanh Nhan
  */
 public class ServiceType {
+
     private String serviceID;
     private String serviceName;
     private String serviceUnit;
     private Float servicePrice;
     private Blob serviceImage;
     private ImageView imageView;
+    private String serviceDescription;
 
     public ServiceType() {
     }
 
-    public ServiceType(String serviceID, String serviceName, String serviceUnit, Float servicePrice, Blob serviceImage) {
+    public ServiceType(String serviceID, String serviceName, String serviceUnit, Float servicePrice, Blob serviceImage, ImageView imageView, String serviceDescription) {
         this.serviceID = serviceID;
         this.serviceName = serviceName;
         this.serviceUnit = serviceUnit;
         this.servicePrice = servicePrice;
         this.serviceImage = serviceImage;
-    }    
+        this.imageView = imageView;
+        this.serviceDescription = serviceDescription;
+    }
 
     public String getServiceID() {
         return serviceID;
@@ -61,7 +65,7 @@ public class ServiceType {
 
     public void setServicePrice(Float servicePrice) {
         this.servicePrice = servicePrice;
-    }  
+    }
 
     public Blob getServiceImage() {
         return serviceImage;
@@ -78,6 +82,13 @@ public class ServiceType {
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
     }
-    
-    
+
+    public String getServiceDescription() {
+        return serviceDescription;
+    }
+
+    public void setServiceDescription(String serviceDescription) {
+        this.serviceDescription = serviceDescription;
+    }
+
 }

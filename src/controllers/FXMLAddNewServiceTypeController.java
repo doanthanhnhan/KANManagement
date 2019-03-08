@@ -6,6 +6,7 @@
 package controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -35,6 +36,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
@@ -86,6 +88,10 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     private Label label_Title;
     @FXML
     private Label label_Description;
+    @FXML
+    private JFXTextArea txtArea_Service_Description;
+    @FXML
+    private JFXButton btnCancel;
 
     /**
      * Initializes the controller class.
@@ -113,6 +119,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             serviceUnit.setText(serviceType.getServiceUnit());
             servicePrice.setText(serviceType.getServicePrice().toString());
             imgService.setImage(serviceType.getImageView().getImage());
+            txtArea_Service_Description.setText(serviceType.getServiceDescription());
             btnAddNew.setText("Update");
 
             //Setting Update button function
@@ -179,7 +186,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 if (check_Validate) {
                     addNewServiceType();
                     System.out.println("Add successful!");
-                }                
+                }
                 return null;
             }
         };
@@ -208,11 +215,22 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     private void handle_Button_Insert_Image_Action(ActionEvent event) {
         File file = fileChooser.showOpenDialog(btnInsertImage.getScene().getWindow());
         fileChooser.setTitle("Choose an image for service type");
-        if (file != null) {
-            System.out.println(file.toURI().toString());
+        if (file != null && file.length()<=(200*1024)) {
+            System.out.println(file.toURI().toString() + " ; Size: = " + file.length()/1024 + "kB");
             Image image = new Image(file.toURI().toString());
             imgService.setImage(image);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setContentText("Your image is greater than 200kB!");
+            alert.showAndWait();
         }
+    }
+
+    @FXML
+    private void handle_Btn_Cancel_Action(ActionEvent event) {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
     }
 
     public void addNewServiceType() {
@@ -225,6 +243,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         serviceType.setServiceID(FormatName.format(serviceID.getText()));
         serviceType.setServiceName(FormatName.format(serviceName.getText()));
         serviceType.setServiceUnit(FormatName.format(serviceUnit.getText()));
+        serviceType.setServiceDescription(FormatName.format(txtArea_Service_Description.getText()));
         serviceType.setServicePrice(Float.parseFloat(servicePrice.getText()));
         BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
         byte[] res;
@@ -244,7 +263,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 "ID MUST CONTAIN 4-50 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR CHARACTER SPECIAL !!!")) {
             System.out.println("serviceID false");
             check_Validate = false;
-        } else if (validateTextField(serviceName, "^(?=.{4,200}$)[a-zA-Z][a-zA-Z0-9_/s]+$", "SERVICE NAME MUST NOT BE EMPTY !!!",
+        } else if (validateTextField(serviceName, "^(?=.{4,200}$)[a-zA-Z][a-zA-Z0-9_\\s]+$", "SERVICE NAME MUST NOT BE EMPTY !!!",
                 "NAME MUST CONTAIN 4-12 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR CHARACTER SPECIAL !!!")) {
             System.out.println("serviceName false");
             check_Validate = false;
@@ -274,6 +293,9 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 hBoxContent.getChildren().add(label);
                 btnInsertImage.requestFocus();
             });
+            check_Validate = false;
+        } else if (validateTextArea(txtArea_Service_Description, "^(.|\\n){1,500}$", "NO EMPTY", "LENGTH MUST < 500 CHARACTERS")) {
+            System.out.println("serviceDescription is too long");            
             check_Validate = false;
         } else {
             System.out.println("Validate finished");
@@ -327,4 +349,30 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         return check;
     }
 
+    public Boolean validateTextArea(JFXTextArea textField, String regexString, String warningEmpty, String warningPattern) {
+        Boolean check;
+        Pattern pattern = Pattern.compile(regexString);
+        if (!textField.getText().equalsIgnoreCase("") && !pattern.matcher(textField.getText()).matches()) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(465, 35);
+                label.setText(warningPattern);
+                textField.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                hBoxContent.setSpacing(10);
+                hBoxContent.setAlignment(Pos.CENTER);
+                hBoxContent.getChildren().clear();
+                hBoxContent.getChildren().add(icon);
+                hBoxContent.getChildren().add(label);
+                textField.requestFocus();
+            });
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
+    }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -10,34 +11,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="649.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewServiceTypeController">
+<AnchorPane id="AnchorPane" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewServiceTypeController">
    <children>
-      <VBox layoutY="-14.0" prefHeight="768.0" prefWidth="649.0">
+      <VBox layoutY="-14.0">
          <children>
-            <HBox prefHeight="129.0" prefWidth="649.0">
+            <HBox alignment="CENTER" prefHeight="129.0" prefWidth="800.0">
                <children>
-                  <VBox prefHeight="100.0" prefWidth="655.0">
+                  <VBox>
                      <children>
-                        <HBox prefHeight="53.0" prefWidth="624.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="53.0" prefWidth="800.0">
                            <children>
                               <Label fx:id="label_Title" prefHeight="53.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="ADD NEW SERVICE TYPE">
                                  <font>
                                     <Font name="System Bold" size="27.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="80.0" top="60.0" />
+                                    <Insets left="50.0" top="50.0" />
                                  </HBox.margin>
                               </Label>
                            </children>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="800.0">
                            <children>
                               <Label fx:id="label_Description" prefHeight="25.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Filling the infomations for adding new service type">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="80.0" top="5.0" />
+                                    <Insets left="50.0" top="5.0" />
                                  </HBox.margin>
                               </Label>
                            </children>
@@ -46,71 +47,87 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER">
                <children>
-                  <JFXTextField fx:id="serviceID" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Service ID" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="30.0" />
-                     </HBox.margin>
-                  </JFXTextField>
+                  <VBox alignment="CENTER" prefHeight="300.0" prefWidth="400.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="70.0">
+                           <children>
+                              <JFXTextField fx:id="serviceID" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service ID" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="70.0">
+                           <children>
+                              <JFXTextField fx:id="serviceName" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service name" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="70.0">
+                           <children>
+                              <JFXTextField fx:id="serviceUnit" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service unit" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="70.0">
+                           <children>
+                              <JFXTextField fx:id="servicePrice" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service price (per unit)" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="285.0" layoutY="10.0" prefHeight="300.0" prefWidth="400.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="80.0" spacing="20.0">
+                           <children>
+                              <Label contentDisplay="TOP" styleClass="label-text" text="Service Image">
+                                 <graphic>
+                                    <ImageView fx:id="imgService" fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="72.0" prefHeight="80.0" spacing="20.0">
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                           <children>
+                              <JFXButton fx:id="btnInsertImage" onAction="#handle_Button_Insert_Image_Action" styleClass="loginBtn" text="Insert image" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0">
                <children>
-                  <JFXTextField fx:id="serviceName" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Service name" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="30.0" />
-                     </HBox.margin>
-                  </JFXTextField>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="649.0">
-               <children>
-                  <JFXTextField fx:id="serviceUnit" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Service unit" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
-                  </JFXTextField>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
-               <children>
-                  <JFXTextField fx:id="servicePrice" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Service price (per unit)" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
-                  </JFXTextField>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0" spacing="20.0">
-               <children>
-                  <JFXButton fx:id="btnInsertImage" onAction="#handle_Button_Insert_Image_Action" styleClass="loginBtn" text="Insert image" />
-                  <Label contentDisplay="TOP" styleClass="label-text" text="Service Image">
-                     <graphic>
-                        <ImageView fx:id="imgService" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                     </graphic>
+                  <JFXTextArea fx:id="txtArea_Service_Description" labelFloat="true" prefWidth="700.0" promptText="Enter service description here">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
-                  </Label>
+                  </JFXTextArea>
                </children>
-               <padding>
-                  <Insets bottom="10.0" top="10.0" />
-               </padding>
             </HBox>
-            <HBox fx:id="hBoxContent" alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+            <HBox fx:id="hBoxContent" alignment="CENTER" prefHeight="80.0" prefWidth="800.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -118,7 +135,7 @@
                   <Insets />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0">
                <children>
                   <JFXButton fx:id="btnAddNew" buttonType="RAISED" onAction="#btnSubmitAddNewEmployee" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
                      <font>
@@ -128,7 +145,18 @@
                         <Insets left="80.0" right="80.0" />
                      </HBox.margin>
                   </JFXButton>
+                  <JFXButton fx:id="btnCancel" buttonType="RAISED" layoutX="115.0" layoutY="29.0" onAction="#handle_Btn_Cancel_Action" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Cancel">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="80.0" />
+                     </HBox.margin>
+                  </JFXButton>
                </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
             </HBox>
          </children>
       </VBox>
