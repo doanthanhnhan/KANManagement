@@ -30,8 +30,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -54,6 +52,7 @@ import models.DAO;
 import models.InfoEmployee;
 import models.formatCalender;
 import utils.FormatName;
+import utils.PatternValided;
 
 /**
  * FXML Controller class
@@ -135,13 +134,11 @@ public class FXMLInfoEmployeeController implements Initializable {
     private ImageView imgService;
     @FXML
     private JFXButton btnCancel;
-    private ObservableList<InfoEmployee> list_info = FXCollections.observableArrayList();
-    private ObservableList<String> list_User = FXCollections.observableArrayList();
-    private ObservableList<InfoEmployee> list_login = FXCollections.observableArrayList();
-    private ObservableList<InfoEmployee> list_login_update = FXCollections.observableArrayList();
     private ObservableList<String> list_Role = FXCollections.observableArrayList();
     public static Boolean validateInfoEmployee = false;
-    public static Boolean check_delete = false;
+    public static Boolean check_delete;
+    private String userLogin = FXMLLoginController.User_Login;
+    private InfoEmployee Emp = new InfoEmployee();
 
     /**
      * Initializes the controller class.
@@ -153,92 +150,86 @@ public class FXMLInfoEmployeeController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif, *.bmp)", "*.jpg", "*.png", "*.gif", "*.bmp");
         fileChooser.getExtensionFilters().add(extFilter);
+        DepartmentId.setText("");
+        Job.setText("");
+        Salary.setText("0");
+        Bonus.setText("0");
+        Comm.setText("0");
         // Set path for fileChooser
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
         validateInfoEmployee = false;
         check_delete = false;
         System.out.println("kiem tra validate Init" + validateInfoEmployee);
-        list_info = FXMLLoginController.List_Employee;
-        list_login = FXMLLoginController.List_EmployeeLogin;
-
-        for (InfoEmployee infoEmployee : list_info) {
-            if (infoEmployee.getUserName().equals(list_login.get(0).getUserName())) {
-                list_login_update.add(infoEmployee);
-            }
-        }
-
-        list_info.forEach((InfoEmployee infoEmployee) -> {
-            list_User.add(infoEmployee.getUserName());
-        });
         if (FXMLMainFormController.checkRegis) {
-            DepartmentId.setText("");
-            Job.setText("");
-            Salary.setText("0");
-            Bonus.setText("0");
-            Comm.setText("0");
-
-            FXMLMainFormController.checkRegis = false;
-            System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
-            if (!list_login_update.get(0).getRole().equals("Admin")) {
-                hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
-                HboxHeader.getChildren().remove(HboxImage);
-                boxId.setDisable(true);
-                boxId.setValue(list_login_update.get(0).getUserName());
-                newPhone.setText(list_login_update.get(0).getPhone_No());
-                address.setText(list_login_update.get(0).getAddress());
-                IdNumber.setText(list_login_update.get(0).getId_number());
-
-                System.out.println("submit click");
-                System.out.println("Check delete " + check_delete);
-                if (list_login_update.get(0).getBirthdate() != null) {
-                    birthday.setValue(LocalDate.parse(list_login_update.get(0).getBirthdate()));
-                }
-                if (list_login_update.get(0).getHiredate() != null) {
-                    Hiredate.setValue(LocalDate.parse(list_login_update.get(0).getBirthdate()));
-                }
-                if (list_login_update.get(0).getSex().equals("Male")) {
-                    Male.setSelected(true);
-                } else {
-                    Female.setSelected(true);
-                }
-                btnInfo.setOnAction((event) -> {
+            try {
+                FXMLMainFormController.checkRegis = false;
+                System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
+                if (!DAO.get_Role(userLogin).equals("Admin")) {
                     check_delete = true;
-                    System.out.println("Submit khong phai Admin");
-                    validateForm();
-                    check_delete = false;
-                    if (validateInfoEmployee) {
-                        // get a handle to the stage
-                        Stage stage = (Stage) btnInfo.getScene().getWindow();
-                        // do what you have to do
-                        stage.hide();
-
+                    Emp = DAO.getInfoEmployee(userLogin);
+                    hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
+                    HboxHeader.getChildren().remove(HboxImage);
+                    boxId.setDisable(true);
+                    boxId.setValue(Emp.getUserName());
+                    newPhone.setText(Emp.getPhone_No());
+                    address.setText(Emp.getAddress());
+                    IdNumber.setText(Emp.getId_number());
+                    System.out.println("submit click");
+                    System.out.println("Check delete " + check_delete);
+                    if (Emp.getBirthdate() != null) {
+                        birthday.setValue(LocalDate.parse(Emp.getBirthdate()));
                     }
-                });
-            } else {
-                btnInfo.setOnAction((event) -> {
-                    System.out.println("run");
-                    FXMLMainFormController.checkRegis = true;
+                    if (Emp.getHiredate() != null) {
+                        Hiredate.setValue(LocalDate.parse(Emp.getBirthdate()));
+                    }
+                    if (Emp.getSex()) {
+                        Male.setSelected(true);
+                    } else {
+                        Female.setSelected(true);
+                    }
+                    btnInfo.setOnAction((event) -> {
+                        System.out.println("Submit khong phai Admin");
+                        validateForm();
+                        if (validateInfoEmployee) {
+                            // get a handle to the stage
+                            Stage stage = (Stage) btnInfo.getScene().getWindow();
+                            // do what you have to do
+                            stage.hide();
 
-                    validateForm();
-                    check_delete = false;
-                });
+                        }
+                    });
+                } else {
+                    try {
+                        refreshIdUser();
+                    } catch (SQLException | ClassNotFoundException ex) {
+                        Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    boxRole.setItems(list_Role);
+                    btnInfo.setOnAction((event) -> {
+                        System.out.println("Event của admin tu MainForm");
+                        System.out.println("run");
+                        FXMLMainFormController.checkRegis = true;
+                        validateForm();
+                    });
+                }
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (FXMLLoginController.checkLoginRegis) {
+            check_delete = true;
             hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
             Hboxbtn.getChildren().remove(btnCancel);
             HboxHeader.getChildren().remove(HboxImage);
             boxId.setDisable(true);
-            boxId.setValue(list_login.get(0).getUserName());
-            FXMLLoginController.checkLoginRegis = false;
+            boxId.setValue(userLogin);
+            System.out.println("đã vào form info tu form login roi");
             btnInfo.setOnAction((event) -> {
-                System.out.println("đã vào btn");
-                check_delete = true;
+                System.out.println("đã vào Btn action tu Login Form");
                 validateForm();
-                check_delete = false;
                 // get a handle to the stage
-
+                System.out.println("Button Submit Infor Action check ValidateInfoEmployee: " + validateInfoEmployee);
                 if (validateInfoEmployee) {
                     try {
                         Stage stageInfo = (Stage) btnInfo.getScene().getWindow();
@@ -252,26 +243,24 @@ public class FXMLInfoEmployeeController implements Initializable {
                     } catch (IOException ex) {
                         Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    FXMLLoginController.checkLoginRegis = false;
                 }
             });
 
         }
+        //            if (!DAO.get_Role(userLogin).equals("Admin")) {
+//                hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
+//                boxId.setDisable(true);
+//                boxId.setValue(userLogin);
+//                Hboxbtn.getChildren().remove(btnCancel);
+//            }
+//            try {
+//                list_Role = (ObservableList<String>) DAO.getAllRole();
+//            } catch (SQLException | ClassNotFoundException ex) {
+//                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
 
-        if (!list_login_update.get(0).getRole().equals("Admin")) {
-            hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
-            boxId.setDisable(true);
-            boxId.setValue(list_login_update.get(0).getUserName());
-            Hboxbtn.getChildren().remove(btnCancel);
-        }
-        try {
-            list_Role = (ObservableList<String>) DAO.getAllRole();
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        boxRole.setItems(list_Role);
-        boxId.setItems(list_User);
-
-        // add enter key
+// add enter key
         boxId.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 System.out.println("Enter pressed");
@@ -280,44 +269,57 @@ public class FXMLInfoEmployeeController implements Initializable {
         });
 
         boxId.valueProperty().addListener((obs, oldItem, newItem) -> {
-            if (newItem != null) {
-                list_info = FXMLLoginController.List_Employee;
-                for (InfoEmployee infoEmployee : list_info) {
-                    if (boxId.getValue().equals(infoEmployee.getEmployee_ID())) {
-                        newPhone.setText(infoEmployee.getPhone_No());
-                        if (infoEmployee.getBirthdate() != null) {
-                            birthday.setValue(LocalDate.parse(infoEmployee.getBirthdate()));
-                        }
-                        if (infoEmployee.getHiredate() != null) {
-                            Hiredate.setValue(LocalDate.parse(infoEmployee.getBirthdate()));
-                        }
-                        if (infoEmployee.getSex().equals("Male")) {
-                            Male.setSelected(true);
-                        } else {
-                            Female.setSelected(true);
-                        }
-                        address.setText(infoEmployee.getAddress());
-                        IdNumber.setText(infoEmployee.getId_number());
-                        FirstName.setText(infoEmployee.getFirst_Name());
-                        LastName.setText(infoEmployee.getLast_Name());
-                        MidName.setText(infoEmployee.getMid_Name());
-                        Email.setText(infoEmployee.getGmail());
-                        DepartmentId.setText(infoEmployee.getWork_Dept());
-                        Job.setText(infoEmployee.getJob());
-                        EducatedLevel.setText(String.valueOf(infoEmployee.getEDLEVEL()));
-                        Salary.setText(infoEmployee.getSalary());
-                        Bonus.setText(infoEmployee.getBonus());
-                        Comm.setText(infoEmployee.getComm());
-                        boxRole.setValue(infoEmployee.getRole());
-                        imgService.setImage(infoEmployee.getImageView().getImage());
-                        break;
-                    }
+            System.out.println("Kiem tra newItem: " + newItem);
+            if (newItem != null && !newItem.equals("")) {
+                try {
+                    Emp = DAO.getInfoEmployee(boxId.getValue());
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                if (Emp.getBirthdate() != null) {
+                    birthday.setValue(LocalDate.parse(Emp.getBirthdate()));
+                }
+                if (Emp.getHiredate() != null) {
+                    Hiredate.setValue(LocalDate.parse(Emp.getBirthdate()));
+                }
+                if (Emp.getSex()) {
+                    Male.setSelected(true);
+                } else {
+                    Female.setSelected(true);
+                }
+                if (Emp.getWork_Dept() != null) {
+                    DepartmentId.setText(Emp.getWork_Dept());
+                }
+                if (Emp.getJob() != null) {
+                    Job.setText(Emp.getWork_Dept());
+                }
+                if (Emp.getComm() != null) {
+                    Comm.setText(Emp.getComm());
+                }
+                if (Emp.getSalary() != null) {
+                    Salary.setText(Emp.getSalary());
+                }
+                if (Emp.getBonus() != null) {
+                    Bonus.setText(Emp.getBonus());
+                }
+                if (Emp.getEDLEVEL() != null) {
+                    EducatedLevel.setText(String.valueOf(Emp.getEDLEVEL()));
+                }
+                newPhone.setText(Emp.getPhone_No());
+                address.setText(Emp.getAddress());
+                IdNumber.setText(Emp.getId_number());
+                FirstName.setText(Emp.getFirst_Name());
+                LastName.setText(Emp.getLast_Name());
+                MidName.setText(Emp.getMid_Name());
+                Email.setText(Emp.getGmail());
+                boxRole.setValue(Emp.getRole());
+                imgService.setImage(Emp.getImageView().getImage());
                 HboxContent.getChildren().clear();
                 boxId.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
             }
         });
-//       
+
+//
         newPhone.setOnKeyPressed((KeyEvent event) -> {
             newPhone.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
             HboxContent.getChildren().clear();
@@ -434,11 +436,15 @@ public class FXMLInfoEmployeeController implements Initializable {
                 btnInfoEmployee();
             }
         });
-        // TODO
+// TODO
     }
 
     @FXML
+    private void refreshIdUser() throws SQLException, ClassNotFoundException {
+        boxId.setItems(DAO.getAllIdUser());
+    }
 
+    @FXML
     private void Format_Show_Calender() {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, birthday);
@@ -460,17 +466,25 @@ public class FXMLInfoEmployeeController implements Initializable {
     @FXML
     private void btnInfoEmployee() {
         validateForm();
+        if (validateInfoEmployee && FXMLLoginController.checkLoginRegis) {
+            try {
+                Stage stageInfo = (Stage) btnInfo.getScene().getWindow();
+                // do what you have to do
+                stageInfo.close();
+                Stage stage = new Stage();
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            FXMLLoginController.checkLoginRegis = false;
+        }
     }
 
     private void validateForm() {
-
         System.out.println("kiem tra validate method : " + validateInfoEmployee);
-        pattern = Pattern.compile("^([0-9][0-9]{1,19}$)|\\+84[0-9]{1,17}$");
-        patternEmail = Pattern.compile("^[a-z][a-z0-9_\\.]{5,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$");
-        patternFLName = Pattern.compile("^\\pL+[\\pL\\pZ]{1,25}$");
-        patternIDNumber = Pattern.compile("^(?=.{4,20}$)[a-zA-Z][a-zA-Z0-9_]+$");
-        patternELevel = Pattern.compile("[\\d]{0,2}");
-        patternSalary = Pattern.compile("^[\\d][\\d]*\\.?[\\d]*$");
         System.out.println("check_delete: " + check_delete);
         if (boxId.getValue() == null) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
@@ -606,7 +620,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Email.requestFocus();
-        } else if (!pattern.matcher(newPhone.getText()).matches()) {
+        } else if (!PatternValided.PatternPhoneNumber(newPhone.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -622,7 +636,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             newPhone.requestFocus();
-        } else if (!patternIDNumber.matcher(IdNumber.getText()).matches()) {
+        } else if (!PatternValided.PatternCMND(IdNumber.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -638,7 +652,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             IdNumber.requestFocus();
-        } else if (!patternFLName.matcher(FirstName.getText()).matches() && !check_delete) {
+        } else if (!PatternValided.PatternName(FirstName.getText()) && !check_delete) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -654,7 +668,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             FirstName.requestFocus();
-        } else if (!patternFLName.matcher(MidName.getText()).matches() && !MidName.getText().equals("") && !check_delete) {
+        } else if (!PatternValided.PatternName(MidName.getText()) && !MidName.getText().equals("") && !check_delete) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -670,7 +684,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             MidName.requestFocus();
-        } else if (!patternFLName.matcher(LastName.getText()).matches() && !check_delete) {
+        } else if (!PatternValided.PatternName(LastName.getText()) && !check_delete) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -686,7 +700,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             LastName.requestFocus();
-        } else if (!patternEmail.matcher(Email.getText()).matches() && !check_delete) {
+        } else if (!PatternValided.PatternEmail(Email.getText()) && !check_delete) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -702,7 +716,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Email.requestFocus();
-        } else if (!(DepartmentId.getText().equals("")) && !check_delete && !patternIDNumber.matcher(DepartmentId.getText()).matches()) {
+        } else if (!(DepartmentId.getText().equals("")) && !check_delete && !PatternValided.PatternCMND(DepartmentId.getText())) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -718,7 +732,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             DepartmentId.requestFocus();
-        } else if (!patternFLName.matcher(Job.getText()).matches() && !check_delete && !Job.getText().equals("")) {
+        } else if (!PatternValided.PatternName(Job.getText()) && !check_delete && !Job.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -734,7 +748,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Job.requestFocus();
-        } else if (!patternELevel.matcher(EducatedLevel.getText()).matches() && !check_delete && !EducatedLevel.getText().equals("")) {
+        } else if (!PatternValided.PatternELevel(EducatedLevel.getText()) && !check_delete && !EducatedLevel.getText().equals("")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -750,7 +764,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             EducatedLevel.requestFocus();
-        } else if (!patternSalary.matcher(Salary.getText()).matches() && !check_delete && !Salary.getText().equals("0")) {
+        } else if (!PatternValided.PatternSalary(Salary.getText()) && !check_delete && !Salary.getText().equals("0")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -766,7 +780,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Salary.requestFocus();
-        } else if (!patternSalary.matcher(Bonus.getText()).matches() && !check_delete && !Bonus.getText().equals("0")) {
+        } else if (!PatternValided.PatternSalary(Bonus.getText()) && !check_delete && !Bonus.getText().equals("0")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -782,7 +796,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(icon);
             HboxContent.getChildren().add(label);
             Bonus.requestFocus();
-        } else if (!patternSalary.matcher(Comm.getText()).matches() && !check_delete && !Comm.getText().equals("0")) {
+        } else if (!PatternValided.PatternSalary(Comm.getText()) && !check_delete && !Comm.getText().equals("0")) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -799,9 +813,8 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(label);
             Comm.requestFocus();
         } else {
-            boolean check = true;
-            for (InfoEmployee infoEmployee : list_info) {
-                if (Email.getText().equals(infoEmployee.getGmail()) && !check_delete && !boxId.getValue().equals(infoEmployee.getUserName())) {
+            try {
+                if (DAO.check_Email(Email.getText()) && !check_delete && !Emp.getGmail().equals(Email.getText())) {
                     FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                     icon.setSize("16");
                     icon.setStyleClass("jfx-glyhp-icon");
@@ -817,69 +830,34 @@ public class FXMLInfoEmployeeController implements Initializable {
                     HboxContent.getChildren().add(icon);
                     HboxContent.getChildren().add(label);
                     Email.requestFocus();
-                    check = false;
-                    break;
-                }
-            }
-
-            if (FXMLMainFormController.checkRegis && check && list_login.get(0).getRole().equals("Admin")) {
-                try {
+                } else if (FXMLMainFormController.checkRegis && DAO.get_Role(FXMLLoginController.User_Login).equals("Admin")) {
                     FXMLMainFormController.checkRegis = false;
                     String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     String date_hire = null;
                     if (Hiredate.getValue() != null) {
                         date_hire = Hiredate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     }
-                    String Sex;
+                    Boolean Sex;
                     String Id_Role;
                     Id_Role = DAO.getIdRole((String) boxRole.getValue());
-                    if (Male.selectedProperty().getValue()) {
-                        Sex = "Male";
-                    } else {
-                        Sex = "Female";
+                    Sex = Male.selectedProperty().getValue();
+                    BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
+                    byte[] res;
+                    try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
+                        ImageIO.write(bImage, "png", s);
+                        res = s.toByteArray();
+                        Blob blob = new SerialBlob(res);
+                        DAO.UpdateAllInfoEmployee(
+                                boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
+                                FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
+                                Email.getText(), DepartmentId.getText(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
+                                Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Id_Role, Sex, blob
+                        );
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    if (!imgService.getImage().equals(null)) {
-                        BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
-                        byte[] res;
-                        try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
-                            ImageIO.write(bImage, "png", s);
-                            res = s.toByteArray();
-                            Blob blob = new SerialBlob(res);
-                            DAO.UpdateAllInfoEmployee(
-                                    boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
-                                    FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
-                                    Email.getText(), DepartmentId.getText(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
-                                    Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Id_Role, Sex, blob
-                            );
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
-
-                        BufferedImage bImage = SwingFXUtils.fromFXImage(new Image(currentPath + "/src/images/Java.png"), null);
-                        byte[] res;
-                        try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
-                            ImageIO.write(bImage, "png", s);
-                            res = s.toByteArray();
-                            Blob blob = new SerialBlob(res);
-                            DAO.UpdateAllInfoEmployee(
-                                    boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
-                                    FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
-                                    Email.getText(), DepartmentId.getText(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
-                                    Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Id_Role, Sex, blob
-                            );
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-                    FXMLLoginController loginController = ConnectControllers.getfXMLLoginController();
-                    loginController.List_Employee = DAO.getAllEmployee();
                     newPhone.setText("");
                     boxId.setValue(null);
                     boxRole.setValue(null);
@@ -898,7 +876,6 @@ public class FXMLInfoEmployeeController implements Initializable {
                     Comm.setText("0");
                     Bonus.setText("0");
                     Male.setSelected(true);
-                    boxId.requestFocus();
                     FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
                     icon.setSize("16");
                     icon.setStyleClass("jfx-glyhp-icon-finish");
@@ -911,35 +888,29 @@ public class FXMLInfoEmployeeController implements Initializable {
                     HboxContent.getChildren().clear();
                     HboxContent.getChildren().add(icon);
                     HboxContent.getChildren().add(label);
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            } else {
-                try {
-                    String Sex;
-                    if (Male.selectedProperty().getValue()) {
-                        Sex = "Male";
-                    } else {
-                        Sex = "Female";
-                    }
+                    check_delete = false;
                     validateInfoEmployee = true;
+                    System.out.println("Vào chỗ submit admin");
+                } else {
+                    Boolean Sex;
+                    Sex = Male.selectedProperty().getValue();
                     String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     DAO.UpdateInfoEmployee(boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), Sex);
-                    FXMLLoginController loginController = ConnectControllers.getfXMLLoginController();
-                    loginController.List_Employee = DAO.getAllEmployee();
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    check_delete = false;
+                    validateInfoEmployee = true;
+                    System.out.println("Vào chỗ submit user");
                 }
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
     }
 
     @FXML
     private void handle_Button_Insert_Image_Action(ActionEvent event) {
         File file = fileChooser.showOpenDialog(btnInsertImage.getScene().getWindow());
         fileChooser.setTitle("Choose an image for service type");
-
         if (file != null) {
             System.out.println(file.toURI().toString());
             Image image = new Image(file.toURI().toString());
