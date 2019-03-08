@@ -78,9 +78,10 @@ CREATE TABLE ServiceType(
 	-- Create columns
 	ID int IDENTITY(1,1),	
 	ServiceID varchar(50) UNIQUE NOT NULL,
-	ServiceName varchar(200) UNIQUE NOT NULL,	
-	ServiceUnit varchar(10) NOT NULL,
-	ServicePrice decimal NOT NULL,
+	ServiceName nvarchar(100) UNIQUE NOT NULL,	
+	ServiceUnit nvarchar(20) NOT NULL,
+	ServicePrice decimal(18,3) NOT NULL,
+	ServiceDescription nvarchar(500),
 	[Image] varbinary(MAX),	
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint

@@ -6,6 +6,7 @@
 package controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -34,6 +36,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
@@ -49,6 +52,7 @@ import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import models.ServiceTypeDAOImpl;
 import models.ServiceType;
+import utils.FormatName;
 import utils.StageLoader;
 
 /**
@@ -60,7 +64,9 @@ public class FXMLAddNewServiceTypeController implements Initializable {
 
     public static ObservableList<ServiceType> listServiceType;
     ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
+    private FXMLListServiceTypeController listServiceTypeController;
     final FileChooser fileChooser = new FileChooser();
+    private Boolean check_Validate = false;
 
     @FXML
     private JFXTextField serviceID;
@@ -78,63 +84,93 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     private HBox hBoxContent;
     @FXML
     private JFXButton btnAddNew;
+    @FXML
+    private Label label_Title;
+    @FXML
+    private Label label_Description;
+    @FXML
+    private JFXTextArea txtArea_Service_Description;
+    @FXML
+    private JFXButton btnCancel;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        listServiceTypeController = ConnectControllers.getfXMLListServiceTypeController();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif, *.bmp)", "*.jpg", "*.png", "*.gif", "*.bmp");
 
         fileChooser.getExtensionFilters().add(extFilter);
         // Set path for fileChooser
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
+
+        //Check form was call from List ServiceType Form
+        if (listServiceTypeController.check_Edit_Action) {
+            listServiceTypeController.check_Edit_Action = false;
+            //Setting values for new form
+            serviceID.setDisable(true);
+            label_Title.setText("EDITING SERVICE TYPE");
+            label_Description.setText("Filling the infomations for editting service type");
+            ServiceType serviceType = FXMLListServiceTypeController.serviceTypeItem;
+            serviceID.setText(serviceType.getServiceID());
+            serviceName.setText(serviceType.getServiceName());
+            serviceUnit.setText(serviceType.getServiceUnit());
+            servicePrice.setText(serviceType.getServicePrice().toString());
+            imgService.setImage(serviceType.getImageView().getImage());
+            txtArea_Service_Description.setText(serviceType.getServiceDescription());
+            btnAddNew.setText("Update");
+
+            //Setting Update button function
+            btnAddNew.setOnAction((event) -> {
+                StageLoader stageLoader = new StageLoader();
+                stageLoader.loadingIndicator("Updating Service Type");
+                Task loadOverview;
+                loadOverview = new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        System.out.println("Loading...");
+                        Platform.runLater(() -> {
+                            hBoxContent.getChildren().clear();
+                        });
+                        validateForm();
+                        if (check_Validate) {
+                            ServiceType updateServiceType = getDataFromForm();
+                            //Updating to DB
+                            serviceTypeDAOImpl.editServiceType(updateServiceType, true);
+                            System.out.println("Updating successful!");
+                        }
+                        return null;
+                    }
+                };
+
+                loadOverview.setOnSucceeded((Event event1) -> {
+                    Platform.runLater(() -> {
+                        stageLoader.stopTimeline();
+                        stageLoader.closeStage();
+                        System.out.println("Form check validate: " + check_Validate);
+                        if (check_Validate) {
+                            listServiceTypeController.showUsersData();
+                            Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+                            stageUpdate.close();
+                        }
+                    });
+                    System.out.println("Finished");
+                });
+
+                new Thread(loadOverview).start();
+
+            });
+        }
     }
 
     @FXML
     private void btnSubmitAddNewEmployee(ActionEvent event) {
         btnAddNew.setDisable(true);
-
-        // Đoạn này làm loading (đang làm chạy vô tận)
-        // Khai báo stage nhìn xuyên thấu
-        final Stage stage = new Stage(StageStyle.TRANSPARENT);
-
-        // Chỗ này set khi mở cửa sổ con lên thì cha bị vô hiệu
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setOpacity(0.5);
-
-        final Label status = new Label("Adding new Service Type");
-        status.setStyle("-fx-text-fill: #008FC0; -fx-font-size : 20px; -fx-font-weight: bold;");
-        final ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
-        indicator.setPrefSize(100, 100);
-        //indicator.setProgress(-1d);
-        final Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), new EventHandler() {
-                    @Override
-                    public void handle(Event event) {
-                        String statusText = status.getText();
-                        status.setText(
-                                ("Adding Service Type . . .".equals(statusText))
-                                ? "Adding Service Type ."
-                                : statusText + " ."
-                        );
-                    }
-                }),
-                new KeyFrame(Duration.millis(1000))
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        //Platform.runLater(() -> {
-        VBox layout = new VBox();
-        layout.setAlignment(Pos.CENTER);
-        layout.setSpacing(10);
-        layout.getChildren().addAll(indicator, status);
-        layout.setStyle("-fx-padding: 10;");
-        stage.setScene(new Scene(layout, 300, 150));
-        stage.show();
-        //});
-
-        timeline.play();
+        //Calling loading form and thread task
+        StageLoader stageLoader = new StageLoader();
+        stageLoader.loadingIndicator("Adding Service Type");
         Task loadOverview;
         loadOverview = new Task() {
             @Override
@@ -146,10 +182,11 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                         hBoxContent.getChildren().clear();
                     }
                 });
-
                 validateForm();
-                System.out.println("Add successful!");
-
+                if (check_Validate) {
+                    addNewServiceType();
+                    System.out.println("Add successful!");
+                }
                 return null;
             }
         };
@@ -159,13 +196,18 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             public void handle(Event event) {
                 Platform.runLater(() -> {
                     btnAddNew.setDisable(false);
-                    timeline.stop();
-                    stage.close();
+                    stageLoader.stopTimeline();
+                    stageLoader.closeStage();
+                    System.out.println("Form check validate: " + check_Validate);
+                    if (check_Validate) {
+                        listServiceTypeController.showUsersData();
+                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+                        stageUpdate.close();
+                    }
                 });
                 System.out.println("Finished");
             }
         });
-
         new Thread(loadOverview).start();
     }
 
@@ -173,21 +215,36 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     private void handle_Button_Insert_Image_Action(ActionEvent event) {
         File file = fileChooser.showOpenDialog(btnInsertImage.getScene().getWindow());
         fileChooser.setTitle("Choose an image for service type");
-
-        if (file != null) {
-            System.out.println(file.toURI().toString());
+        if (file != null && file.length()<=(200*1024)) {
+            System.out.println(file.toURI().toString() + " ; Size: = " + file.length()/1024 + "kB");
             Image image = new Image(file.toURI().toString());
             imgService.setImage(image);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setContentText("Your image is greater than 200kB!");
+            alert.showAndWait();
         }
     }
 
-    public void addNewServiceType() {
-        ServiceType serviceType = new ServiceType();
-        serviceType.setServiceID(serviceID.getText());
-        serviceType.setServiceName(serviceName.getText());
-        serviceType.setServiceUnit(serviceUnit.getText());
-        serviceType.setServicePrice(Float.parseFloat(servicePrice.getText()));
+    @FXML
+    private void handle_Btn_Cancel_Action(ActionEvent event) {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
+    }
 
+    public void addNewServiceType() {
+        ServiceType serviceType = getDataFromForm();
+        serviceTypeDAOImpl.addServiceType(serviceType);
+    }
+
+    public ServiceType getDataFromForm() {
+        ServiceType serviceType = new ServiceType();
+        serviceType.setServiceID(FormatName.format(serviceID.getText()));
+        serviceType.setServiceName(FormatName.format(serviceName.getText()));
+        serviceType.setServiceUnit(FormatName.format(serviceUnit.getText()));
+        serviceType.setServiceDescription(FormatName.format(txtArea_Service_Description.getText()));
+        serviceType.setServicePrice(Float.parseFloat(servicePrice.getText()));
         BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
         byte[] res;
         try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
@@ -198,23 +255,26 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         } catch (SQLException | IOException ex) {
             Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        serviceTypeDAOImpl.addServiceType(serviceType);
+        return serviceType;
     }
 
     public void validateForm() {
         if (validateTextField(serviceID, "^(?=.{4,50}$)[a-zA-Z][a-zA-Z0-9_]+$", "SERVICE ID MUST NOT BE EMPTY !!!",
                 "ID MUST CONTAIN 4-50 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR CHARACTER SPECIAL !!!")) {
             System.out.println("serviceID false");
-        } else if (validateTextField(serviceName, "^(?=.{4,200}$)[a-zA-Z][a-zA-Z0-9_]+$", "SERVICE NAME MUST NOT BE EMPTY !!!",
+            check_Validate = false;
+        } else if (validateTextField(serviceName, "^(?=.{4,200}$)[a-zA-Z][a-zA-Z0-9_\\s]+$", "SERVICE NAME MUST NOT BE EMPTY !!!",
                 "NAME MUST CONTAIN 4-12 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR CHARACTER SPECIAL !!!")) {
             System.out.println("serviceName false");
+            check_Validate = false;
         } else if (validateTextField(serviceUnit, "^(?=.{1,10}$)[a-zA-Z][a-zA-Z0-9_]+$", "SERVICE UNIT MUST NOT BE EMPTY !!!",
                 "UNIT MUST CONTAIN 4-12 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR CHARACTER SPECIAL !!!")) {
             System.out.println("serviceUnit false");
+            check_Validate = false;
         } else if (validateTextField(servicePrice, "^[\\d][\\d]*\\.?[\\d]*$", "SERVICE PRICE MUST NOT BE EMPTY !!!",
                 "PRICE MUST CONTAIN NUMBER \nAND MUST BE CORRECT NUMBER FORMAT !!!")) {
             System.out.println("servicePrice false");
+            check_Validate = false;
         } else if (imgService.getImage() == null) {
             System.out.println("imgService is null");
             Platform.runLater(() -> {
@@ -233,10 +293,14 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 hBoxContent.getChildren().add(label);
                 btnInsertImage.requestFocus();
             });
+            check_Validate = false;
+        } else if (validateTextArea(txtArea_Service_Description, "^(.|\\n){1,500}$", "NO EMPTY", "LENGTH MUST < 500 CHARACTERS")) {
+            System.out.println("serviceDescription is too long");            
+            check_Validate = false;
         } else {
             System.out.println("Validate finished");
-            addNewServiceType();
             System.out.println("Add finished");
+            check_Validate = true;
         }
     }
 
@@ -262,6 +326,33 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             });
             check = true;
         } else if (!pattern.matcher(textField.getText()).matches()) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(465, 35);
+                label.setText(warningPattern);
+                textField.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                hBoxContent.setSpacing(10);
+                hBoxContent.setAlignment(Pos.CENTER);
+                hBoxContent.getChildren().clear();
+                hBoxContent.getChildren().add(icon);
+                hBoxContent.getChildren().add(label);
+                textField.requestFocus();
+            });
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
+    }
+
+    public Boolean validateTextArea(JFXTextArea textField, String regexString, String warningEmpty, String warningPattern) {
+        Boolean check;
+        Pattern pattern = Pattern.compile(regexString);
+        if (!textField.getText().equalsIgnoreCase("") && !pattern.matcher(textField.getText()).matches()) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");

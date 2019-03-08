@@ -30,6 +30,33 @@ import javafx.util.Duration;
  */
 public class StageLoader {
 
+    private Timeline timeline;
+    private Stage stage;
+
+    public Timeline getTimeline() {
+        return timeline;
+    }
+
+    public void setTimeline(Timeline timeline) {
+        this.timeline = timeline;
+    }
+
+    public void stopTimeline() {
+        timeline.stop();
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+    
+    public void closeStage() {
+        stage.close();
+    }
+
     /**
      *
      * @param fxmlPath
@@ -46,13 +73,13 @@ public class StageLoader {
             stage.setTitle(title);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
+            stage.showAndWait();
         } catch (IOException ex) {
             Logger.getLogger(StageLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void loadingIndicator(Stage stage, Timeline timeline, String title) {
+    public void loadingIndicator(String title) {
         // Khai báo stage nhìn xuyên thấu
         stage = new Stage(StageStyle.TRANSPARENT);
 
@@ -89,7 +116,7 @@ public class StageLoader {
         stage.setScene(new Scene(layout, 300, 150));
         stage.show();
         //});
-        
+
         timeline.play();
     }
 }
