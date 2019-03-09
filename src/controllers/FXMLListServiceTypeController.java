@@ -157,7 +157,17 @@ public class FXMLListServiceTypeController implements Initializable {
         
         //Set filterData and Pagination
         filteredData = new FilteredList<>(listServiceTypes, list -> true);
-        //ConnectControllers.getfXMLMainFormController().
+        ConnectControllers.getfXMLMainFormController().searchString.addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(
+                    serviceType -> newValue == null || newValue.isEmpty() || 
+                    serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServicePrice().toString().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
+            pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
+            changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
+        });
         txt_Search.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(
                     serviceType -> newValue == null || newValue.isEmpty() || 

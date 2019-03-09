@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -47,6 +49,7 @@ import utils.MyTimer;
 public class FXMLMainFormController implements Initializable {
 
     public static Boolean checkRegis = false;
+    public static StringProperty searchString;
 
     @FXML
     private MenuBar mainMenuBar;
@@ -160,9 +163,18 @@ public class FXMLMainFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        ConnectControllers.setfXMLMainFormController(this);
+        ConnectControllers.setfXMLMainFormController(this);        
+        searchString = new SimpleStringProperty();
+        
+        txt_Search.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                searchString.set(txt_Search.getText());
+                System.out.println(searchString.getValue());
+            }
+        });
         //Set close button for selected TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+        
     }
 
     private void initMenuBar() {
