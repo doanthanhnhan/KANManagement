@@ -12,6 +12,7 @@ package controllers;
 public class ConnectControllers {
 
     public static FXMLLoginController fXMLLoginController;
+    public static FXMLMainFormController fXMLMainFormController;
     public static FXMLForgetPassController fXMLForgetPassController;
     public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController;
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
@@ -25,6 +26,14 @@ public class ConnectControllers {
         ConnectControllers.fXMLLoginController = fXMLLoginController;
     }
 
+    public static FXMLMainFormController getfXMLMainFormController() {
+        return fXMLMainFormController;
+    }
+
+    public static void setfXMLMainFormController(FXMLMainFormController fXMLMainFormController) {
+        ConnectControllers.fXMLMainFormController = fXMLMainFormController;
+    }
+    
     public static FXMLForgetPassController fXMLForgetPassController() {
 
         return fXMLForgetPassController;
@@ -58,6 +67,5 @@ public class ConnectControllers {
     public static void setfXMLListServiceTypeController(FXMLListServiceTypeController fXMLListServiceTypeController) {
         ConnectControllers.fXMLListServiceTypeController = fXMLListServiceTypeController;
     }
-    
-    
+
 }

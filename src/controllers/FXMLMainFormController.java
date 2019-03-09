@@ -30,6 +30,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -150,12 +151,16 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_Edit_User_Role;
     @FXML
     private Menu About;
+    @FXML
+    private TextField txt_Search;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        ConnectControllers.setfXMLMainFormController(this);
         //Set close button for selected TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
     }

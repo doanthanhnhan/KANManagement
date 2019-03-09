@@ -7,6 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
@@ -16,6 +17,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLMainFormController">
    <children>
@@ -24,9 +26,9 @@
             <JFXTabPane fx:id="mainTabPane" BorderPane.alignment="CENTER" />
          </center>
          <top>
-            <VBox BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <MenuBar fx:id="mainMenuBar">
+                  <MenuBar fx:id="mainMenuBar" nodeOrientation="LEFT_TO_RIGHT">
                      <menus>
                         <Menu fx:id="menu_File" mnemonicParsing="false" text="File">
                            <items>
@@ -193,11 +195,12 @@
                               <Tooltip contentDisplay="TOP" text="Settings" textAlignment="CENTER" />
                            </tooltip>
                         </Button>
-                        <Pane>
-                           <children>
-                              <HBox prefWidth="400.0" />
-                           </children>
-                        </Pane>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="txt_Search" promptText="Search...">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                        </TextField>
                         <Button alignment="CENTER" mnemonicParsing="false" text="Date and Time" textAlignment="CENTER">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">

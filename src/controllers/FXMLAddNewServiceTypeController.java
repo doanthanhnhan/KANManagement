@@ -254,12 +254,12 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 "ID MUST CONTAIN 4-50 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR CHARACTER SPECIAL !!!")) {
             System.out.println("serviceID false");
             check_Validate = false;
-        } else if (validateTextField(serviceName, "^(?=.{4,200}$)[a-zA-Z][a-zA-Z0-9_\\s]+$", "SERVICE NAME MUST NOT BE EMPTY !!!",
-                "NAME MUST CONTAIN 4-12 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR CHARACTER SPECIAL !!!")) {
+        } else if (validateTextField(serviceName, "^(?=.{1,100}$)[\\pL\\pZ\\pS]+$", "SERVICE NAME MUST NOT BE EMPTY !!!",
+                "NAME MUST CONTAIN 1-100 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR SPECIAL CHARACTER  !!!")) {
             System.out.println("serviceName false");
             check_Validate = false;
-        } else if (validateTextField(serviceUnit, "^(?=.{1,10}$)[a-zA-Z][a-zA-Z0-9_]+$", "SERVICE UNIT MUST NOT BE EMPTY !!!",
-                "UNIT MUST CONTAIN 4-12 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR CHARACTER SPECIAL !!!")) {
+        } else if (validateTextField(serviceUnit, "^(?=.{1,20}$)[a-zA-Z][a-zA-Z0-9_]+$", "SERVICE UNIT MUST NOT BE EMPTY !!!",
+                "UNIT MUST CONTAIN 1-20 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR SPECIAL CHARACTER  !!!")) {
             System.out.println("serviceUnit false");
             check_Validate = false;
         } else if (validateTextField(servicePrice, "^[\\d][\\d]*\\.?[\\d]*$", "SERVICE PRICE MUST NOT BE EMPTY !!!",

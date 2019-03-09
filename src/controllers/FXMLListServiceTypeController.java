@@ -74,27 +74,7 @@ public class FXMLListServiceTypeController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         setColumns();
         showUsersData();
-        ConnectControllers.setfXMLListServiceTypeController(this);
-
-        //Set filterData and Pagination
-        filteredData = new FilteredList<>(listServiceTypes, p -> true);
-        txt_Search.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(
-                    serviceType -> newValue == null || newValue.isEmpty() || 
-                    serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServicePrice().toString().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
-            changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
-        });        
-
-        int totalPage = (int) (Math.ceil(listServiceTypes.size() * 1.0 / ROWS_PER_PAGE));
-        pagination.setPageCount(totalPage);
-        pagination.setCurrentPageIndex(0);
-        changeTableView(0, ROWS_PER_PAGE);
-        pagination.currentPageIndexProperty().addListener(
-                (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+        ConnectControllers.setfXMLListServiceTypeController(this);        
 
         // Check item when click on table
         table_ServiceType.setOnMouseClicked((MouseEvent event) -> {
@@ -122,7 +102,7 @@ public class FXMLListServiceTypeController implements Initializable {
             FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
         
         sortedData.comparatorProperty().bind(table_ServiceType.comparatorProperty());
-
+        
         table_ServiceType.setItems(sortedData);
 
     }
@@ -174,6 +154,28 @@ public class FXMLListServiceTypeController implements Initializable {
         listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
         //table_ServiceType.getItems().clear();
         table_ServiceType.setItems(listServiceTypes);
+        
+        //Set filterData and Pagination
+        filteredData = new FilteredList<>(listServiceTypes, list -> true);
+        //ConnectControllers.getfXMLMainFormController().
+        txt_Search.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(
+                    serviceType -> newValue == null || newValue.isEmpty() || 
+                    serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServicePrice().toString().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
+            pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
+            changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
+        });        
+
+        int totalPage = (int) (Math.ceil(listServiceTypes.size() * 1.0 / ROWS_PER_PAGE));
+        pagination.setPageCount(totalPage);
+        pagination.setCurrentPageIndex(0);
+        changeTableView(0, ROWS_PER_PAGE);
+        pagination.currentPageIndexProperty().addListener(
+                (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
     }
 
     @FXML
