@@ -16,7 +16,6 @@ public class ConnectControllers {
     public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController;
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
-
     public static FXMLLoginController getfXMLLoginController() {
         return fXMLLoginController;
     }
