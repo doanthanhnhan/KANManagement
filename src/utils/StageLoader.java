@@ -113,7 +113,7 @@ public class StageLoader {
         layout.setSpacing(10);
         layout.getChildren().addAll(indicator, status);
         layout.setStyle("-fx-padding: 10;");
-        stage.setScene(new Scene(layout, 300, 150));
+        stage.setScene(new Scene(layout, 150, 150));
         stage.show();
         //});
 

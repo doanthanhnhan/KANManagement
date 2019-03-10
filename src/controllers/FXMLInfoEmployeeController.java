@@ -51,6 +51,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import models.DAO;
 import models.InfoEmployee;
 import models.formatCalender;
+import models.notificationFunction;
 import utils.FormatName;
 import utils.PatternValided;
 
@@ -139,6 +140,10 @@ public class FXMLInfoEmployeeController implements Initializable {
     public static Boolean check_delete;
     private String userLogin = FXMLLoginController.User_Login;
     private InfoEmployee Emp = new InfoEmployee();
+    @FXML
+    private FontAwesomeIconView iconRefresh;
+    @FXML
+    private HBox HboxBoxId;
 
     /**
      * Initializes the controller class.
@@ -166,6 +171,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                 FXMLMainFormController.checkRegis = false;
                 System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
                 if (!DAO.get_Role(userLogin).equals("Admin")) {
+                    HboxBoxId.getChildren().remove(iconRefresh);
                     check_delete = true;
                     Emp = DAO.getInfoEmployee(userLogin);
                     hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
@@ -220,6 +226,7 @@ public class FXMLInfoEmployeeController implements Initializable {
         if (FXMLLoginController.checkLoginRegis) {
             check_delete = true;
             hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
+            HboxBoxId.getChildren().remove(iconRefresh);
             Hboxbtn.getChildren().remove(btnCancel);
             HboxHeader.getChildren().remove(HboxImage);
             boxId.setDisable(true);
@@ -248,19 +255,6 @@ public class FXMLInfoEmployeeController implements Initializable {
             });
 
         }
-        //            if (!DAO.get_Role(userLogin).equals("Admin")) {
-//                hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
-//                boxId.setDisable(true);
-//                boxId.setValue(userLogin);
-//                Hboxbtn.getChildren().remove(btnCancel);
-//            }
-//            try {
-//                list_Role = (ObservableList<String>) DAO.getAllRole();
-//            } catch (SQLException | ClassNotFoundException ex) {
-//                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-
-// add enter key
         boxId.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 System.out.println("Enter pressed");
@@ -438,10 +432,10 @@ public class FXMLInfoEmployeeController implements Initializable {
         });
 // TODO
     }
-
     @FXML
     private void refreshIdUser() throws SQLException, ClassNotFoundException {
         boxId.setItems(DAO.getAllIdUser());
+        System.out.println("refresh xong");
     }
 
     @FXML
@@ -504,25 +498,8 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(label);
             boxId.requestFocus();
         } else if (newPhone.getText() == null || newPhone.getText().equals("")) {
-            System.out.println("Neu ID khong null -- Vao else if");
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("PHONE NUMBER MUST NOT EMPTY !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            newPhone.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newPhone.requestFocus();
-            System.out.println("Chay het cau newPhone");
+            notificationFunction.notification(newPhone, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
         } else if (birthday.getValue() == null) {
-            System.out.println("Neu ID khong null -- Vao else if 1");
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
             icon.setStyleClass("jfx-glyhp-icon");
@@ -539,298 +516,61 @@ public class FXMLInfoEmployeeController implements Initializable {
             HboxContent.getChildren().add(label);
             birthday.requestFocus();
         } else if (address.getText() == null || address.getText().equals("")) {
-            System.out.println("Neu ID khong null -- Vao else if 2");
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("ADDRESS MUST NOT EMPTY !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            address.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            address.requestFocus();
+            notificationFunction.notification(address, HboxContent, "ADDRESS NUMBER MUST NOT EMPTY !!!");
+
         } else if (IdNumber.getText() == null || IdNumber.getText().equals("")) {
-            System.out.println("Neu ID khong null -- Vao else if 3");
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("ID NUMBER MUST NOT EMPTY !!!");
-            IdNumber.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            IdNumber.requestFocus();
+            notificationFunction.notification(IdNumber, HboxContent, "ID NUMBER MUST NOT EMPTY !!!");
+
         } else if ((FirstName.getText() == null || FirstName.getText().equals("")) && !check_delete) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("FIRST NAME MUST NOT EMPTY !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            FirstName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            FirstName.requestFocus();
+            notificationFunction.notification(IdNumber, HboxContent, "FIRST NAME MUST NOT EMPTY !!!");
+
         } else if ((LastName.getText() == null || LastName.getText().equals("")) && !check_delete) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("LAST NAME MUST NOT EMPTY !!!");
-            LastName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            LastName.requestFocus();
+            notificationFunction.notification(LastName, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
+
         } else if ((Email.getText() == null || Email.getText().equals("")) && !check_delete) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("EMAIL MUST NOT EMPTY !!!");
-            Email.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            Email.requestFocus();
+            notificationFunction.notification(Email, HboxContent, "EMAIL MUST NOT EMPTY !!!");
+
         } else if (!PatternValided.PatternPhoneNumber(newPhone.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("PHONE NUMBER IS INCORRECT !!!");
-            newPhone.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newPhone.requestFocus();
+            notificationFunction.notification(newPhone, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
+
         } else if (!PatternValided.PatternCMND(IdNumber.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("ID NUMBER IS INCORRECT !!!");
-            IdNumber.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            IdNumber.requestFocus();
+            notificationFunction.notification(IdNumber, HboxContent, "ID NUMBER IS INCORRECT !!!");
+
         } else if (!PatternValided.PatternName(FirstName.getText()) && !check_delete) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("FIRSTNAME INVALID !!! (Example: Nguyễn, John,...) ");
-            FirstName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            FirstName.requestFocus();
+            notificationFunction.notification(FirstName, HboxContent, "FIRSTNAME INVALID (Example: Nguyễn, Lê,...) !!!");
+
         } else if (!PatternValided.PatternName(MidName.getText()) && !MidName.getText().equals("") && !check_delete) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("MIDNAME INVALID !!!(Example: Thị, Rooney,...");
-            MidName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            MidName.requestFocus();
+            notificationFunction.notification(MidName, HboxContent, "MIDNAME INVALID (Example: Thị, Văn,...) !!!");
+
         } else if (!PatternValided.PatternName(LastName.getText()) && !check_delete) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("LASTNAME INVALID !!!(Example: Toàn, Văn,...");
-            label.setAlignment(Pos.CENTER_LEFT);
-            LastName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            LastName.requestFocus();
+            notificationFunction.notification(LastName, HboxContent, "LASTNAME INVALID (Example: Nguyễn, Trần,...) !!!");
+
         } else if (!PatternValided.PatternEmail(Email.getText()) && !check_delete) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("INVALID EMAIL !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            Email.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            Email.requestFocus();
+            notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
 
         } else if (!(DepartmentId.getText().equals("")) && !check_delete && !PatternValided.PatternCMND(DepartmentId.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("DEPARTMENT ID IS INCORRECT !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            DepartmentId.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            DepartmentId.requestFocus();
+            notificationFunction.notification(DepartmentId, HboxContent, "DEPARTMENT ID IS INCORRECT !!!");
+
         } else if (!PatternValided.PatternName(Job.getText()) && !check_delete && !Job.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("JOB IS INCORRECT !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            Job.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            Job.requestFocus();
+            notificationFunction.notification(Job, HboxContent, "JOB IS INCORRECT !!!");
+
         } else if (!PatternValided.PatternELevel(EducatedLevel.getText()) && !check_delete && !EducatedLevel.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("EDUCATED LEVEL IS INCORRECT !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            EducatedLevel.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            EducatedLevel.requestFocus();
+            notificationFunction.notification(EducatedLevel, HboxContent, "EDUCATED LEVEL IS INCORRECT !!!");
+
         } else if (!PatternValided.PatternSalary(Salary.getText()) && !check_delete && !Salary.getText().equals("0")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("SALARY IS INCORRECT !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            Salary.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            Salary.requestFocus();
+            notificationFunction.notification(Salary, HboxContent, "SALARY IS INCORRECT !!!");
+
         } else if (!PatternValided.PatternSalary(Bonus.getText()) && !check_delete && !Bonus.getText().equals("0")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("BONUS IS INCORRECT !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            Bonus.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            Bonus.requestFocus();
+            notificationFunction.notification(Bonus, HboxContent, "BONUS IS INCORRECT !!!");
+
         } else if (!PatternValided.PatternSalary(Comm.getText()) && !check_delete && !Comm.getText().equals("0")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setText("COMM IS INCORRECT !!!");
-            label.setAlignment(Pos.CENTER_LEFT);
-            Comm.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            Comm.requestFocus();
+            notificationFunction.notification(Comm, HboxContent, "COMM IS INCORRECT !!!");
+
         } else {
             try {
                 if (DAO.check_Email(Email.getText()) && !check_delete && !Emp.getGmail().equals(Email.getText())) {
-                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                    icon.setSize("16");
-                    icon.setStyleClass("jfx-glyhp-icon");
-                    Label label = new Label();
-                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                    label.setPrefSize(350, 35);
-                    label.setText("EMAIL ALREADY EXIST !!!");
-                    label.setAlignment(Pos.CENTER_LEFT);
-                    Email.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                    HboxContent.setSpacing(10);
-                    HboxContent.setAlignment(Pos.CENTER_LEFT);
-                    HboxContent.getChildren().clear();
-                    HboxContent.getChildren().add(icon);
-                    HboxContent.getChildren().add(label);
-                    Email.requestFocus();
+                    notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
+
                 } else if (FXMLMainFormController.checkRegis && DAO.get_Role(FXMLLoginController.User_Login).equals("Admin")) {
                     FXMLMainFormController.checkRegis = false;
                     String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

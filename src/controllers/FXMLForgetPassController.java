@@ -36,6 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
 import models.InfoEmployee;
+import models.notificationFunction;
 import utils.PatternValided;
 import utils.MD5Encrypt;
 
@@ -62,10 +63,10 @@ public class FXMLForgetPassController implements Initializable {
     private HBox HboxContent;
     private String UserForget = FXMLLoginController.User_Login;
     private InfoEmployee Emp = new InfoEmployee();
+
     /**
      * Initializes the controller class.
      */
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -154,35 +155,9 @@ public class FXMLForgetPassController implements Initializable {
     @FXML
     private void handleForgetAction() throws SQLException, ClassNotFoundException {
         if (txtForgetPassword.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("PASSWORD MUST NOT EMPTY !!!");
-            txtForgetPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            txtForgetPassword.requestFocus();
+            notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "PASSWORD MUST NOT EMPTY !!!");
         } else if (txtForgetConfirmPassword.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("CONFIRM PASSWORD MUST NOT EMPTY !!!");
-            txtForgetConfirmPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            txtForgetConfirmPassword.requestFocus();
+            notificationFunction.notificationPassword(txtForgetConfirmPassword, HboxContent, "CONFIRM PASSWORD MUST NOT EMPTY !!!");
         } else if (txtSerectQuestion.getSelectionModel().isEmpty()) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
@@ -200,68 +175,17 @@ public class FXMLForgetPassController implements Initializable {
             HboxContent.getChildren().add(label);
             txtSerectQuestion.requestFocus();
         } else if (textSerectAnswer.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("CONFIRM PASSWORD MUST NOT EMPTY !!!");
-            textSerectAnswer.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            textSerectAnswer.requestFocus();
+            notificationFunction.notificationPassword(textSerectAnswer, HboxContent, "SERECT ANSWER MUST NOT EMPTY !!!");
         } else if (!PatternValided.PatternPassword(txtForgetPassword.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("PASSWORD INVALID (EXAM:Abc12345,... (6-20 CHARACTERS) !!!");
-            txtForgetPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            txtForgetPassword.requestFocus();
+            notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "PASSWORD INVALID (EXAM:Abc12345,... (6-20 CHARACTERS) !!!");
         } else if (!txtForgetPassword.getText().equals(txtForgetConfirmPassword.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
-            txtForgetPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            txtForgetPassword.requestFocus();
+            notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
         } else {
             Emp = DAO.getInfoForgetPassEmployee(UserForget);
             MD5Encrypt m = new MD5Encrypt();
 //            Kiểm tra account block thì ko cho thực hiện bất kì điều gì nữa
             if (!Emp.getActive()) {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(300, 35);
-                label.setText("ACCOUNT IS LOCKED !!!");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                txtForgetPassword.requestFocus();
+                notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "ACCOUNT IS LOCKED !!!");
             } //          Xử lý  khi câu hỏi và câu trả lời chính xác
             else if (Emp.getSerect_Question().equals(m.hashPass(txtSerectQuestion.getValue()))
                     && Emp.getSerect_Answer().equals(m.hashPass(textSerectAnswer.getText()))) {
@@ -299,7 +223,5 @@ public class FXMLForgetPassController implements Initializable {
                 DAO.check_Login(txtForgetUsername.getText(), logtime);
             }
         }
-
     }
-
 }

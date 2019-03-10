@@ -89,3 +89,9 @@
     -jfx-focus-color:#6747CD;
     -jfx-unfocus-color:#6747CD;
 }*/
+.jfx-glyhp-icon-refresh:hover{
+    -fx-fill: blue;
+}
+.jfx-glyhp-icon-refresh{
+    -fx-fill: #6447cd;
+}

@@ -11,8 +11,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.FXMLLoginController.User_Login;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -22,33 +20,26 @@ import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
+import models.notificationFunction;
 import utils.MD5Encrypt;
+import utils.StageLoader;
 
 /**
  *
@@ -91,6 +82,7 @@ public class FXMLLoginController implements Initializable {
                 }
             }
         });
+        
         txtPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -112,45 +104,49 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private void handleLoginAction() throws ClassNotFoundException, SQLException, IOException {
         btnLogin.setDisable(true);
-        // Đoạn này làm loading (đang làm chạy vô tận)
+//        // Đoạn này làm loading (đang làm chạy vô tận)
+//
+//        // Khai báo stage nhìn xuyên thấu
+//        final Stage stage = new Stage(StageStyle.TRANSPARENT);
+//
+//        // Chỗ này set khi mở cửa sổ con lên thì cha bị vô hiệu
+//        stage.initModality(Modality.APPLICATION_MODAL);
+//        stage.setOpacity(0.5);
+//
+//        final Label status = new Label("Loading");
+//        status.setStyle("-fx-text-fill: #008FC0; -fx-font-size : 20px; -fx-font-weight: bold;");
+//        final ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
+//        indicator.setPrefSize(100, 100);
+//        final Timeline timeline = new Timeline(
+//                new KeyFrame(Duration.seconds(1), new EventHandler() {
+//                    @Override
+//                    public void handle(Event event) {
+//                        String statusText = status.getText();
+//                        status.setText(
+//                                ("Loading . . .".equals(statusText))
+//                                ? "Loading ."
+//                                : statusText + " ."
+//                        );
+//                    }
+//                }),
+//                new KeyFrame(Duration.millis(1000))
+//        );
+//        timeline.setCycleCount(Timeline.INDEFINITE);
+//        Platform.runLater(() -> {
+//            VBox layout = new VBox();
+//            layout.setAlignment(Pos.CENTER);
+//            layout.setSpacing(10);
+//            layout.getChildren().addAll(indicator, status);
+//            layout.setStyle("-fx-padding: 10;");
+//            stage.setScene(new Scene(layout, 150, 150));
+//            stage.show();
+//        });
+//
+//        timeline.play();
 
-        // Khai báo stage nhìn xuyên thấu
-        final Stage stage = new Stage(StageStyle.TRANSPARENT);
+        StageLoader stageLoader = new StageLoader();
+        stageLoader.loadingIndicator("Loading");
 
-        // Chỗ này set khi mở cửa sổ con lên thì cha bị vô hiệu
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setOpacity(0.5);
-
-        final Label status = new Label("Loading");
-        status.setStyle("-fx-text-fill: #008FC0; -fx-font-size : 20px; -fx-font-weight: bold;");
-        final ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
-        indicator.setPrefSize(100, 100);
-        final Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), new EventHandler() {
-                    @Override
-                    public void handle(Event event) {
-                        String statusText = status.getText();
-                        status.setText(
-                                ("Loading . . .".equals(statusText))
-                                ? "Loading ."
-                                : statusText + " ."
-                        );
-                    }
-                }),
-                new KeyFrame(Duration.millis(1000))
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        Platform.runLater(() -> {
-            VBox layout = new VBox();
-            layout.setAlignment(Pos.CENTER);
-            layout.setSpacing(10);
-            layout.getChildren().addAll(indicator, status);
-            layout.setStyle("-fx-padding: 10;");
-            stage.setScene(new Scene(layout, 150, 150));
-            stage.show();
-        });
-
-        timeline.play();
         Task loadOverview = new Task() {
             @Override
             protected Object call() throws Exception {
@@ -171,8 +167,8 @@ public class FXMLLoginController implements Initializable {
                 System.out.println("Finished");
                 Platform.runLater(() -> {
                     btnLogin.setDisable(false);
-                    timeline.stop();
-                    stage.close();
+                    stageLoader.stopTimeline();
+                    stageLoader.closeStage();
                 });
             }
         });
@@ -184,37 +180,11 @@ public class FXMLLoginController implements Initializable {
     public void loginAction() throws ClassNotFoundException, SQLException, IOException {
         if (txtUserName.getText().equals("")) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(300, 35);
-                label.setText("USER MUST NOT EMPTY !!!");
-                txtUserName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                hboxContent.setAlignment(Pos.CENTER);
-                hboxContent.setSpacing(10);
-                hboxContent.getChildren().clear();
-                hboxContent.getChildren().add(icon);
-                hboxContent.getChildren().add(label);
-                txtUserName.requestFocus();
+                notificationFunction.notification(txtUserName, hboxContent, "USER MUST NOT EMPTY !!!");
             });
         } else if (txtPassword.getText().equals("")) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(300, 35);
-                label.setText("PASSWORD MUST NOT EMPTY !!!");
-                txtPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                hboxContent.setAlignment(Pos.CENTER);
-                hboxContent.setSpacing(10);
-                hboxContent.getChildren().clear();
-                hboxContent.getChildren().add(icon);
-                hboxContent.getChildren().add(label);
-                txtPassword.requestFocus();
+                notificationFunction.notificationPassword(txtPassword, hboxContent, "PASSWORD MUST NOT EMPTY !!!");
             });
         } else {
             try {
@@ -227,39 +197,16 @@ public class FXMLLoginController implements Initializable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                            icon.setSize("16");
-                            icon.setStyleClass("jfx-glyhp-icon");
-                            Label label = new Label();
-                            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                            label.setPrefSize(300, 35);
-                            label.setText("USER OR PASSWORD WRONG!!!");
-                            hboxContent.setAlignment(Pos.CENTER);
-                            hboxContent.setSpacing(10);
-                            hboxContent.getChildren().clear();
-                            hboxContent.getChildren().add(icon);
-                            hboxContent.getChildren().add(label);
+                            notificationFunction.notification(txtUserName, hboxContent, "USER OR PASSWORD WRONG!!!");
                         }
                     });
-
                 } else {
                     //              Xử lý trường hợp User tồn tại nhưng đã bị block
                     if (!Emp.getActive()) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                                icon.setSize("16");
-                                icon.setStyleClass("jfx-glyhp-icon");
-                                Label label = new Label();
-                                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                                label.setPrefSize(300, 35);
-                                label.setText("ACCOUNT IS LOCKED !!!");
-                                hboxContent.setAlignment(Pos.CENTER);
-                                hboxContent.setSpacing(10);
-                                hboxContent.getChildren().clear();
-                                hboxContent.getChildren().add(icon);
-                                hboxContent.getChildren().add(label);
+                                notificationFunction.notification(txtUserName, hboxContent, "ACCOUNT IS LOCKED !!!");
                             }
                         });
                     } //          Xử lý trường hợp sai pass
@@ -276,18 +223,7 @@ public class FXMLLoginController implements Initializable {
                                     if (!DAO.check_Time(user).equals(logtime)) {
                                         DAO.reset_CheckLogin(user, logtime);
                                     }
-                                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                                    icon.setSize("16");
-                                    icon.setStyleClass("jfx-glyhp-icon");
-                                    Label label = new Label();
-                                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                                    label.setPrefSize(300, 35);
-                                    label.setText("USER OR PASSWORD WRONG!!!");
-                                    hboxContent.setAlignment(Pos.CENTER);
-                                    hboxContent.setSpacing(10);
-                                    hboxContent.getChildren().clear();
-                                    hboxContent.getChildren().add(icon);
-                                    hboxContent.getChildren().add(label);
+                                    notificationFunction.notification(txtUserName, hboxContent, "USER OR PASSWORD WRONG!!!");
                                     DAO.check_Login(txtUserName.getText(), logtime);
                                 } catch (SQLException | ClassNotFoundException ex) {
                                     Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
@@ -347,12 +283,9 @@ public class FXMLLoginController implements Initializable {
                     }
 
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
 
     }
@@ -360,64 +293,15 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private void handleForgetPass() throws IOException, SQLException, ClassNotFoundException {
         if ("".equals(txtUserName.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("USER MUST NOT EMPTY !!!");
-            txtUserName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            hboxContent.setAlignment(Pos.CENTER);
-            hboxContent.setSpacing(10);
-            hboxContent.getChildren().clear();
-            hboxContent.getChildren().add(icon);
-            hboxContent.getChildren().add(label);
-            txtUserName.requestFocus();
+            notificationFunction.notification(txtUserName, hboxContent, "USER MUST NOT EMPTY !!!");
         } else {
             Emp = DAO.getListCheckLogin(txtUserName.getText());
             if (Emp == null) {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(300, 35);
-                label.setText("ACCOUNT DOES NOT EXIST !!!");
-                hboxContent.setAlignment(Pos.CENTER);
-                hboxContent.setSpacing(10);
-                hboxContent.getChildren().clear();
-                hboxContent.getChildren().add(icon);
-                hboxContent.getChildren().add(label);
-                txtUserName.requestFocus();
+                notificationFunction.notification(txtUserName, hboxContent, "ACCOUNT DOES NOT EXIST !!!");
             } else if (!Emp.getActive()) {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(300, 35);
-                label.setText("ACCOUNT IS LOCKED !!!");
-                hboxContent.setAlignment(Pos.CENTER);
-                hboxContent.setSpacing(10);
-                hboxContent.getChildren().clear();
-                hboxContent.getChildren().add(icon);
-                hboxContent.getChildren().add(label);
+                notificationFunction.notification(txtUserName, hboxContent, "ACCOUNT IS LOCKED !!!");
             } else if (!DAO.checkSetPass(txtUserName.getText())) {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(300, 35);
-                label.setText("USER DOESN'T HAVE SECRET QUESTIONS!!!");
-                txtUserName.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                hboxContent.setAlignment(Pos.CENTER);
-                hboxContent.setSpacing(10);
-                hboxContent.getChildren().clear();
-                hboxContent.getChildren().add(icon);
-                hboxContent.getChildren().add(label);
-                txtUserName.requestFocus();
+                notificationFunction.notification(txtUserName, hboxContent, "USER DOESN'T HAVE SECRET QUESTIONS!!!");
             } else {
                 User_Login = txtUserName.getText();
                 Stage stageForget = new Stage();

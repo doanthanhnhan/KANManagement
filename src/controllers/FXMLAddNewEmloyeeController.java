@@ -50,8 +50,10 @@ import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import models.InfoEmployee;
+import models.notificationFunction;
 import utils.PatternValided;
 import utils.FormatName;
+import utils.StageLoader;
 
 /**
  * FXML Controller class
@@ -59,6 +61,7 @@ import utils.FormatName;
  * @author Admin
  */
 public class FXMLAddNewEmloyeeController implements Initializable {
+
     @FXML
     private JFXTextField newGmail;
     @FXML
@@ -79,6 +82,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     private JFXButton btnAddNew;
     @FXML
     private HBox HboxContent;
+
     /**
      * Initializes the controller class.
      *
@@ -228,48 +232,11 @@ public class FXMLAddNewEmloyeeController implements Initializable {
         // Đoạn này làm loading (đang làm chạy vô tận)
 
         // Khai báo stage nhìn xuyên thấu
-        final Stage stage = new Stage(StageStyle.TRANSPARENT);
-
-        // Chỗ này set khi mở cửa sổ con lên thì cha bị vô hiệu
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setOpacity(0.5);
-
-        final Label status = new Label("Sending Email");
-        status.setStyle("-fx-text-fill: #008FC0; -fx-font-size : 20px; -fx-font-weight: bold;");
-        final ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
-        indicator.setPrefSize(100, 100);
-        //indicator.setProgress(-1d);
-        final Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), new EventHandler() {
-                    @Override
-                    public void handle(Event event) {
-                        String statusText = status.getText();
-                        status.setText(
-                                ("Sending Email . . .".equals(statusText))
-                                ? "Sending Email ."
-                                : statusText + " ."
-                        );
-                    }
-                }),
-                new KeyFrame(Duration.millis(1000))
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        //Platform.runLater(() -> {
-        VBox layout = new VBox();
-        layout.setAlignment(Pos.CENTER);
-        layout.setSpacing(10);
-        layout.getChildren().addAll(indicator, status);
-        layout.setStyle("-fx-padding: 10;");
-        stage.setScene(new Scene(layout, 300, 150));
-        stage.show();
-        //});
-
-        timeline.play();
-        Task loadOverview;
-        loadOverview = new Task() {
+        StageLoader stageLoader = new StageLoader();
+        stageLoader.loadingIndicator("Sending Email");
+        Task loadOverview = new Task() {
             @Override
             protected Object call() throws Exception {
-                System.out.println("Loading...");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -287,86 +254,32 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 System.out.println("Finished");
                 Platform.runLater(() -> {
                     btnAddNew.setDisable(false);
-                    timeline.stop();
-                    stage.close();
+                    stageLoader.stopTimeline();
+                    stageLoader.closeStage();
                 });
             }
         });
-
         new Thread(loadOverview).start();
-
     }
 
     private void AddNewEmployee() throws ClassNotFoundException, SQLException, IOException, Exception {
 //        valided texfield
         if (newId.getText().equals("")) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("ID MUST NOT EMPTY !!!");
-                newId.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newId.requestFocus();
+                notificationFunction.notification(newId, HboxContent, "ID MUST NOT EMPTY !!!");
             });
         } else if (newGmail.getText().equals("")) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("GMAIL MUST NOT EMPTY !!!");
-                newGmail.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newGmail.requestFocus();
+                notificationFunction.notification(newGmail, HboxContent, "GMAIL MUST NOT EMPTY !!!");
             });
         } else if (newFirstname.getText().equals("")) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("FIRST NAME MUST NOT EMPTY !!!");
-                newFirstname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newFirstname.requestFocus();
+                notificationFunction.notification(newFirstname, HboxContent, "FIRST NAME MUST NOT EMPTY !!!");
             });
 
         } else if (newLastname.getText().equals("")) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("LAST NAME MUST NOT EMPTY !!!");
-                newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newLastname.requestFocus();
+                notificationFunction.notification(newLastname, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
             });
 
         } else if (newRole.getValue() == null) {
@@ -389,128 +302,38 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             });
         } else if (!PatternValided.PatternID(newId.getText())) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("ID MUST 4-12 CHARACTER, NOT BEGIN NUMBER AND CHARACTER SPECIAL !!!");
-                newId.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newId.requestFocus();
+                notificationFunction.notification(newId, HboxContent, "ID MUST 4-12 CHARACTER, NOT BEGIN NUMBER AND CHARACTER SPECIAL !!!");
             });
 
         } else if (!PatternValided.PatternEmail(newGmail.getText())) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("EMAIL DOES NOT EXIST!!!");
-                newGmail.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newGmail.requestFocus();
+                notificationFunction.notification(newGmail, HboxContent, "EMAIL DOES NOT EXIST!!!");
             });
         } else if (!PatternValided.PatternName(newFirstname.getText())) {
             Platform.runLater(() -> {
+                notificationFunction.notification(newFirstname, HboxContent, "FIRSTNAME DOES NOT EXIST !!! (Example: Nguyễn, Lê,...) ");
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("FIRSTNAME DOES NOT EXIST !!! (Example: Nguyễn, John,...) ");
-                newFirstname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newFirstname.requestFocus();
             });
 
         } else if (!PatternValided.PatternName(newMidname.getText()) && !newMidname.getText().equals("")) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("MIDNAME DOES NOT EXIST !!!(Example: Thị, Rooney,...");
-                newMidname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newMidname.requestFocus();
+                notificationFunction.notification(newMidname, HboxContent, "MIDNAME DOES NOT EXIST !!!(Example: Thị,Văn,...");
             });
 
         } else if (!PatternValided.PatternName(newLastname.getText())) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(465, 35);
-                label.setText("LASTNAME DOES NOT EXIST !!!(Example: Toàn, Văn,...");
-                newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newLastname.requestFocus();
+                notificationFunction.notification(newLastname, HboxContent, "LASTNAME DOES NOT EXIST !!!(Example: Toàn, Văn,...");
             });
 
         } else {
             if (DAO.check_Id(newId.getText())) {
                 Platform.runLater(() -> {
-                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                    icon.setSize("16");
-                    icon.setStyleClass("jfx-glyhp-icon");
-                    Label label = new Label();
-                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                    label.setPrefSize(465, 35);
-                    label.setText("ID ALREADY EXIST !!!");
-                    newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                    HboxContent.setSpacing(10);
-                    HboxContent.setAlignment(Pos.CENTER);
-                    HboxContent.getChildren().clear();
-                    HboxContent.getChildren().add(icon);
-                    HboxContent.getChildren().add(label);
-                    newId.requestFocus();
+                    notificationFunction.notification(newId, HboxContent, "ID ALREADY EXIST !!!");
                 });
             } else if (DAO.check_Email(newGmail.getText())) {
                 System.out.println("vao else if gmail");
                 Platform.runLater(() -> {
-                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                    icon.setSize("16");
-                    icon.setStyleClass("jfx-glyhp-icon");
-                    Label label = new Label();
-                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                    label.setPrefSize(465, 35);
-                    label.setText("EMAIL ALREADY EXIST !!!");
-                    newLastname.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-                    HboxContent.setSpacing(10);
-                    HboxContent.setAlignment(Pos.CENTER);
-                    HboxContent.getChildren().clear();
-                    HboxContent.getChildren().add(icon);
-                    HboxContent.getChildren().add(label);
-                    newGmail.requestFocus();
+                    notificationFunction.notification(newGmail, HboxContent, "EMAIL ALREADY EXIST !!!");
                 });
             } else {
                 Platform.runLater(new Runnable() {
@@ -541,8 +364,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             String content = "Username: " + newId.getText() + ", Password: 123456";
                             Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                                     "KAN@123456", "Default username and password", content);
-                            if(DAO.checkFirstLogin() != 1){
-                                DAO.setUserLogs(FXMLLoginController.User_Login, "Create "+Username, logtime);
+                            if (DAO.checkFirstLogin() != 1) {
+                                DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + Username, logtime);
                             }
                             newRole.setValue(null);
                             newFirstname.setText("");

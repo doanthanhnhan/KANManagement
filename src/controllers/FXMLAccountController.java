@@ -39,6 +39,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
 import models.InfoEmployee;
+import models.notificationFunction;
 import utils.PatternValided;
 import utils.MD5Encrypt;
 
@@ -180,35 +181,11 @@ public class FXMLAccountController implements Initializable {
     @FXML
     private void btnSubmitRegister() throws ClassNotFoundException, SQLException, IOException {
         if (newPassword.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
-            label.setText("PASSWORD MUST NOT EMPTY !!!");
-            newPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newPassword.requestFocus();
+            notificationFunction.notificationPassword(newPassword, HboxContent, "PASSWORD MUST NOT EMPTY !!!");
+
         } else if (newConfirmPassword.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
-            label.setText("CONFIRM PASSWORD MUST NOT EMPTY !!!");
-            newConfirmPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newConfirmPassword.requestFocus();
+            notificationFunction.notificationPassword(newConfirmPassword, HboxContent, "CONFIRM PASSWORD MUST NOT EMPTY !!!");
+            
         } else if (newSerectQuestion.getSelectionModel().isEmpty()) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
@@ -226,97 +203,23 @@ public class FXMLAccountController implements Initializable {
             HboxContent.getChildren().add(label);
             newSerectQuestion.requestFocus();
         } else if (newSerectAnswer.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
-            label.setText("CONFIRM PASSWORD MUST NOT EMPTY !!!");
-            newSerectAnswer.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newSerectAnswer.requestFocus();
+            notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "SERECT ANSWER MUST NOT EMPTY !!!");
+          
         } else if (ConfirmAnswer.getText().equals("")) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
-            label.setText("CONFIRM PASSWORD MUST NOT EMPTY !!!");
-            ConfirmAnswer.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            ConfirmAnswer.requestFocus();
+            notificationFunction.notificationPassword(ConfirmAnswer, HboxContent, "CONFIRM SERECT ANSWER MUST NOT EMPTY !!!");
+           
         } else if (!PatternValided.PatternPassword(newPassword.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
-            label.setText("PASSWORD INCORRECT (EXAM:Abc12345 (6-20 CHARACTERS) !!! ");
-            newPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newPassword.requestFocus();
+            notificationFunction.notificationPassword(newPassword, HboxContent, "PASSWORD INCORRECT (EXAM:Abc12345,...(6-20 CHARACTERS) !!!");
+           
         } else if (!newPassword.getText().equals(newConfirmPassword.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
-            label.setText("PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
-            newPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            newConfirmPassword.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newPassword.requestFocus();
+            notificationFunction.notificationPassword(newPassword, HboxContent, "PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
+           
         } else if (!PatternValided.PatternAnswer(newSerectAnswer.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
-            label.setText("ANSWER INCORRECT (ANSWER MUST HAVE 4-20 CHARACTER) !!!");
-            newSerectAnswer.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newSerectAnswer.requestFocus();
+            notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "ANSWER INCORRECT (ANSWER MUST HAVE 4-20 CHARACTER) !!!");
+            
         } else if (!newSerectAnswer.getText().equals(ConfirmAnswer.getText())) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(470, 35);
-            label.setText("ANSWER AND ANSWER CONFIRM DID NOT MATCH !!!");
-            newSerectAnswer.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            ConfirmAnswer.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-            HboxContent.setSpacing(10);
-            HboxContent.setAlignment(Pos.CENTER);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            newSerectAnswer.requestFocus();
+            notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "ANSWER AND ANSWER CONFIRM DID NOT MATCH !!!");
+          
         } else {
             MD5Encrypt m;
             m = new MD5Encrypt();
