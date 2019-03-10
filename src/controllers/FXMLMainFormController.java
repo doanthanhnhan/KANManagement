@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -30,6 +32,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -46,6 +49,7 @@ import utils.MyTimer;
 public class FXMLMainFormController implements Initializable {
 
     public static Boolean checkRegis = false;
+    public static StringProperty searchString;
 
     @FXML
     private MenuBar mainMenuBar;
@@ -150,14 +154,27 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_Edit_User_Role;
     @FXML
     private Menu About;
+    @FXML
+    private TextField txt_Search;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        ConnectControllers.setfXMLMainFormController(this);        
+        searchString = new SimpleStringProperty();
+        
+        txt_Search.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                searchString.set(txt_Search.getText());
+                System.out.println(searchString.getValue());
+            }
+        });
         //Set close button for selected TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+        
     }
 
     private void initMenuBar() {

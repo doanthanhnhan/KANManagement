@@ -22,10 +22,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -35,19 +32,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import models.ServiceTypeDAOImpl;
@@ -222,7 +213,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
-            alert.setContentText("Your image is greater than 200kB!");
+            alert.setContentText("Your image is greater than 200kB !");
             alert.showAndWait();
         }
     }
@@ -263,12 +254,12 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 "ID MUST CONTAIN 4-50 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR CHARACTER SPECIAL !!!")) {
             System.out.println("serviceID false");
             check_Validate = false;
-        } else if (validateTextField(serviceName, "^(?=.{4,200}$)[a-zA-Z][a-zA-Z0-9_\\s]+$", "SERVICE NAME MUST NOT BE EMPTY !!!",
-                "NAME MUST CONTAIN 4-12 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR CHARACTER SPECIAL !!!")) {
+        } else if (validateTextField(serviceName, "^(?=.{1,100}$)[\\pL\\pZ\\pS]+$", "SERVICE NAME MUST NOT BE EMPTY !!!",
+                "NAME MUST CONTAIN 1-100 CHARACTER, \nBEGINNING CHAR MUST BE NOT NUMBER OR SPECIAL CHARACTER  !!!")) {
             System.out.println("serviceName false");
             check_Validate = false;
-        } else if (validateTextField(serviceUnit, "^(?=.{1,10}$)[a-zA-Z][a-zA-Z0-9_]+$", "SERVICE UNIT MUST NOT BE EMPTY !!!",
-                "UNIT MUST CONTAIN 4-12 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR CHARACTER SPECIAL !!!")) {
+        } else if (validateTextField(serviceUnit, "^(?=.{1,20}$)[a-zA-Z][a-zA-Z0-9_]+$", "SERVICE UNIT MUST NOT BE EMPTY !!!",
+                "UNIT MUST CONTAIN 1-20 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR SPECIAL CHARACTER  !!!")) {
             System.out.println("serviceUnit false");
             check_Validate = false;
         } else if (validateTextField(servicePrice, "^[\\d][\\d]*\\.?[\\d]*$", "SERVICE PRICE MUST NOT BE EMPTY !!!",

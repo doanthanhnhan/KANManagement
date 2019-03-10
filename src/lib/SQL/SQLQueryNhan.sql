@@ -1,22 +1,24 @@
 CREATE TABLE Rooms(
 	-- Create columns	
-	RoomID varchar(10) UNIQUE NOT NULL,	
+	RoomID varchar(10) NOT NULL,
+	CustomerID varchar(30) NOT NULL,	
 	RoomType varchar(20) NOT NULL,	
 	PhoneNumber varchar(20) NOT NULL,
 	RoomOnFloor int NOT NULL,
 	RoomArea decimal NOT NULL,
 	RoomStatus varchar(10) NOT NULL,
 	Clean bit DEFAULT 1,
-	Repaired bit DEFAULT 0,
+	Repaired bit DEFAULT 1,
 	InProgress bit DEFAULT 0,
-	Active bit DEFAULT 1 NOT NULL,
+	Active bit DEFAULT 1,
 	-- Create constraint
-	CONSTRAINT pk_RoomID PRIMARY KEY (RoomID)	
+	CONSTRAINT pk_RoomID PRIMARY KEY (RoomID),
+	CONSTRAINT uc_RoomID UNIQUE (RoomID)	
 )
 
 CREATE TABLE Customers(
 	-- Create columns	
-	CustomerID varchar(30) UNIQUE NOT NULL,	
+	CustomerID varchar(30) NOT NULL,	
 	CustomerFirstName varchar(20) NOT NULL,
 	CustomerMidName varchar(20) ,
 	CustomerLastName varchar(20) NOT NULL,
@@ -24,23 +26,25 @@ CREATE TABLE Customers(
 	CustomerPhoneNumber varchar(20) NOT NULL,
 	CustomerPassport varchar(30),
 	CustomerEmail varchar(100),	
-	Active bit DEFAULT 1 NOT NULL,
+	Active bit DEFAULT 1,
 	-- Create constraint
-	CONSTRAINT pk_CustomerID PRIMARY KEY (CustomerID)
+	CONSTRAINT pk_CustomerID PRIMARY KEY (CustomerID),
+	CONSTRAINT uc_CustomerID UNIQUE (CustomerID)
 )
 CREATE TABLE CheckInOrders(
 	-- Create columns
 	ID int IDENTITY(1,1),	
-	CheckInID varchar(50) UNIQUE NOT NULL,
+	CheckInID varchar(50) NOT NULL,
 	CustomerID varchar(30) NOT NULL,
 	RoomID varchar(10) NOT NULL,
 	CheckInType varchar(20) NOT NULL,	
 	NumberOfCustomer int NOT NULL,
 	CheckInDate datetime NOT NULL,		
 	CustomerPackage varchar(200),	
-	Active bit DEFAULT 1 NOT NULL,
+	Active bit DEFAULT 1,
 	-- Create constraint
-	CONSTRAINT pk_CheckInOrdersID PRIMARY KEY (ID)
+	CONSTRAINT pk_CheckInOrdersID PRIMARY KEY (ID),
+	CONSTRAINT uc_CheckInID UNIQUE (CheckInID)
 )
 DROP TABLE CheckInOrders
 
@@ -63,29 +67,46 @@ CREATE TABLE CheckOutOrders(
 CREATE TABLE ServicesOrders(
 	-- Create columns
 	ID int IDENTITY(1,1),	
-	OrderID varchar(50) UNIQUE NOT NULL,
-	RoomID varchar(10) NOT NULL,	
-	ServiceID varchar(50) NOT NULL,
-	ServiceQuantity decimal NOT NULL,
-	ServiceOrderTime datetime NOT NULL,
+	OrderID varchar(50) NOT NULL,
+	CustomerID varchar(30) NOT NULL,	
+	ServiceOrderDate datetime NOT NULL,
 	ServiceNote nvarchar(200),	
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
-	CONSTRAINT pk_ServicesOrdersRoomID PRIMARY KEY (ID)	
+	CONSTRAINT pk_ServicesOrdersRoomID PRIMARY KEY (ID),
+	CONSTRAINT uc_OrderID UNIQUE (OrderID)	
 )
+
+CREATE TABLE ServicesOrderDetails(
+	-- Create columns
+	ID int IDENTITY(1,1),	
+	OrderDetailID varchar(50) NOT NULL,
+	OrderID varchar(50) NOT NULL,
+	ServiceID varchar(50) NOT NULL,	
+	ServiceQuantity int NOT NULL,
+	Price money(18,3) NOT NULL,	
+	Discount float,
+	Active bit DEFAULT 1 NOT NULL,
+	-- Create constraint
+	CONSTRAINT pk_ServicesOrderDetails PRIMARY KEY (ID),
+	CONSTRAINT uc_OrderID UNIQUE (OrderDetailID)	
+)
+
 
 CREATE TABLE ServiceType(
 	-- Create columns
 	ID int IDENTITY(1,1),	
-	ServiceID varchar(50) UNIQUE NOT NULL,
-	ServiceName nvarchar(100) UNIQUE NOT NULL,	
+	ServiceID varchar(50) NOT NULL,
+	ServiceName nvarchar(100) NOT NULL,	
 	ServiceUnit nvarchar(20) NOT NULL,
 	ServicePrice decimal(18,3) NOT NULL,
 	ServiceDescription nvarchar(500),
 	[Image] varbinary(MAX),	
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
-	CONSTRAINT pk_ServiceID PRIMARY KEY (ID)	
+	CONSTRAINT pk_ServiceType PRIMARY KEY (ID),
+	CONSTRAINT uc_ServiceID UNIQUE (ServiceID),
+	CONSTRAINT uc_ServiceName UNIQUE (ServiceName)
 )
 
 CREATE TABLE UserLogs(
@@ -134,6 +155,7 @@ CREATE TABLE Employees(
 	CONSTRAINT pk_EmployeeID PRIMARY KEY (EmployeeID)
 )
 
+-- CREATE CONSTRAINT FOR TABLES --
 ALTER TABLE Users
 ADD CONSTRAINT FK_EmployeeID
 FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID);
@@ -141,6 +163,25 @@ FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID);
 ALTER TABLE Employees
 ADD CONSTRAINT FK_RoleID
 FOREIGN KEY (RoleID) REFERENCES [Role](RoleID);
+
+ALTER TABLE Rooms
+ADD CONSTRAINT fk_CustomerID_Rooms FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID);
+
+ALTER TABLE CheckInOrders
+ADD CONSTRAINT fk_CustomerID_CheckInOrders FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+	CONSTRAINT fk_RoomID_CheckInOrders FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID);
+
+ALTER TABLE CheckOutOrders
+ADD CONSTRAINT fk_CustomerID_CheckOutOrders FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+	CONSTRAINT fk_CheckInID_CheckOutOrders FOREIGN KEY (CheckInID) REFERENCES CheckInOrders(CheckInID);
+
+ALTER TABLE ServicesOrders
+ADD CONSTRAINT fk_CustomerID_ServiceOrders FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID);
+
+ALTER TABLE ServicesOrderDetails
+ADD CONSTRAINT fk_OrderID FOREIGN KEY (OrderID) REFERENCES ServicesOrders(OrderID),
+	CONSTRAINT fk_ServiceID FOREIGN KEY (ServiceID) REFERENCES ServiceType(ServiceID);
+
 -- CREATE DATA FOR TESTING --
 INSERT INTO Rooms (RoomID, RoomType, PhoneNumber, RoomOnFloor, RoomArea, RoomStatus, Clean, Repaired, InProgress) VALUES 
 ('R0101', 'Single', '67890101',1,20,'Available',1,1,1),

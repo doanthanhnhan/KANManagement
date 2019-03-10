@@ -5,18 +5,22 @@
  */
 package controllers;
 
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -43,6 +47,9 @@ public class FXMLListServiceTypeController implements Initializable {
     public Boolean check_Edit_Action = false;
     public static ServiceType serviceTypeItem;
 
+    private static final int ROWS_PER_PAGE = 4;    
+    private FilteredList<ServiceType> filteredData;
+
     @FXML
     private TableView<ServiceType> table_ServiceType;
     @FXML
@@ -55,6 +62,10 @@ public class FXMLListServiceTypeController implements Initializable {
     private AnchorPane main_AnchorPane;
     @FXML
     private MenuItem menuItem_Refresh;
+    @FXML
+    private JFXTextField txt_Search;
+    @FXML
+    private Pagination pagination;
 
     /**
      * Initializes the controller class.
@@ -63,10 +74,11 @@ public class FXMLListServiceTypeController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         setColumns();
         showUsersData();
-        ConnectControllers.setfXMLListServiceTypeController(this);
+        ConnectControllers.setfXMLListServiceTypeController(this);        
+
         // Check item when click on table
         table_ServiceType.setOnMouseClicked((MouseEvent event) -> {
-            if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY)) 
+            if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
                     && table_ServiceType.getSelectionModel().getSelectedItem() != null) {
                 menuItem_Edit.setDisable(false);
                 menuItem_Delete.setDisable(false);
@@ -77,6 +89,22 @@ public class FXMLListServiceTypeController implements Initializable {
                 menuItem_Delete.setDisable(true);
             }
         });
+    }
+
+    private void changeTableView(int index, int limit) {
+
+        int fromIndex = index * limit;
+        int toIndex = Math.min(fromIndex + limit, listServiceTypes.size());
+
+        int minIndex = Math.min(toIndex, filteredData.size());
+        
+        SortedList<ServiceType> sortedData = new SortedList<>(
+            FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
+        
+        sortedData.comparatorProperty().bind(table_ServiceType.comparatorProperty());
+        
+        table_ServiceType.setItems(sortedData);
+
     }
 
     private void setColumns() {
@@ -111,11 +139,12 @@ public class FXMLListServiceTypeController implements Initializable {
         serviceUnitCol.setStyle("-fx-alignment: CENTER-LEFT;");
         servicePriceCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceDescriptionCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceDescriptionCol.setPrefWidth(200);
         serviceImageCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         table_ServiceType.getColumns().clear();
-        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol, servicePriceCol,serviceDescriptionCol, serviceImageCol);
+        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol, servicePriceCol, serviceDescriptionCol, serviceImageCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -123,13 +152,45 @@ public class FXMLListServiceTypeController implements Initializable {
 
     public void showUsersData() {
         listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
-        table_ServiceType.getItems().clear();
+        //table_ServiceType.getItems().clear();
         table_ServiceType.setItems(listServiceTypes);
+        
+        //Set filterData and Pagination
+        filteredData = new FilteredList<>(listServiceTypes, list -> true);
+        ConnectControllers.getfXMLMainFormController().searchString.addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(
+                    serviceType -> newValue == null || newValue.isEmpty() || 
+                    serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServicePrice().toString().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
+            pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
+            changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
+        });
+        txt_Search.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(
+                    serviceType -> newValue == null || newValue.isEmpty() || 
+                    serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase()) || 
+                    serviceType.getServicePrice().toString().contains(newValue.toLowerCase()) || 
+                    serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
+            pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
+            changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
+        });        
+
+        int totalPage = (int) (Math.ceil(listServiceTypes.size() * 1.0 / ROWS_PER_PAGE));
+        pagination.setPageCount(totalPage);
+        pagination.setCurrentPageIndex(0);
+        changeTableView(0, ROWS_PER_PAGE);
+        pagination.currentPageIndexProperty().addListener(
+                (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
     }
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
-        check_Edit_Action = true;        
+        check_Edit_Action = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
 
@@ -137,7 +198,7 @@ public class FXMLListServiceTypeController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
-        check_Edit_Action = false;        
+        check_Edit_Action = false;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
     }
