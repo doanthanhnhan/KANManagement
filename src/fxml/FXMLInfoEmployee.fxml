@@ -18,7 +18,7 @@
 
 <AnchorPane id="AnchorPane" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLInfoEmployeeController">
    <children>
-      <VBox fx:id="vBox_Employee_Info" layoutX="-6.0" layoutY="-7.0">
+      <VBox fx:id="vBox_Employee_Info" layoutX="-6.0" layoutY="-7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="HboxHeader">
                <children>
@@ -106,7 +106,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXDatePicker fx:id="birthday" defaultColor="#6467cd" onAction="#Format_Show_Calender" prefHeight="35.0" prefWidth="400.0" promptText="Date Of Birth">
+                              <JFXDatePicker fx:id="birthday" defaultColor="#6467cd" editable="false" onAction="#Format_Show_Calender" prefHeight="35.0" prefWidth="400.0" promptText="Date Of Birth">
                                  <HBox.margin>
                                     <Insets top="30.0" />
                                  </HBox.margin>
@@ -229,7 +229,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXDatePicker fx:id="Hiredate" defaultColor="#6467cd" onAction="#Format_Show_Calender_Hiredate" prefHeight="35.0" prefWidth="400.0" promptText="Hiredate">
+                              <JFXDatePicker fx:id="Hiredate" defaultColor="#6467cd" editable="false" onAction="#Format_Show_Calender_Hiredate" prefHeight="35.0" prefWidth="400.0" promptText="Hiredate">
                                  <HBox.margin>
                                     <Insets left="80.0" right="80.0" top="30.0" />
                                  </HBox.margin>
@@ -318,7 +318,7 @@
             </HBox>
             <HBox fx:id="Hboxbtn" alignment="CENTER">
                <children>
-                  <JFXButton fx:id="btnInfo" buttonType="RAISED" onAction="#btnInfoEmployee" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                  <JFXButton fx:id="btnInfo" buttonType="RAISED" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

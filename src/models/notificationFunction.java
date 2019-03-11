@@ -28,7 +28,6 @@ public class notificationFunction {
         label.setPrefSize(300, 35);
         label.setText(content);
         textField.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-        hboxContent.setAlignment(Pos.CENTER);
         hboxContent.setSpacing(10);
         hboxContent.getChildren().clear();
         hboxContent.getChildren().add(icon);
@@ -45,7 +44,6 @@ public class notificationFunction {
         label.setPrefSize(300, 35);
         label.setText(content);
         textField.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
-        hboxContent.setAlignment(Pos.CENTER);
         hboxContent.setSpacing(10);
         hboxContent.getChildren().clear();
         hboxContent.getChildren().add(icon);

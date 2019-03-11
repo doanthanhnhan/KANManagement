@@ -103,50 +103,9 @@ public class FXMLLoginController implements Initializable {
 
     @FXML
     private void handleLoginAction() throws ClassNotFoundException, SQLException, IOException {
-        btnLogin.setDisable(true);
-//        // Đoạn này làm loading (đang làm chạy vô tận)
-//
-//        // Khai báo stage nhìn xuyên thấu
-//        final Stage stage = new Stage(StageStyle.TRANSPARENT);
-//
-//        // Chỗ này set khi mở cửa sổ con lên thì cha bị vô hiệu
-//        stage.initModality(Modality.APPLICATION_MODAL);
-//        stage.setOpacity(0.5);
-//
-//        final Label status = new Label("Loading");
-//        status.setStyle("-fx-text-fill: #008FC0; -fx-font-size : 20px; -fx-font-weight: bold;");
-//        final ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
-//        indicator.setPrefSize(100, 100);
-//        final Timeline timeline = new Timeline(
-//                new KeyFrame(Duration.seconds(1), new EventHandler() {
-//                    @Override
-//                    public void handle(Event event) {
-//                        String statusText = status.getText();
-//                        status.setText(
-//                                ("Loading . . .".equals(statusText))
-//                                ? "Loading ."
-//                                : statusText + " ."
-//                        );
-//                    }
-//                }),
-//                new KeyFrame(Duration.millis(1000))
-//        );
-//        timeline.setCycleCount(Timeline.INDEFINITE);
-//        Platform.runLater(() -> {
-//            VBox layout = new VBox();
-//            layout.setAlignment(Pos.CENTER);
-//            layout.setSpacing(10);
-//            layout.getChildren().addAll(indicator, status);
-//            layout.setStyle("-fx-padding: 10;");
-//            stage.setScene(new Scene(layout, 150, 150));
-//            stage.show();
-//        });
-//
-//        timeline.play();
-
+        btnLogin.setDisable(true);        
         StageLoader stageLoader = new StageLoader();
         stageLoader.loadingIndicator("Loading");
-
         Task loadOverview = new Task() {
             @Override
             protected Object call() throws Exception {
@@ -160,7 +119,6 @@ public class FXMLLoginController implements Initializable {
                 return null;
             }
         };
-
         loadOverview.setOnSucceeded(new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
