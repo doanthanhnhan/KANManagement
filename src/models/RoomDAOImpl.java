@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import utils.FormatName;
 import utils.connectDB;
 
 /**
@@ -23,13 +24,17 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public ObservableList<Room> getAllRoom() {
-        String sql = "SELECT * FROM Rooms";
+        String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName' \n"
+                + "FROM Rooms R, Customers C\n"
+                + "WHERE R.CustomerID = C.CustomerID";
         ObservableList<Room> listRooms = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-                while (rs.next()) {                    
+                while (rs.next()) {
                     Room room = new Room();
                     room.setRoomID(rs.getString("roomID"));
+                    room.setCustomerName(FormatName.format(rs.getString("CustomerFullName")));
+                    room.setUserName(rs.getString("userName"));
                     room.setRoomType(rs.getString("RoomType"));
                     room.setRoomPhoneNumber(rs.getString("PhoneNumber"));
                     room.setRoomOnFloor(rs.getInt("RoomOnFloor"));
@@ -37,7 +42,10 @@ public class RoomDAOImpl implements RoomDAO {
                     room.setRoomStatus(rs.getString("RoomStatus"));
                     room.setRoomClean(rs.getBoolean("Clean"));
                     room.setRoomRepaired(rs.getBoolean("Repaired"));
-                    room.setRoomInProgress(rs.getBoolean("InProgress"));                    
+                    room.setRoomInProgress(rs.getBoolean("InProgress"));
+                    room.setDayRemaining(rs.getInt("DayRemaining"));
+                    room.setActive(rs.getBoolean("Active"));
+
                     listRooms.add(room);
                 }
             }
@@ -66,7 +74,7 @@ public class RoomDAOImpl implements RoomDAO {
         RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
         ObservableList<Room> listRooms = FXCollections.observableArrayList();
         listRooms = roomDAOImpl.getAllRoom();
-        for (Room listRoom : listRooms) {            
+        for (Room listRoom : listRooms) {
             System.out.println(listRoom.toString());
         }
     }

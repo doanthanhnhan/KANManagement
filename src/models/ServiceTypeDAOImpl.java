@@ -31,7 +31,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public ObservableList<ServiceType> getAllServiceType() {
-        String sql = "SELECT * FROM ServiceType";
+        String sql = "SELECT ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, ServiceDescription FROM ServiceType";
         ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -41,16 +41,19 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                     serviceType.setServiceName(rs.getNString("ServiceName"));
                     serviceType.setServiceUnit(rs.getNString("ServiceUnit"));
                     serviceType.setServicePrice(rs.getFloat("ServicePrice"));
-                    serviceType.setServiceImage(rs.getBlob("Image"));
+                    if (rs.getBlob("Image") != null) {
+                        serviceType.setServiceImage(rs.getBlob("Image"));
+                    }
                     serviceType.setServiceDescription(rs.getNString("ServiceDescription"));
-
-                    byte[] bytes = serviceType.getServiceImage().getBytes(1l, (int) serviceType.getServiceImage().length());
-                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
-                    Image image = SwingFXUtils.toFXImage(img, null);
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(50);
-                    imageView.setFitWidth(50);
-                    serviceType.setImageView(imageView);
+                    if (serviceType.getServiceImage() != null) {
+                        byte[] bytes = serviceType.getServiceImage().getBytes(1l, (int) serviceType.getServiceImage().length());
+                        BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+                        Image image = SwingFXUtils.toFXImage(img, null);
+                        ImageView imageView = new ImageView(image);
+                        imageView.setFitHeight(50);
+                        imageView.setFitWidth(50);
+                        serviceType.setImageView(imageView);
+                    }
 
                     listServiceTypes.add(serviceType);
                 }
@@ -72,7 +75,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setNString(2, serviceType.getServiceName());
                 stmt.setNString(3, serviceType.getServiceUnit());
                 stmt.setFloat(4, serviceType.getServicePrice());
-                stmt.setBlob(5, serviceType.getServiceImage());                
+                stmt.setBlob(5, serviceType.getServiceImage());
                 stmt.setBoolean(6, true);
                 stmt.setNString(7, serviceType.getServiceDescription());
                 stmt.executeUpdate();
@@ -107,7 +110,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
         String sql = "DELETE FROM ServiceType WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, serviceType.getServiceID());                
+                stmt.setString(1, serviceType.getServiceID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {

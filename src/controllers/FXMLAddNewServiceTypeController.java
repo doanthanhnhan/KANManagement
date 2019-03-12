@@ -109,7 +109,9 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             serviceName.setText(serviceType.getServiceName());
             serviceUnit.setText(serviceType.getServiceUnit());
             servicePrice.setText(serviceType.getServicePrice().toString());
-            imgService.setImage(serviceType.getImageView().getImage());
+            if (serviceType.getImageView() != null) {
+                imgService.setImage(serviceType.getImageView().getImage());
+            }
             txtArea_Service_Description.setText(serviceType.getServiceDescription());
             btnAddNew.setText("Update");
 
@@ -206,8 +208,8 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     private void handle_Button_Insert_Image_Action(ActionEvent event) {
         File file = fileChooser.showOpenDialog(btnInsertImage.getScene().getWindow());
         fileChooser.setTitle("Choose an image for service type");
-        if (file != null && file.length()<=(200*1024)) {
-            System.out.println(file.toURI().toString() + " ; Size: = " + file.length()/1024 + "kB");
+        if (file != null && file.length() <= (200 * 1024)) {
+            System.out.println(file.toURI().toString() + " ; Size: = " + file.length() / 1024 + "kB");
             Image image = new Image(file.toURI().toString());
             imgService.setImage(image);
         } else {
@@ -286,7 +288,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             });
             check_Validate = false;
         } else if (validateTextArea(txtArea_Service_Description, "^(.|\\n){1,500}$", "NO EMPTY", "LENGTH MUST < 500 CHARACTERS")) {
-            System.out.println("serviceDescription is too long");            
+            System.out.println("serviceDescription is too long");
             check_Validate = false;
         } else {
             System.out.println("Validate finished");
