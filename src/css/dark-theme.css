@@ -164,8 +164,15 @@
     -fx-font-size : 15px;
     /*-fx-font-weight: regular;*/
 }
+.label-Primary-Status{
+    -fx-text-fill: -fx-primarycolor;
+    -fx-font-size : 15px;
+}
 .glyph-icon-clean-repair-inprogress-status{
     -fx-fill: -fx-checkoutcolor;
+}
+.glyph-icon-primary{
+    -fx-fill: -fx-primarycolor;
 }
 .label-task-status{
     -fx-text-fill: -fx-primarycolor;

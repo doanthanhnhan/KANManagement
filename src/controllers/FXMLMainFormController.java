@@ -48,8 +48,7 @@ import utils.MyTimer;
  */
 public class FXMLMainFormController implements Initializable {
 
-    public static Boolean checkRegis = false;
-    public static StringProperty searchString;
+    public static Boolean checkRegis = false;    
 
     @FXML
     private MenuBar mainMenuBar;
@@ -162,19 +161,12 @@ public class FXMLMainFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        ConnectControllers.setfXMLMainFormController(this);
         
-        ConnectControllers.setfXMLMainFormController(this);        
-        searchString = new SimpleStringProperty();
-        
-        txt_Search.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue!=null){
-                searchString.set(txt_Search.getText());
-                System.out.println(searchString.getValue());
-            }
-        });
         //Set close button for selected TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
-        
+
     }
 
     private void initMenuBar() {
@@ -332,6 +324,15 @@ public class FXMLMainFormController implements Initializable {
     }
     // ############### END VIEW ACTIONS ###############
 
+    // =============== PUBLIC METHODS ===============
+    public TextField getTxt_Search() {
+        return txt_Search;
+    }
+
+    public void setTxt_Search(TextField txt_Search) {
+        this.txt_Search = txt_Search;
+    }
+
     /**
      *
      * @param fxmlPath
@@ -380,7 +381,7 @@ public class FXMLMainFormController implements Initializable {
                     AnchorPane subPane = (AnchorPane) FXMLLoader.load(getClass().getResource(formPath));
 
                     // Add fxml content to a tab
-                    Tab subTab = new Tab(tabName);                    
+                    Tab subTab = new Tab(tabName);
                     subTab.setContent(subPane);
                     Platform.runLater(() -> {
                         mainTabPane.getTabs().add(subTab);

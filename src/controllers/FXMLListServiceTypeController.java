@@ -47,7 +47,7 @@ public class FXMLListServiceTypeController implements Initializable {
     public Boolean check_Edit_Action = false;
     public static ServiceType serviceTypeItem;
 
-    private static final int ROWS_PER_PAGE = 4;    
+    private static final int ROWS_PER_PAGE = 4;
     private FilteredList<ServiceType> filteredData;
 
     @FXML
@@ -63,8 +63,6 @@ public class FXMLListServiceTypeController implements Initializable {
     @FXML
     private MenuItem menuItem_Refresh;
     @FXML
-    private JFXTextField txt_Search;
-    @FXML
     private Pagination pagination;
 
     /**
@@ -74,7 +72,7 @@ public class FXMLListServiceTypeController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         setColumns();
         showUsersData();
-        ConnectControllers.setfXMLListServiceTypeController(this);        
+        ConnectControllers.setfXMLListServiceTypeController(this);
 
         // Check item when click on table
         table_ServiceType.setOnMouseClicked((MouseEvent event) -> {
@@ -97,12 +95,12 @@ public class FXMLListServiceTypeController implements Initializable {
         int toIndex = Math.min(fromIndex + limit, listServiceTypes.size());
 
         int minIndex = Math.min(toIndex, filteredData.size());
-        
+
         SortedList<ServiceType> sortedData = new SortedList<>(
-            FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
-        
+                FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
+
         sortedData.comparatorProperty().bind(table_ServiceType.comparatorProperty());
-        
+
         table_ServiceType.setItems(sortedData);
 
     }
@@ -154,31 +152,21 @@ public class FXMLListServiceTypeController implements Initializable {
         listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
         //table_ServiceType.getItems().clear();
         table_ServiceType.setItems(listServiceTypes);
-        
+
         //Set filterData and Pagination
         filteredData = new FilteredList<>(listServiceTypes, list -> true);
-        ConnectControllers.getfXMLMainFormController().searchString.addListener((observable, oldValue, newValue) -> {
+        FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
+        mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(
-                    serviceType -> newValue == null || newValue.isEmpty() || 
-                    serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServicePrice().toString().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
+                    serviceType -> newValue == null || newValue.isEmpty()
+                    || serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase())
+                    || serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase())
+                    || serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase())
+                    || serviceType.getServicePrice().toString().contains(newValue.toLowerCase())
+                    || serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
         });
-        txt_Search.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(
-                    serviceType -> newValue == null || newValue.isEmpty() || 
-                    serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase()) || 
-                    serviceType.getServicePrice().toString().contains(newValue.toLowerCase()) || 
-                    serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
-            pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
-            changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
-        });        
 
         int totalPage = (int) (Math.ceil(listServiceTypes.size() * 1.0 / ROWS_PER_PAGE));
         pagination.setPageCount(totalPage);

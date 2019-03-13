@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.icons525.Icons525View?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Pagination?>
@@ -52,21 +50,6 @@
                </children>
             </HBox>
          </bottom>
-         <top>
-            <HBox spacing="10.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Icons525View glyphName="SEARCH" size="20">
-                     <HBox.margin>
-                        <Insets top="8.0" />
-                     </HBox.margin>
-                  </Icons525View>
-                  <JFXTextField fx:id="txt_Search" promptText="Search . . . " />
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" top="10.0" />
-               </padding>
-            </HBox>
-         </top>
       </BorderPane>
    </children>
 </AnchorPane>
