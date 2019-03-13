@@ -160,7 +160,7 @@ public class FXMLListServiceTypeController implements Initializable {
             filteredData.setPredicate(
                     serviceType -> newValue == null || newValue.isEmpty()
                     || serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase())
-                    || serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase())
+                    //|| serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase())
                     || serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase())
                     || serviceType.getServicePrice().toString().contains(newValue.toLowerCase())
                     || serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));

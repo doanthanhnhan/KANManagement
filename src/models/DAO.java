@@ -210,6 +210,52 @@ public class DAO {
     }
 // Lấy ra Info của User
 
+    public static ObservableList<InfoEmployee> getAllInfoEmployee() throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<InfoEmployee> list = FXCollections.observableArrayList();
+        String sql = "select * from Employees";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            InfoEmployee Emp = new InfoEmployee();
+            Emp.setEmployee_ID(rs.getString("EmployeeID"));
+            Emp.setActive(rs.getBoolean("Active"));
+            Emp.setFirst_Name(rs.getString("EmployeeFirstName"));
+            Emp.setMid_Name(rs.getString("EmployeeMidName"));
+            Emp.setLast_Name(rs.getString("EmployeeLastName"));
+            Emp.setWork_Dept(rs.getString("DepartmentID"));
+            Emp.setPhone_No(rs.getString("PhoneNumber"));
+            Emp.setHiredate(rs.getString("HireDate"));
+            Emp.setJob(rs.getString("Job"));
+            Emp.setEDLEVEL(rs.getInt("EducatedLevel"));
+            Emp.setBirthdate(rs.getString("Birthday"));
+            Emp.setSalary(rs.getString("Salary"));
+            Emp.setBonus(rs.getString("Bonus"));
+            Emp.setComm(rs.getString("Comm"));
+            Emp.setGmail(rs.getString("Email"));
+            Emp.setAddress(rs.getString("Address"));
+            Emp.setId_number(rs.getString("IDNumber"));
+            Emp.setServiceImage(rs.getBlob("Image"));
+            if (rs.getBlob("Image") != null) {
+                try {
+                    byte[] bytes = Emp.getServiceImage().getBytes(1l, (int) Emp.getServiceImage().length());
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+                    Image image = SwingFXUtils.toFXImage(img, null);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(50);
+                    imageView.setFitWidth(50);
+                    Emp.setImageView(imageView);
+                } catch (IOException ex) {
+                    Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            Emp.setSex(rs.getBoolean("Sex"));
+            list.add(Emp);
+        }
+        return list;
+    }
+
     public static InfoEmployee getInfoEmployee(String user) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         String sql = "select Users.*,Employees.*,[Role].* from Users, Employees,[Role] where Users.EmployeeID =? and Users.EmployeeID = Employees.EmployeeID and Employees.RoleID=[Role].RoleID";

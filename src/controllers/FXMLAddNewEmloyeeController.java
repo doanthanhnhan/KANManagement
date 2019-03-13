@@ -74,6 +74,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     private JFXButton btnAddNew;
     @FXML
     private HBox HboxContent;
+    private FXMLListEmployeeController fXMLListEmployeeController;
 
     /**
      * Initializes the controller class.
@@ -83,6 +84,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
         try {
             if (DAO.checkFirstLogin() == 0) {
                 newRole.setValue("Admin");
