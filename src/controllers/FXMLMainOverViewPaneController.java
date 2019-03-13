@@ -16,9 +16,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -41,7 +45,11 @@ import models.RoomDAOImpl;
 public class FXMLMainOverViewPaneController implements Initializable {
 
     public static ObservableList<Room> listRooms;
+    ObservableList<String> list_Status = FXCollections.observableArrayList();
+    ObservableList<String> list_Type = FXCollections.observableArrayList();
+    ObservableList<String> list_HouseKeeping = FXCollections.observableArrayList();
     RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
+
     private FilteredList<Room> filteredRoom;
 
     @FXML
@@ -129,11 +137,48 @@ public class FXMLMainOverViewPaneController implements Initializable {
         System.out.println("Test chạy không????");
         listRooms = roomDAOImpl.getAllRoom();
         System.out.println("listRooms size = " + listRooms.size());
-        ArrayList<String> array_Status = new ArrayList<>(Arrays.asList("Available", "Reserved", "Occupied", "Check out"));
-        ArrayList<String> array_Type = new ArrayList<>(Arrays.asList("Single", "Double", "Triple", "Family", "Deluxe"));
-        ArrayList<String> array_HouseKeeping = new ArrayList<>(Arrays.asList("Clean", "Not clean", "Repaired", "Need repairing", "In progress", "Progress done"));
 
-        add_Rooms_With_Condition(flowPane_Rooms, array_Status, array_Type, array_HouseKeeping);
+        // Make all check boxes bean ticked
+//        checkBox_Available.setSelected(true);
+//        checkBox_Reserved.setSelected(true);
+//        checkBox_Occupied.setSelected(true);
+//        checkBox_Checkout.setSelected(true);
+//        checkBox_Single.setSelected(true);
+//        checkBox_Double.setSelected(true);
+//        checkBox_Triple.setSelected(true);
+//        checkBox_Family.setSelected(true);
+//        checkBox_Deluxe.setSelected(true);
+//        checkBox_Clean.setSelected(true);
+//        checkBox_NotClean.setSelected(true);
+//        checkBox_Repair.setSelected(true);
+//        checkBox_InProgress.setSelected(true);
+        // Test checking role and removing node
+        //vBox_Filters.getChildren().remove(checkBox_InProgress.getParent());
+        //Adding room properties to list
+        checkBox_Property_Listener(list_Status, checkBox_Available, "Available");
+        checkBox_Property_Listener(list_Status, checkBox_Reserved, "Reserved");
+        checkBox_Property_Listener(list_Status, checkBox_Occupied, "Occupied");
+        checkBox_Property_Listener(list_Status, checkBox_Checkout, "Out");
+
+        checkBox_Property_Listener(list_Type, checkBox_Single, "Single");
+        checkBox_Property_Listener(list_Type, checkBox_Double, "Double");
+        checkBox_Property_Listener(list_Type, checkBox_Triple, "Triple");
+        checkBox_Property_Listener(list_Type, checkBox_Family, "Family");
+        checkBox_Property_Listener(list_Type, checkBox_Deluxe, "Deluxe");
+
+        checkBox_Property_Listener(list_HouseKeeping, checkBox_Clean, "Clean");
+        checkBox_Property_Listener(list_HouseKeeping, checkBox_NotClean, "Not clean");
+        checkBox_Property_Listener(list_HouseKeeping, checkBox_Repair, "Repaired");
+        checkBox_Property_Listener(list_HouseKeeping, checkBox_Not_Repair, "Not repaired");
+        checkBox_Property_Listener(list_HouseKeeping, checkBox_InProgress, "In progress");
+        checkBox_Property_Listener(list_HouseKeeping, checkBox_Remaining_Days, "Remaining days");
+
+        System.out.println("list_Status size = " + list_Status.size());
+        System.out.println("list_Type size = " + list_Type.size());
+        System.out.println("list_HouseKeeping size = " + list_HouseKeeping.size());
+
+        //Add room into form
+        add_Rooms_With_Condition(listRooms, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
 
         //Set filterData and Pagination
         filteredRoom = new FilteredList<>(listRooms, list -> true);
@@ -152,23 +197,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     || room.getRoomPhoneNumber().toLowerCase().contains(newValue.toLowerCase()));
         });
 
-        // Make all check boxes bean ticked
-//        checkBox_Available.setSelected(true);
-//        checkBox_Reserved.setSelected(true);
-//        checkBox_Occupied.setSelected(true);
-//        checkBox_Checkout.setSelected(true);
-//        checkBox_Single.setSelected(true);
-//        checkBox_Double.setSelected(true);
-//        checkBox_Triple.setSelected(true);
-//        checkBox_Family.setSelected(true);
-//        checkBox_Deluxe.setSelected(true);
-//        checkBox_Clean.setSelected(true);
-//        checkBox_NotClean.setSelected(true);
-//        checkBox_Repair.setSelected(true);
-//        checkBox_InProgress.setSelected(true);
-        // Test checking role and removing node
-        vBox_Filters.getChildren().remove(checkBox_InProgress.getParent());
-
+        //Setting floor number into comboBox
         ObservableList<String> listFromFloor = FXCollections.observableArrayList();
         //Finding max floor
         Room roomAtMaxFloor = Collections.max(listRooms, new CompareRoom());
@@ -211,82 +240,28 @@ public class FXMLMainOverViewPaneController implements Initializable {
         listRooms = roomDAOImpl.getAllRoom();
         filteredRoom = new FilteredList<>(listRooms, list -> true);
         System.out.println("Button clicked.");
-
-        ArrayList<String> listStatus = new ArrayList<>();
-        if (!checkBox_Available.isSelected() && !checkBox_Reserved.isSelected() && !checkBox_Occupied.isSelected() && !checkBox_Checkout.isSelected()) {
-            System.out.println("None selected type");
-            listStatus = new ArrayList<>(Arrays.asList("Available", "Reserved", "Occupied", "Check out"));
-        } else {
-            System.out.println("Exist selected type");
-            listStatus.clear();
-            if (checkBox_Available.isSelected()) {
-                listStatus.add("Available");
+        Predicate<Room> roomStatus = i -> {
+            for (String status : list_Status) {
+                if (i.getRoomStatus().contains(status)) {
+                    return i.getRoomStatus().contains(status);
+                }
             }
-            if (checkBox_Reserved.isSelected()) {
-                listStatus.add("Reserved");
-            }
-            if (checkBox_Occupied.isSelected()) {
-                listStatus.add("Occupied");
-            }
-            if (checkBox_Checkout.isSelected()) {
-                listStatus.add("Check out");
-            }
-        }
-
-        ArrayList<String> listTypes = new ArrayList<>();
-        if (!checkBox_Single.isSelected() && !checkBox_Double.isSelected() && !checkBox_Triple.isSelected() && !checkBox_Family.isSelected() && !checkBox_Deluxe.isSelected()) {
-            listTypes = new ArrayList<>(Arrays.asList("Single", "Double", "Triple", "Family", "Deluxe"));
-        } else {
-            listTypes.clear();
-            if (checkBox_Single.isSelected()) {
-                listTypes.add("Single");
-            }
-            if (checkBox_Double.isSelected()) {
-                listTypes.add("Double");
-            }
-            if (checkBox_Triple.isSelected()) {
-                listTypes.add("Triple");
-            }
-            if (checkBox_Family.isSelected()) {
-                listTypes.add("Family");
-            }
-            if (checkBox_Deluxe.isSelected()) {
-                listTypes.add("Deluxe");
-            }
-        }
-
-        ArrayList<String> listHouseKeeping = new ArrayList<>();
-        if (!checkBox_Clean.isSelected() && !checkBox_NotClean.isSelected() && !checkBox_Repair.isSelected() && !checkBox_InProgress.isSelected()) {
-            listHouseKeeping = new ArrayList<>(Arrays.asList("Clean", "Not clean", "Repaired", "Need repairing", "In progress", "Progress done"));
-        } else {
-            listHouseKeeping.clear();
-            if (checkBox_Clean.isSelected()) {
-                listHouseKeeping.add("Clean");
-            }
-            if (checkBox_NotClean.isSelected()) {
-                listHouseKeeping.add("Not clean");
-            }
-            if (checkBox_Repair.isSelected()) {
-                listHouseKeeping.add("Repair");
-            }
-            if (checkBox_InProgress.isSelected()) {
-                listHouseKeeping.add("In progress");
-            }
-        }
-        System.out.println("List status: " + listStatus.toString());
-
-        add_Rooms_With_Condition(flowPane_Rooms, listStatus, listTypes, listHouseKeeping);
+            return false;
+        };
+        filteredRoom.setPredicate(roomStatus);
+        add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
 
     }
 
     public void add_Rooms_With_Condition(
+            ObservableList<Room> list_Rooms,
             Pane parentPane,
-            ArrayList<String> roomStatus,
-            ArrayList<String> roomType,
-            ArrayList<String> roomHouseKeeping) {
+            ObservableList<String> roomStatus,
+            ObservableList<String> roomType,
+            ObservableList<String> roomHouseKeeping) {
         parentPane.getChildren().clear();
         try {
-            for (Room listRoom : listRooms) {
+            for (Room listRoom : list_Rooms) {
                 System.out.println("RoomID = " + listRoom.getRoomID());
                 AnchorPane pane = (AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/FXMLRoomStatusForm.fxml"));
                 Label label_Room_Number = (Label) pane.lookup("#label_Room_Number");
@@ -394,19 +369,19 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     icon_Clean_Status.getStyleClass().add("glyph-icon-primary");
                 }
                 // Convert HouseKeeping to String list
-                ArrayList<String> listHouseKeeping = new ArrayList<>();
-                if (listRoom.isRoomClean()) {
-                    listHouseKeeping.add("Clean");
-                }
-                if (!listRoom.isRoomClean()) {
-                    listHouseKeeping.add("Not clean");
-                }
-                if (listRoom.isRoomRepaired()) {
-                    listHouseKeeping.add("Repair");
-                }
-                if (listRoom.isRoomInProgress()) {
-                    listHouseKeeping.add("In progress");
-                }
+//                ArrayList<String> listHouseKeeping = new ArrayList<>();
+//                if (listRoom.isRoomClean()) {
+//                    listHouseKeeping.add("Clean");
+//                }
+//                if (!listRoom.isRoomClean()) {
+//                    listHouseKeeping.add("Not clean");
+//                }
+//                if (listRoom.isRoomRepaired()) {
+//                    listHouseKeeping.add("Repair");
+//                }
+//                if (listRoom.isRoomInProgress()) {
+//                    listHouseKeeping.add("In progress");
+//                }
 
                 parentPane.getChildren().add(pane);
                 //Check room status and add to specific Pane
@@ -450,6 +425,111 @@ public class FXMLMainOverViewPaneController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainOverViewPaneController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Adding text to list
+     *
+     * @param list
+     * @param checkBox
+     * @param checkBox_Text
+     */
+    private void checkBox_Property_Listener(ObservableList<String> list, JFXCheckBox checkBox, String checkBox_Text) {
+        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("newValue = " + newValue);
+            if (newValue == true) {
+                System.out.println(checkBox_Text + " = " + checkBox.isSelected());
+                if (!list.contains(checkBox_Text)) {
+                    list.add(checkBox_Text);
+                }
+            } else {
+                System.out.println(checkBox_Text + " = " + checkBox.isSelected());
+                if (list.contains(checkBox_Text)) {
+                    list.remove(checkBox_Text);
+                }
+            }
+            filteredRoom = new FilteredList<>(listRooms, list1 -> true);
+
+            Predicate<Room> roomStatus = i -> {
+                for (String status : list_Status) {
+                    if (i.getRoomStatus().contains(status)) {
+                        return i.getRoomStatus().contains(status);
+                    }
+                }
+                return false;
+            };
+
+            Predicate<Room> roomType = i -> {
+                for (String type : list_Type) {
+                    if (i.getRoomType().contains(type)) {
+                        return i.getRoomType().contains(type);
+                    }
+                }
+                return false;
+            };
+
+            Predicate<Room> roomHouseKeeping = i -> {
+                for (String houseKeeping : list_HouseKeeping) {
+                    if (check_Room_Housekeeping_Status(i, houseKeeping)) {
+                        return check_Room_Housekeeping_Status(i, houseKeeping);
+                    }
+                }
+                return false;
+            };
+            if (!list_Status.isEmpty() && !list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
+                System.out.println("3 list are not empty");
+                filteredRoom.setPredicate(roomStatus.and(roomType).and(roomHouseKeeping));
+            } else if (!list_Status.isEmpty() && !list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
+                System.out.println("liststatus, listtype are not empty");
+                filteredRoom.setPredicate(roomStatus.and(roomType));
+            } else if (!list_Status.isEmpty() && list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
+                System.out.println("liststatus, listhouse are not empty");
+                filteredRoom.setPredicate(roomStatus.and(roomHouseKeeping));
+            } else if (!list_Status.isEmpty() && list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
+                System.out.println("liststatus is not empty");
+                filteredRoom.setPredicate(roomStatus);
+            } else if (list_Status.isEmpty() && !list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
+                System.out.println("listtype, listhouse are not empty");
+                filteredRoom.setPredicate(roomType.and(roomHouseKeeping));
+            } else if (list_Status.isEmpty() && !list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
+                System.out.println("listtype is not empty");
+                filteredRoom.setPredicate(roomType);
+            } else if (list_Status.isEmpty() && list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
+                System.out.println("listhouse is not empty");
+                filteredRoom.setPredicate(roomHouseKeeping);
+            }
+
+            add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
+        });
+    }
+
+    private Boolean check_Room_Housekeeping_Status(Room room, String compare_Str) {
+        // Convert HouseKeeping to String list
+        ArrayList<String> listHouseKeeping = new ArrayList<>();
+        if (room.isRoomClean()) {
+            listHouseKeeping.add("Clean");
+        }
+        if (!room.isRoomClean()) {
+            listHouseKeeping.add("Not clean");
+        }
+        if (room.isRoomRepaired()) {
+            listHouseKeeping.add("Repaired");
+        }
+        if (!room.isRoomRepaired()) {
+            listHouseKeeping.add("Not repaired");
+        }
+        if (room.isRoomInProgress()) {
+            listHouseKeeping.add("In progress");
+        }
+        if (!room.isRoomInProgress()) {
+            listHouseKeeping.add("Remaining days");
+        }
+        for (String string : listHouseKeeping) {
+            if (string.equalsIgnoreCase(compare_Str)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public class CompareRoom implements Comparator<Room> {
