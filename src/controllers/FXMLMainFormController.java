@@ -164,7 +164,7 @@ public class FXMLMainFormController implements Initializable {
 
         ConnectControllers.setfXMLMainFormController(this);
         
-        //Set close button for selected TAB
+        //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
     }
