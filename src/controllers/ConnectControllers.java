@@ -17,6 +17,7 @@ public class ConnectControllers {
     public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController;
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
+    public static FXMLListEmployeeController fXMLListEmployeeController;
     public static FXMLLoginController getfXMLLoginController() {
         return fXMLLoginController;
     }
@@ -42,13 +43,21 @@ public class ConnectControllers {
         ConnectControllers.fXMLForgetPassController = fXMLForgetPassController;
     }
 
-    public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController() {
+    public static FXMLAddNewEmloyeeController getfXMLAddNewEmloyeeController() {
 
         return fXMLAddNewEmloyeeController;
     }
 
     public static void setfXMLAddNewEmloyeeController(FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController) {
         ConnectControllers.fXMLAddNewEmloyeeController = fXMLAddNewEmloyeeController;
+    }
+
+    public static FXMLListEmployeeController getfXMLListEmployeeController() {
+        return fXMLListEmployeeController;
+    }
+
+    public static void setfXMLListEmployeeController(FXMLListEmployeeController fXMLListEmployeeController) {
+        ConnectControllers.fXMLListEmployeeController = fXMLListEmployeeController;
     }
 
     public static FXMLAddNewServiceTypeController getfXMLAddNewServiceTypeController() {

@@ -48,7 +48,7 @@ import utils.MyTimer;
  */
 public class FXMLMainFormController implements Initializable {
 
-    public static Boolean checkRegis = false;    
+    public static Boolean checkRegis = false;
 
     @FXML
     private MenuBar mainMenuBar;
@@ -163,6 +163,7 @@ public class FXMLMainFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         ConnectControllers.setfXMLMainFormController(this);
+
         
         //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
@@ -287,6 +288,12 @@ public class FXMLMainFormController implements Initializable {
     private void handle_MenuItem_List_Service_Type_Action(ActionEvent event) {
         System.out.println("List Service Type menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceType.fxml", "Service type");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_Employee_Action(ActionEvent event) {
+        System.out.println("List Service Type menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListEmployee.fxml", "Employee type");
     }
     // ############### END VIEW ACTIONS ###############
 
