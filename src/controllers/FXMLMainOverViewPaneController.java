@@ -154,7 +154,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
 //        checkBox_InProgress.setSelected(true);
         // Test checking role and removing node
         //vBox_Filters.getChildren().remove(checkBox_InProgress.getParent());
-        //Adding room properties to list
+        //Adding room properties to list and do filtering
         checkBox_Property_Listener(list_Status, checkBox_Available, "Available");
         checkBox_Property_Listener(list_Status, checkBox_Reserved, "Reserved");
         checkBox_Property_Listener(list_Status, checkBox_Occupied, "Occupied");
@@ -173,10 +173,6 @@ public class FXMLMainOverViewPaneController implements Initializable {
         checkBox_Property_Listener(list_HouseKeeping, checkBox_InProgress, "In progress");
         checkBox_Property_Listener(list_HouseKeeping, checkBox_Remaining_Days, "Remaining days");
 
-        System.out.println("list_Status size = " + list_Status.size());
-        System.out.println("list_Type size = " + list_Type.size());
-        System.out.println("list_HouseKeeping size = " + list_HouseKeeping.size());
-
         //Add room into form
         add_Rooms_With_Condition(listRooms, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
 
@@ -184,6 +180,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
         filteredRoom = new FilteredList<>(listRooms, list -> true);
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Searching...");
             filteredRoom.setPredicate(
                     room -> newValue == null || newValue.isEmpty()
                     || room.getRoomID().toLowerCase().contains(newValue.toLowerCase())
@@ -195,12 +192,16 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     || String.valueOf(room.getDayRemaining()).contains(newValue.toLowerCase())
                     || String.valueOf(room.getRoomArea()).contains(newValue.toLowerCase())
                     || room.getRoomPhoneNumber().toLowerCase().contains(newValue.toLowerCase()));
+            //Add room into form
+            add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
         });
 
         //Setting floor number into comboBox
         ObservableList<String> listFromFloor = FXCollections.observableArrayList();
         //Finding max floor
         Room roomAtMaxFloor = Collections.max(listRooms, new CompareRoom());
+        //Finding min floor
+        Room roomAtMinFloor = Collections.min(listRooms, new CompareRoom());
         System.out.println("Max Floor: " + roomAtMaxFloor.getRoomOnFloor());
 
         for (int i = 1; i <= roomAtMaxFloor.getRoomOnFloor(); i++) {
@@ -208,30 +209,39 @@ public class FXMLMainOverViewPaneController implements Initializable {
         }
 
         comboBox_FromFloor.getItems().addAll(listFromFloor);
+        comboBox_FromFloor.setValue(String.valueOf(roomAtMinFloor.getRoomOnFloor()));
         comboBox_ToFloor.getItems().addAll(listFromFloor);
+        comboBox_ToFloor.setValue(String.valueOf(roomAtMaxFloor.getRoomOnFloor()));
 
         // Validating when comboBox change value
         comboBox_FromFloor.valueProperty().addListener((obs, oldItem, newItem) -> {
             System.out.println("Min floor changed");
             if (Integer.parseInt(comboBox_FromFloor.getValue()) > Integer.parseInt(comboBox_ToFloor.getValue())) {
-
-                System.out.println("Min > Max : " + comboBox_FromFloor.getStyleClass());
-                comboBox_FromFloor.getStyleClass().add("jfx-combo-box-fault");
-            } else {
-                comboBox_FromFloor.getStyleClass().remove("jfx-combo-box-fault");
-                comboBox_FromFloor.getStyleClass().remove("jfx-combo-box");
+                comboBox_ToFloor.setValue(newItem);
             }
+            Predicate<Room> minFloor = i -> {
+                return i.getRoomOnFloor() >= Integer.parseInt(comboBox_FromFloor.getValue());
+            };
+            Predicate<Room> maxFloor = i -> {
+                return i.getRoomOnFloor() <= Integer.parseInt(comboBox_ToFloor.getValue());
+            };
+            filteredRoom.setPredicate(minFloor.and(maxFloor));
+            //Add room into form
+            add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
         });
         comboBox_ToFloor.valueProperty().addListener((obs, oldItem, newItem) -> {
-            System.out.println("Max floor changed");
             if (Integer.parseInt(comboBox_FromFloor.getValue()) > Integer.parseInt(comboBox_ToFloor.getValue())) {
-
-                System.out.println("Max < Min : " + comboBox_ToFloor.getStyleClass());
-                comboBox_ToFloor.getStyleClass().add("jfx-combo-box-fault");
-            } else {
-                comboBox_ToFloor.getStyleClass().remove("jfx-combo-box-fault");
-                comboBox_ToFloor.getStyleClass().add("jfx-combo-box");
+                comboBox_FromFloor.setValue(newItem);
             }
+            Predicate<Room> minFloor = i -> {
+                return i.getRoomOnFloor() >= Integer.parseInt(comboBox_FromFloor.getValue());
+            };
+            Predicate<Room> maxFloor = i -> {
+                return i.getRoomOnFloor() <= Integer.parseInt(comboBox_ToFloor.getValue());
+            };
+            filteredRoom.setPredicate(minFloor.and(maxFloor));
+            //Add room into form
+            add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
         });
     }
 
@@ -368,59 +378,9 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     icon_Clean_Status.getStyleClass().removeAll();
                     icon_Clean_Status.getStyleClass().add("glyph-icon-primary");
                 }
-                // Convert HouseKeeping to String list
-//                ArrayList<String> listHouseKeeping = new ArrayList<>();
-//                if (listRoom.isRoomClean()) {
-//                    listHouseKeeping.add("Clean");
-//                }
-//                if (!listRoom.isRoomClean()) {
-//                    listHouseKeeping.add("Not clean");
-//                }
-//                if (listRoom.isRoomRepaired()) {
-//                    listHouseKeeping.add("Repair");
-//                }
-//                if (listRoom.isRoomInProgress()) {
-//                    listHouseKeeping.add("In progress");
-//                }
 
                 parentPane.getChildren().add(pane);
-                //Check room status and add to specific Pane
-//                Boolean checkListHK = false, checkType = false, checkHouseKeeping = false;
-//                for (String status : roomStatus) {
-//                    for (String type : roomType) {
-//                        for (String houseKeeping : roomHouseKeeping) {
-//                            for (String stringHouseKeeping : listHouseKeeping) {
-//                                System.out.printf("RoomID=%s, status=%s, type=%s, houseKeeping=%s \n",
-//                                        listRoom.getRoomID(), listRoom.getRoomStatus(), listRoom.getRoomType(), stringHouseKeeping);
-//                                if (status.equalsIgnoreCase(listRoom.getRoomStatus()) 
-//                                        && type.equalsIgnoreCase(listRoom.getRoomType()) 
-//                                        && houseKeeping.equalsIgnoreCase(stringHouseKeeping)
-//                                    ) {
-//                                    parentPane.getChildren().add(pane);
-//                                    checkListHK = true;
-//                                    break;
-//                                }
-//                            }
-//                            if (checkListHK) {
-//                                checkHouseKeeping = true;
-//                                break;
-//                            }
-//                        }
-//                        // Dùng để test trường hợp 2 thuộc tính
-////                        if (status.equalsIgnoreCase(listRoom.getRoomStatus()) && type.equals(listRoom.getRoomType())) {
-////                            parentPane.getChildren().add(pane);
-////                            checkType = true;
-////                            break;
-////                        }
-//                        if (checkHouseKeeping) {
-//                            checkType = true;
-//                            break;
-//                        }
-//                    }
-//                    if (checkType) {
-//                        break;
-//                    }
-//                }
+
             }
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainOverViewPaneController.class.getName()).log(Level.SEVERE, null, ex);
@@ -428,7 +388,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
     }
 
     /**
-     * Adding text to list
+     * Adding text to list and do filtering
      *
      * @param list
      * @param checkBox
