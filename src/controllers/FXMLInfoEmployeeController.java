@@ -78,7 +78,7 @@ public class FXMLInfoEmployeeController implements Initializable {
     private HBox HboxHeader;
 
     @FXML
-    private JFXDatePicker birthday ;
+    private JFXDatePicker birthday;
     private JFXTextField newMidname;
     @FXML
     private HBox HboxContent;
@@ -165,15 +165,13 @@ public class FXMLInfoEmployeeController implements Initializable {
         birthday.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
-                
                 super.updateItem(date, empty);
-
                 LocalDate today = LocalDate.ofYearDay(LocalDate.now().getYear() - 16, LocalDate.now().getDayOfYear());
-                
                 setDisable(empty || date.compareTo(today) > 0);
-
+               
             }
         });
+
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif, *.bmp)", "*.jpg", "*.png", "*.gif", "*.bmp");
         fileChooser.getExtensionFilters().add(extFilter);
         DepartmentId.setText("");
