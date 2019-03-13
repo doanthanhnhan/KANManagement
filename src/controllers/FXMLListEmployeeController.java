@@ -118,17 +118,16 @@ public class FXMLListEmployeeController implements Initializable {
         TableColumn<InfoEmployee, String> empHireDateCol = new TableColumn<>("Emp HireDate");
         TableColumn<InfoEmployee, String> empJobCol = new TableColumn<>("Emp Job");
         TableColumn<InfoEmployee, String> empEduLevelCol = new TableColumn<>("Emp EducatedLevel");
-        TableColumn<InfoEmployee, Boolean> empSexCol = new TableColumn<>("Emp Sex");
+        TableColumn<InfoEmployee, String> empSexCol = new TableColumn<>("Emp Sex");
         TableColumn<InfoEmployee, String> empBirthdayCol = new TableColumn<>("Emp Birthday");
         TableColumn<InfoEmployee, Double> empSalaryCol = new TableColumn<>("Emp Salary");
         TableColumn<InfoEmployee, Double> empBonusCol = new TableColumn<>("Emp Bonus");
         TableColumn<InfoEmployee, String> empCommCol = new TableColumn<>("Emp Comm");
         TableColumn<InfoEmployee, ImageView> empImageCol = new TableColumn<>("Emp Image");
-        TableColumn<InfoEmployee, Boolean> empActiveCol = new TableColumn<>("Emp Active");
         TableColumn numberCol = new TableColumn("#");
-        numberCol.setCellValueFactory(new Callback<CellDataFeatures<ServiceType, String>, ObservableValue<String>>() {
+        numberCol.setCellValueFactory(new Callback<CellDataFeatures<InfoEmployee, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(CellDataFeatures<ServiceType, String> p) {
+            public ObservableValue<String> call(CellDataFeatures<InfoEmployee, String> p) {
                 return new ReadOnlyObjectWrapper((table_ListEmployee.getItems().indexOf(p.getValue()) + 1) + "");
             }
         });
@@ -148,14 +147,21 @@ public class FXMLListEmployeeController implements Initializable {
         empHireDateCol.setCellValueFactory(new PropertyValueFactory<>("Hiredate"));
         empEduLevelCol.setCellValueFactory(new PropertyValueFactory<>("EDLEVEL"));
         empJobCol.setCellValueFactory(new PropertyValueFactory<>("Job"));
-        empSexCol.setCellValueFactory(new PropertyValueFactory<>("Sex"));
+        empSexCol.setCellValueFactory(new Callback<CellDataFeatures<InfoEmployee, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<InfoEmployee, String> param) {
+
+                if (param.getValue().getSex()) {
+                    return new ReadOnlyObjectWrapper("Male");
+                }
+                return new ReadOnlyObjectWrapper("Female");
+            }
+        });
         empBirthdayCol.setCellValueFactory(new PropertyValueFactory<>("Birthdate"));
         empSalaryCol.setCellValueFactory(new PropertyValueFactory<>("Salary"));
         empBonusCol.setCellValueFactory(new PropertyValueFactory<>("Bonus"));
         empCommCol.setCellValueFactory(new PropertyValueFactory<>("Comm"));
         empImageCol.setCellValueFactory(new PropertyValueFactory<>("imageView"));
-        empActiveCol.setCellValueFactory(new PropertyValueFactory<>("Active"));
-
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empFNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -170,7 +176,6 @@ public class FXMLListEmployeeController implements Initializable {
         empBonusCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empCommCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empImageCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empActiveCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empPhoneCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empAddressCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empIdNumberCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -180,8 +185,8 @@ public class FXMLListEmployeeController implements Initializable {
 
         // Thêm cột vào bảng
         table_ListEmployee.getColumns().clear();
-        table_ListEmployee.getColumns().addAll(numberCol, empIDCol, empFNameCol, empMNameCol, empLNameCol, empEmailCol, empDepartIdCol,empPhoneCol,empAddressCol,
-               empIdNumberCol,empHireDateCol,empEduLevelCol, empJobCol,empSexCol,empBirthdayCol,empSalaryCol,empBonusCol,empCommCol,empImageCol,empActiveCol);
+        table_ListEmployee.getColumns().addAll(numberCol, empIDCol, empFNameCol, empMNameCol, empLNameCol, empEmailCol, empDepartIdCol, empPhoneCol, empAddressCol,
+                empIdNumberCol, empHireDateCol, empEduLevelCol, empJobCol, empSexCol, empBirthdayCol, empSalaryCol, empBonusCol, empCommCol, empImageCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -202,10 +207,16 @@ public class FXMLListEmployeeController implements Initializable {
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(
                     Emp -> newValue == null || newValue.isEmpty()
-                    || Emp.getId_number().toLowerCase().contains(newValue.toLowerCase())
+                    || Emp.getEmployee_ID().toLowerCase().contains(newValue.toLowerCase())
                     || Emp.getFirst_Name().toLowerCase().contains(newValue.toLowerCase())
                     || Emp.getMid_Name().toLowerCase().contains(newValue.toLowerCase())
-                    || Emp.getLast_Name().toString().contains(newValue.toLowerCase())
+                    || Emp.getSex().equals(male_Female(newValue))
+                    || Emp.getLast_Name().toLowerCase().contains(newValue.toLowerCase())
+                    || Emp.getAddress().toLowerCase().contains(newValue.toLowerCase())
+                    || Emp.getBonus().toLowerCase().contains(newValue.toLowerCase())
+                    || Emp.getSalary().toLowerCase().contains(newValue.toLowerCase())
+                    || Emp.getJob().toLowerCase().contains(newValue.toLowerCase())
+                    || Emp.getWork_Dept().toLowerCase().contains(newValue.toLowerCase())
                     || Emp.getPhone_No().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
@@ -217,6 +228,16 @@ public class FXMLListEmployeeController implements Initializable {
         changeTableView(0, ROWS_PER_PAGE);
         pagination.currentPageIndexProperty().addListener(
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+    }
+
+    public Boolean male_Female(String str) {
+        if (str.matches("^[m]{1,1}[a]{0,1}[l]{0,1}[e]{0,1}.*$")) {
+            return true;
+        }
+        if (str.matches("^[f]{1,1}[e]{0,1}[m]{0,1}[a]{0,1}[l]{0,1}[e]{0,1}.*$")) {
+            return false;
+        }
+        return null;
     }
 
     @FXML

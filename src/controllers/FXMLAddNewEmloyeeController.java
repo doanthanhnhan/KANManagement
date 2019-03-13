@@ -63,8 +63,6 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     @FXML
     private JFXTextField newLastname;
     @FXML
-    private JFXComboBox newRole;
-    @FXML
     private JFXTextField newId;
     @FXML
     private JFXRadioButton sexMale;
@@ -85,14 +83,6 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
-        try {
-            if (DAO.checkFirstLogin() == 0) {
-                newRole.setValue("Admin");
-                newRole.setDisable(true);
-            }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
-        }
         newId.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -187,37 +177,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 }
             }
         });
-        newRole.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-
-                if (event.getCode() == KeyCode.ENTER) {
-                    try {
-                        btnSubmitAddNewEmployee();
-                    } catch (ClassNotFoundException | SQLException | IOException ex) {
-                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
-        newRole.valueProperty().addListener((obs, oldItem, newItem) -> {
-            if (newItem != null) {
-                Platform.runLater(() -> {
-                    HboxContent.getChildren().clear();
-                    newRole.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                });
-            }
-        });
         ObservableList listRole = FXCollections.observableArrayList();
-        try {
-            listRole = DAO.getAllRole();
-            newRole.setItems(listRole);
-            // TODO
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @FXML
@@ -276,24 +236,6 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 notificationFunction.notification(newLastname, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
             });
 
-        } else if (newRole.getValue() == null) {
-            Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(470, 35);
-                label.setText("ROLE MUST NOT EMPTY !!!");
-                newRole.getStyleClass().removeAll();
-                newRole.getStyleClass().add("jfx-combo-box-fault");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                newRole.requestFocus();
-            });
         } else if (!PatternValided.PatternID(newId.getText())) {
             Platform.runLater(() -> {
                 notificationFunction.notification(newId, HboxContent, "ID MUST 4-12 CHARACTER, NOT BEGIN NUMBER AND CHARACTER SPECIAL !!!");
@@ -336,8 +278,6 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                         try {
                             Boolean Sex;
                             Sex = sexMale.selectedProperty().getValue();
-                            String Id_Role;
-                            Id_Role = DAO.getIdRole((String) newRole.getValue());
                             InfoEmployee Emp = new InfoEmployee();
                             Emp.setId_number(newId.getText());
                             Emp.setFirst_Name(FormatName.format(newFirstname.getText()));
@@ -345,7 +285,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             Emp.setLast_Name(FormatName.format(newLastname.getText()));
                             Emp.setGmail(newGmail.getText());
                             Emp.setSex(Sex);
-                            DAO.AddNewEmployee(Emp, Id_Role);
+                            DAO.AddNewEmployee(Emp);
                             String Username = newId.getText();
                             MD5Encrypt m;
                             m = new MD5Encrypt();
@@ -359,9 +299,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                                     "KAN@123456", "Default username and password", content);
                             if (DAO.checkFirstLogin() != 1) {
-                                DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + Username, logtime);
+                                DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + newId.getText(), logtime);
                             }
-                            newRole.setValue(null);
                             newFirstname.setText("");
                             newMidname.setText("");
                             newLastname.setText("");

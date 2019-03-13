@@ -43,7 +43,6 @@ public class InfoEmployee {
     private StringProperty Bonus;
     private StringProperty Comm;
     private StringProperty Gmail;
-    private StringProperty Role;
     private StringProperty Id_number;
 
     public String getGmail() {
@@ -68,14 +67,6 @@ public class InfoEmployee {
 
     public void setAddress(String Address) {
         this.Address = new SimpleStringProperty(Address);
-    }
-
-    public String getRole() {
-        return Role.get();
-    }
-
-    public void setRole(String Role) {
-        this.Role = new SimpleStringProperty(Role);
     }
 
     public String getEmployee_ID() {
@@ -189,6 +180,7 @@ public class InfoEmployee {
     public void setEDLEVEL(Integer EDLEVEL) {
         this.EDLEVEL = new SimpleIntegerProperty(EDLEVEL);
     }
+
     public Boolean getSex() {
         return Sex.get();
     }
@@ -196,7 +188,6 @@ public class InfoEmployee {
     public void setSex(Boolean Sex) {
         this.Sex = new SimpleBooleanProperty(Sex);
     }
-
 
     public String getBirthdate() {
         return Birthdate.get();
@@ -250,7 +241,7 @@ public class InfoEmployee {
     }
 
     public InfoEmployee(String Employee_ID, String UserName, String PassWord, String Id_number, String Address, Boolean Active, String Serect_Question, String Serect_Answer, String First_Name, String Mid_Name, String Last_Name, String Work_Dept, String Phone_No, String Hiredate, String Job,
-            Integer EDLEVEL, Boolean Sex, String Birthdate, String Salary, String Bonus, String Comm, String Role, String Gmail, Blob serviceImage) {
+            Integer EDLEVEL, Boolean Sex, String Birthdate, String Salary, String Bonus, String Comm, String Gmail, Blob serviceImage) {
         this.Employee_ID = new SimpleStringProperty(Employee_ID);
         this.UserName = new SimpleStringProperty(UserName);
         this.PassWord = new SimpleStringProperty(PassWord);
@@ -272,7 +263,6 @@ public class InfoEmployee {
         this.Salary = new SimpleStringProperty(Salary);
         this.Bonus = new SimpleStringProperty(Bonus);
         this.Comm = new SimpleStringProperty(Comm);
-        this.Role = new SimpleStringProperty(Role);
         this.Gmail = new SimpleStringProperty(Gmail);
         this.serviceImage = serviceImage;
     }

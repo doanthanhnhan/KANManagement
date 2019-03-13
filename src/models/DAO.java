@@ -189,25 +189,7 @@ public class DAO {
         rs.close();
         return false;
     }
-// Lấy ra Position của user
 
-    public static String get_Role(String user) throws SQLException, ClassNotFoundException {
-        Connection connection = connectDB.connectSQLServer();
-        // Tạo đối tượng Statement.
-        String sql = "select Position from Employees,Role where EmployeeID = ? and Employees.RoleID = Role.RoleID";
-        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
-        PreparedStatement pt = connection.prepareStatement(sql);
-        pt.setString(1, user);
-        String Position = null;
-        ResultSet rs = pt.executeQuery();
-        while (rs.next()) {
-            Position = rs.getString("Position");
-        }
-        rs.close();
-        pt.close();
-        connection.close();
-        return Position;
-    }
 // Lấy ra Info của User
 
     public static ObservableList<InfoEmployee> getAllInfoEmployee() throws ClassNotFoundException, SQLException {
@@ -222,20 +204,57 @@ public class DAO {
             Emp.setEmployee_ID(rs.getString("EmployeeID"));
             Emp.setActive(rs.getBoolean("Active"));
             Emp.setFirst_Name(rs.getString("EmployeeFirstName"));
-            Emp.setMid_Name(rs.getString("EmployeeMidName"));
+            if (rs.getString("EmployeeMidName") == null) {
+                Emp.setMid_Name("");
+            } else {
+                Emp.setMid_Name(rs.getString("EmployeeMidName"));
+            }
             Emp.setLast_Name(rs.getString("EmployeeLastName"));
-            Emp.setWork_Dept(rs.getString("DepartmentID"));
-            Emp.setPhone_No(rs.getString("PhoneNumber"));
-            Emp.setHiredate(rs.getString("HireDate"));
-            Emp.setJob(rs.getString("Job"));
+            if (rs.getString("DepartmentID") == null) {
+                Emp.setWork_Dept("");
+            } else {
+                Emp.setWork_Dept(rs.getString("DepartmentID"));
+            }
+            if (rs.getString("PhoneNumber") == null) {
+                Emp.setPhone_No("");
+            } else {
+                Emp.setPhone_No(rs.getString("PhoneNumber"));
+            }
+            if (rs.getString("Job") == null) {
+                Emp.setJob("");
+            } else {
+                Emp.setJob(rs.getString("Job"));
+            }
             Emp.setEDLEVEL(rs.getInt("EducatedLevel"));
+            Emp.setHiredate(rs.getString("HireDate"));
+
             Emp.setBirthdate(rs.getString("Birthday"));
-            Emp.setSalary(rs.getString("Salary"));
-            Emp.setBonus(rs.getString("Bonus"));
-            Emp.setComm(rs.getString("Comm"));
+            if (rs.getString("Salary") == null) {
+                Emp.setSalary("");
+            } else {
+                Emp.setSalary(rs.getString("Salary"));
+            }
+            if (rs.getString("Bonus") == null) {
+                Emp.setBonus("");
+            } else {
+                Emp.setBonus(rs.getString("Bonus"));
+            }
+            if (rs.getString("Address") == null) {
+                Emp.setAddress("");
+            } else {
+                Emp.setAddress(rs.getString("Address"));
+            }
+            if (rs.getString("Comm") == null) {
+                Emp.setComm("");
+            } else {
+                Emp.setComm(rs.getString("Comm"));
+            }
             Emp.setGmail(rs.getString("Email"));
-            Emp.setAddress(rs.getString("Address"));
-            Emp.setId_number(rs.getString("IDNumber"));
+            if (rs.getString("IDNumber") == null) {
+                Emp.setId_number("");
+            } else {
+                Emp.setId_number(rs.getString("IDNumber"));
+            }
             Emp.setServiceImage(rs.getBlob("Image"));
             if (rs.getBlob("Image") != null) {
                 try {
@@ -284,7 +303,6 @@ public class DAO {
             Emp.setBonus(rs.getString("Bonus"));
             Emp.setComm(rs.getString("Comm"));
             Emp.setGmail(rs.getString("Email"));
-            Emp.setRole(rs.getString("Position"));
             Emp.setAddress(rs.getString("Address"));
             Emp.setId_number(rs.getString("IDNumber"));
             Emp.setServiceImage(rs.getBlob("Image"));
@@ -311,10 +329,21 @@ public class DAO {
     }
 // Xử lý insert dữ liệu Employees mới đc tạo ra
 
-    public static void AddNewEmployee(InfoEmployee Emp, String ID_ROLE) throws MalformedURLException {
+    public static void AddNewEmployee(InfoEmployee Emp) throws MalformedURLException, SQLException, ClassNotFoundException {
+//        if (checkFirstLogin().equals(0)) {
+//            Connection connection = connectDB.connectSQLServer();
+//            String sql = "Insert into Role values(?,?,?,?,?,?,?)";
+//            PreparedStatement pt = connection.prepareStatement(sql);
+//            pt.setString(1, Emp.getId_number());
+//            pt.setString(2, Emp.getFirst_Name());
+//            pt.setString(3, Emp.getMid_Name());
+//            pt.setString(4, Emp.getLast_Name());
+//            pt.setBoolean(5, Emp.getSex());
+//            pt.setString(6, Emp.getGmail());
+//        }
         try {
             Connection connection = connectDB.connectSQLServer();
-            String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,RoleID,Image) values(?,?,?,?,?,?,?,?)";
+            String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,Image) values(?,?,?,?,?,?,?)";
             PreparedStatement pt = connection.prepareStatement(exm);
             pt.setString(1, Emp.getId_number());
             pt.setString(2, Emp.getFirst_Name());
@@ -322,7 +351,6 @@ public class DAO {
             pt.setString(4, Emp.getLast_Name());
             pt.setBoolean(5, Emp.getSex());
             pt.setString(6, Emp.getGmail());
-            pt.setString(7, ID_ROLE);
             String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
             File file = new File(currentPath + "/src/images/imagequestion.png");
             BufferedImage bImage;
@@ -332,7 +360,7 @@ public class DAO {
                 ImageIO.write(bImage, "png", s);
                 res = s.toByteArray();
                 Blob blob = new SerialBlob(res);
-                pt.setBlob(8, blob);
+                pt.setBlob(7, blob);
 
             } catch (SQLException ex) {
                 Logger.getLogger(FXMLAddNewServiceTypeController.class
@@ -368,24 +396,7 @@ public class DAO {
         return listIdUser;
     }
 
-    public static ObservableList<?> getAllRole() throws SQLException, ClassNotFoundException {
-        Connection connection = connectDB.connectSQLServer();
-        // Tạo đối tượng Statement.
-        Statement statement = connection.createStatement();
-
-        String sql = "select * from Role";
-
-        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
-        ResultSet rs = statement.executeQuery(sql);
-        ObservableList ListRole = FXCollections.observableArrayList();
-        while (rs.next()) {
-            ListRole.add(rs.getString("Position"));
-        }
-        connection.close();
-        return ListRole;
-    }
 // xử lý lấy ra ID của Role khi có position
-
     public static String getIdRole(String Role) throws ClassNotFoundException, SQLException {
         String Id = null;
         Connection connection = connectDB.connectSQLServer();
@@ -531,11 +542,11 @@ public class DAO {
     }
 
     public static void UpdateAllInfoEmployee(String User, String Phone, String Birthday, String Address, String IdNumber, String FName, String MName, String LName, String Email,
-            String DepartId, String Hiredate, String Job, String EducatedLevel, Double Salary, Double Bonus, Double Comm, String Role, Boolean Sex, Blob Image) throws ClassNotFoundException, SQLException {
+            String DepartId, String Hiredate, String Job, String EducatedLevel, Double Salary, Double Bonus, Double Comm, Boolean Sex, Blob Image) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "UPDATE Employees SET EmployeeFirstName=?,EmployeeMidName=?,EmployeeLastName=?,DepartmentId=?,"
-                + " PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ?,HireDate=?,Job=?,EducatedLevel=?,Salary=?,"
-                + "Bonus=?,Comm=?,RoleID=?,Sex=?,Image=? WHERE EmployeeID = ?";
+                + " PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ?,HireDate=?,EducatedLevel=?,Salary=?,"
+                + "Bonus=?,Comm=?,Sex=?,Image=? WHERE EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, FName);
         pt.setString(2, MName);
@@ -551,10 +562,9 @@ public class DAO {
         pt.setDouble(12, Salary);
         pt.setDouble(13, Bonus);
         pt.setDouble(14, Comm);
-        pt.setString(15, Role);
-        pt.setBoolean(16, Sex);
-        pt.setBlob(17, Image);
-        pt.setString(18, User);
+        pt.setBoolean(15, Sex);
+        pt.setBlob(16, Image);
+        pt.setString(17, User);
         pt.execute();
         pt.close();
         connection.close();

@@ -80,17 +80,23 @@
                            <children>
                               <HBox fx:id="HboxBoxId" alignment="CENTER" prefHeight="35.0" prefWidth="400.0" spacing="10.0">
                                  <children>
-                                    <JFXComboBox fx:id="boxId" editable="true" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Id Employee" />
+                                    <JFXComboBox fx:id="boxId" editable="true" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Id Employee">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin></JFXComboBox>
                                     <FontAwesomeIconView fx:id="iconRefresh" glyphName="REFRESH" onMouseClicked="#refreshIdUser" size="20" styleClass="jfx-glyhp-icon-refresh">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></FontAwesomeIconView>
                                  </children>
                                  <HBox.margin>
-                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                    <Insets left="80.0" right="80.0" top="20.0" />
                                  </HBox.margin>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
@@ -292,15 +298,7 @@
                               </HBox>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER">
-                           <children>
-                              <JFXComboBox fx:id="boxRole" editable="true" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Role">
-                                 <HBox.margin>
-                                    <Insets left="80.0" right="80.0" top="30.0" />
-                                 </HBox.margin>
-                              </JFXComboBox>
-                           </children>
-                        </HBox>
+                        <HBox alignment="CENTER" />
                      </children>
                   </VBox>
                </children>
