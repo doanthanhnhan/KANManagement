@@ -189,7 +189,7 @@ public class DAO {
     public static ObservableList<InfoEmployee> getAllInfoEmployee() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<InfoEmployee> list = FXCollections.observableArrayList();
-        String sql = "select * from Employees where active = 1";
+        String sql = "select * from Employees where active = 1 and EmployeeID !='admin'";
         PreparedStatement pt = connection.prepareStatement(sql);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
