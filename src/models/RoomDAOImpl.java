@@ -87,13 +87,13 @@ public class RoomDAOImpl implements RoomDAO {
                     HBox roomAction = new HBox();
 
                     JFXButton btn_Check_In = new JFXButton("Check In");
-                    btn_Check_In.getStyleClass().add("loginBtn");
+                    btn_Check_In.getStyleClass().add("btn-green-color");
 
                     JFXButton btn_Check_Out = new JFXButton("Check Out");
-                    btn_Check_Out.getStyleClass().add("loginBtn");
+                    btn_Check_Out.getStyleClass().add("btn-red-color");
 
                     JFXButton btn_Services = new JFXButton("Services");
-                    btn_Services.getStyleClass().add("loginBtn");
+                    btn_Services.getStyleClass().add("btn-warning-color");
 
                     roomAction.setAlignment(Pos.CENTER);
                     roomAction.setSpacing(10);

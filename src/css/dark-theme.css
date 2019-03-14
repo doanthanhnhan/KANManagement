@@ -15,6 +15,11 @@
     -fx-reservedcolor: #009FB4;
     -fx-occupiedcolor: #C83F06;
     -fx-fault-color: #FF2625;
+    -fx-warning-color: #ffc107;
+    -fx-blue-color: #007bff;
+    -fx-red-color: #dc3545;
+    -fx-white-color: #fff;
+    -fx-green-color: #28a745;
 }
 
 /*GENERAL NODE*/
@@ -66,6 +71,53 @@
     -fx-border-radius: 3px;
     -fx-cursor: hand;
 }
+.btn-red-color{
+    -fx-background-color: -fx-red-color;
+    -fx-text-fill: -fx-white-color;
+    -fx-background-radius: 3px;
+}
+.btn-red-color:hover{
+    -fx-background-color: transparent;
+    -fx-background-radius: 3px;
+    -fx-text-fill: -fx-red-color;
+    -fx-border-color: -fx-red-color;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 3px;
+    -fx-cursor: hand;
+}
+.btn-warning-color{
+    -fx-background-color: -fx-warning-color;
+    -fx-text-fill: -fx-white-color;
+    -fx-background-radius: 3px;
+}
+.btn-warning-color:hover{
+    -fx-background-color: transparent;
+    -fx-background-radius: 3px;
+    -fx-text-fill: -fx-warning-color;
+    -fx-border-color: -fx-warning-color;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 3px;
+    -fx-cursor: hand;
+}
+
+.btn-green-color{
+    -fx-background-color: -fx-green-color;
+    -fx-text-fill: -fx-white-color;
+    -fx-background-radius: 3px;
+}
+.btn-green-color:hover{
+    -fx-background-color: transparent;
+    -fx-background-radius: 3px;
+    -fx-text-fill: -fx-green-color;
+    -fx-border-color: -fx-green-color;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-border-radius: 3px;
+    -fx-cursor: hand;
+}
+
 .text-field {
     -fx-prompt-text-fill: -fx-primarytextcolor;
     -fx-text-fill: black;
