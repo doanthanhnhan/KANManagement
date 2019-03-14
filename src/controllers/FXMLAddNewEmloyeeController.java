@@ -6,7 +6,7 @@
 package controllers;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
+
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -25,10 +25,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -82,7 +80,15 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+
+        try {
+            if (DAO.checkFirstLogin() == 0) {
+                newId.setDisable(true);
+                newId.setText("admin");
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         newId.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -295,10 +301,17 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             String logtime;
                             logtime = dateFormat.format(cal.getTime());
                             DAO.AddUser(newId.getText(), Username, Password, logtime);
+                            if(DAO.checkFirstLogin().equals(1)){
+                                DAO.setRoleAdmin(newId.getText());
+                            }
+                            else{
+                                DAO.setRoleUser(newId.getText());
+                            }
                             String content = "Username: " + newId.getText() + ", Password: 123456";
                             Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                                     "KAN@123456", "Default username and password", content);
-                            if (DAO.checkFirstLogin() != 1) {
+                    
+                            if (!DAO.checkFirstLogin().equals(1)) {
                                 DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + newId.getText(), logtime);
                             }
                             newFirstname.setText("");
@@ -307,6 +320,10 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             newGmail.setText("");
                             newId.setText("");
                             newId.requestFocus();
+                            if(FXMLListEmployeeController.check_form_list){
+                                fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+                                fXMLListEmployeeController.table_ListEmployee.setItems(DAO.getAllInfoEmployee());
+                            }
                         } catch (SQLException ex) {
                             Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (ClassNotFoundException ex) {

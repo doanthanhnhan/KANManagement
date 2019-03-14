@@ -7,6 +7,9 @@ package controllers;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,8 +37,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import models.DAO;
 import models.InfoEmployee;
-import models.ServiceType;
-import models.ServiceTypeDAOImpl;
 import utils.StageLoader;
 
 /**
@@ -46,14 +47,14 @@ import utils.StageLoader;
 public class FXMLListEmployeeController implements Initializable {
 
     ObservableList<InfoEmployee> listEmp = FXCollections.observableArrayList();
-    public Boolean check_Edit_Action = false;
+    public  Boolean check_Edit_Action = false;
     public static InfoEmployee Emp;
-
+    public static Boolean check_form_list = false;
     private static final int ROWS_PER_PAGE = 4;
     private FilteredList<InfoEmployee> filteredData;
 
     @FXML
-    private TableView<InfoEmployee> table_ListEmployee;
+    public TableView<InfoEmployee> table_ListEmployee;
     @FXML
     private MenuItem menuItem_Edit;
     @FXML
@@ -72,6 +73,8 @@ public class FXMLListEmployeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        FXMLMainFormController.checkRegis = true;
+        check_form_list=true;
         setColumns();
         showUsersData();
         ConnectControllers.setfXMLListEmployeeController(this);
@@ -258,16 +261,25 @@ public class FXMLListEmployeeController implements Initializable {
     @FXML
     private void handle_MenuItem_Delete_Action(ActionEvent event) {
         System.out.println("Kien");
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setTitle("Comfirm");
-//        alert.setContentText("Do you want to delete this?");
-//        alert.showAndWait();
-//        System.out.println(alert.getResult());
-//        if (alert.getResult() == ButtonType.OK) {
-//            serviceTypeDAOImpl.deleteServiceType(serviceTypeItem);
-//            System.out.println("Delete successful");
-//            showUsersData();
-//        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Comfirm");
+        alert.setContentText("Do you want to delete " + Emp.getEmployee_ID() + "?");
+        alert.showAndWait();
+        System.out.println(alert.getResult());
+        if (alert.getResult() == ButtonType.OK) {
+            try {
+                DAO.delete_Employee(Emp.getEmployee_ID());
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                String logtime;
+                logtime = dateFormat.format(cal.getTime());
+                DAO.setUserLogs(FXMLLoginController.User_Login, "Delete " + Emp.getEmployee_ID(), logtime);
+                System.out.println("Delete successful");
+                showUsersData();
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @FXML

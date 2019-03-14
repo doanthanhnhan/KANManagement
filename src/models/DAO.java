@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Paths;
-import java.sql.Array;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,18 +25,14 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
-import utils.FormatName;
 
 /**
  *
@@ -191,11 +186,10 @@ public class DAO {
     }
 
 // Lấy ra Info của User
-
     public static ObservableList<InfoEmployee> getAllInfoEmployee() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<InfoEmployee> list = FXCollections.observableArrayList();
-        String sql = "select * from Employees";
+        String sql = "select * from Employees where active = 1";
         PreparedStatement pt = connection.prepareStatement(sql);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
@@ -277,7 +271,7 @@ public class DAO {
 
     public static InfoEmployee getInfoEmployee(String user) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
-        String sql = "select Users.*,Employees.*,[Role].* from Users, Employees,[Role] where Users.EmployeeID =? and Users.EmployeeID = Employees.EmployeeID and Employees.RoleID=[Role].RoleID";
+        String sql = "select Users.*,Employees.* from Users, Employees where Users.EmployeeID =? and Users.EmployeeID = Employees.EmployeeID";
         PreparedStatement pt = connection.prepareStatement(sql);
         pt.setString(1, user);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
@@ -330,17 +324,6 @@ public class DAO {
 // Xử lý insert dữ liệu Employees mới đc tạo ra
 
     public static void AddNewEmployee(InfoEmployee Emp) throws MalformedURLException, SQLException, ClassNotFoundException {
-//        if (checkFirstLogin().equals(0)) {
-//            Connection connection = connectDB.connectSQLServer();
-//            String sql = "Insert into Role values(?,?,?,?,?,?,?)";
-//            PreparedStatement pt = connection.prepareStatement(sql);
-//            pt.setString(1, Emp.getId_number());
-//            pt.setString(2, Emp.getFirst_Name());
-//            pt.setString(3, Emp.getMid_Name());
-//            pt.setString(4, Emp.getLast_Name());
-//            pt.setBoolean(5, Emp.getSex());
-//            pt.setString(6, Emp.getGmail());
-//        }
         try {
             Connection connection = connectDB.connectSQLServer();
             String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,Image) values(?,?,?,?,?,?,?)";
@@ -379,6 +362,25 @@ public class DAO {
                     .getName()).log(Level.SEVERE, null, ex1);
         }
     }
+// update active = 0
+
+    public static void delete_Employee(String User) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String sql = "UPDATE Users SET Active = ? WHERE EmployeeID = ?";
+        PreparedStatement pts = connection.prepareStatement(sql);
+        pts.setInt(1, 0);
+        pts.setString(2, User);
+        pts.execute();
+        pts.close();
+
+        String exp = "UPDATE Employees SET Active = ? WHERE EmployeeID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setInt(1, 0);
+        pt.setString(2, User);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
 
     public static ObservableList<String> getAllIdUser() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
@@ -394,21 +396,6 @@ public class DAO {
         }
         connection.close();
         return listIdUser;
-    }
-
-// xử lý lấy ra ID của Role khi có position
-    public static String getIdRole(String Role) throws ClassNotFoundException, SQLException {
-        String Id = null;
-        Connection connection = connectDB.connectSQLServer();
-        String exp = "select RoleID from [Role] where Position = ?";
-        PreparedStatement pt = connection.prepareStatement(exp);
-        pt.setString(1, Role);
-        ResultSet rs;
-        rs = pt.executeQuery();
-        while (rs.next()) {
-            Id = rs.getString("RoleID");
-        }
-        return Id;
     }
 
     public static void AddUser(String Emp_Id, String User, String Pass, String Date) throws SQLException, ClassNotFoundException {
@@ -545,8 +532,8 @@ public class DAO {
             String DepartId, String Hiredate, String Job, String EducatedLevel, Double Salary, Double Bonus, Double Comm, Boolean Sex, Blob Image) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "UPDATE Employees SET EmployeeFirstName=?,EmployeeMidName=?,EmployeeLastName=?,DepartmentId=?,"
-                + " PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ?,HireDate=?,EducatedLevel=?,Salary=?,"
-                + "Bonus=?,Comm=?,Sex=?,Image=? WHERE EmployeeID = ?";
+                + " PhoneNumber = ?, Birthday = ? ,Address = ?,IDNumber = ?,HireDate=?,Job=?,EducatedLevel=?,Salary=?,"
+                + "Bonus=?,Comm=?,Sex=?,Image=?,Email=? WHERE EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, FName);
         pt.setString(2, MName);
@@ -564,9 +551,84 @@ public class DAO {
         pt.setDouble(14, Comm);
         pt.setBoolean(15, Sex);
         pt.setBlob(16, Image);
-        pt.setString(17, User);
+        pt.setString(17, Email);
+        pt.setString(18, User);
         pt.execute();
         pt.close();
+        connection.close();
+    }
+// set Role for User
+
+    public static void setRoleUser(String User) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String ex = "Insert Into Role(EmployeeID) Values (?)";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setString(1, User);
+        pts.execute();
+        pts.close();
+        connection.close();
+    }
+// set Role for admin
+
+    public static void setRoleAdmin(String User) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String ex = "Insert Into Role Values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setString(1, User);
+        pts.setBoolean(2, true);
+        pts.setBoolean(3, true);
+        pts.setBoolean(4, true);
+        pts.setBoolean(5, true);
+        pts.setBoolean(6, true);
+        pts.setBoolean(7, true);
+        pts.setBoolean(8, true);
+        pts.setBoolean(9, true);
+        pts.setBoolean(10, true);
+        pts.setBoolean(11, true);
+        pts.setBoolean(12, true);
+        pts.setBoolean(13, true);
+        pts.setBoolean(14, true);
+        pts.setBoolean(15, true);
+        pts.setBoolean(16, true);
+        pts.setBoolean(17, true);
+        pts.setBoolean(18, true);
+        pts.setBoolean(19, true);
+        pts.setBoolean(20, true);
+        pts.setBoolean(21, true);
+        pts.setBoolean(22, true);
+        pts.setBoolean(23, true);
+        pts.setBoolean(24, true);
+        pts.setBoolean(25, true);
+        pts.setBoolean(26, true);
+        pts.setBoolean(27, true);
+        pts.setBoolean(28, true);
+        pts.setBoolean(29, true);
+        pts.setBoolean(30, true);
+        pts.setBoolean(31, true);
+        pts.setBoolean(32, true);
+        pts.setBoolean(33, true);
+        pts.setBoolean(34, true);
+        pts.setBoolean(35, true);
+        pts.setBoolean(36, true);
+        pts.setBoolean(37, true);
+        pts.setBoolean(38, true);
+        pts.setBoolean(39, true);
+        pts.setBoolean(40, true);
+        pts.setBoolean(41, true);
+        pts.setBoolean(42, true);
+        pts.setBoolean(43, true);
+        pts.setBoolean(44, true);
+        pts.setBoolean(45, true);
+        pts.setBoolean(46, true);
+        pts.setBoolean(47, true);
+        pts.setBoolean(48, true);
+        pts.setBoolean(49, true);
+        pts.setBoolean(50, true);
+        pts.setBoolean(51, true);
+        pts.setBoolean(52, true);
+        pts.setBoolean(53, true);
+        pts.execute();
+        pts.close();
         connection.close();
     }
 }
