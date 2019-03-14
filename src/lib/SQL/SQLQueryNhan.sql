@@ -188,8 +188,7 @@ CREATE TABLE Employees(
 	Bonus decimal,
 	Comm decimal,
 	Email varchar(100),
-	Active bit DEFAULT 1,
-	RoleID varchar(20),
+	Active bit DEFAULT 1,	
 	[Image] varbinary(MAX),
 	-- Create constraint
 	CONSTRAINT pk_EmployeeID PRIMARY KEY (EmployeeID),
@@ -215,7 +214,7 @@ CREATE TABLE Users(
 
 CREATE TABLE [Role](
 	-- Create columns
-	RoleID varchar(20) NOT NULL,	
+	RoleID int IDENTITY(1,1),	
 	EmployeeID varchar(20) NOT NULL,
 	Employee_View bit DEFAULT 0,
 	Employee_Add bit DEFAULT 0,

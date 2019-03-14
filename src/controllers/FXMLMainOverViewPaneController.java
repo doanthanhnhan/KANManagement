@@ -28,6 +28,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -122,6 +123,10 @@ public class FXMLMainOverViewPaneController implements Initializable {
     private FlowPane flowPane_Rooms;
     @FXML
     private ScrollPane scrollPane_Rooms;
+    @FXML
+    private AnchorPane anchorPane_Main;
+    @FXML
+    private SplitPane splitPane_Rooms;
 
     /**
      * Initializes the controller class.
@@ -132,7 +137,9 @@ public class FXMLMainOverViewPaneController implements Initializable {
     }
 
     public void initAddRooms() {
-        System.out.println("Test chạy không????");               
+        System.out.println("Test chạy không????");
+        //Disable splitPane_Room auto resize
+        SplitPane.setResizableWithParent(anchorPane_Main, false);
         listRooms = roomDAOImpl.getAllRoom();
         System.out.println("listRooms size = " + listRooms.size());
 
