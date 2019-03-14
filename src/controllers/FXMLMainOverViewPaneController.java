@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -48,8 +50,6 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
     private FilteredList<Room> filteredRoom;
 
-    @FXML
-    private AnchorPane aPane_Rooms;
     @FXML
     private JFXButton btn_OverView_Submit;
     @FXML
@@ -120,6 +120,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
     private Label label_Not_Repair_Rooms;
     @FXML
     private FlowPane flowPane_Rooms;
+    @FXML
+    private ScrollPane scrollPane_Rooms;
 
     /**
      * Initializes the controller class.
@@ -130,7 +132,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
     }
 
     public void initAddRooms() {
-        System.out.println("Test chạy không????");
+        System.out.println("Test chạy không????");               
         listRooms = roomDAOImpl.getAllRoom();
         System.out.println("listRooms size = " + listRooms.size());
 
