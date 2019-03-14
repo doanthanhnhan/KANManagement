@@ -12,17 +12,13 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -219,13 +215,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
             if (Integer.parseInt(comboBox_FromFloor.getValue()) > Integer.parseInt(comboBox_ToFloor.getValue())) {
                 comboBox_ToFloor.setValue(newItem);
             }
-            Predicate<Room> minFloor = i -> {
-                return i.getRoomOnFloor() >= Integer.parseInt(comboBox_FromFloor.getValue());
-            };
-            Predicate<Room> maxFloor = i -> {
-                return i.getRoomOnFloor() <= Integer.parseInt(comboBox_ToFloor.getValue());
-            };
-            filteredRoom.setPredicate(minFloor.and(maxFloor));
+            // Call method check_Filter
+            check_Filter(filteredRoom);
             //Add room into form
             add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
         });
@@ -233,13 +224,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
             if (Integer.parseInt(comboBox_FromFloor.getValue()) > Integer.parseInt(comboBox_ToFloor.getValue())) {
                 comboBox_FromFloor.setValue(newItem);
             }
-            Predicate<Room> minFloor = i -> {
-                return i.getRoomOnFloor() >= Integer.parseInt(comboBox_FromFloor.getValue());
-            };
-            Predicate<Room> maxFloor = i -> {
-                return i.getRoomOnFloor() <= Integer.parseInt(comboBox_ToFloor.getValue());
-            };
-            filteredRoom.setPredicate(minFloor.and(maxFloor));
+            // Call method check_Filter
+            check_Filter(filteredRoom);
             //Add room into form
             add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
         });
@@ -409,58 +395,72 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 }
             }
             filteredRoom = new FilteredList<>(listRooms, list1 -> true);
-
-            Predicate<Room> roomStatus = i -> {
-                for (String status : list_Status) {
-                    if (i.getRoomStatus().contains(status)) {
-                        return i.getRoomStatus().contains(status);
-                    }
-                }
-                return false;
-            };
-
-            Predicate<Room> roomType = i -> {
-                for (String type : list_Type) {
-                    if (i.getRoomType().contains(type)) {
-                        return i.getRoomType().contains(type);
-                    }
-                }
-                return false;
-            };
-
-            Predicate<Room> roomHouseKeeping = i -> {
-                for (String houseKeeping : list_HouseKeeping) {
-                    if (check_Room_Housekeeping_Status(i, houseKeeping)) {
-                        return check_Room_Housekeeping_Status(i, houseKeeping);
-                    }
-                }
-                return false;
-            };
-            if (!list_Status.isEmpty() && !list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
-                System.out.println("3 list are not empty");
-                filteredRoom.setPredicate(roomStatus.and(roomType).and(roomHouseKeeping));
-            } else if (!list_Status.isEmpty() && !list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
-                System.out.println("liststatus, listtype are not empty");
-                filteredRoom.setPredicate(roomStatus.and(roomType));
-            } else if (!list_Status.isEmpty() && list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
-                System.out.println("liststatus, listhouse are not empty");
-                filteredRoom.setPredicate(roomStatus.and(roomHouseKeeping));
-            } else if (!list_Status.isEmpty() && list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
-                System.out.println("liststatus is not empty");
-                filteredRoom.setPredicate(roomStatus);
-            } else if (list_Status.isEmpty() && !list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
-                System.out.println("listtype, listhouse are not empty");
-                filteredRoom.setPredicate(roomType.and(roomHouseKeeping));
-            } else if (list_Status.isEmpty() && !list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
-                System.out.println("listtype is not empty");
-                filteredRoom.setPredicate(roomType);
-            } else if (list_Status.isEmpty() && list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
-                System.out.println("listhouse is not empty");
-                filteredRoom.setPredicate(roomHouseKeeping);
-            }
+            // Call method check_Filter
+            check_Filter(filteredRoom);
 
             add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
         });
+    }
+
+    private FilteredList check_Filter(FilteredList filter) {
+        Predicate<Room> roomStatus = i -> {
+            for (String status : list_Status) {
+                if (i.getRoomStatus().contains(status)) {
+                    return i.getRoomStatus().contains(status);
+                }
+            }
+            return false;
+        };
+
+        Predicate<Room> roomType = i -> {
+            for (String type : list_Type) {
+                if (i.getRoomType().contains(type)) {
+                    return i.getRoomType().contains(type);
+                }
+            }
+            return false;
+        };
+
+        Predicate<Room> roomHouseKeeping = i -> {
+            for (String houseKeeping : list_HouseKeeping) {
+                if (check_Room_Housekeeping_Status(i, houseKeeping)) {
+                    return check_Room_Housekeeping_Status(i, houseKeeping);
+                }
+            }
+            return false;
+        };
+        Predicate<Room> minFloor = i -> {
+            return i.getRoomOnFloor() >= Integer.parseInt(comboBox_FromFloor.getValue());
+        };
+        Predicate<Room> maxFloor = i -> {
+            return i.getRoomOnFloor() <= Integer.parseInt(comboBox_ToFloor.getValue());
+        };
+        if (!list_Status.isEmpty() && !list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
+            System.out.println("3 list are not empty");
+            filter.setPredicate(roomStatus.and(roomType).and(roomHouseKeeping).and(minFloor).and(maxFloor).and(minFloor).and(maxFloor));
+        } else if (!list_Status.isEmpty() && !list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
+            System.out.println("liststatus, listtype are not empty");
+            filter.setPredicate(roomStatus.and(roomType).and(minFloor).and(maxFloor));
+        } else if (!list_Status.isEmpty() && list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
+            System.out.println("liststatus, listhouse are not empty");
+            filter.setPredicate(roomStatus.and(roomHouseKeeping).and(minFloor).and(maxFloor));
+        } else if (!list_Status.isEmpty() && list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
+            System.out.println("liststatus is not empty");
+            filter.setPredicate(roomStatus.and(minFloor).and(maxFloor));
+        } else if (list_Status.isEmpty() && !list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
+            System.out.println("listtype, listhouse are not empty");
+            filter.setPredicate(roomType.and(roomHouseKeeping).and(minFloor).and(maxFloor));
+        } else if (list_Status.isEmpty() && !list_Type.isEmpty() && list_HouseKeeping.isEmpty()) {
+            System.out.println("listtype is not empty");
+            filter.setPredicate(roomType.and(minFloor).and(maxFloor));
+        } else if (list_Status.isEmpty() && list_Type.isEmpty() && !list_HouseKeeping.isEmpty()) {
+            System.out.println("listhouse is not empty");
+            filter.setPredicate(roomHouseKeeping.and(minFloor).and(maxFloor));
+        } else {
+            System.out.println("3 list are empty");
+            filter.setPredicate(minFloor.and(maxFloor));
+        }
+        return filter;
     }
 
     private Boolean check_Room_Housekeeping_Status(Room room, String compare_Str) {
