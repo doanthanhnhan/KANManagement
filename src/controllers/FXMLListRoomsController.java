@@ -25,7 +25,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -48,7 +47,7 @@ public class FXMLListRoomsController implements Initializable {
     public Boolean check_Edit_Action = false;
     public static RoomEX roomEXItem;
 
-    private static final int ROWS_PER_PAGE = 4;
+    private static final int ROWS_PER_PAGE = 20;
     private FilteredList<RoomEX> filteredData;
 
     @FXML
@@ -109,9 +108,15 @@ public class FXMLListRoomsController implements Initializable {
     private void setColumns() {
         TableColumn<RoomEX, String> roomIDCol = new TableColumn<>("Room ID");
         TableColumn<RoomEX, String> roomTypeCol = new TableColumn<>("Room type");
+        TableColumn<RoomEX, String> roomStatusCol = new TableColumn<>("Status");
         TableColumn<RoomEX, String> customerNameCol = new TableColumn<>("Customer name");
-        TableColumn<RoomEX, CheckBox> roomCleanCol = new TableColumn<>("Room clean");
-        TableColumn<RoomEX, RoomAction> roomActionCol = new TableColumn<>("Room action");
+        TableColumn<RoomEX, Integer> remainingDaysCol = new TableColumn<>("Days");
+        TableColumn<RoomEX, String> roomPhoneNumberCol = new TableColumn<>("Phone number");
+        TableColumn<RoomEX, Integer> roomOnFloorCol = new TableColumn<>("Floor");
+        TableColumn<RoomEX, CheckBox> roomCleanCol = new TableColumn<>("Clean");
+        TableColumn<RoomEX, CheckBox> roomRepairedCol = new TableColumn<>("Repaired");
+        TableColumn<RoomEX, CheckBox> roomInProgressCol = new TableColumn<>("In progress");
+        TableColumn<RoomEX, RoomAction> roomActionCol = new TableColumn<>("Action");
 
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<CellDataFeatures<RoomEX, String>, ObservableValue<String>>() {
@@ -126,20 +131,33 @@ public class FXMLListRoomsController implements Initializable {
         // Lấy giá trị từ các thuộc tính của RoomEX.
         roomIDCol.setCellValueFactory(new PropertyValueFactory<>("roomID"));
         roomTypeCol.setCellValueFactory(new PropertyValueFactory<>("roomType"));
+        roomStatusCol.setCellValueFactory(new PropertyValueFactory<>("roomStatus"));
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        remainingDaysCol.setCellValueFactory(new PropertyValueFactory<>("dayRemaining"));
+        roomPhoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("roomPhoneNumber"));
+        roomOnFloorCol.setCellValueFactory(new PropertyValueFactory<>("roomOnFloor"));
         roomCleanCol.setCellValueFactory(new PropertyValueFactory<>("checkBox_Room_Clean"));
+        roomRepairedCol.setCellValueFactory(new PropertyValueFactory<>("checkBox_Room_Repaired"));
+        roomInProgressCol.setCellValueFactory(new PropertyValueFactory<>("checkBox_Room_In_Progress"));
         roomActionCol.setCellValueFactory(new PropertyValueFactory<>("roomAction"));
 
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         roomIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         roomTypeCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        roomStatusCol.setStyle("-fx-alignment: CENTER-LEFT;");
         customerNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        roomCleanCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        roomActionCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        remainingDaysCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        roomPhoneNumberCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        roomOnFloorCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        roomCleanCol.setStyle("-fx-alignment: CENTER;");
+        roomRepairedCol.setStyle("-fx-alignment: CENTER;");
+        roomInProgressCol.setStyle("-fx-alignment: CENTER;");
+        roomActionCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         table_Rooms.getColumns().clear();
-        table_Rooms.getColumns().addAll(numberCol, roomIDCol, roomTypeCol, customerNameCol, roomCleanCol, roomActionCol);
+        table_Rooms.getColumns().addAll(numberCol, roomIDCol, roomTypeCol, roomStatusCol, customerNameCol, remainingDaysCol,
+                roomPhoneNumberCol, roomOnFloorCol , roomCleanCol, roomRepairedCol, roomInProgressCol, roomActionCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -151,26 +169,27 @@ public class FXMLListRoomsController implements Initializable {
         table_Rooms.setItems(listRoomEXs);
 
         //Set filterData and Pagination
-//        filteredData = new FilteredList<>(listRoomEXs, list -> true);
-//        FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
-//        mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
-//            filteredData.setPredicate(
-//                    roomEX -> newValue == null || newValue.isEmpty()
-//                    || roomEX.getRoomID().toLowerCase().contains(newValue.toLowerCase()));
-//                    //|| roomEX.getRoomDescription().toLowerCase().contains(newValue.toLowerCase())
-//                    //|| roomEX.getRoomUnit().toLowerCase().contains(newValue.toLowerCase())
-//                    //|| roomEX.getRoomPrice().toString().contains(newValue.toLowerCase())
-//                    //|| roomEX.getRoomName().toLowerCase().contains(newValue.toLowerCase()));
-//            pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
-//            changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
-//        });
-//
-//        int totalPage = (int) (Math.ceil(listRoomEXs.size() * 1.0 / ROWS_PER_PAGE));
-//        pagination.setPageCount(totalPage);
-//        pagination.setCurrentPageIndex(0);
-//        changeTableView(0, ROWS_PER_PAGE);
-//        pagination.currentPageIndexProperty().addListener(
-//                (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+        filteredData = new FilteredList<>(listRoomEXs, list -> true);
+        FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
+        mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(
+                    roomEX -> newValue == null || newValue.isEmpty()
+                    || roomEX.getRoomID().toLowerCase().contains(newValue.toLowerCase())
+                    || roomEX.getCustomerName().toLowerCase().contains(newValue.toLowerCase())
+                    || roomEX.getCustomerName().toLowerCase().contains(newValue.toLowerCase())
+                    || String.valueOf(roomEX.getDayRemaining()).contains(newValue.toLowerCase())
+                    || String.valueOf(roomEX.getRoomOnFloor()).contains(newValue.toLowerCase())
+                    || roomEX.getRoomType().toLowerCase().contains(newValue.toLowerCase()));
+            pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
+            changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
+        });
+
+        int totalPage = (int) (Math.ceil(listRoomEXs.size() * 1.0 / ROWS_PER_PAGE));
+        pagination.setPageCount(totalPage);
+        pagination.setCurrentPageIndex(0);
+        changeTableView(0, ROWS_PER_PAGE);
+        pagination.currentPageIndexProperty().addListener(
+                (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
     }
 
     @FXML
