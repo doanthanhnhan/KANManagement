@@ -119,7 +119,6 @@ public class DAO {
         pts.execute();
         pts.close();
         connection.close();
-
     }
 // Lấy ra thông tin câu hỏi và câu trả lời bí mật của tài khoản quên mật khẩu
 
