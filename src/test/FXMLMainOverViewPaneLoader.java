@@ -29,8 +29,8 @@ public class FXMLMainOverViewPaneLoader extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            System.out.println("Kiểm tra : "+ getClass().getResource("/fxml/FXMLMainOverViewPane.fxml").getPath());
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainOverViewPane.fxml"));
+            System.out.println("Kiểm tra : "+ getClass().getResource("/fxml/FXMLDecentralization.fxml").getPath());
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLDecentralization.fxml"));
 
             Scene scene = new Scene(root);
 
