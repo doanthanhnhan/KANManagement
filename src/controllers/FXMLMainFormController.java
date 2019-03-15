@@ -321,7 +321,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
         System.out.println("Edit Employee Informations menu item clicked!");
-        formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
+        formLoader("/fxml/FXMLDecentralization.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
     @FXML
