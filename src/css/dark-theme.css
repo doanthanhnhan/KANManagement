@@ -127,6 +127,9 @@
     -fx-fill: -fx-primarycolor;
 }
 .label-text{
+    -fx-text-fill:-fx-primarycolor;    
+}
+.label-with-image{
     -fx-text-fill:-fx-primarycolor;
     -fx-border-color: -fx-primarycolor;
 }
@@ -158,6 +161,7 @@
     -jfx-unfocus-color: -fx-fault-color;
 }
 .jfx-date-picker{
+    -jfx-default-color: -fx-primarycolor;
     -fx-prompt-text-fill: -fx-primarytextcolor;    
     -fx-font-size : 14px;
     -fx-font-weight: bold;    
