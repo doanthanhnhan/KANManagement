@@ -8,6 +8,8 @@ package controllers;
 import com.jfoenix.controls.JFXTabPane;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +51,7 @@ import utils.MyTimer;
 public class FXMLMainFormController implements Initializable {
 
     public static Boolean checkRegis = false;
+    private Map<String, Tab> openTabs = new HashMap<>();
 
     @FXML
     private MenuBar mainMenuBar;
@@ -164,7 +167,6 @@ public class FXMLMainFormController implements Initializable {
 
         ConnectControllers.setfXMLMainFormController(this);
 
-        
         //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
@@ -212,70 +214,14 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void homeAction(ActionEvent event) {
         btn_Toolbar_Home.setDisable(true);
-
-//        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
-//        list_Employee = FXMLLoginController.List_EmployeeLogin;
-//        String userRole = list_Employee.get(0).getRole();
-        Label label_Task_Status = new Label();
-
-        //Set timer and start
-        MyTimer myTimer = new MyTimer();
-        myTimer.create_myTimer(label_Task_Status);
-
-        //Add label to bottom
-        hbox_Bottom.getChildren().add(0, label_Task_Status);
-
         String userRole = "Admin";
         if (userRole.equals("Admin")) {
             initMenuBar();
         }
-
-        Task loadOverview = new Task() {
-            @Override
-            protected Object call() throws Exception {
-                System.out.println("Loading...");
-
-                try {
-                    // Get content from fxml file
-                    AnchorPane overviewPane = (AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/FXMLMainOverViewPane.fxml"));
-
-                    // Add fxml content to a tab
-                    Tab overViewTab = new Tab("Overview");
-                    overViewTab.setContent(overviewPane);
-                    Platform.runLater(() -> {
-                        mainTabPane.getTabs().add(overViewTab);
-
-                        //Stop timer
-                        myTimer.stop_Timer(label_Task_Status);
-                    });
-
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return null;
-            }
-        };
-        progressBar_MainTask.setVisible(true);
-        progressBar_MainTask.progressProperty().unbind();
-        progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
-
-        loadOverview.setOnSucceeded(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                System.out.println("Finished");
-                Platform.runLater(() -> {
-                    label_Task_Status.setText("Finished");
-                    progressBar_MainTask.progressProperty().unbind();
-                    progressBar_MainTask.setProgress(0);
-                    progressBar_MainTask.setVisible(false);
-                    hbox_Bottom.getChildren().remove(label_Task_Status);
-                    btn_Toolbar_Home.setDisable(false);
-
-                });
-            }
-        });
-
-        new Thread(loadOverview).start();
+//        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
+//        list_Employee = FXMLLoginController.List_EmployeeLogin;
+//        String userRole = list_Employee.get(0).getRole();
+        task_Insert_Tab_With_Indicator("/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
     }
 
     @FXML
@@ -287,13 +233,13 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_List_Service_Type_Action(ActionEvent event) {
         System.out.println("List Service Type menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceType.fxml", "Service type");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceType.fxml", "listServiceType_Tab", "Service type");
     }
 
     @FXML
     private void handle_MenuItem_List_Employee_Action(ActionEvent event) {
         System.out.println("List Service Type menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListEmployee.fxml", "Employee type");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListEmployee.fxml", "listEmployees_Tab", "Employees");
     }
     // ############### END VIEW ACTIONS ###############
 
@@ -367,7 +313,7 @@ public class FXMLMainFormController implements Initializable {
      * @param formPath
      * @param tabName
      */
-    public void task_Insert_Tab_With_Indicator(String formPath, String tabName) {
+    public void task_Insert_Tab_With_Indicator(String formPath, String tabID, String tabName) {
         Label label_Task_Status = new Label();
 
         //Set timer and start
@@ -390,8 +336,18 @@ public class FXMLMainFormController implements Initializable {
                     // Add fxml content to a tab
                     Tab subTab = new Tab(tabName);
                     subTab.setContent(subPane);
+                    subTab.setId(tabID);
+
                     Platform.runLater(() -> {
-                        mainTabPane.getTabs().add(subTab);
+                        //Checking existing tab
+                        if (openTabs.containsKey(formPath)) {
+                            mainTabPane.getSelectionModel().select(openTabs.get(formPath));
+                        } else {
+                            mainTabPane.getTabs().add(subTab);
+                            mainTabPane.getSelectionModel().select(subTab);
+                            openTabs.put(formPath, subTab);
+                            subTab.setOnClosed(e -> openTabs.remove(formPath));
+                        }
 
                         //Stop timer
                         myTimer.stop_Timer(label_Task_Status);
@@ -427,8 +383,14 @@ public class FXMLMainFormController implements Initializable {
 
     @FXML
     private void handle_Toolbar_CheckOut_Action(ActionEvent event) {
-        System.out.println("List Service Type menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOutForm.fxml", "Check Out");
+        System.out.println("CheckOut clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOutForm.fxml", "checkOut_Tab", "Check Out");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_Rooms_Action(ActionEvent event) {
+        System.out.println("List rooms menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListRooms.fxml", "listRooms_Tab", "Rooms");
     }
 
 }

@@ -49,7 +49,7 @@ public class FXMLListServiceTypeController implements Initializable {
 
     private static final int ROWS_PER_PAGE = 4;
     private FilteredList<ServiceType> filteredData;
-
+    
     @FXML
     private TableView<ServiceType> table_ServiceType;
     @FXML
