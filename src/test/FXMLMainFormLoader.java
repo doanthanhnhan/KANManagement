@@ -23,8 +23,8 @@ public class FXMLMainFormLoader extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            System.out.println("Kiểm tra : "+ getClass().getResource("/fxml/FXMLDecentralization.fxml").getPath());
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLDecentralization.fxml"));
+            System.out.println("Kiểm tra : "+ getClass().getResource("/fxml/FXMLMainForm.fxml").getPath());
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
 
             Scene scene = new Scene(root);
 

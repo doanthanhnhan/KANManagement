@@ -7,6 +7,7 @@ package controllers;
 
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -47,9 +48,9 @@ public class FXMLListServiceTypeController implements Initializable {
     public Boolean check_Edit_Action = false;
     public static ServiceType serviceTypeItem;
 
-    private static final int ROWS_PER_PAGE = 4;
+    private static final int ROWS_PER_PAGE = 20;
     private FilteredList<ServiceType> filteredData;
-    
+
     @FXML
     private TableView<ServiceType> table_ServiceType;
     @FXML
@@ -110,6 +111,8 @@ public class FXMLListServiceTypeController implements Initializable {
         TableColumn<ServiceType, String> serviceNameCol = new TableColumn<>("Service name");
         TableColumn<ServiceType, String> serviceUnitCol = new TableColumn<>("Service unit");
         TableColumn<ServiceType, Float> servicePriceCol = new TableColumn<>("Service price");
+        TableColumn<ServiceType, Integer> serviceInventoryCol = new TableColumn<>("Inventory");
+        TableColumn<ServiceType, LocalDateTime> serviceInputDateCol = new TableColumn<>("Import date");
         TableColumn<ServiceType, ImageView> serviceImageCol = new TableColumn<>("Service image");
         TableColumn<ServiceType, String> serviceDescriptionCol = new TableColumn<>("Service description");
 
@@ -128,6 +131,8 @@ public class FXMLListServiceTypeController implements Initializable {
         serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         serviceUnitCol.setCellValueFactory(new PropertyValueFactory<>("serviceUnit"));
         servicePriceCol.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
+        serviceInventoryCol.setCellValueFactory(new PropertyValueFactory<>("serviceInventory"));
+        serviceInputDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceInputDate"));
         serviceImageCol.setCellValueFactory(new PropertyValueFactory<>("imageView"));
         serviceDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("serviceDescription"));
 
@@ -136,13 +141,16 @@ public class FXMLListServiceTypeController implements Initializable {
         serviceNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceUnitCol.setStyle("-fx-alignment: CENTER-LEFT;");
         servicePriceCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceInventoryCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceInputDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceDescriptionCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceDescriptionCol.setPrefWidth(200);
         serviceImageCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         table_ServiceType.getColumns().clear();
-        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol, servicePriceCol, serviceDescriptionCol, serviceImageCol);
+        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol,
+                servicePriceCol, serviceInventoryCol, serviceInputDateCol, serviceDescriptionCol, serviceImageCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -163,6 +171,8 @@ public class FXMLListServiceTypeController implements Initializable {
                     //|| serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase())
                     || serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase())
                     || serviceType.getServicePrice().toString().contains(newValue.toLowerCase())
+                    || serviceType.getServiceInventory().toString().contains(newValue.toLowerCase())
+                    || serviceType.getServiceInputDate().toString().contains(newValue.toLowerCase())
                     || serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);

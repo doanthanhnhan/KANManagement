@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -21,7 +22,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="53.0" prefWidth="800.0">
                            <children>
-                              <Label fx:id="label_Title" prefHeight="53.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="ADD NEW SERVICE TYPE">
+                              <Label fx:id="label_Title" prefHeight="53.0" styleClass="label-text" text="ADD NEW SERVICE TYPE">
                                  <font>
                                     <Font name="System Bold" size="27.0" />
                                  </font>
@@ -33,7 +34,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="800.0">
                            <children>
-                              <Label fx:id="label_Description" prefHeight="25.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Filling the infomations for adding new service type">
+                              <Label fx:id="label_Description" prefHeight="25.0" styleClass="label-color" text="Filling the infomations for adding new service type">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
@@ -53,7 +54,7 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="70.0">
                            <children>
-                              <JFXTextField fx:id="serviceID" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service ID" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="serviceID" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service ID" styleClass="text-field" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
@@ -62,29 +63,35 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="70.0">
                            <children>
-                              <JFXTextField fx:id="serviceName" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service name" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="serviceName" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service name" styleClass="text-field" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </JFXTextField>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="70.0">
+                        <HBox alignment="CENTER" prefHeight="70.0" prefWidth="300.0" spacing="20.0">
                            <children>
-                              <JFXTextField fx:id="serviceUnit" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service unit" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="serviceUnit" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="100.0" promptText="Service unit" styleClass="text-field" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                              <JFXTextField fx:id="servicePrice" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="180.0" promptText="Service price (per unit)" styleClass="text-field" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </JFXTextField>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="70.0">
+                        <HBox alignment="CENTER" prefHeight="70.0" prefWidth="300.0" spacing="20.0">
                            <children>
-                              <JFXTextField fx:id="servicePrice" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="300.0" promptText="Service price (per unit)" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="serviceInventory" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="100.0" promptText="Inventory" styleClass="text-field" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </JFXTextField>
+                              <JFXDatePicker fx:id="serviceImportDate" prefHeight="35.0" prefWidth="180.0" promptText="Import Date" styleClass="jfx-date-picker" />
                            </children>
                         </HBox>
                      </children>
@@ -93,7 +100,7 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="80.0" spacing="20.0">
                            <children>
-                              <Label contentDisplay="TOP" styleClass="label-text" text="Service Image">
+                              <Label contentDisplay="TOP" styleClass="label-with-image" text="Service Image">
                                  <graphic>
                                     <ImageView fx:id="imgService" fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
@@ -137,7 +144,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0">
                <children>
-                  <JFXButton fx:id="btnAddNew" buttonType="RAISED" onAction="#btnSubmitAddNewEmployee" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                  <JFXButton fx:id="btnAddNew" buttonType="RAISED" onAction="#btnSubmitAddNewEmployee" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" text="Submit">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -145,7 +152,7 @@
                         <Insets left="80.0" right="80.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="btnCancel" buttonType="RAISED" layoutX="115.0" layoutY="29.0" onAction="#handle_Btn_Cancel_Action" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Cancel">
+                  <JFXButton fx:id="btnCancel" buttonType="RAISED" layoutX="115.0" layoutY="29.0" onAction="#handle_Btn_Cancel_Action" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" text="Cancel">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

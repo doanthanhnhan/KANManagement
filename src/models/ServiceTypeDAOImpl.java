@@ -9,10 +9,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -31,7 +34,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public ObservableList<ServiceType> getAllServiceType() {
-        String sql = "SELECT ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, ServiceDescription FROM ServiceType";
+        String sql = "SELECT ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, ServiceDescription, ServiceInventory, InputDate FROM ServiceType";
         ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -54,7 +57,8 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                         imageView.setFitWidth(50);
                         serviceType.setImageView(imageView);
                     }
-
+                    serviceType.setServiceInventory(rs.getInt("ServiceInventory"));                    
+                    serviceType.setServiceInputDate(rs.getTimestamp("InputDate").toLocalDateTime());
                     listServiceTypes.add(serviceType);
                 }
             } catch (IOException ex) {
@@ -68,7 +72,8 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public void addServiceType(ServiceType serviceType) {
-        String sql = "INSERT INTO ServiceType (ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, Active, ServiceDescription) VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO ServiceType (ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, Active, ServiceDescription, ServiceInventory, InputDate, UserName) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?)";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceType.getServiceID());
@@ -78,6 +83,10 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setBlob(5, serviceType.getServiceImage());
                 stmt.setBoolean(6, true);
                 stmt.setNString(7, serviceType.getServiceDescription());
+                stmt.setInt(8, serviceType.getServiceInventory());
+                stmt.setString(9, serviceType.getUserName());
+                //Convert LocalDateTime to Timestamp
+                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceInputDate()));
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -87,7 +96,10 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public void editServiceType(ServiceType serviceType, Boolean active) {
-        String sql = "UPDATE ServiceType SET ServiceID=?, ServiceName=?, ServiceUnit=?, ServicePrice=?, Image=?, Active=?, ServiceDescription=?  WHERE ServiceID=?";
+        String sql = "UPDATE ServiceType SET ServiceID=?, ServiceName=?, ServiceUnit=?, ServicePrice=?, "
+                + "Image=?, Active=?, ServiceDescription=?,  "
+                + "ServiceInventory=?, InputDate=?, UserName=? "
+                + "WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceType.getServiceID());
@@ -97,7 +109,10 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setBlob(5, serviceType.getServiceImage());
                 stmt.setBoolean(6, active);
                 stmt.setNString(7, serviceType.getServiceDescription());
-                stmt.setNString(8, serviceType.getServiceID());
+                stmt.setInt(8, serviceType.getServiceInventory());
+                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceInputDate()));                
+                stmt.setString(10, serviceType.getUserName());
+                stmt.setNString(11, serviceType.getServiceID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {

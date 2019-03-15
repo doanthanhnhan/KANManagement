@@ -10,16 +10,25 @@
     /*    -fx-primarycolor: #2A2E37;
         -fx-secondarycolor: #FFFF8D;
         -fx-primarytextcolor: #B2B2B2;*/
-    -fx-checkoutcolor: #FF2625;
-    -fx-availablecolor: #7AA716;
-    -fx-reservedcolor: #009FB4;
-    -fx-occupiedcolor: #C83F06;
-    -fx-fault-color: #FF2625;
+    -fx-checkoutcolor: #dc3545;
+    -fx-availablecolor: #28a745;
+    -fx-reservedcolor: #007bff;
+    -fx-occupiedcolor: #fd7e14;
+    -fx-fault-color: #dc3545;
     -fx-warning-color: #ffc107;
+    /*Bootstrap color*/
     -fx-blue-color: #007bff;
     -fx-red-color: #dc3545;
     -fx-white-color: #fff;
     -fx-green-color: #28a745;
+    -fx-indigo-color: #6610f2;
+    -fx-purple-color: #6f42c1;
+    -fx-pink-color: #e83e8c;
+    -fx-orange-color: #fd7e14;
+    -fx-teal-color: #20c997;
+    -fx-cyan-color: #17a2b8;
+    -fx-yellow-color: #ffc107;
+    
 }
 
 /*GENERAL NODE*/
@@ -135,8 +144,19 @@
 .text-field {
     -fx-prompt-text-fill: -fx-primarytextcolor;
     -fx-text-fill: black;
+    -jfx-focus-color: -fx-primarycolor;
+    -jfx-unfocus-color: -fx-primarycolor;
 }
-
+.text-field-fault {
+    -jfx-focus-color: -fx-red-color;
+    -jfx-unfocus-color: -fx-red-color;
+}
+.text-area {
+    -fx-prompt-text-fill: -fx-primarytextcolor;
+    -fx-text-fill: black;
+    -jfx-focus-color: -fx-primarycolor;
+    -jfx-unfocus-color: -fx-primarycolor;
+}
 #passIcon{
     -fx-fill: -fx-primarycolor;
 }

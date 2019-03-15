@@ -6,6 +6,8 @@
 package models;
 
 import java.sql.Blob;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import javafx.scene.image.ImageView;
 
 /**
@@ -15,9 +17,12 @@ import javafx.scene.image.ImageView;
 public class ServiceType {
 
     private String serviceID;
+    private String userName;
     private String serviceName;
     private String serviceUnit;
     private Float servicePrice;
+    private Integer serviceInventory;
+    private LocalDateTime serviceInputDate;
     private Blob serviceImage;
     private ImageView imageView;
     private String serviceDescription;
@@ -43,6 +48,14 @@ public class ServiceType {
         this.serviceID = serviceID;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getServiceName() {
         return serviceName;
     }
@@ -65,6 +78,22 @@ public class ServiceType {
 
     public void setServicePrice(Float servicePrice) {
         this.servicePrice = servicePrice;
+    }
+
+    public Integer getServiceInventory() {
+        return serviceInventory;
+    }
+
+    public void setServiceInventory(Integer serviceInventory) {
+        this.serviceInventory = serviceInventory;
+    }
+
+    public LocalDateTime getServiceInputDate() {
+        return serviceInputDate;
+    }
+
+    public void setServiceInputDate(LocalDateTime serviceInputDate) {
+        this.serviceInputDate = serviceInputDate;
     }
 
     public Blob getServiceImage() {
