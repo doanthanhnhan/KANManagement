@@ -287,7 +287,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         ServiceType serviceType = new ServiceType();
         serviceType.setServiceID(FormatName.format(serviceID.getText()));
         serviceType.setServiceName(FormatName.format(serviceName.getText()));
-        serviceType.set(FormatName.format(serviceName.getText()));
+        serviceType.setServiceName(FormatName.format(serviceName.getText()));
         serviceType.setServiceUnit(FormatName.format(serviceUnit.getText()));
         serviceType.setServiceInventory(Integer.parseInt(FormatName.format(serviceInventory.getText())));
         //Setting localdatetime (DatePicker + LocalTime.now())

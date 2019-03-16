@@ -7,10 +7,14 @@ package models;
 
 import com.jfoenix.controls.JFXButton;
 import controllers.FXMLDecentralizationController;
+import controllers.FXMLLoginController;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -25,6 +29,7 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOcheckRole {
+// check quyen Emp_Edit
 
     public static Boolean checkRoleEditEmployee(String User) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
@@ -33,11 +38,35 @@ public class DAOcheckRole {
         pt.setString(1, User);
         ResultSet rs;
         rs = pt.executeQuery();
-        if (rs.next()) {
-            pt.close();
-            connection.close();
-            rs.close();
-            return true;
+        while (rs.next()) {
+            if (rs.getBoolean("Employee_Edit")) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+        }
+        pt.close();
+        connection.close();
+        rs.close();
+        return false;
+    }
+//    check quyen Emp_Add
+
+    public static Boolean checkRoleAddEmployee(String User) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "select Employee_Add from Role where EmployeeID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, User);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        while (rs.next()) {
+            if (rs.getBoolean("Employee_Add")) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
         }
         pt.close();
         connection.close();
@@ -382,7 +411,7 @@ public class DAOcheckRole {
                 btn_Update.setDisable(false);
                 btn_Edit.setDisable(true);
             });
-            
+
 //            action Update
             btn_Update.setOnAction((event) -> {
 //                CheckIn CheckOut Department Customer Booking
@@ -442,13 +471,13 @@ public class DAOcheckRole {
                 cb_Employee_Add.setDisable(true);
                 cb_Employee_Delete.setDisable(true);
                 btn_Update.setDisable(true);
-        
+
                 try {
                     update_EmployeeDecentralization(
                             Emp.getEmployee_ID(), cb_Employee_View.isSelected(), cb_Employee_Add.isSelected(), cb_Employee_Edit.isSelected(), cb_Employee_Delete.isSelected(),
-                            cb_User_View.isSelected(), cb_User_Add.isSelected(), cb_User_Edit.isSelected(), cb_User_Delete.isSelected(), cb_Booking_View.isSelected(), cb_Booking_Add.isSelected(), cb_Booking_Edit.isSelected(),cb_Booking_Delete.isSelected(),
-                            cb_CheckIn_View.isSelected(), cb_CheckIn_Add.isSelected(), cb_CheckIn_Edit.isSelected(), cb_CheckIn_Delete.isSelected(),cb_CheckOut_View.isSelected(), cb_CheckOut_Add.isSelected(), cb_CheckOut_Edit.isSelected(), cb_CheckOut_Delete.isSelected(),
-                            cb_Customer_View.isSelected(), cb_Customer_Add.isSelected(), cb_Customer_Edit.isSelected(), cb_Customer_Delete.isSelected(),cb_Department_View.isSelected(), cb_Department_Add.isSelected(), cb_Department_Edit.isSelected(), cb_Department_Delete.isSelected(),
+                            cb_User_View.isSelected(), cb_User_Add.isSelected(), cb_User_Edit.isSelected(), cb_User_Delete.isSelected(), cb_Booking_View.isSelected(), cb_Booking_Add.isSelected(), cb_Booking_Edit.isSelected(), cb_Booking_Delete.isSelected(),
+                            cb_CheckIn_View.isSelected(), cb_CheckIn_Add.isSelected(), cb_CheckIn_Edit.isSelected(), cb_CheckIn_Delete.isSelected(), cb_CheckOut_View.isSelected(), cb_CheckOut_Add.isSelected(), cb_CheckOut_Edit.isSelected(), cb_CheckOut_Delete.isSelected(),
+                            cb_Customer_View.isSelected(), cb_Customer_Add.isSelected(), cb_Customer_Edit.isSelected(), cb_Customer_Delete.isSelected(), cb_Department_View.isSelected(), cb_Department_Add.isSelected(), cb_Department_Edit.isSelected(), cb_Department_Delete.isSelected(),
                             cb_Role_View.isSelected(), cb_Role_Add.isSelected(), cb_Role_Edit.isSelected(), cb_Role_Delete.isSelected(), cb_Room_View.isSelected(), cb_Room_Add.isSelected(), cb_Room_Edit.isSelected(), cb_Room_Delete.isSelected(),
                             cb_SODetail_View.isSelected(), cb_SODetail_Add.isSelected(), cb_SODetail_Edit.isSelected(), cb_SODetail_Delete.isSelected(), cb_SODer_View.isSelected(), cb_SODer_Add.isSelected(), cb_SODer_Edit.isSelected(), cb_SODer_Delete.isSelected(),
                             cb_SType_View.isSelected(), cb_SType_Add.isSelected(), cb_SType_Edit.isSelected(), cb_SType_Delete.isSelected(), cb_UserLog_View.isSelected(), cb_UserLog_Add.isSelected(), cb_UserLog_Edit.isSelected(), cb_UserLog_Delete.isSelected()
@@ -456,7 +485,15 @@ public class DAOcheckRole {
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
                 }
-  
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                String logtime;
+                logtime = dateFormat.format(cal.getTime());
+                try {
+                    DAO.setUserLogs(FXMLLoginController.User_Login, "Update Decentralization for " + Emp.getEmployee_ID(), logtime);
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 btn_Edit.setDisable(false);
             });
             Emp.setDecentralizationAction(Action);

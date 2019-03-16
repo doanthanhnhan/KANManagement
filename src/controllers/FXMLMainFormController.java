@@ -15,8 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -52,7 +50,6 @@ public class FXMLMainFormController implements Initializable {
 
     public static Boolean checkRegis = false;
     private Map<String, Tab> openTabs = new HashMap<>();
-
     @FXML
     private MenuBar mainMenuBar;
     @FXML
@@ -158,13 +155,21 @@ public class FXMLMainFormController implements Initializable {
     private Menu About;
     @FXML
     private TextField txt_Search;
+    @FXML
+    public AnchorPane AnchorPaneMainForm;
+
+    /**you
+     *
+     */
+
+     
+    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         ConnectControllers.setfXMLMainFormController(this);
 
         //Set close button for all TAB

@@ -20,8 +20,6 @@ import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,13 +35,18 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.notificationFunction;
 import utils.PatternValided;
 import utils.FormatName;
 import utils.StageLoader;
+import utils.showFXMLLogin;
+import view.Login;
 
 /**
  * FXML Controller class
@@ -52,6 +55,8 @@ import utils.StageLoader;
  */
 public class FXMLAddNewEmloyeeController implements Initializable {
 
+    private Integer checkFirstLogin;
+    private showFXMLLogin showFormLogin = new showFXMLLogin();
     @FXML
     private JFXTextField newGmail;
     @FXML
@@ -71,6 +76,11 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     @FXML
     private HBox HboxContent;
     private FXMLListEmployeeController fXMLListEmployeeController;
+    private FXMLMainFormController fXMLMainFormController;
+    @FXML
+    private AnchorPane anchorPaneAddEmployee;
+    @FXML
+    private ToggleGroup newSexEmployee;
 
     /**
      * Initializes the controller class.
@@ -80,14 +90,14 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         try {
-            if (DAO.checkFirstLogin() == 0) {
-                newId.setDisable(true);
-                newId.setText("admin");
-            }
+            checkFirstLogin = DAO.checkFirstLogin();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (checkFirstLogin.equals(0)) {
+            newId.setDisable(true);
+            newId.setText("admin");
         }
         newId.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -99,11 +109,19 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        btnSubmitAddNewEmployee();
+                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
+                            stage.close();
+                            stageMainForm.close();
+                            showFormLogin.showFormLogin();
+                        } else {
+                            btnSubmitAddNewEmployee();
+                        }
+
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -118,11 +136,18 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        btnSubmitAddNewEmployee();
+                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
+                            stage.close();
+                            stageMainForm.close();
+                            showFormLogin.showFormLogin();
+                        } else {
+                            btnSubmitAddNewEmployee();
+                        }
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -137,11 +162,18 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        btnSubmitAddNewEmployee();
+                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
+                            stage.close();
+                            stageMainForm.close();
+                            showFormLogin.showFormLogin();
+                        } else {
+                            btnSubmitAddNewEmployee();
+                        }
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -156,11 +188,18 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        btnSubmitAddNewEmployee();
+                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
+                            stage.close();
+                            stageMainForm.close();
+                            showFormLogin.showFormLogin();
+                        } else {
+                            btnSubmitAddNewEmployee();
+                        }
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -174,20 +213,34 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        btnSubmitAddNewEmployee();
+                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
+                            stage.close();
+                            stageMainForm.close();
+                            showFormLogin.showFormLogin();
+                        } else {
+                            btnSubmitAddNewEmployee();
+                        }
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
         });
-        ObservableList listRole = FXCollections.observableArrayList();
     }
 
     @FXML
     private void btnSubmitAddNewEmployee() throws ClassNotFoundException, SQLException, IOException {
+        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
+            stage.close();
+            stageMainForm.close();
+            showFormLogin.showFormLogin();
+        }
         btnAddNew.setDisable(true);
         // Đoạn này làm loading (đang làm chạy vô tận)
 
@@ -223,6 +276,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     }
 
     private void AddNewEmployee() throws ClassNotFoundException, SQLException, IOException, Exception {
+
 //        valided texfield
         if (newId.getText().equals("")) {
             Platform.runLater(() -> {
@@ -301,17 +355,16 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             String logtime;
                             logtime = dateFormat.format(cal.getTime());
                             DAO.AddUser(newId.getText(), Username, Password, logtime);
-                            if(DAO.checkFirstLogin().equals(1)){
+                            if (checkFirstLogin.equals(1)) {
                                 DAO.setRoleAdmin(newId.getText());
-                            }
-                            else{
+                            } else {
                                 DAO.setRoleUser(newId.getText());
                             }
                             String content = "Username: " + newId.getText() + ", Password: 123456";
                             Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                                     "KAN@123456", "Default username and password", content);
-                    
-                            if (!DAO.checkFirstLogin().equals(1)) {
+
+                            if (!checkFirstLogin.equals(1)) {
                                 DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + newId.getText(), logtime);
                             }
                             newFirstname.setText("");
@@ -320,7 +373,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             newGmail.setText("");
                             newId.setText("");
                             newId.requestFocus();
-                            if(FXMLListEmployeeController.check_form_list){
+                            if (FXMLListEmployeeController.check_form_list) {
                                 fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
                                 fXMLListEmployeeController.table_ListEmployee.setItems(DAO.getAllInfoEmployee());
                             }
@@ -334,23 +387,13 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                     }
                 });
             }
-            if (DAO.checkFirstLogin().equals(0)) {
+            if (checkFirstLogin.equals(0)) {
                 Platform.runLater(() -> {
-                    Stage stage = (Stage) btnAddNew.getScene().getWindow();
-                    stage.close();
-                    Stage stageEdit = new Stage();
-                    stageEdit.resizableProperty().setValue(Boolean.FALSE);
-                    Parent root = null;
                     try {
-                        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+                        showFormLogin.showFormLogin();
                     } catch (IOException ex) {
                         Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    stageEdit.getIcons().add(new Image("/images/iconmanagement.png"));
-                    Scene scene = new Scene(root);
-                    stageEdit.setTitle("KANManagement");
-                    stageEdit.setScene(scene);
-                    stageEdit.show();
                 });
             }
         }

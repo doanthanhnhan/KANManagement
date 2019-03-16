@@ -18,25 +18,25 @@ import models.DAO;
  * @author Admin
  */
 public class Login extends Application {
-    public static Stage stage;
+
+    public static Integer checkFirstLogin;
+
     @Override
     public void start(Stage stage) throws Exception {
-        this.stage=stage;
-        Parent root = null;
-        if(DAO.checkFirstLogin()==0){
-            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+        checkFirstLogin = DAO.checkFirstLogin();
+        if (checkFirstLogin.equals(0)) {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
             stage.setTitle("Add New Employee");
-        }
-        else{
-            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
-            stage.setTitle("KANManagementLogin");
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+        } else {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+            stage.setTitle("Login");
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
         }
         stage.resizableProperty().setValue(Boolean.FALSE);
         stage.getIcons().add(new Image("/images/KAN Logo.png"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
         stage.show();
     }
 
@@ -46,5 +46,5 @@ public class Login extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
