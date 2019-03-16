@@ -38,6 +38,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import models.RoleDAOImpl;
+import models.boolDecentralizationModel;
 
 import utils.MyTimer;
 
@@ -50,6 +52,9 @@ public class FXMLMainFormController implements Initializable {
 
     public static Boolean checkRegis = false;
     private Map<String, Tab> openTabs = new HashMap<>();
+    FXMLLoginController fxmlLoginController;
+    RoleDAOImpl roleDAOImpl;
+    
     @FXML
     private MenuBar mainMenuBar;
     @FXML
@@ -170,11 +175,21 @@ public class FXMLMainFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        roleDAOImpl = new RoleDAOImpl();
+        //Set FXMLMainFormController reference
         ConnectControllers.setfXMLMainFormController(this);
 
+        //Get FXMLLoginController for using in this controller
+        fxmlLoginController = ConnectControllers.getfXMLLoginController();
+        
         //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
+        //Get user role
+        boolDecentralizationModel userRole = new boolDecentralizationModel();
+        userRole = roleDAOImpl.getEmployeeRole(fxmlLoginController.getUser_Login_Sucessful());
+        System.out.println("User has logged in: " + userRole.getEmployee_ID());
+        System.out.println(userRole.toString());
     }
 
     private void initMenuBar() {

@@ -50,6 +50,7 @@ import models.ServiceTypeDAOImpl;
 import models.ServiceType;
 import utils.FormatName;
 import utils.StageLoader;
+import utils.formatCalender;
 
 /**
  * FXML Controller class
@@ -424,5 +425,11 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             check = false;
         }
         return check;
+    }
+
+    @FXML
+    private void formatImportDate(ActionEvent event) {
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, serviceImportDate);
     }
 }

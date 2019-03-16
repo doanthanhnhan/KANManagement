@@ -21,6 +21,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -48,7 +50,9 @@ import utils.StageLoader;
 public class FXMLLoginController implements Initializable {
 
     public static String User_Login;
+    public StringProperty user_Login_Sucessful;
     private InfoEmployee Emp = new InfoEmployee();
+
     @FXML
     private AnchorPane formLogin;
     @FXML
@@ -66,6 +70,10 @@ public class FXMLLoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        user_Login_Sucessful = new SimpleStringProperty();
+        //Set FXMLLoginController reference
+        ConnectControllers.setfXMLLoginController(this);
+
         txtUserName.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -99,6 +107,18 @@ public class FXMLLoginController implements Initializable {
                 }
             }
         });
+    }
+
+    public final String getUser_Login_Sucessful() {
+        return user_Login_Sucessful.get();
+    }
+
+    public final void setUser_Login_Sucessful(String value) {
+        user_Login_Sucessful.set(value);
+    }
+
+    public StringProperty user_Login_SucessfulProperty() {
+        return user_Login_Sucessful;
     }
 
     @FXML
@@ -189,7 +209,10 @@ public class FXMLLoginController implements Initializable {
                             }
                         });
                     } else {
-                        User_Login = txtUserName.getText();
+
+                        //Passing user login successful
+                        User_Login = txtUserName.getText();                        
+
                         Platform.runLater(new Runnable() {
                             Stage stage = (Stage) btnLogin.getScene().getWindow();
 
@@ -219,6 +242,7 @@ public class FXMLLoginController implements Initializable {
                                         stageEdit.initStyle(StageStyle.UNDECORATED);
 
                                     } else {
+                                        setUser_Login_Sucessful(txtUserName.getText());
                                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                         Calendar cal = Calendar.getInstance();
                                         String logtime;

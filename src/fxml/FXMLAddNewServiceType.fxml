@@ -91,7 +91,7 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </JFXTextField>
-                              <JFXDatePicker fx:id="serviceImportDate" prefHeight="35.0" prefWidth="180.0" promptText="Import Date" styleClass="jfx-date-picker" />
+                              <JFXDatePicker fx:id="serviceImportDate" onAction="#formatImportDate" prefHeight="35.0" prefWidth="180.0" promptText="Import Date" styleClass="jfx-date-picker" />
                            </children>
                         </HBox>
                      </children>
