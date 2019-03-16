@@ -54,7 +54,7 @@ public class FXMLMainFormController implements Initializable {
     private Map<String, Tab> openTabs = new HashMap<>();
     FXMLLoginController fxmlLoginController;
     RoleDAOImpl roleDAOImpl;
-    
+
     @FXML
     private MenuBar mainMenuBar;
     @FXML
@@ -162,14 +162,27 @@ public class FXMLMainFormController implements Initializable {
     private TextField txt_Search;
     @FXML
     public AnchorPane AnchorPaneMainForm;
-
-    /**you
-     *
-     */
-
-     
+    @FXML
+    private MenuItem menuItem_List_Department;
+    @FXML
+    private MenuItem menuItem_Add_Department;
+    @FXML
+    private MenuItem menuItem_Edit_Department;
+    @FXML
+    private MenuItem menuItem_List_Role;
+    @FXML
+    private MenuItem menuItem_Add_Role;
+    @FXML
+    private MenuItem menuItem_Edit_Role;
+    @FXML
+    private MenuItem menuItem_List_Service_Orders_Details;
+    @FXML
+    private MenuItem menuItem_Add_Service_Order_Details;
+    @FXML
+    private MenuItem menuItem_Edit_Service_Order_Details;
+    @FXML
+    private MenuItem menuItem_List_Users_Log;
     
-
     /**
      * Initializes the controller class.
      */
@@ -181,15 +194,187 @@ public class FXMLMainFormController implements Initializable {
 
         //Get FXMLLoginController for using in this controller
         fxmlLoginController = ConnectControllers.getfXMLLoginController();
-        
+
         //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
-        //Get user role
+        //Get user role        
         boolDecentralizationModel userRole = new boolDecentralizationModel();
         userRole = roleDAOImpl.getEmployeeRole(fxmlLoginController.getUser_Login_Sucessful());
         System.out.println("User has logged in: " + userRole.getEmployee_ID());
         System.out.println(userRole.toString());
+
+        //Setting role to form
+        //01.BOOKING CRUD
+        if (!userRole.ischeckBooking_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckBooking_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckBooking_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Booking);
+        }
+        if (!userRole.ischeckBooking_View()) {
+            menu_View.getItems().remove(menuItem_List_Booking);
+        }
+        //02.CHECK IN CRUD
+        if (!userRole.ischeckCheckIn_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Check_In);
+        }
+        if (!userRole.ischeckCheckIn_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckCheckIn_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Check_In);
+        }
+        if (!userRole.ischeckCheckIn_View()) {
+            menu_View.getItems().remove(menuItem_List_Check_In);
+        }
+        //03.CHECK OUT CRUD
+        if (!userRole.ischeckCheckOut_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Check_out);
+        }
+        if (!userRole.ischeckCheckOut_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckCheckOut_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Check_Out);
+        }
+        if (!userRole.ischeckCheckOut_View()) {
+            menu_View.getItems().remove(menuItem_List_Check_Out);
+        }
+        //04.CUSTOMER CRUD
+        if (!userRole.ischeckCustomer_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Customer);
+        }
+        if (!userRole.ischeckCustomer_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckCustomer_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Customer);
+        }
+        if (!userRole.ischeckCustomer_View()) {
+            menu_View.getItems().remove(menuItem_List_Customers);
+        }
+        //05.DEPARTMENT CRUD
+        if (!userRole.ischeckDepartment_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Department);
+        }
+        if (!userRole.ischeckDepartment_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckDepartment_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Department);
+        }
+        if (!userRole.ischeckDepartment_View()) {
+            menu_View.getItems().remove(menuItem_List_Department);
+        }
+        //06.EMPLOYEE CRUD
+        if (!userRole.ischeckEmployee_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Employee);
+        }
+        if (!userRole.ischeckEmployee_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckEmployee_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Employee);
+        }
+        if (!userRole.ischeckEmployee_View()) {
+            menu_View.getItems().remove(menuItem_List_Employees);
+        }
+        //07.ROLE CRUD
+        if (!userRole.ischeckRole_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Role);
+        }
+        if (!userRole.ischeckRole_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckRole_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Role);
+        }
+        if (!userRole.ischeckRole_View()) {
+            menu_View.getItems().remove(menuItem_List_Role);
+        }
+        //08.ROOM CRUD
+        if (!userRole.ischeckRoom_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Room);
+        }
+        if (!userRole.ischeckRoom_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckRoom_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Room);
+        }
+        if (!userRole.ischeckRoom_View()) {
+            menu_View.getItems().remove(menuItem_List_Rooms);
+        }
+        //09.SERVICES ORDERS CRUD
+        if (!userRole.ischeckSODer_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Service_Order);
+        }
+        if (!userRole.ischeckSODer_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckSODer_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Service_Order);
+        }
+        if (!userRole.ischeckSODer_View()) {
+            menu_View.getItems().remove(menuItem_List_Service_Orders);
+        }
+        //10.SERVICE ORDER DETAILS CRUD
+        if (!userRole.ischeckSODetail_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Service_Order_Details);
+        }
+        if (!userRole.ischeckSODetail_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckSODetail_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Service_Order_Details);
+        }
+        if (!userRole.ischeckSODetail_View()) {
+            menu_View.getItems().remove(menuItem_List_Service_Orders_Details);
+        }
+        //11.SERVICE TYPE CRUD
+        if (!userRole.ischeckSType_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_Service_Type);
+        }
+        if (!userRole.ischeckSType_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckSType_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_Service_Type);
+        }
+        if (!userRole.ischeckSType_View()) {
+            menu_View.getItems().remove(menuItem_List_Service_Type);
+        }
+        //12.USERLOG CRUD
+        if (!userRole.ischeckUserLog_Add()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckUserLog_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckUserLog_Edit()) {
+            //menu_Add.getItems().remove(menuItem_Edit_Booking);
+        }
+        if (!userRole.ischeckUserLog_View()) {
+            menu_View.getItems().remove(menuItem_List_Users_Log);
+        }
+        //13.USERS CRUD
+        if (!userRole.ischeckUser_Add()) {
+            menu_Add.getItems().remove(menuItem_Add_User);
+        }
+        if (!userRole.ischeckUser_Delete()) {
+            //menu_Add.getItems().remove(menuItem_Add_Booking);
+        }
+        if (!userRole.ischeckUser_Edit()) {
+            menu_Edit.getItems().remove(menuItem_Edit_User);
+        }
+        if (!userRole.ischeckUser_View()) {
+            menu_View.getItems().remove(menuItem_List_Users);
+        }
+        // ENDING SETTING ROLE TO FORM
     }
 
     private void initMenuBar() {

@@ -508,7 +508,7 @@ public class boolDecentralizationModel {
         this.checkSODer_Add = new SimpleBooleanProperty(checkSODer_Add);
     }
 
-    public boolean ischeckcheckSODer_View() {
+    public boolean ischeckSODer_View() {
         return checkSODer_View.get();
     }
 
@@ -766,4 +766,5 @@ public class boolDecentralizationModel {
         this.checkEmployee_Edit = new SimpleBooleanProperty(checkEmployee_Edit);
         this.checkEmployee_Delete = new SimpleBooleanProperty(checkEmployee_Delete);
     }
+    
 }
