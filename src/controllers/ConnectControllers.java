@@ -18,6 +18,7 @@ public class ConnectControllers {
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
     public static FXMLListEmployeeController fXMLListEmployeeController;
+
     public static FXMLLoginController getfXMLLoginController() {
         return fXMLLoginController;
     }
@@ -33,7 +34,7 @@ public class ConnectControllers {
     public static void setfXMLMainFormController(FXMLMainFormController fXMLMainFormController) {
         ConnectControllers.fXMLMainFormController = fXMLMainFormController;
     }
-    
+
     public static FXMLForgetPassController fXMLForgetPassController() {
 
         return fXMLForgetPassController;

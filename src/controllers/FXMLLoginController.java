@@ -82,7 +82,7 @@ public class FXMLLoginController implements Initializable {
                 }
             }
         });
-        
+
         txtPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -103,7 +103,7 @@ public class FXMLLoginController implements Initializable {
 
     @FXML
     private void handleLoginAction() throws ClassNotFoundException, SQLException, IOException {
-        btnLogin.setDisable(true);        
+        btnLogin.setDisable(true);
         StageLoader stageLoader = new StageLoader();
         stageLoader.loadingIndicator("Loading");
         Task loadOverview = new Task() {

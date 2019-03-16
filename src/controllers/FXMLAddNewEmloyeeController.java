@@ -35,6 +35,8 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -42,6 +44,7 @@ import javafx.scene.layout.AnchorPane;
 import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.notificationFunction;
+import utils.AlertLoginAgain;
 import utils.PatternValided;
 import utils.FormatName;
 import utils.StageLoader;
@@ -55,7 +58,6 @@ import view.Login;
  */
 public class FXMLAddNewEmloyeeController implements Initializable {
 
-    private Integer checkFirstLogin;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     @FXML
     private JFXTextField newGmail;
@@ -90,14 +92,14 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         try {
-            checkFirstLogin = DAO.checkFirstLogin();
+            if (DAO.checkFirstLogin().equals(0)) {
+                newId.setDisable(true);
+                newId.setText("admin");
+            }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (checkFirstLogin.equals(0)) {
-            newId.setDisable(true);
-            newId.setText("admin");
         }
         newId.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -109,7 +111,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            AlertLoginAgain.alertLogin();
                             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
                             Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
                             Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
@@ -136,7 +139,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            AlertLoginAgain.alertLogin();
                             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
                             Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
                             Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
@@ -162,7 +166,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            AlertLoginAgain.alertLogin();
                             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
                             Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
                             Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
@@ -188,7 +193,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            AlertLoginAgain.alertLogin();
                             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
                             Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
                             Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
@@ -213,7 +219,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+                            AlertLoginAgain.alertLogin();
                             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
                             Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
                             Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
@@ -233,7 +240,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
 
     @FXML
     private void btnSubmitAddNewEmployee() throws ClassNotFoundException, SQLException, IOException {
-        if (!checkFirstLogin.equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+            AlertLoginAgain.alertLogin();
             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
             Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
             Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
@@ -355,7 +363,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             String logtime;
                             logtime = dateFormat.format(cal.getTime());
                             DAO.AddUser(newId.getText(), Username, Password, logtime);
-                            if (checkFirstLogin.equals(1)) {
+                            if (DAO.checkFirstLogin().equals(1)) {
                                 DAO.setRoleAdmin(newId.getText());
                             } else {
                                 DAO.setRoleUser(newId.getText());
@@ -364,7 +372,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                                     "KAN@123456", "Default username and password", content);
 
-                            if (!checkFirstLogin.equals(1)) {
+                            if (!DAO.checkFirstLogin().equals(1)) {
                                 DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + newId.getText(), logtime);
                             }
                             newFirstname.setText("");
@@ -387,7 +395,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                     }
                 });
             }
-            if (checkFirstLogin.equals(0)) {
+            if (DAO.checkFirstLogin().equals(0)) {
                 Platform.runLater(() -> {
                     try {
                         showFormLogin.showFormLogin();
