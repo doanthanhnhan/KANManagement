@@ -348,6 +348,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             if (DAO.checkFirstLogin().equals(0)) {
                 Platform.runLater(() -> {
                     try {
+                        Stage stage = (Stage) btnAddNew.getScene().getWindow();
+                        stage.close();
                         showFormLogin.showFormLogin();
                     } catch (IOException ex) {
                         Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);

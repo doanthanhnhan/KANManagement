@@ -711,7 +711,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                         Platform.runLater(() -> {
                             notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
                         });
-                    } else if (FXMLMainFormController.checkRegis && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
+                    } else if (FXMLMainFormController.checkRegis && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")&& !FXMLLoginController.checkLoginRegis) {
                         System.out.println("vao khu vuc submit admin 1");
                         Platform.runLater(() -> {
                             System.out.println("vao khu vuc submit admin 2");
@@ -804,7 +804,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                 System.out.println("Event của admin tu MainForm");
                 System.out.println("run");
                 FXMLMainFormController.checkRegis = true;
-                handleInfoAction();
+                handleInfoAction();                
             }
         } catch (SQLException | ClassNotFoundException | IOException ex) {
             Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);

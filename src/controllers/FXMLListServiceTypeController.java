@@ -100,7 +100,8 @@ public class FXMLListServiceTypeController implements Initializable {
 
         //Get user role from Mainform
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
-        userRole = mainFormController.getUserRole();
+        //userRole = mainFormController.getUserRole();
+        userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
         //11.SERVICE TYPE CRUD
         if (!userRole.ischeckSType_Add()) {
             contextMenu_Main.getItems().remove(menuItem_Add);

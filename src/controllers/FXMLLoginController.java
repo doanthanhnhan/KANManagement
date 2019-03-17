@@ -211,8 +211,8 @@ public class FXMLLoginController implements Initializable {
                     } else {
 
                         //Passing user login successful
-                        User_Login = txtUserName.getText();                        
-
+                        User_Login = txtUserName.getText();
+                        setUser_Login_Sucessful(txtUserName.getText());
                         Platform.runLater(new Runnable() {
                             Stage stage = (Stage) btnLogin.getScene().getWindow();
 
@@ -242,7 +242,7 @@ public class FXMLLoginController implements Initializable {
                                         stageEdit.initStyle(StageStyle.UNDECORATED);
 
                                     } else {
-                                        setUser_Login_Sucessful(txtUserName.getText());
+
                                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                         Calendar cal = Calendar.getInstance();
                                         String logtime;

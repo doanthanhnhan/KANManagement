@@ -460,12 +460,14 @@ public class FXMLMainFormController implements Initializable {
     // =============== START ADD ACTIONS ===============
     @FXML
     private void handle_MenuItem_Add_Employee_Action(ActionEvent event) {
+        checkRegis = true;
         System.out.println("Add new Employee menu item clicked!");
         formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New Employee");
     }
 
     @FXML
     private void handle_MenuItem_Add_User_Action(ActionEvent event) {
+        checkRegis = true;
         System.out.println("Add new User menu item clicked!");
         formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New User");
     }
@@ -480,12 +482,14 @@ public class FXMLMainFormController implements Initializable {
     // =============== EDIT ACTIONS ===============
     @FXML
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
+        checkRegis = true;
         System.out.println("Edit Employee Informations menu item clicked!");
         formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
     @FXML
     private void handle_MenuItem_Edit_User_Action(ActionEvent event) {
+        checkRegis = true;
         System.out.println("Edit User Informations menu item clicked!");
         formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit User Informations");
     }
@@ -610,7 +614,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_List_Role_Action(ActionEvent event) {
         System.out.println("List Role menu item clicked!");
-        formLoader("/fxml/FXMLDecentralization.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLDecentralization.fxml", "Users role", "Edit Employee Informations");
     }
 
 }
