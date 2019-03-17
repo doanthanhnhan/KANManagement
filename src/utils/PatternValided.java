@@ -5,7 +5,15 @@
  */
 package utils;
 
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 /**
  *
@@ -57,4 +65,96 @@ public class PatternValided {
         return Salary.matcher(value).matches();
     }
 
+    /**
+     * Pattern validation for JFXTextField
+     *
+     * @param hbox
+     * @param textField
+     * @param regexString
+     * @param warningEmpty
+     * @param warningPattern
+     * @return Boolean
+     */
+    public Boolean validateTextField(HBox hbox, JFXTextField textField, String regexString, String warningEmpty, String warningPattern) {
+        Boolean check;
+        Pattern pattern = Pattern.compile(regexString);
+        if (textField.getText().equals("")) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(465, 35);
+                label.setText(warningEmpty);
+                //textField.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                textField.getStyleClass().add("text-field-fault");
+                hbox.setSpacing(10);
+                hbox.setAlignment(Pos.CENTER);
+                hbox.getChildren().clear();
+                hbox.getChildren().add(icon);
+                hbox.getChildren().add(label);
+                textField.requestFocus();
+            });
+            check = true;
+        } else if (!pattern.matcher(textField.getText()).matches()) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(465, 35);
+                label.setText(warningPattern);
+                textField.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                hbox.setSpacing(10);
+                hbox.setAlignment(Pos.CENTER);
+                hbox.getChildren().clear();
+                hbox.getChildren().add(icon);
+                hbox.getChildren().add(label);
+                textField.requestFocus();
+            });
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
+    }
+
+    /**
+     * Pattern validation for JFXTextArea
+     *
+     * @param hbox
+     * @param textField
+     * @param regexString
+     * @param warningEmpty
+     * @param warningPattern
+     * @return Boolean
+     */
+    public Boolean validateTextArea(HBox hbox, JFXTextArea textField, String regexString, String warningEmpty, String warningPattern) {
+        Boolean check;
+        Pattern pattern = Pattern.compile(regexString);
+        if (!textField.getText().equalsIgnoreCase("") && !pattern.matcher(textField.getText()).matches()) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(465, 35);
+                label.setText(warningPattern);
+                textField.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+                hbox.setSpacing(10);
+                hbox.setAlignment(Pos.CENTER);
+                hbox.getChildren().clear();
+                hbox.getChildren().add(icon);
+                hbox.getChildren().add(label);
+                textField.requestFocus();
+            });
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
+    }
 }

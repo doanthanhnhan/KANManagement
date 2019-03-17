@@ -5,7 +5,6 @@
  */
 package controllers;
 
-import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
@@ -20,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
@@ -31,8 +31,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import models.RoleDAOImpl;
 import models.ServiceType;
 import models.ServiceTypeDAOImpl;
+import models.boolDecentralizationModel;
 import utils.StageLoader;
 
 /**
@@ -43,9 +45,11 @@ import utils.StageLoader;
 public class FXMLListServiceTypeController implements Initializable {
 
     ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
-    ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
+    ServiceTypeDAOImpl serviceTypeDAOImpl;
+    RoleDAOImpl roleDAOImpl;
+    public boolDecentralizationModel userRole;
 
-    public Boolean check_Edit_Action = false;
+    public Boolean check_Edit_Action;
     public static ServiceType serviceTypeItem;
 
     private static final int ROWS_PER_PAGE = 20;
@@ -65,12 +69,17 @@ public class FXMLListServiceTypeController implements Initializable {
     private MenuItem menuItem_Refresh;
     @FXML
     private Pagination pagination;
+    @FXML
+    private ContextMenu contextMenu_Main;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        serviceTypeDAOImpl = new ServiceTypeDAOImpl();
+        roleDAOImpl = new RoleDAOImpl();
+        check_Edit_Action = false;
         setColumns();
         showUsersData();
         ConnectControllers.setfXMLListServiceTypeController(this);
@@ -88,6 +97,23 @@ public class FXMLListServiceTypeController implements Initializable {
                 menuItem_Delete.setDisable(true);
             }
         });
+
+        //Get user role from Mainform
+        FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
+        userRole = mainFormController.getUserRole();
+        //11.SERVICE TYPE CRUD
+        if (!userRole.ischeckSType_Add()) {
+            contextMenu_Main.getItems().remove(menuItem_Add);
+        }
+        if (!userRole.ischeckSType_Delete()) {
+            contextMenu_Main.getItems().remove(menuItem_Delete);
+        }
+        if (!userRole.ischeckSType_Edit()) {
+            contextMenu_Main.getItems().remove(menuItem_Edit);
+        }
+        if (!userRole.ischeckSType_View()) {
+            //contextMenu_Main.getItems().remove(menuItem_List_Service_Type);
+        }
     }
 
     private void changeTableView(int index, int limit) {

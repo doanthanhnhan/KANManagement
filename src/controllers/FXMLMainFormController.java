@@ -54,6 +54,7 @@ public class FXMLMainFormController implements Initializable {
     private Map<String, Tab> openTabs = new HashMap<>();
     FXMLLoginController fxmlLoginController;
     RoleDAOImpl roleDAOImpl;
+    public boolDecentralizationModel userRole;
 
     @FXML
     private MenuBar mainMenuBar;
@@ -182,7 +183,7 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_Edit_Service_Order_Details;
     @FXML
     private MenuItem menuItem_List_Users_Log;
-    
+
     /**
      * Initializes the controller class.
      */
@@ -199,7 +200,7 @@ public class FXMLMainFormController implements Initializable {
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
         //Get user role        
-        boolDecentralizationModel userRole = new boolDecentralizationModel();
+        userRole = new boolDecentralizationModel();
         userRole = roleDAOImpl.getEmployeeRole(fxmlLoginController.getUser_Login_Sucessful());
         System.out.println("User has logged in: " + userRole.getEmployee_ID());
         System.out.println(userRole.toString());
@@ -377,6 +378,14 @@ public class FXMLMainFormController implements Initializable {
         // ENDING SETTING ROLE TO FORM
     }
 
+    public boolDecentralizationModel getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(boolDecentralizationModel userRole) {
+        this.userRole = userRole;
+    }
+
     private void initMenuBar() {
         MenuItem regis = new MenuItem("Registration User");
         regis.setOnAction((event) -> {
@@ -472,7 +481,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
         System.out.println("Edit Employee Informations menu item clicked!");
-        formLoader("/fxml/FXMLDecentralization.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
+        formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
     @FXML
@@ -596,6 +605,12 @@ public class FXMLMainFormController implements Initializable {
     private void handle_MenuItem_List_Rooms_Action(ActionEvent event) {
         System.out.println("List rooms menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListRooms.fxml", "listRooms_Tab", "Rooms");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_Role_Action(ActionEvent event) {
+        System.out.println("List Role menu item clicked!");
+        formLoader("/fxml/FXMLDecentralization.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
 }

@@ -20,7 +20,7 @@
                 <TableColumn prefWidth="75.0" text="C2" />
               </columns>
                <contextMenu>
-                  <ContextMenu>
+                  <ContextMenu fx:id="contextMenu_Main">
                     <items>
                       <MenuItem fx:id="menuItem_Edit" mnemonicParsing="false" onAction="#handle_MenuItem_Edit_Action" text="Edit">
                            <graphic>

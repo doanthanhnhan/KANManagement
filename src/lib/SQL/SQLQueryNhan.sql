@@ -523,5 +523,5 @@ SELECT R.*, U.UserName FROM [Role] R, Users U WHERE R.EmployeeID=U.EmployeeID
 
 DROP VIEW view_UserRole
 CREATE VIEW view_UserRole AS
-SELECT R.*, E.EmployeeFirstName+' '+E.EmployeeMidName+' '+E.EmployeeLastName AS 'EmployeeFullName' FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID
+SELECT R.*, E.EmployeeFirstName, E.EmployeeMidName, E.EmployeeLastName FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID
 SELECT * FROM view_UserRole
