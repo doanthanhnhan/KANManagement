@@ -111,18 +111,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
-                            AlertLoginAgain.alertLogin();
-                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
-                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
-                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
-                            stage.close();
-                            stageMainForm.close();
-                            showFormLogin.showFormLogin();
-                        } else {
-                            btnSubmitAddNewEmployee();
-                        }
-
+                        btnSubmitAddNewEmployee();
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -139,17 +128,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
-                            AlertLoginAgain.alertLogin();
-                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
-                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
-                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
-                            stage.close();
-                            stageMainForm.close();
-                            showFormLogin.showFormLogin();
-                        } else {
-                            btnSubmitAddNewEmployee();
-                        }
+                        btnSubmitAddNewEmployee();
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -166,19 +145,9 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
-                            AlertLoginAgain.alertLogin();
-                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
-                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
-                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
-                            stage.close();
-                            stageMainForm.close();
-                            showFormLogin.showFormLogin();
-                        } else {
-                            btnSubmitAddNewEmployee();
-                        }
+                        btnSubmitAddNewEmployee();
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
-                        Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -193,17 +162,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
-                            AlertLoginAgain.alertLogin();
-                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
-                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
-                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
-                            stage.close();
-                            stageMainForm.close();
-                            showFormLogin.showFormLogin();
-                        } else {
-                            btnSubmitAddNewEmployee();
-                        }
+                        btnSubmitAddNewEmployee();
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -219,17 +178,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 });
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
-                            AlertLoginAgain.alertLogin();
-                            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
-                            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
-                            Stage stage = (Stage) anchorPaneAddEmployee.getScene().getWindow();
-                            stage.close();
-                            stageMainForm.close();
-                            showFormLogin.showFormLogin();
-                        } else {
-                            btnSubmitAddNewEmployee();
-                        }
+                        btnSubmitAddNewEmployee();
                     } catch (ClassNotFoundException | SQLException | IOException ex) {
                         Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -240,7 +189,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
 
     @FXML
     private void btnSubmitAddNewEmployee() throws ClassNotFoundException, SQLException, IOException {
-        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleAddEmployee(FXMLLoginController.User_Login)) {
+        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Employee_Add")) {
             AlertLoginAgain.alertLogin();
             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
             Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
@@ -248,39 +197,40 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             stage.close();
             stageMainForm.close();
             showFormLogin.showFormLogin();
+        } else {
+            btnAddNew.setDisable(true);
+            // Đoạn này làm loading (đang làm chạy vô tận)
+
+            // Khai báo stage nhìn xuyên thấu
+            StageLoader stageLoader = new StageLoader();
+            stageLoader.loadingIndicator("Sending Email");
+            Task loadOverview = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            HboxContent.getChildren().clear();
+                        }
+                    });
+                    AddNewEmployee();
+                    return null;
+                }
+            };
+
+            loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    System.out.println("Finished");
+                    Platform.runLater(() -> {
+                        btnAddNew.setDisable(false);
+                        stageLoader.stopTimeline();
+                        stageLoader.closeStage();
+                    });
+                }
+            });
+            new Thread(loadOverview).start();
         }
-        btnAddNew.setDisable(true);
-        // Đoạn này làm loading (đang làm chạy vô tận)
-
-        // Khai báo stage nhìn xuyên thấu
-        StageLoader stageLoader = new StageLoader();
-        stageLoader.loadingIndicator("Sending Email");
-        Task loadOverview = new Task() {
-            @Override
-            protected Object call() throws Exception {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        HboxContent.getChildren().clear();
-                    }
-                });
-                AddNewEmployee();
-                return null;
-            }
-        };
-
-        loadOverview.setOnSucceeded(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                System.out.println("Finished");
-                Platform.runLater(() -> {
-                    btnAddNew.setDisable(false);
-                    stageLoader.stopTimeline();
-                    stageLoader.closeStage();
-                });
-            }
-        });
-        new Thread(loadOverview).start();
     }
 
     private void AddNewEmployee() throws ClassNotFoundException, SQLException, IOException, Exception {

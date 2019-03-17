@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import static controllers.ConnectControllers.fXMLMainFormController;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.awt.image.BufferedImage;
@@ -21,9 +22,7 @@ import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +48,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -60,9 +60,11 @@ import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.formatCalender;
 import models.notificationFunction;
+import utils.AlertLoginAgain;
 import utils.FormatName;
 import utils.PatternValided;
 import utils.StageLoader;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -71,6 +73,7 @@ import utils.StageLoader;
  */
 public class FXMLInfoEmployeeController implements Initializable {
 
+    private showFXMLLogin showFormLogin = new showFXMLLogin();
     final FileChooser fileChooser = new FileChooser();
     @FXML
     private JFXTextField newPhone;
@@ -150,6 +153,9 @@ public class FXMLInfoEmployeeController implements Initializable {
     @FXML
     private FontAwesomeIconView iconRefresh;
     @FXML
+    private AnchorPane anchorPaneInfoEmployee;
+
+    @FXML
     private HBox HboxBoxId;
 
     /**
@@ -184,11 +190,11 @@ public class FXMLInfoEmployeeController implements Initializable {
         validateInfoEmployee = false;
         check_delete = false;
         System.out.println("kiem tra validate Init" + validateInfoEmployee);
-        System.out.println("mainform check regis: "+FXMLMainFormController.checkRegis);
+        System.out.println("mainform check regis: " + FXMLMainFormController.checkRegis);
         if (FXMLMainFormController.checkRegis) {
             try {
                 System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
-                if (!DAOcheckRole.checkRoleEditEmployee(userLogin)) {
+                if (!DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
                     HboxBoxId.getChildren().remove(iconRefresh);
                     Hboxbtn.getChildren().remove(btnCancel);
                     check_delete = true;
@@ -465,7 +471,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                     stageLoader.closeStage();
                     try {
                         System.out.println("validateInfoEmployee = " + validateInfoEmployee);
-                        if (validateInfoEmployee && !DAOcheckRole.checkRoleEditEmployee(userLogin)) {
+                        if (validateInfoEmployee && !DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
                             // get a handle to the stage
                             Stage stage = (Stage) btnInfo.getScene().getWindow();
                             // do what you have to do
@@ -522,247 +528,270 @@ public class FXMLInfoEmployeeController implements Initializable {
 
     private void btnInfoEmployee() {
         Platform.runLater(() -> {
-            validateForm();
-        });
-        if (validateInfoEmployee && FXMLLoginController.checkLoginRegis) {
             try {
-                Stage stageInfo = (Stage) btnInfo.getScene().getWindow();
-                // do what you have to do
-                stageInfo.close();
-                Stage stage = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                validateForm();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            FXMLLoginController.checkLoginRegis = false;
-        }
-
-    }
-
-    private void validateForm() {
-        System.out.println("kiem tra user : " + userLogin);
-        System.out.println("kiem tra validate method : " + validateInfoEmployee);
-        System.out.println("check_delete: " + check_delete);
-        if (boxId.getValue() == null) {
-            Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(350, 35);
-                label.setText("ID MUST NOT EMPTY !!!");
-                label.setAlignment(Pos.CENTER_LEFT);
-                boxId.getStyleClass().removeAll();
-                boxId.getStyleClass().add("jfx-combo-box-fault");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER_LEFT);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                boxId.requestFocus();
-            });
-
-        } else if (newPhone.getText() == null || newPhone.getText().equals("")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(newPhone, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
-            });
-
-        } else if (birthday.getValue() == null) {
-            Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(350, 35);
-                label.setAlignment(Pos.CENTER_LEFT);
-                label.setText("BIRTHDAY MUST NOT EMPTY !!!");
-                birthday.setStyle("-jfx-default-color: RED;");
-                HboxContent.setAlignment(Pos.CENTER_LEFT);
-                HboxContent.setSpacing(10);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                birthday.requestFocus();
-            });
-
-        } else if (address.getText() == null || address.getText().equals("")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(address, HboxContent, "ADDRESS NUMBER MUST NOT EMPTY !!!");
-            });
-
-        } else if (IdNumber.getText() == null || IdNumber.getText().equals("")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(IdNumber, HboxContent, "ID NUMBER MUST NOT EMPTY !!!");
-            });
-
-        } else if ((FirstName.getText() == null || FirstName.getText().equals("")) && !check_delete) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(IdNumber, HboxContent, "FIRST NAME MUST NOT EMPTY !!!");
-            });
-
-        } else if ((LastName.getText() == null || LastName.getText().equals("")) && !check_delete) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(LastName, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
-            });
-
-        } else if ((Email.getText() == null || Email.getText().equals("")) && !check_delete) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(Email, HboxContent, "EMAIL MUST NOT EMPTY !!!");
-            });
-
-        } else if (!PatternValided.PatternPhoneNumber(newPhone.getText())) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(newPhone, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
-            });
-
-        } else if (!PatternValided.PatternCMND(IdNumber.getText())) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(IdNumber, HboxContent, "ID NUMBER IS INCORRECT !!!");
-            });
-
-        } else if (!PatternValided.PatternName(FirstName.getText()) && !check_delete) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(FirstName, HboxContent, "FIRSTNAME INVALID (Example: Nguyễn, Lê,...) !!!");
-            });
-
-        } else if (!PatternValided.PatternName(MidName.getText()) && !MidName.getText().equals("") && !check_delete) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(MidName, HboxContent, "MIDNAME INVALID (Example: Thị, Văn,...) !!!");
-            });
-
-        } else if (!PatternValided.PatternName(LastName.getText()) && !check_delete) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(LastName, HboxContent, "LASTNAME INVALID (Example: Nguyễn, Trần,...) !!!");
-            });
-
-        } else if (!PatternValided.PatternEmail(Email.getText()) && !check_delete) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
-            });
-
-        } else if (!(DepartmentId.getText().equals("")) && !check_delete && !PatternValided.PatternCMND(DepartmentId.getText())) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(DepartmentId, HboxContent, "DEPARTMENT ID IS INCORRECT !!!");
-            });
-
-        } else if (!PatternValided.PatternName(Job.getText()) && !check_delete && !Job.getText().equals("")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(Job, HboxContent, "JOB IS INCORRECT !!!");
-            });
-
-        } else if (!PatternValided.PatternELevel(EducatedLevel.getText()) && !check_delete && !EducatedLevel.getText().equals("")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(EducatedLevel, HboxContent, "EDUCATED LEVEL IS INCORRECT !!!");
-            });
-
-        } else if (!PatternValided.PatternSalary(Salary.getText()) && !check_delete && !Salary.getText().equals("0")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(Salary, HboxContent, "SALARY IS INCORRECT !!!");
-            });
-
-        } else if (!PatternValided.PatternSalary(Bonus.getText()) && !check_delete && !Bonus.getText().equals("0")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(Bonus, HboxContent, "BONUS IS INCORRECT !!!");
-            });
-
-        } else if (!PatternValided.PatternSalary(Comm.getText()) && !check_delete && !Comm.getText().equals("0")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(Comm, HboxContent, "COMM IS INCORRECT !!!");
-            });
-
-        } else {
-            try {
-                System.out.println("checkRegis = " + FXMLMainFormController.checkRegis);
-                if (DAO.check_Email(Email.getText()) && !check_delete && !Emp.getGmail().equals(Email.getText())) {
-                    Platform.runLater(() -> {
-                        notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
-                    });
-                } else if (FXMLMainFormController.checkRegis && DAOcheckRole.checkRoleEditEmployee(userLogin)) {
-                    System.out.println("vao khu vuc submit admin 1");
-                    Platform.runLater(() -> {
-                        System.out.println("vao khu vuc submit admin 2");
-                        FXMLMainFormController.checkRegis = false;
-                        String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                        String date_hire = null;
-                        if (Hiredate.getValue() != null) {
-                            date_hire = Hiredate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                        }
-                        Boolean Sex;
-                        Sex = Male.selectedProperty().getValue();
-                        BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
-                        byte[] res;
-                        try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
-                            ImageIO.write(bImage, "png", s);
-                            res = s.toByteArray();
-                            Blob blob = new SerialBlob(res);
-                            DAO.UpdateAllInfoEmployee(
-                                    boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
-                                    FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
-                                    Email.getText(), DepartmentId.getText(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
-                                    Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Sex, blob
-                            );
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException | ClassNotFoundException ex) {
-                            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        newPhone.setText("");
-                        boxId.setValue(null);
-                        birthday.setValue(null);
-                        Hiredate.setValue(null);
-                        FirstName.setText("");
-                        MidName.setText("");
-                        LastName.setText("");
-                        Email.setText("");
-                        IdNumber.setText("");
-                        address.setText("");
-                        DepartmentId.setText("");
-                        Job.setText("");
-                        EducatedLevel.setText("");
-                        Salary.setText("0");
-                        Comm.setText("0");
-                        Bonus.setText("0");
-                        Male.setSelected(true);
-                        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
-                        icon.setSize("16");
-                        icon.setStyleClass("jfx-glyhp-icon-finish");
-                        Label label = new Label();
-                        label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
-                        label.setPrefSize(300, 35);
-                        label.setText("UPDATE INFO " + boxId.getValue() + " COMPLETE!!!");
-                        HboxContent.setSpacing(10);
-                        HboxContent.getChildren().clear();
-                        HboxContent.getChildren().add(icon);
-                        HboxContent.getChildren().add(label);
-                        check_delete = false;
-                        validateInfoEmployee = true;
-                        System.out.println("Vào chỗ submit admin");
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        Boolean Sex;
-                        Sex = Male.selectedProperty().getValue();
-                        String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                        try {
-                            DAO.UpdateInfoEmployee(boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), Sex);
-                        } catch (ClassNotFoundException | SQLException ex) {
-                            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        check_delete = false;
-                        validateInfoEmployee = true;
-                        System.out.println("Vào chỗ submit user");
-                    });
-                }
-            } catch (SQLException | ClassNotFoundException ex) {
+            } catch (SQLException ex) {
                 Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+            if (validateInfoEmployee && FXMLLoginController.checkLoginRegis) {
+                try {
+                    Stage stageInfo = (Stage) btnInfo.getScene().getWindow();
+                    // do what you have to do
+                    stageInfo.close();
+                    Stage stage = new Stage();
+                    Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                FXMLLoginController.checkLoginRegis = false;
+            }
+        });
+    }
 
+    private void validateForm() throws ClassNotFoundException, IOException, SQLException {
+
+        if (FXMLMainFormController.checkRegis && !check_delete && !DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
+            Platform.runLater(() -> {
+                AlertLoginAgain.alertLogin();
+                fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+                Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+                Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
+                stage.close();
+                stageMainForm.close();
+                try {
+                    showFormLogin.showFormLogin();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        } else {
+            System.out.println("kiem tra user : " + userLogin);
+            System.out.println("kiem tra validate method : " + validateInfoEmployee);
+            System.out.println("check_delete: " + check_delete);
+            if (boxId.getValue() == null) {
+                Platform.runLater(() -> {
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(350, 35);
+                    label.setText("ID MUST NOT EMPTY !!!");
+                    label.setAlignment(Pos.CENTER_LEFT);
+                    boxId.getStyleClass().removeAll();
+                    boxId.getStyleClass().add("jfx-combo-box-fault");
+                    HboxContent.setSpacing(10);
+                    HboxContent.setAlignment(Pos.CENTER_LEFT);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
+                    boxId.requestFocus();
+                });
+
+            } else if (newPhone.getText() == null || newPhone.getText().equals("")) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(newPhone, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
+                });
+
+            } else if (birthday.getValue() == null) {
+                Platform.runLater(() -> {
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(350, 35);
+                    label.setAlignment(Pos.CENTER_LEFT);
+                    label.setText("BIRTHDAY MUST NOT EMPTY !!!");
+                    birthday.setStyle("-jfx-default-color: RED;");
+                    HboxContent.setAlignment(Pos.CENTER_LEFT);
+                    HboxContent.setSpacing(10);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
+                    birthday.requestFocus();
+                });
+
+            } else if (address.getText() == null || address.getText().equals("")) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(address, HboxContent, "ADDRESS NUMBER MUST NOT EMPTY !!!");
+                });
+
+            } else if (IdNumber.getText() == null || IdNumber.getText().equals("")) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(IdNumber, HboxContent, "ID NUMBER MUST NOT EMPTY !!!");
+                });
+
+            } else if ((FirstName.getText() == null || FirstName.getText().equals("")) && !check_delete) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(IdNumber, HboxContent, "FIRST NAME MUST NOT EMPTY !!!");
+                });
+
+            } else if ((LastName.getText() == null || LastName.getText().equals("")) && !check_delete) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(LastName, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
+                });
+
+            } else if ((Email.getText() == null || Email.getText().equals("")) && !check_delete) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(Email, HboxContent, "EMAIL MUST NOT EMPTY !!!");
+                });
+
+            } else if (!PatternValided.PatternPhoneNumber(newPhone.getText())) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(newPhone, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
+                });
+
+            } else if (!PatternValided.PatternCMND(IdNumber.getText())) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(IdNumber, HboxContent, "ID NUMBER IS INCORRECT !!!");
+                });
+
+            } else if (!PatternValided.PatternName(FirstName.getText()) && !check_delete) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(FirstName, HboxContent, "FIRSTNAME INVALID (Example: Nguyễn, Lê,...) !!!");
+                });
+
+            } else if (!PatternValided.PatternName(MidName.getText()) && !MidName.getText().equals("") && !check_delete) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(MidName, HboxContent, "MIDNAME INVALID (Example: Thị, Văn,...) !!!");
+                });
+
+            } else if (!PatternValided.PatternName(LastName.getText()) && !check_delete) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(LastName, HboxContent, "LASTNAME INVALID (Example: Nguyễn, Trần,...) !!!");
+                });
+
+            } else if (!PatternValided.PatternEmail(Email.getText()) && !check_delete) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
+                });
+
+            } else if (!(DepartmentId.getText().equals("")) && !check_delete && !PatternValided.PatternCMND(DepartmentId.getText())) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(DepartmentId, HboxContent, "DEPARTMENT ID IS INCORRECT !!!");
+                });
+
+            } else if (!PatternValided.PatternName(Job.getText()) && !check_delete && !Job.getText().equals("")) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(Job, HboxContent, "JOB IS INCORRECT !!!");
+                });
+
+            } else if (!PatternValided.PatternELevel(EducatedLevel.getText()) && !check_delete && !EducatedLevel.getText().equals("")) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(EducatedLevel, HboxContent, "EDUCATED LEVEL IS INCORRECT !!!");
+                });
+
+            } else if (!PatternValided.PatternSalary(Salary.getText()) && !check_delete && !Salary.getText().equals("0")) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(Salary, HboxContent, "SALARY IS INCORRECT !!!");
+                });
+
+            } else if (!PatternValided.PatternSalary(Bonus.getText()) && !check_delete && !Bonus.getText().equals("0")) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(Bonus, HboxContent, "BONUS IS INCORRECT !!!");
+                });
+
+            } else if (!PatternValided.PatternSalary(Comm.getText()) && !check_delete && !Comm.getText().equals("0")) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(Comm, HboxContent, "COMM IS INCORRECT !!!");
+                });
+
+            } else {
+                try {
+                    System.out.println("checkRegis = " + FXMLMainFormController.checkRegis);
+                    if (DAO.check_Email(Email.getText()) && !check_delete && !Emp.getGmail().equals(Email.getText())) {
+                        Platform.runLater(() -> {
+                            notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
+                        });
+                    } else if (FXMLMainFormController.checkRegis && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
+                        System.out.println("vao khu vuc submit admin 1");
+                        Platform.runLater(() -> {
+                            System.out.println("vao khu vuc submit admin 2");
+                            FXMLMainFormController.checkRegis = false;
+                            String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                            String date_hire = null;
+                            if (Hiredate.getValue() != null) {
+                                date_hire = Hiredate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                            }
+                            Boolean Sex;
+                            Sex = Male.selectedProperty().getValue();
+                            BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
+                            byte[] res;
+                            try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
+                                ImageIO.write(bImage, "png", s);
+                                res = s.toByteArray();
+                                Blob blob = new SerialBlob(res);
+                                DAO.UpdateAllInfoEmployee(
+                                        boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
+                                        FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
+                                        Email.getText(), DepartmentId.getText(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
+                                        Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Sex, blob
+                                );
+                            } catch (SQLException ex) {
+                                Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IOException | ClassNotFoundException ex) {
+                                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            newPhone.setText("");
+                            boxId.setValue(null);
+                            birthday.setValue(null);
+                            Hiredate.setValue(null);
+                            FirstName.setText("");
+                            MidName.setText("");
+                            LastName.setText("");
+                            Email.setText("");
+                            IdNumber.setText("");
+                            address.setText("");
+                            DepartmentId.setText("");
+                            Job.setText("");
+                            EducatedLevel.setText("");
+                            Salary.setText("0");
+                            Comm.setText("0");
+                            Bonus.setText("0");
+                            Male.setSelected(true);
+                            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
+                            icon.setSize("16");
+                            icon.setStyleClass("jfx-glyhp-icon-finish");
+                            Label label = new Label();
+                            label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
+                            label.setPrefSize(300, 35);
+                            label.setText("UPDATE INFO " + boxId.getValue() + " COMPLETE!!!");
+                            HboxContent.setSpacing(10);
+                            HboxContent.getChildren().clear();
+                            HboxContent.getChildren().add(icon);
+                            HboxContent.getChildren().add(label);
+                            check_delete = false;
+                            validateInfoEmployee = true;
+                            System.out.println("Vào chỗ submit admin");
+                        });
+                    } else {
+                        Platform.runLater(() -> {
+                            Boolean Sex;
+                            Sex = Male.selectedProperty().getValue();
+                            String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                            try {
+                                DAO.UpdateInfoEmployee(boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), Sex);
+                            } catch (ClassNotFoundException | SQLException ex) {
+                                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            check_delete = false;
+                            validateInfoEmployee = true;
+                            System.out.println("Vào chỗ submit user");
+                        });
+                    }
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     public void enter_Submit_Action() {

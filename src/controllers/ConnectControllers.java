@@ -18,6 +18,15 @@ public class ConnectControllers {
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
     public static FXMLListEmployeeController fXMLListEmployeeController;
+    public static FXMLInfoEmployeeController fXMLInfoEmployeeController;
+
+    public static FXMLInfoEmployeeController getfXMLInfoEmployeeController() {
+        return fXMLInfoEmployeeController;
+    }
+
+    public static void setfXMLInfoEmployeeController(FXMLInfoEmployeeController fXMLInfoEmployeeController) {
+        ConnectControllers.fXMLInfoEmployeeController = fXMLInfoEmployeeController;
+    }
 
     public static FXMLLoginController getfXMLLoginController() {
         return fXMLLoginController;

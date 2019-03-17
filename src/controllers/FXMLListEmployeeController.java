@@ -5,6 +5,8 @@
  */
 package controllers;
 
+import static controllers.ConnectControllers.fXMLMainFormController;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -34,10 +36,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.DAO;
+import models.DAOcheckRole;
 import models.InfoEmployee;
+import utils.AlertLoginAgain;
 import utils.StageLoader;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -46,8 +52,9 @@ import utils.StageLoader;
  */
 public class FXMLListEmployeeController implements Initializable {
 
+    private showFXMLLogin showFormLogin = new showFXMLLogin();
     ObservableList<InfoEmployee> listEmp = FXCollections.observableArrayList();
-    public  Boolean check_Edit_Action = false;
+    public Boolean check_Edit_Action = false;
     public static InfoEmployee Emp;
     public static Boolean check_form_list = false;
     private static final int ROWS_PER_PAGE = 4;
@@ -74,7 +81,7 @@ public class FXMLListEmployeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         FXMLMainFormController.checkRegis = true;
-        check_form_list=true;
+        check_form_list = true;
         setColumns();
         showUsersData();
         ConnectControllers.setfXMLListEmployeeController(this);
@@ -259,25 +266,35 @@ public class FXMLListEmployeeController implements Initializable {
     }
 
     @FXML
-    private void handle_MenuItem_Delete_Action(ActionEvent event) {
-        System.out.println("Kien");
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Comfirm");
-        alert.setContentText("Do you want to delete " + Emp.getEmployee_ID() + "?");
-        alert.showAndWait();
-        System.out.println(alert.getResult());
-        if (alert.getResult() == ButtonType.OK) {
-            try {
-                DAO.delete_Employee(Emp.getEmployee_ID());
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                Calendar cal = Calendar.getInstance();
-                String logtime;
-                logtime = dateFormat.format(cal.getTime());
-                DAO.setUserLogs(FXMLLoginController.User_Login, "Delete " + Emp.getEmployee_ID(), logtime);
-                System.out.println("Delete successful");
-                showUsersData();
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+    private void handle_MenuItem_Delete_Action(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
+        if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Employee_Delete")) {
+            AlertLoginAgain.alertLogin();
+            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            Stage stage = (Stage) main_AnchorPane.getScene().getWindow();
+            stage.close();
+            stageMainForm.close();
+            showFormLogin.showFormLogin();
+        } else {
+            System.out.println("Kien");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Comfirm");
+            alert.setContentText("Do you want to delete " + Emp.getEmployee_ID() + "?");
+            alert.showAndWait();
+            System.out.println(alert.getResult());
+            if (alert.getResult() == ButtonType.OK) {
+                try {
+                    DAO.delete_Employee(Emp.getEmployee_ID());
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Calendar cal = Calendar.getInstance();
+                    String logtime;
+                    logtime = dateFormat.format(cal.getTime());
+                    DAO.setUserLogs(FXMLLoginController.User_Login, "Delete " + Emp.getEmployee_ID(), logtime);
+                    System.out.println("Delete successful");
+                    showUsersData();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

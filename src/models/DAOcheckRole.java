@@ -29,39 +29,16 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOcheckRole {
-// check quyen Emp_Edit
 
-    public static Boolean checkRoleEditEmployee(String User) throws ClassNotFoundException, SQLException {
+    public static Boolean checkRoleDecentralization(String User,String name_Role) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp = "select Employee_Edit from Role where EmployeeID = ?";
+        String exp = "select "+name_Role+" from Role where EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, User);
         ResultSet rs;
         rs = pt.executeQuery();
         while (rs.next()) {
-            if (rs.getBoolean("Employee_Edit")) {
-                pt.close();
-                connection.close();
-                rs.close();
-                return true;
-            }
-        }
-        pt.close();
-        connection.close();
-        rs.close();
-        return false;
-    }
-//    check quyen Emp_Add
-
-    public static Boolean checkRoleAddEmployee(String User) throws ClassNotFoundException, SQLException {
-        Connection connection = connectDB.connectSQLServer();
-        String exp = "select Employee_Add from Role where EmployeeID = ?";
-        PreparedStatement pt = connection.prepareStatement(exp);
-        pt.setString(1, User);
-        ResultSet rs;
-        rs = pt.executeQuery();
-        while (rs.next()) {
-            if (rs.getBoolean("Employee_Add")) {
+            if (rs.getBoolean(name_Role)) {
                 pt.close();
                 connection.close();
                 rs.close();
