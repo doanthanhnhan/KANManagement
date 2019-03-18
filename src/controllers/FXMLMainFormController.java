@@ -24,7 +24,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -40,6 +42,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
+import utils.FormatName;
 
 import utils.MyTimer;
 
@@ -201,11 +204,11 @@ public class FXMLMainFormController implements Initializable {
         //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
+        //SETTING ROLE TO FORM
         //Get user role        
         userRole = new boolDecentralizationModel();
         userRole = roleDAOImpl.getEmployeeRole(fxmlLoginController.getUser_Login_Sucessful());
         System.out.println("User has logged in: " + userRole.getEmployee_ID());
-        System.out.println(userRole.toString());
 
         //Setting role to form
         //01.BOOKING CRUD
@@ -377,7 +380,11 @@ public class FXMLMainFormController implements Initializable {
         if (!userRole.ischeckUser_View()) {
             menu_View.getItems().remove(menuItem_List_Users);
         }
-        // ENDING SETTING ROLE TO FORM
+        //ENDING SETTING ROLE TO FORM
+
+        //Setting logout button
+        String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
+        btn_Toolbar_User_Logout.setText(FormatName.format(userFullName));
     }
 
     public boolDecentralizationModel getUserRole() {
@@ -442,7 +449,16 @@ public class FXMLMainFormController implements Initializable {
 
     @FXML
     private void userLogOutAction(ActionEvent event) {
-        System.exit(0);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Log out confirm");
+        alert.setHeaderText("Warning");
+        alert.setContentText("Are you sure to log out?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            Stage stage = (Stage) btn_Toolbar_User_Logout.getScene().getWindow();
+            stage.close();
+            formLoader("/fxml/FXMLLogin.fxml", "/images/KAN Logo.png", "Login");
+        }
     }
 
     // =============== START VIEW ACTIONS ===============
