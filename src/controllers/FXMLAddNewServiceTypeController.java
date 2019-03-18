@@ -99,6 +99,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("Add new Service Type initialize...");
         listServiceTypeController = ConnectControllers.getfXMLListServiceTypeController();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif, *.bmp)", "*.jpg", "*.png", "*.gif", "*.bmp");
 
@@ -106,10 +107,9 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         // Set path for fileChooser
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
-
+        System.out.println("Check edit action = " + listServiceTypeController.getCheck_Edit_Action() + " adress: " + listServiceTypeController.getCheck_Edit_Action().hashCode());
         //Check form was call from List ServiceType Form
-        if (listServiceTypeController.check_Edit_Action) {
-            listServiceTypeController.check_Edit_Action = false;
+        if (listServiceTypeController.getCheck_Edit_Action()) {            
             //Setting values for new form
             serviceID.setDisable(true);
             label_Title.setText("EDITING SERVICE TYPE");

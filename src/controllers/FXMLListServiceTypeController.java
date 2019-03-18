@@ -77,12 +77,13 @@ public class FXMLListServiceTypeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("List Service Type initialize...");
+        ConnectControllers.setfXMLListServiceTypeController(this);
         serviceTypeDAOImpl = new ServiceTypeDAOImpl();
         roleDAOImpl = new RoleDAOImpl();
-        check_Edit_Action = false;
+        check_Edit_Action = new Boolean(false);
         setColumns();
         showUsersData();
-        ConnectControllers.setfXMLListServiceTypeController(this);
 
         // Check item when click on table
         table_ServiceType.setOnMouseClicked((MouseEvent event) -> {
@@ -115,6 +116,14 @@ public class FXMLListServiceTypeController implements Initializable {
         if (!userRole.ischeckSType_View()) {
             //contextMenu_Main.getItems().remove(menuItem_List_Service_Type);
         }
+    }
+
+    public Boolean getCheck_Edit_Action() {
+        return check_Edit_Action;
+    }
+
+    public void setCheck_Edit_Action(Boolean check_Edit_Action) {
+        this.check_Edit_Action = check_Edit_Action;
     }
 
     private void changeTableView(int index, int limit) {
@@ -215,7 +224,8 @@ public class FXMLListServiceTypeController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
-        check_Edit_Action = true;
+        this.setCheck_Edit_Action(true);
+        System.out.println("Edit clicked and check = " + getCheck_Edit_Action() + " adress: " + getCheck_Edit_Action().hashCode());
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
 
@@ -223,9 +233,9 @@ public class FXMLListServiceTypeController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
-        check_Edit_Action = false;
+        this.setCheck_Edit_Action(false);
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Add new Service Type Informations");
     }
 
     @FXML

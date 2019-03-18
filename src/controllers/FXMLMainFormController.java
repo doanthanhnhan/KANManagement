@@ -189,9 +189,11 @@ public class FXMLMainFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        roleDAOImpl = new RoleDAOImpl();
         //Set FXMLMainFormController reference
         ConnectControllers.setfXMLMainFormController(this);
+
+        //Initialize roleDAOImpl
+        roleDAOImpl = new RoleDAOImpl();
 
         //Get FXMLLoginController for using in this controller
         fxmlLoginController = ConnectControllers.getfXMLLoginController();
@@ -545,35 +547,33 @@ public class FXMLMainFormController implements Initializable {
         Task loadOverview = new Task() {
             @Override
             protected Object call() throws Exception {
-                System.out.println("Loading...");
+                System.out.println("Loading tab...");
 
-                try {
-                    // Get content from fxml file
-                    AnchorPane subPane = (AnchorPane) FXMLLoader.load(getClass().getResource(formPath));
-
-                    // Add fxml content to a tab
-                    Tab subTab = new Tab(tabName);
-                    subTab.setContent(subPane);
-                    subTab.setId(tabID);
-
-                    Platform.runLater(() -> {
-                        //Checking existing tab
-                        if (openTabs.containsKey(formPath)) {
-                            mainTabPane.getSelectionModel().select(openTabs.get(formPath));
-                        } else {
+                Platform.runLater(() -> {
+                    //Checking existing tab
+                    if (openTabs.containsKey(formPath)) {
+                        mainTabPane.getSelectionModel().select(openTabs.get(formPath));
+                    } else {
+                        try {
+                            // Get content from fxml file
+                            AnchorPane subPane = (AnchorPane) FXMLLoader.load(getClass().getResource(formPath));
+                            // Add fxml content to a tab
+                            Tab subTab = new Tab(tabName);
+                            subTab.setContent(subPane);
+                            subTab.setId(tabID);
                             mainTabPane.getTabs().add(subTab);
                             mainTabPane.getSelectionModel().select(subTab);
                             openTabs.put(formPath, subTab);
                             subTab.setOnClosed(e -> openTabs.remove(formPath));
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                    }
 
-                        //Stop timer
-                        myTimer.stop_Timer(label_Task_Status);
-                    });
+                    //Stop timer
+                    myTimer.stop_Timer(label_Task_Status);
+                });
 
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
-                }
                 return null;
             }
         };
