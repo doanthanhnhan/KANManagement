@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import models.CheckInRoomDAOImple;
 import models.DAO;
 
 /**
@@ -36,7 +37,7 @@ public class Test1 extends Application {
 
 
 
-        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLFormInforOfGuest.fxml"));
 
 //            stage.setTitle("KANManagementLogin");
 //        }
@@ -50,6 +51,7 @@ public class Test1 extends Application {
 
         stage.setScene(scene);
         stage.show();
+        
     }
 
     /**
@@ -57,6 +59,12 @@ public class Test1 extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+
+//        String a = "thienan";
+//        String b = "hanh";
+//        int h = CheckInRoomDAOImple.checkContinueString(a, b);
+//        System.out.println(h);
+        
     }
 
 }

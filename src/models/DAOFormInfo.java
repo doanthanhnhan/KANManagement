@@ -12,6 +12,6 @@ import java.time.LocalDate;
  * @author ASUS
  */
 public interface DAOFormInfo {
-    public void AddNewBooking(String FName,String LName, String Mail,String Phone,String Note,String Company,String RoomType,int Number,LocalDate Date,boolean Check,String Flight);
-    public void AddNewCustomer(String FName, String LName, String Mail, String Phone, String Passport, LocalDate BirthDay);
+    public void AddNewBooking(String Note,int Number,LocalDate Date,boolean Check,String Flight,String Cus, String Room);
+    public void AddNewCustomer(String FName, String LName, String Mail, String Phone, String Passport, LocalDate BirthDay,  String Company, boolean Sex, String userName,float Discount);
 }

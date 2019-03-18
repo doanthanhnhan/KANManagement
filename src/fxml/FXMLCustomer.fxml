@@ -2,10 +2,12 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -16,7 +18,7 @@
         <URL value="@/css/fxmlcustomer.css" />
     </stylesheets>
     <children>
-      <VBox prefHeight="621.0" prefWidth="1366.0" style="-fx-background-color: white;">
+      <VBox prefHeight="706.0" prefWidth="1366.0" style="-fx-background-color: white;">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
@@ -54,6 +56,40 @@
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </JFXTextField>
+                        <JFXTextField fx:id="txtDiscount" labelFloat="true" promptText="Discount" unFocusColor="#4a4a4a">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
+                        <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="683.0">
+                           <children>
+                              <JFXRadioButton fx:id="sexMale" text="Male">
+                                 <padding>
+                                    <Insets left="25.0" right="60.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets top="-30.0" />
+                                 </HBox.margin>
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="SexGroup" />
+                                 </toggleGroup>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXRadioButton>
+                              <JFXRadioButton fx:id="sexFemale" text="Female" toggleGroup="$SexGroup">
+                                 <padding>
+                                    <Insets left="25.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets top="-30.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXRadioButton>
+                           </children>
+                        </HBox>
                         <HBox fx:id="HBoxContent" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Label fx:id="LabelContent" alignment="CENTER" prefHeight="21.0" prefWidth="693.0" style="-fx-text-fill: red;">
@@ -89,7 +125,11 @@
                               <Insets left="25.0" right="25.0" top="-9.0" />
                            </padding>
                         </JFXDatePicker>
-                        <HBox />
+                        <JFXTextField fx:id="txtCompany" labelFloat="true" promptText="Company" unFocusColor="#4a4a4a">
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </JFXTextField>
                         <JFXButton fx:id="btnSubmit" onAction="#handleSubmit" prefHeight="90.0" prefWidth="697.0" ripplerFill="#9194d0" style="-fx-background-color: #6467cd; -fx-background-radius: 500;" text="Submit">
                            <font>
                               <Font name="System Bold" size="19.0" />
@@ -100,6 +140,14 @@
                            <padding>
                               <Insets left="25.0" right="25.0" />
                            </padding>
+                        </JFXButton>
+                        <JFXButton fx:id="BookingCall" onAction="#BookingCall" prefHeight="31.0" prefWidth="686.0" text="Skip" underline="true">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="-28.0" />
+                           </VBox.margin>
                         </JFXButton>
                      </children>
                   </VBox>

@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,25 +29,22 @@ import utils.connectDB;
 public class FormInfo implements DAOFormInfo {
 
     @Override
-    public void AddNewBooking(String FName, String LName, String Mail, String Phone, String Note, String Company, String RoomType, int Number, LocalDate Date, boolean Check, String Flight) {
+    public void AddNewBooking(String Note, int Number, LocalDate Date, boolean Check, String Flight,String Cus, String Room) {
         try {
             Connection connection = connectDB.connectSQLServer();
-            String exm = "Insert into BookingInfo(BookingID,FirstName,LastName,Email,Phone,Note,Company,RoomType,NumberGuest,DateBook,BookDrive,Flight) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+            String exm = "Insert into BookingInfo(BookingID,Note,NumberGuest,DateBook,BookDrive,Flight,CustomerID,RoomID,UserName) values(?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = connection.prepareStatement(exm);
 
             String ID = "BOO" + Integer.toString(new Random().nextInt(999)) + Integer.toString(new Random().nextInt(99)) + "test";
             ps.setString(1, ID);
-            ps.setString(2, FName);
-            ps.setString(3, LName);
-            ps.setString(4, Mail);
-            ps.setString(5, Phone);
-            ps.setString(6, Note);
-            ps.setString(7, Company);
-            ps.setString(8, RoomType);
-            ps.setInt(9, Number);
-            ps.setDate(10, java.sql.Date.valueOf(Date));
-            ps.setBoolean(11, Check);
-            ps.setString(12, Flight);
+            ps.setString(2, Note);
+            ps.setInt(3, Number);
+            ps.setDate(4, java.sql.Date.valueOf(Date));
+            ps.setBoolean(5, Check);
+            ps.setString(6, Flight);
+            ps.setString(7, Cus);
+            ps.setString(8, Room);
+            ps.setString(9, "admin");
             ps.execute();
             ps.close();
             connection.close();
@@ -54,28 +52,62 @@ public class FormInfo implements DAOFormInfo {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
         }
     }
-
-    @Override
-    public void AddNewCustomer(String FName, String LName, String Mail, String Phone, String Passport, LocalDate BirthDay) {
+    public void EditBooking(String Note, int Number, LocalDate Date, boolean Check, String Flight, String ID) {
         try {
             Connection connection = connectDB.connectSQLServer();
-            String exm = "Insert into Customers(CustomerID,CustomerFirstName,CustomerLastName,CustomerBirthDay,CustomerPhoneNumber,CustomerPassport,CustomerEmail,Active) values(?,?,?,?,?,?,?,?)";
+            String exm = "UPDATE BookingInfo SET Note = ?,NumberGuest = ?,DateBook = ?,BookDrive = ?,Flight = ? WHERE BookingID = ?;";
             PreparedStatement ps = connection.prepareStatement(exm);
 
-            String ID = "CUS" + Integer.toString(new Random().nextInt(999)) + Integer.toString(new Random().nextInt(99)) + "test";
-            boolean Check = true;
-
-            ps.setString(1, ID);
-            ps.setString(2, FName);
-            ps.setString(3, LName);
-            ps.setDate(4, java.sql.Date.valueOf(BirthDay));
-            ps.setString(5, Phone);
-            ps.setString(6, Passport);
-            ps.setString(7, Mail);
-            ps.setBoolean(8, Check);
+            ps.setString(6, ID);
+            ps.setString(1, Note);;
+            ps.setInt(2, Number);
+            ps.setDate(3, java.sql.Date.valueOf(Date));
+            ps.setBoolean(4, Check);
+            ps.setString(5, Flight);
             ps.execute();
             ps.close();
             connection.close();
+        } catch (SQLException | ClassNotFoundException ex1) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+    }
+    
+    public static String CusID;
+
+    public static String getCusID() {
+        return CusID;
+    }
+
+    public static void setCusID(String CusID) {
+        FormInfo.CusID = CusID;
+    }
+
+    @Override
+    public void AddNewCustomer(String FName, String LName, String Mail, String Phone, String Passport, LocalDate BirthDay, String Company, boolean Sex, String userName,float Discount) {
+        try {
+            try (Connection connection = connectDB.connectSQLServer()) {
+                String exm = "Insert into Customers(CustomerID,CustomerFirstName,CustomerLastName,CustomerBirthDay,CustomerPhoneNumber,CustomerPassport,CustomerEmail,Active,Company,Sex,Username,Discount) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+                PreparedStatement ps = connection.prepareStatement(exm);
+                
+                String ID = "CUS" + Integer.toString(new Random().nextInt(999)) + Integer.toString(new Random().nextInt(99)) + "test";
+                boolean Check = true;
+                setCusID(ID);
+                ps.setString(1, ID);
+                ps.setString(2, FName);
+                ps.setString(3, LName);
+                ps.setDate(4, java.sql.Date.valueOf(BirthDay));
+                ps.setString(5, Phone);
+                ps.setString(6, Passport);
+                ps.setString(7, Mail);
+                ps.setBoolean(8, Check);
+                ps.setString(9, Company);
+                ps.setBoolean(10, Sex);
+                ps.setString(11, userName);
+                ps.setFloat(12, Discount);
+                System.out.println("Discount = " + Discount);
+                ps.execute();
+                ps.close();
+            }
         } catch (SQLException | ClassNotFoundException ex1) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
         }

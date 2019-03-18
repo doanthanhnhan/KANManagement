@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="706.0" prefWidth="1366.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controllers.FXMLRenewCusFormCheckController">
+    <stylesheets>
+        <URL value="@/css/fxmlrenewcusformcheck.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane prefHeight="706.0" prefWidth="300.0">
+         <children>
+            <VBox prefHeight="706.0" prefWidth="300.0" style="-fx-background-color: #100925;">
+               <children>
+                  <Label alignment="CENTER" prefHeight="247.0" prefWidth="300.0" style="-fx-text-fill: white;" text="registration" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="39.0" />
+                     </font>
+                  </Label>
+                  <JFXButton fx:id="customerBtn" prefHeight="60.0" prefWidth="300.0" text="customer" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets left="-100.0" />
+                     </padding>
+                     <graphic>
+                        <FontAwesomeIconView fill="#6447cd" strokeWidth="42.0" wrappingWidth="62.365234375">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                        </FontAwesomeIconView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="bookingBtn" prefHeight="60.0" prefWidth="300.0" text="booking" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets left="-100.0" />
+                     </padding>
+                     <graphic>
+                        <FontAwesomeIconView fill="#6447cd" strokeWidth="42.0" wrappingWidth="62.365234375">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                        </FontAwesomeIconView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="checkinBtn" prefHeight="60.0" prefWidth="300.0" text="check in" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets left="-100.0" />
+                     </padding>
+                     <graphic>
+                        <FontAwesomeIconView fill="#6447cd" strokeWidth="42.0" wrappingWidth="62.365234375">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                        </FontAwesomeIconView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="300.0" prefHeight="706.0" prefWidth="1067.0">
+         <children>
+            <Pane fx:id="customerPane" prefHeight="706.0" prefWidth="1067.0" />
+            <Pane fx:id="bookingPane" prefHeight="706.0" prefWidth="1067.0" />
+            <Pane fx:id="checkinPane" prefHeight="706.0" prefWidth="1067.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
