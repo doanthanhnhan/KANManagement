@@ -7,6 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
@@ -33,7 +34,8 @@
                         <Menu fx:id="menu_File" mnemonicParsing="false" text="File">
                            <items>
                               <MenuItem fx:id="menuItem_Settings" mnemonicParsing="false" text="Settings" />
-                              <MenuItem fx:id="menuItem_Close" mnemonicParsing="false" text="Close" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="menuItem_Close" mnemonicParsing="false" onAction="#handle_Menu_Item_Close_Action" text="Exit" />
                            </items>
                         </Menu>
                         <Menu fx:id="menu_View" mnemonicParsing="false" text="View">
@@ -42,7 +44,7 @@
                               <MenuItem fx:id="menuItem_List_Check_In" mnemonicParsing="false" text="List Check in" />
                               <MenuItem fx:id="menuItem_List_Check_Out" mnemonicParsing="false" text="List Check out" />
                               <MenuItem fx:id="menuItem_List_Customers" mnemonicParsing="false" text="List Customers" />
-                              <MenuItem fx:id="menuItem_List_Department" mnemonicParsing="false" text="List Customers" />
+                              <MenuItem fx:id="menuItem_List_Department" mnemonicParsing="false" text="List Departments" />
                               <MenuItem fx:id="menuItem_List_Employees" mnemonicParsing="false" onAction="#handle_MenuItem_List_Employee_Action" text="List Employees" />
                               <MenuItem fx:id="menuItem_List_Role" mnemonicParsing="false" onAction="#handle_MenuItem_List_Role_Action" text="List Role" />
                               <MenuItem fx:id="menuItem_List_Rooms" mnemonicParsing="false" onAction="#handle_MenuItem_List_Rooms_Action" text="List Rooms" />

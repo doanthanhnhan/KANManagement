@@ -75,7 +75,7 @@ public class PatternValided {
      * @param warningPattern
      * @return Boolean
      */
-    public Boolean validateTextField(HBox hbox, JFXTextField textField, String regexString, String warningEmpty, String warningPattern) {
+    public static Boolean validateTextField(HBox hbox, JFXTextField textField, String regexString, String warningEmpty, String warningPattern) {
         Boolean check;
         Pattern pattern = Pattern.compile(regexString);
         if (textField.getText().equals("")) {
@@ -131,7 +131,7 @@ public class PatternValided {
      * @param warningPattern
      * @return Boolean
      */
-    public Boolean validateTextArea(HBox hbox, JFXTextArea textField, String regexString, String warningEmpty, String warningPattern) {
+    public static Boolean validateTextArea(HBox hbox, JFXTextArea textField, String regexString, String warningEmpty, String warningPattern) {
         Boolean check;
         Pattern pattern = Pattern.compile(regexString);
         if (!textField.getText().equalsIgnoreCase("") && !pattern.matcher(textField.getText()).matches()) {

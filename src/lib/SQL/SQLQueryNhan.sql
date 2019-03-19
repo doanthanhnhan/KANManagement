@@ -476,6 +476,7 @@ SELECT * FROM Rooms
 DELETE FROM Rooms
 
 SELECT * FROM ServiceType
+DELETE FROM ServiceType
 INSERT INTO ServiceType(ServiceID, UserName, ServiceName, ServiceUnit, ServicePrice, ServiceInventory, InputDate) VALUES
 ('KANService001', 'admin', N'Laundry', N'time', 0, 99999, '2019-03-01'),
 ('KANService002', 'admin', N'Fruit basket', N'set', 10, 99999, '2019-03-01'),

@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
@@ -57,12 +58,17 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                         imageView.setFitWidth(50);
                         serviceType.setImageView(imageView);
                     }
-                    serviceType.setServiceInventory(rs.getInt("ServiceInventory"));                    
+                    serviceType.setServiceInventory(rs.getInt("ServiceInventory"));
                     serviceType.setServiceInputDate(rs.getTimestamp("InputDate").toLocalDateTime());
                     listServiceTypes.add(serviceType);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+                alert.show();
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,14 +89,20 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setBlob(5, serviceType.getServiceImage());
                 stmt.setBoolean(6, true);
                 stmt.setNString(7, serviceType.getServiceDescription());
-                stmt.setInt(8, serviceType.getServiceInventory());
-                stmt.setString(9, serviceType.getUserName());
+                stmt.setInt(8, serviceType.getServiceInventory());                
                 //Convert LocalDateTime to Timestamp
                 stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceInputDate()));
+                stmt.setString(10, serviceType.getUserName());
+                
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
+            alert.show();
         }
     }
 
@@ -110,13 +122,18 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setBoolean(6, active);
                 stmt.setNString(7, serviceType.getServiceDescription());
                 stmt.setInt(8, serviceType.getServiceInventory());
-                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceInputDate()));                
+                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceInputDate()));
                 stmt.setString(10, serviceType.getUserName());
                 stmt.setNString(11, serviceType.getServiceID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
+            alert.show();
         }
     }
 
@@ -130,6 +147,11 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Can't connect to Database");
+            alert.show();
         }
     }
 
