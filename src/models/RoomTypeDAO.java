@@ -11,9 +11,9 @@ import java.util.List;
  *
  * @author Doan Thanh Nhan
  */
-public interface RoomDAO {
-    List<Room> getAllRoom();
-    void addRoom(Room room);
-    void editRoom(Room room, Boolean active);
-    void deleteRoom(Room room);
+public interface RoomTypeDAO {
+    List<RoomType> getAllRoomType();
+    void addRoomType(RoomType roomType);
+    void editRoomType(RoomType roomType, Boolean active);
+    void deleteRoomType(RoomType roomType);
 }

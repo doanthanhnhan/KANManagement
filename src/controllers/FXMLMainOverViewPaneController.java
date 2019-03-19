@@ -26,6 +26,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
@@ -133,7 +134,16 @@ public class FXMLMainOverViewPaneController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initAddRooms();
+        System.out.println("list size = " + roomDAOImpl.getAllRoom().size() );
+        if (roomDAOImpl.getAllRoom().size() != 0) {
+            initAddRooms();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+            alert.show();
+        }
     }
 
     public void initAddRooms() {

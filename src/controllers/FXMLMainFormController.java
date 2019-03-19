@@ -437,14 +437,8 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void homeAction(ActionEvent event) {
         btn_Toolbar_Home.setDisable(true);
-        String userRole = "Admin";
-        if (userRole.equals("Admin")) {
-            initMenuBar();
-        }
-//        ObservableList<InfoEmployee> list_Employee = FXCollections.observableArrayList();
-//        list_Employee = FXMLLoginController.List_EmployeeLogin;
-//        String userRole = list_Employee.get(0).getRole();
         task_Insert_Tab_With_Indicator("/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
+        btn_Toolbar_Home.setDisable(false);
     }
 
     @FXML
@@ -461,6 +455,17 @@ public class FXMLMainFormController implements Initializable {
         }
     }
 
+    @FXML
+    private void handle_Toolbar_CheckOut_Action(ActionEvent event) {
+        System.out.println("CheckOut clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOutForm.fxml", "checkOut_Tab", "Check Out");
+    }
+
+    @FXML
+    private void handle_Menu_Item_Close_Action(ActionEvent event) {
+        System.exit(0);
+    }
+
     // =============== START VIEW ACTIONS ===============
     @FXML
     private void handle_MenuItem_List_Service_Type_Action(ActionEvent event) {
@@ -472,6 +477,18 @@ public class FXMLMainFormController implements Initializable {
     private void handle_MenuItem_List_Employee_Action(ActionEvent event) {
         System.out.println("List Service Type menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListEmployee.fxml", "listEmployees_Tab", "Employees");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_Rooms_Action(ActionEvent event) {
+        System.out.println("List rooms menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListRooms.fxml", "listRooms_Tab", "Rooms");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_Role_Action(ActionEvent event) {
+        System.out.println("List Role menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLDecentralization.fxml", "Users role", "Edit Employee Informations");
     }
     // ############### END VIEW ACTIONS ###############
 
@@ -551,7 +568,6 @@ public class FXMLMainFormController implements Initializable {
      */
     public void task_Insert_Tab_With_Indicator(String formPath, String tabID, String tabName) {
         Label label_Task_Status = new Label();
-
         //Set timer and start
         MyTimer myTimer = new MyTimer();
         myTimer.create_myTimer(label_Task_Status);
@@ -607,30 +623,11 @@ public class FXMLMainFormController implements Initializable {
                     progressBar_MainTask.setProgress(0);
                     progressBar_MainTask.setVisible(false);
                     hbox_Bottom.getChildren().remove(label_Task_Status);
-                    btn_Toolbar_Home.setDisable(false);
                 });
             }
         });
 
         new Thread(loadOverview).start();
-    }
-
-    @FXML
-    private void handle_Toolbar_CheckOut_Action(ActionEvent event) {
-        System.out.println("CheckOut clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOutForm.fxml", "checkOut_Tab", "Check Out");
-    }
-
-    @FXML
-    private void handle_MenuItem_List_Rooms_Action(ActionEvent event) {
-        System.out.println("List rooms menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListRooms.fxml", "listRooms_Tab", "Rooms");
-    }
-
-    @FXML
-    private void handle_MenuItem_List_Role_Action(ActionEvent event) {
-        System.out.println("List Role menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLDecentralization.fxml", "Users role", "Edit Employee Informations");
     }
 
 }

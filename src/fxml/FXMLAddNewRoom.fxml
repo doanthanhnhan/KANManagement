@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPaneAddEmployee" prefHeight="735.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewEmloyeeController">
+<AnchorPane id="AnchorPane" fx:id="anchorPaneAddEmployee" prefWidth="649.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewRoomController">
    <children>
-      <VBox layoutY="-1.0" prefHeight="735.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutY="-1.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox prefHeight="129.0" prefWidth="649.0">
                <children>
@@ -21,19 +21,19 @@
                      <children>
                         <HBox prefHeight="53.0" prefWidth="624.0">
                            <children>
-                              <Label prefHeight="53.0" prefWidth="321.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="ADD NEW EMPLOYEE">
+                              <Label fx:id="label_Title" prefHeight="53.0" prefWidth="321.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="ADD NEW ROOM">
                                  <font>
                                     <Font name="System Bold" size="27.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="80.0" top="60.0" />
+                                    <Insets left="80.0" top="50.0" />
                                  </HBox.margin>
                               </Label>
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label prefHeight="27.0" prefWidth="352.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for add new emloyee">
+                              <Label fx:id="label_Description" prefHeight="27.0" prefWidth="352.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for add new room">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
@@ -47,86 +47,85 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="643.0" spacing="20.0">
                <children>
-                  <JFXTextField fx:id="newId" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="254.0" promptText="Enter Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXTextField fx:id="txt_Room_ID" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="254.0" promptText="Enter room ID" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="30.0" />
-                     </HBox.margin>
                   </JFXTextField>
-                  <JFXRadioButton fx:id="sexMale" selected="true" text="Male">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets right="20.0" top="40.0" />
-                     </HBox.margin>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="newSexEmployee" />
-                     </toggleGroup>
-                  </JFXRadioButton>
-                  <JFXRadioButton fx:id="sexFemale" text="Female" toggleGroup="$newSexEmployee">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets top="40.0" />
-                     </HBox.margin>
-                  </JFXRadioButton>
+                  <JFXComboBox fx:id="comboBox_Room_Type" labelFloat="true" prefHeight="35.0" prefWidth="254.0" promptText="Room type" />
                </children>
+               <padding>
+                  <Insets left="80.0" right="80.0" />
+               </padding>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0" spacing="20.0">
                <children>
-                  <JFXTextField fx:id="newGmail" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Gmail" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXTextField fx:id="txt_Room_Phone_Number" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter room phone number" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="30.0" />
-                     </HBox.margin>
                   </JFXTextField>
                </children>
+               <padding>
+                  <Insets left="80.0" right="80.0" />
+               </padding>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="649.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="649.0" spacing="20.0">
                <children>
-                  <JFXTextField fx:id="newFirstname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Firstname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXTextField fx:id="txt_Room_On_Floor" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Room on floor" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
                   </JFXTextField>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
-               <children>
-                  <JFXTextField fx:id="newMidname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Midname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXTextField fx:id="txt_Room_Area" focusColor="#6447cd" labelFloat="true" layoutX="90.0" layoutY="33.0" prefHeight="35.0" prefWidth="582.0" promptText="Room area" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
                   </JFXTextField>
                </children>
+               <padding>
+                  <Insets left="80.0" right="80.0" />
+               </padding>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0" spacing="20.0">
                <children>
-                  <JFXTextField fx:id="newLastname" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Enter Lastname" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                  <JFXComboBox fx:id="comboBox_Room_Status" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Room status" />
+                  <JFXCheckBox fx:id="checkBox_Room_Clean" alignment="BOTTOM_CENTER" checkedColor="#6747cd" prefHeight="35.0" text="Clean" textFill="#6467cd" unCheckedColor="#6747cd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" top="20.0" />
-                     </HBox.margin>
+                  </JFXCheckBox>
+                  <JFXCheckBox fx:id="checkBox_Room_Repaired" alignment="BOTTOM_CENTER" checkedColor="#6747cd" layoutX="513.0" layoutY="33.0" prefHeight="35.0" text="Repaired" textFill="#6467cd" unCheckedColor="#6747cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXCheckBox>
+                  <JFXCheckBox fx:id="checkBox_Room_In_Progress" alignment="BOTTOM_CENTER" checkedColor="#6747cd" layoutX="513.0" layoutY="33.0" prefHeight="35.0" text="Checking" textFill="#6467cd" unCheckedColor="#6747cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXCheckBox>
+               </children>
+               <padding>
+                  <Insets left="80.0" right="80.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="643.0" spacing="20.0">
+               <children>
+                  <JFXComboBox fx:id="comboBox_Room_Customer_ID" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Customer ID" />
+                  <JFXTextField fx:id="txt_Room_Day_Remaining" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="582.0" promptText="Days remaining" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
                   </JFXTextField>
                </children>
+               <padding>
+                  <Insets left="80.0" right="80.0" />
+               </padding>
             </HBox>
-            <HBox fx:id="HboxContent" alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="643.0">
+            <HBox fx:id="hBoxContent" alignment="CENTER_LEFT" prefWidth="643.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -134,20 +133,28 @@
                   <Insets />
                </VBox.margin>
                <padding>
-                  <Insets left="80.0" right="80.0" top="20.0" />
+                  <Insets left="80.0" right="80.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="87.0" prefWidth="649.0" spacing="20.0">
                <children>
-                  <JFXButton fx:id="btnAddNew" buttonType="RAISED" onAction="#btnSubmitAddNewEmployee" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                  <JFXButton fx:id="btnAddNew" buttonType="RAISED" onAction="#handle_Button_Save_Action" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Save">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="80.0" right="80.0" />
-                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="btnCancel" buttonType="RAISED" layoutX="90.0" layoutY="29.0" onAction="#handle_Button_Cancel_Action" prefHeight="50.0" prefWidth="590.0" ripplerFill="#0777ff" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Cancel">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
                   </JFXButton>
                </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets left="80.0" right="80.0" />
+               </padding>
             </HBox>
          </children>
       </VBox>

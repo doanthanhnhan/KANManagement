@@ -83,7 +83,16 @@ public class FXMLListServiceTypeController implements Initializable {
         roleDAOImpl = new RoleDAOImpl();
         check_Edit_Action = new Boolean(false);
         setColumns();
-        showUsersData();
+        if(serviceTypeDAOImpl.getAllServiceType().size() != 0){
+            showUsersData();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+            alert.show();
+        }
+        
 
         // Check item when click on table
         table_ServiceType.setOnMouseClicked((MouseEvent event) -> {

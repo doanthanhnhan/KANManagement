@@ -62,6 +62,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     public static ObservableList<ServiceType> listServiceType;
     ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
     private FXMLListServiceTypeController listServiceTypeController;
+    private FXMLMainFormController mainFormController;
     final FileChooser fileChooser = new FileChooser();
     private Boolean check_Validate = false;
 
@@ -100,6 +101,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Add new Service Type initialize...");
+        mainFormController = ConnectControllers.getfXMLMainFormController();
         listServiceTypeController = ConnectControllers.getfXMLListServiceTypeController();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif, *.bmp)", "*.jpg", "*.png", "*.gif", "*.bmp");
 
@@ -288,7 +290,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         ServiceType serviceType = new ServiceType();
         serviceType.setServiceID(FormatName.format(serviceID.getText()));
         serviceType.setServiceName(FormatName.format(serviceName.getText()));
-        serviceType.setServiceName(FormatName.format(serviceName.getText()));
+        serviceType.setUserName(FormatName.format(mainFormController.userRole.getEmployee_ID()));
         serviceType.setServiceUnit(FormatName.format(serviceUnit.getText()));
         serviceType.setServiceInventory(Integer.parseInt(FormatName.format(serviceInventory.getText())));
         //Setting localdatetime (DatePicker + LocalTime.now())

@@ -18,20 +18,20 @@ import javafx.stage.Stage;
  *
  * @author Doan Thanh Nhan
  */
-public class FXMLAddNewServiceTypeLoader extends Application {
+public class FXMLAddNewRoomLoader extends Application {
 
     @Override
     public void start(Stage stage) {
         try {
-            System.out.println("Kiểm tra : "+ getClass().getResource("/fxml/FXMLAddNewServiceType.fxml").getPath());
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewServiceType.fxml"));
+            System.out.println("Kiểm tra : "+ getClass().getResource("/fxml/FXMLAddNewRoom.fxml").getPath());
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewRoom.fxml"));
 
             Scene scene = new Scene(root);
 
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
-            Logger.getLogger(FXMLAddNewServiceTypeLoader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLAddNewRoomLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

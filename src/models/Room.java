@@ -21,6 +21,7 @@ import javafx.beans.property.StringProperty;
 public class Room {
 
     private StringProperty roomID;
+    private StringProperty customerID;
     private StringProperty customerName;
     private StringProperty userName;
     private StringProperty roomType;
@@ -36,6 +37,7 @@ public class Room {
 
     public Room() {
         this.roomID = new SimpleStringProperty();
+        this.customerID = new SimpleStringProperty();
         this.customerName = new SimpleStringProperty();
         this.userName = new SimpleStringProperty();
         this.roomType = new SimpleStringProperty();
@@ -60,6 +62,18 @@ public class Room {
 
     public StringProperty roomIDProperty() {
         return roomID;
+    }
+
+    public final String getCustomerID() {
+        return customerID.get();
+    }
+
+    public final void setCustomerID(String value) {
+        customerID.set(value);
+    }
+
+    public StringProperty customerIDProperty() {
+        return customerID;
     }
 
     public final String getRoomType() {
@@ -208,13 +222,13 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room{" + "roomID=" + roomID + ", customerName=" + customerName + ", "
-                + "userName=" + userName + ", roomType=" + roomType + ", roomPhoneNumber=" 
-                + roomPhoneNumber + ", roomOnFloor=" + roomOnFloor + ", roomArea=" 
-                + roomArea + ", roomStatus=" + roomStatus + ", roomClean=" + roomClean 
-                + ", roomRepaired=" + roomRepaired + ", roomInProgress=" + roomInProgress 
-                + ", daysRemaining=" + dayRemaining + ", Active=" + Active + '}';
+        return "Room{" + "roomID=" + roomID + ", customerID=" + customerID + ", "
+                + "customerName=" + customerName + ", userName=" + userName + ", roomType="
+                + roomType + ", roomPhoneNumber=" + roomPhoneNumber + ", roomOnFloor="
+                + roomOnFloor + ", roomArea=" + roomArea + ", roomStatus=" + roomStatus
+                + ", roomClean=" + roomClean + ", roomRepaired=" + roomRepaired
+                + ", roomInProgress=" + roomInProgress + ", dayRemaining="
+                + dayRemaining + ", Active=" + Active + '}';
     }
 
-    
 }

@@ -70,8 +70,10 @@ public class FXMLListRoomsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("List Rooms initialize...");
+        ConnectControllers.setfXMLListRoomsController(this);
         setColumns();
-        showUsersData();
+        showRoomsData();
         //ConnectControllers.setfXMLListRoomEXController(this);
 
         // Check item when click on table
@@ -163,7 +165,7 @@ public class FXMLListRoomsController implements Initializable {
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
     }
 
-    public void showUsersData() {
+    public void showRoomsData() {
         listRoomEXs = roomEXDAOImpl.getAllRoomEX();
         //table_Rooms.getItems().clear();
         table_Rooms.setItems(listRoomEXs);
@@ -196,7 +198,7 @@ public class FXMLListRoomsController implements Initializable {
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
         check_Edit_Action = true;
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewRoomEX.fxml", "/images/KAN Logo.png", "Edit Room Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Edit Room Type Informations");
 
     }
 
@@ -204,7 +206,7 @@ public class FXMLListRoomsController implements Initializable {
     private void handle_MenuItem_Add_Action(ActionEvent event) {
         check_Edit_Action = false;
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewRoomEX.fxml", "/images/KAN Logo.png", "Edit Room Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Edit Room Type Informations");
     }
 
     @FXML
@@ -217,13 +219,13 @@ public class FXMLListRoomsController implements Initializable {
         if (alert.getResult() == ButtonType.OK) {
             //roomEXDAOImpl.deleteRoomEX(roomEXItem);
             System.out.println("Delete successful");
-            showUsersData();
+            showRoomsData();
         }
     }
 
     @FXML
     private void handle_MenuItem_Refresh_Action(ActionEvent event) {
-        showUsersData();
+        showRoomsData();
     }
 
 }
