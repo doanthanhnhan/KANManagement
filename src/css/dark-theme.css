@@ -28,13 +28,17 @@
     -fx-teal-color: #20c997;
     -fx-cyan-color: #17a2b8;
     -fx-yellow-color: #ffc107;
-    
+
 }
 
 /*GENERAL NODE*/
 /*.root{
     -fx-background-color: -fx-primarycolor;
 }*/
+
+.anchor-pane{
+    -fx-background-image: url("../images/ServiceType/mardan_palace_hotel.jpg");
+}
 
 .glyph-icon{
     -fx-fill: -fx-primarycolor;
