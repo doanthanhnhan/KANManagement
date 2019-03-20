@@ -92,7 +92,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
         try {
             if (DAO.checkFirstLogin().equals(0)) {
                 newId.setDisable(true);

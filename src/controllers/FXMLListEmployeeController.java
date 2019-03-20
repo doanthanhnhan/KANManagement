@@ -26,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
@@ -41,6 +42,8 @@ import javafx.util.Callback;
 import models.DAO;
 import models.DAOcheckRole;
 import models.InfoEmployee;
+import models.RoleDAOImpl;
+import models.boolDecentralizationModel;
 import utils.AlertLoginAgain;
 import utils.StageLoader;
 import utils.showFXMLLogin;
@@ -51,12 +54,14 @@ import utils.showFXMLLogin;
  * @author Doan Thanh Nhan
  */
 public class FXMLListEmployeeController implements Initializable {
-
+    
+    public boolDecentralizationModel userRole;
+    RoleDAOImpl roleDAOImpl;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     ObservableList<InfoEmployee> listEmp = FXCollections.observableArrayList();
     public Boolean check_Edit_Action = false;
     public static InfoEmployee Emp;
-    public static Boolean check_form_list = false;
+    public  static Boolean check_form_list = false;
     private static final int ROWS_PER_PAGE = 4;
     private FilteredList<InfoEmployee> filteredData;
 
@@ -74,6 +79,8 @@ public class FXMLListEmployeeController implements Initializable {
     private MenuItem menuItem_Refresh;
     @FXML
     private Pagination pagination;
+    @FXML
+    private ContextMenu contextMenu_Main;
 
     /**
      * Initializes the controller class.
@@ -85,6 +92,7 @@ public class FXMLListEmployeeController implements Initializable {
         setColumns();
         showUsersData();
         ConnectControllers.setfXMLListEmployeeController(this);
+        roleDAOImpl = new RoleDAOImpl();
         // Check item when click on table
         table_ListEmployee.setOnMouseClicked((MouseEvent event) -> {
             if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
@@ -97,6 +105,23 @@ public class FXMLListEmployeeController implements Initializable {
                 menuItem_Delete.setDisable(true);
             }
         });
+        //Get user role from Mainform
+        FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
+        //userRole = mainFormController.getUserRole();
+        userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
+        //11.SERVICE TYPE CRUD
+        if (!userRole.ischeckEmployee_Add()) {
+            contextMenu_Main.getItems().remove(menuItem_Add);
+        }
+        if (!userRole.ischeckEmployee_Delete()) {
+            contextMenu_Main.getItems().remove(menuItem_Delete);
+        }
+        if (!userRole.ischeckEmployee_Edit()) {
+            contextMenu_Main.getItems().remove(menuItem_Edit);
+        }
+        if (!userRole.ischeckSType_View()) {
+//            contextMenu_Main.getItems().remove(menuItem_List_Service_Type);
+        }
     }
 
     private void changeTableView(int index, int limit) {

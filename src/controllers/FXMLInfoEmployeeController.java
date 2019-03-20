@@ -157,6 +157,7 @@ public class FXMLInfoEmployeeController implements Initializable {
 
     @FXML
     private HBox HboxBoxId;
+    private FXMLListEmployeeController fXMLListEmployeeController;
 
     /**
      * Initializes the controller class.
@@ -166,7 +167,7 @@ public class FXMLInfoEmployeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
         birthday.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -192,9 +193,64 @@ public class FXMLInfoEmployeeController implements Initializable {
         System.out.println("kiem tra validate Init" + validateInfoEmployee);
         System.out.println("mainform check regis: " + FXMLMainFormController.checkRegis);
         if (FXMLMainFormController.checkRegis) {
+            DepartmentId.setText("");
+            Job.setText("");
+            Salary.setText("0");
+            Bonus.setText("0");
+            Comm.setText("0");
             try {
                 System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
-                if (!DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
+                if (FXMLListEmployeeController.check_form_list) {
+                    DepartmentId.setText("");
+                    Job.setText("");
+                    Salary.setText("0");
+                    Bonus.setText("0");
+                    Comm.setText("0");
+                    InfoEmployee Emp = FXMLListEmployeeController.Emp;
+                    HboxBoxId.getChildren().remove(iconRefresh);
+                    boxId.setDisable(true);
+                    boxId.setValue(Emp.getEmployee_ID());
+                    if (Emp.getBirthdate() != null) {
+                        birthday.setValue(LocalDate.parse(Emp.getBirthdate()));
+                    }
+                    if (Emp.getHiredate() != null) {
+                        Hiredate.setValue(LocalDate.parse(Emp.getBirthdate()));
+                    }
+                    if (Emp.getSex()) {
+                        Male.setSelected(true);
+                    } else {
+                        Female.setSelected(true);
+                    }
+                    if (Emp.getWork_Dept() != null) {
+                        DepartmentId.setText(Emp.getWork_Dept());
+                    }
+                    if (Emp.getJob() != null) {
+                        Job.setText(Emp.getWork_Dept());
+                    }
+                    if (Emp.getComm() != null || !Emp.getComm().equals(0)) {
+                        Comm.setText(Emp.getComm());
+                    }
+                    if (Emp.getSalary() != null || !Emp.getSalary().equals(0)) {
+                        Salary.setText(Emp.getSalary());
+                    }
+                    if (Emp.getBonus() != null || !Emp.getBonus().equals(0)) {
+                        Bonus.setText(Emp.getBonus());
+                    }
+                    if (Emp.getEDLEVEL() != null) {
+                        EducatedLevel.setText(String.valueOf(Emp.getEDLEVEL()));
+                    }
+                    newPhone.setText(Emp.getPhone_No());
+                    address.setText(Emp.getAddress());
+                    IdNumber.setText(Emp.getId_number());
+                    FirstName.setText(Emp.getFirst_Name());
+                    LastName.setText(Emp.getLast_Name());
+                    MidName.setText(Emp.getMid_Name());
+                    Email.setText(Emp.getGmail());
+                    imgService.setImage(Emp.getImageView().getImage());
+                    btnInfo.setOnAction((event) -> {
+                        enter_Submit_Action();
+                    });
+                } else if (!DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
                     HboxBoxId.getChildren().remove(iconRefresh);
                     Hboxbtn.getChildren().remove(btnCancel);
                     check_delete = true;
@@ -711,7 +767,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                         Platform.runLater(() -> {
                             notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
                         });
-                    } else if (FXMLMainFormController.checkRegis && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")&& !FXMLLoginController.checkLoginRegis) {
+                    } else if (FXMLMainFormController.checkRegis && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !FXMLLoginController.checkLoginRegis) {
                         System.out.println("vao khu vuc submit admin 1");
                         Platform.runLater(() -> {
                             System.out.println("vao khu vuc submit admin 2");
@@ -804,7 +860,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                 System.out.println("Event của admin tu MainForm");
                 System.out.println("run");
                 FXMLMainFormController.checkRegis = true;
-                handleInfoAction();                
+                handleInfoAction();
             }
         } catch (SQLException | ClassNotFoundException | IOException ex) {
             Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);

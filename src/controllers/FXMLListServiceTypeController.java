@@ -123,7 +123,7 @@ public class FXMLListServiceTypeController implements Initializable {
             contextMenu_Main.getItems().remove(menuItem_Edit);
         }
         if (!userRole.ischeckSType_View()) {
-            //contextMenu_Main.getItems().remove(menuItem_List_Service_Type);
+//            contextMenu_Main.getItems().remove(menuItem_List_Service_Type);
         }
     }
 
