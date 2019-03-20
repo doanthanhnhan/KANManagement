@@ -232,6 +232,24 @@ public class RoomDAOImpl implements RoomDAO {
         }
     }
 
+    @Override
+    public void deleteRoomEX(RoomEX roomEX) {
+        String sql = "DELETE FROM Rooms WHERE RoomID=?";
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, roomEX.getRoomID());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Can't connect to Database");
+            alert.show();
+        }
+    }
+
     public static void main(String[] args) {
         RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
         ObservableList<Room> listRooms = FXCollections.observableArrayList();

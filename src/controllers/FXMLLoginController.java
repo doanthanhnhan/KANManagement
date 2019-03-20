@@ -144,9 +144,9 @@ public class FXMLLoginController implements Initializable {
             public void handle(Event event) {
                 System.out.println("Finished");
                 Platform.runLater(() -> {
-                    btnLogin.setDisable(false);
-                    stageLoader.stopTimeline();
+                    btnLogin.setDisable(false);                    
                     stageLoader.closeStage();
+                    stageLoader.stopTimeline();
                 });
             }
         });
