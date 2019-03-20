@@ -462,18 +462,22 @@ public class DAO {
         connection.close();
     }
 
-    public static void setUserLogs_With_MAC(String User, String Content, String Logtime, String macAddress) throws ClassNotFoundException, SQLException {
-        Connection connection = connectDB.connectSQLServer();
-        String ex = "Insert Into UserLogs(UserName,LogContent,LogTime,Active,MACAdress) Values (?,?,?,?,?)";
-        PreparedStatement pts = connection.prepareStatement(ex);
-        pts.setString(1, User);
-        pts.setString(2, Content);
-        pts.setString(3, Logtime);
-        pts.setInt(4, 1);
-        pts.setString(5, macAddress);
-        pts.execute();
-        pts.close();
-        connection.close();
+    public static void setUserLogs_With_MAC(String User, String Content, String Logtime, String macAddress) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            String ex = "Insert Into UserLogs(UserName,LogContent,LogTime,Active,MACAdress) Values (?,?,?,?,?)";
+            PreparedStatement pts = connection.prepareStatement(ex);
+            pts.setString(1, User);
+            pts.setString(2, Content);
+            pts.setString(3, Logtime);
+            pts.setInt(4, 1);
+            pts.setString(5, macAddress);
+            pts.execute();
+            pts.close();
+            connection.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 // Xử lý update lại pass khi người dùng forget pass
 

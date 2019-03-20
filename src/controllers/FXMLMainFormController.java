@@ -43,6 +43,7 @@ import javafx.stage.Stage;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
 import utils.FormatName;
+import utils.GetInetAddress;
 
 import utils.MyTimer;
 
@@ -58,6 +59,7 @@ public class FXMLMainFormController implements Initializable {
     FXMLLoginController fxmlLoginController;
     RoleDAOImpl roleDAOImpl;
     public boolDecentralizationModel userRole;
+    public String macAdress;
 
     @FXML
     private MenuBar mainMenuBar;
@@ -194,6 +196,9 @@ public class FXMLMainFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //Set FXMLMainFormController reference
         ConnectControllers.setfXMLMainFormController(this);
+
+        //Set MACAddress
+        setMacAdress(GetInetAddress.getMacAddress());
 
         //Initialize roleDAOImpl
         roleDAOImpl = new RoleDAOImpl();
@@ -393,6 +398,14 @@ public class FXMLMainFormController implements Initializable {
 
     public void setUserRole(boolDecentralizationModel userRole) {
         this.userRole = userRole;
+    }
+
+    public String getMacAdress() {
+        return macAdress;
+    }
+
+    public void setMacAdress(String macAdress) {
+        this.macAdress = macAdress;
     }
 
     private void initMenuBar() {

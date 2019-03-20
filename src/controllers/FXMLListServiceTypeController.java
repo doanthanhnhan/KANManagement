@@ -7,6 +7,7 @@ package controllers;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -31,10 +32,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import models.DAO;
 import models.RoleDAOImpl;
 import models.ServiceType;
 import models.ServiceTypeDAOImpl;
 import models.boolDecentralizationModel;
+import utils.FormatName;
 import utils.StageLoader;
 
 /**
@@ -54,6 +57,8 @@ public class FXMLListServiceTypeController implements Initializable {
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<ServiceType> filteredData;
+    
+    private FXMLMainFormController mainFormController;
 
     @FXML
     private TableView<ServiceType> table_ServiceType;
@@ -79,6 +84,7 @@ public class FXMLListServiceTypeController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("List Service Type initialize...");
         ConnectControllers.setfXMLListServiceTypeController(this);
+        mainFormController = ConnectControllers.getfXMLMainFormController();
         serviceTypeDAOImpl = new ServiceTypeDAOImpl();
         roleDAOImpl = new RoleDAOImpl();
         check_Edit_Action = new Boolean(false);
@@ -256,6 +262,9 @@ public class FXMLListServiceTypeController implements Initializable {
         System.out.println(alert.getResult());
         if (alert.getResult() == ButtonType.OK) {
             serviceTypeDAOImpl.deleteServiceType(serviceTypeItem);
+            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceType ID: " 
+                            + FormatName.format(serviceTypeItem.getServiceID()), 
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
             System.out.println("Delete successful");
             showUsersData();
         }

@@ -10,6 +10,8 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -26,6 +28,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import models.DAO;
 import models.RoomDAOImpl;
 import models.Room;
 import utils.FormatName;
@@ -191,6 +194,9 @@ public class FXMLAddNewRoomController implements Initializable {
                 validateForm();
                 if (check_Validate) {
                     addNewRoom();
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new room: " 
+                            + FormatName.format(txt_Room_ID.getText()), 
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Add successful!");
                 }
                 return null;
@@ -233,6 +239,9 @@ public class FXMLAddNewRoomController implements Initializable {
                     Room updateRoom = getDataFromForm();
                     //Updating to DB
                     roomDAOImpl.editRoom(updateRoom, true);
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Update room: " 
+                            + FormatName.format(txt_Room_ID.getText()), 
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Updating successful!");
                 }
                 return null;
