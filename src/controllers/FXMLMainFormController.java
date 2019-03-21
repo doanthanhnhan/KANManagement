@@ -531,6 +531,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
         checkRegis = true;
+        FXMLListEmployeeController.check_form_list = false;
         System.out.println("Edit Employee Informations menu item clicked!");
         formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
@@ -538,6 +539,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_Edit_User_Action(ActionEvent event) {
         checkRegis = true;
+        FXMLListEmployeeController.check_form_list = false;
         System.out.println("Edit User Informations menu item clicked!");
         formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit User Informations");
     }

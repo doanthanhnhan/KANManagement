@@ -26,10 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -194,12 +191,8 @@ public class FXMLInfoEmployeeController implements Initializable {
             try {
                 System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
                 if (FXMLListEmployeeController.check_form_list) {
-                    DepartmentId.setText("");
-                    Job.setText("");
-                    Salary.setText("0");
-                    Bonus.setText("0");
-                    Comm.setText("0");
-                    InfoEmployee Emp = FXMLListEmployeeController.Emp;
+                    System.out.println("Vao check_form_list = true");
+                    Emp = FXMLListEmployeeController.Emp;
                     HboxBoxId.getChildren().remove(iconRefresh);
                     boxId.setDisable(true);
                     boxId.setValue(Emp.getEmployee_ID());
@@ -338,7 +331,10 @@ public class FXMLInfoEmployeeController implements Initializable {
             System.out.println("Kiem tra newItem: " + newItem);
             if (newItem != null && !newItem.equals("")) {
                 try {
-                    Emp = DAO.getInfoEmployee(boxId.getValue());
+                    if (!FXMLListEmployeeController.check_form_list){
+                        Emp = DAO.getInfoEmployee(boxId.getValue());
+                    }
+                    
                 } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -498,13 +494,15 @@ public class FXMLInfoEmployeeController implements Initializable {
         Task loadOverview = new Task() {
             @Override
             protected Object call() throws Exception {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        HboxContent.getChildren().clear();
+                Platform.runLater(() -> {
+                    HboxContent.getChildren().clear();
+                    try {
+                        validateForm();
+                    } catch (ClassNotFoundException | IOException | SQLException ex) {
+                        Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
-                validateForm();
+
                 System.out.println("click 2");
                 return null;
             }
@@ -575,7 +573,7 @@ public class FXMLInfoEmployeeController implements Initializable {
         stage.hide();
     }
 
-    private void btnInfoEmployee() {
+    public void btnInfoEmployee() {
         Platform.runLater(() -> {
             try {
                 validateForm();
@@ -604,7 +602,7 @@ public class FXMLInfoEmployeeController implements Initializable {
         });
     }
 
-    private void validateForm() throws ClassNotFoundException, IOException, SQLException {
+    public void validateForm() throws ClassNotFoundException, IOException, SQLException {
 
         if (FXMLMainFormController.checkRegis && !check_delete && !DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
             Platform.runLater(() -> {
@@ -756,9 +754,10 @@ public class FXMLInfoEmployeeController implements Initializable {
             } else {
                 try {
                     System.out.println("checkRegis = " + FXMLMainFormController.checkRegis);
-                    System.out.println("mainform check = "+ DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit"));
-                    System.out.println("checkloginRegis= "+ !FXMLLoginController.checkLoginRegis);
+                    System.out.println("check  decentralization= " + DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit"));
+                    System.out.println("checkloginRegis= " + FXMLLoginController.checkLoginRegis);
                     if (DAO.check_Email(Email.getText()) && !check_delete && !Emp.getGmail().equals(Email.getText())) {
+                        System.out.println("vao khu vuc check Email");
                         Platform.runLater(() -> {
                             notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
                         });
@@ -821,7 +820,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                             HboxContent.getChildren().add(label);
                             check_delete = false;
                             validateInfoEmployee = true;
-                            if (FXMLListEmployeeController.check_form_list) {
+                            if (FXMLListEmployeeController.check_Edit_Action) {
                                 fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
                                 try {
                                     fXMLListEmployeeController.table_ListEmployee.setItems(DAO.getAllInfoEmployee());
@@ -851,6 +850,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                 }
             }
         }
+        System.out.println("Ket thuc ham validation");
     }
 
     public void enter_Submit_Action() {

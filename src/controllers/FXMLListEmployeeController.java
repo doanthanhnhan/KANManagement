@@ -59,7 +59,7 @@ public class FXMLListEmployeeController implements Initializable {
     RoleDAOImpl roleDAOImpl;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     ObservableList<InfoEmployee> listEmp = FXCollections.observableArrayList();
-    public Boolean check_Edit_Action = false;
+    public static Boolean check_Edit_Action = false;
     public static InfoEmployee Emp;
     public  static Boolean check_form_list = false;
     private static final int ROWS_PER_PAGE = 4;
@@ -88,7 +88,7 @@ public class FXMLListEmployeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         FXMLMainFormController.checkRegis = true;
-        check_form_list = true;
+        check_Edit_Action =true;
         setColumns();
         showUsersData();
         ConnectControllers.setfXMLListEmployeeController(this);
@@ -277,7 +277,7 @@ public class FXMLListEmployeeController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
-        check_Edit_Action = true;
+        check_form_list = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
 
@@ -285,7 +285,6 @@ public class FXMLListEmployeeController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
-        check_Edit_Action = false;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
     }
