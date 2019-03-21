@@ -18,6 +18,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +37,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import models.Customer;
+import models.DAO;
+import models.DAOcheckRole;
 import models.FormInfo;
+import utils.AlertLoginAgain;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -44,6 +50,10 @@ import models.FormInfo;
  * @author ASUS
  */
 public class FXMLCustomerController implements Initializable {
+
+    private showFXMLLogin showFormLogin = new showFXMLLogin();
+
+    private FXMLMainFormController fXMLMainFormController;
 
     @FXML
     private Label LabelContent;
@@ -109,41 +119,60 @@ public class FXMLCustomerController implements Initializable {
 
     @FXML
     void handleSubmit(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/FXMLFormInforOfGuest.fxml"));
-        FXMLFormInforOfGuestController fxmlFIGC = fxmlLoader.getController();
-
-        FormInfo Form = new FormInfo();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        LabelContent.setStyle("-fx-text-fill: red;");
-//                if (FormInfo.isString(txtLastName.getText()) && FormInfo.isString(txtFirstName.getText()) && FormInfo.validatePhoneNumber(txtPhoneNumber.getText()) && FormInfo.validateEmail(txtEmail.getText()) && FormInfo.isDateValid(dateFormat.format(dateBirthDay.getValue())))
-        if (FormInfo.isString(txtLastName.getText()) && FormInfo.isString(txtFirstName.getText()) && FormInfo.validatePhoneNumber(txtPhoneNumber.getText()) && FormInfo.validateEmail(txtEmail.getText())) {
-            boolean sex = sexMale.isSelected();
-            System.out.println(Float.parseFloat(txtDiscount.getText()));
-            Form.AddNewCustomer(txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), txtPassport.getText(), dateBirthDay.getValue(), txtCompany.getText(), sex, "admin", Float.parseFloat(txtDiscount.getText()));
-            txtFirstName.setText("");
-            txtLastName.setText("");
-            txtEmail.setText("");
-            txtPhoneNumber.setText("");
-            txtPassport.setText("");
-            dateBirthDay.setValue(null);
-            txtCompany.setText("");
-            txtDiscount.setText("");
-
-            LabelContent.setStyle("-fx-text-fill: green;");
-            LabelContent.setText("Success");
-            Parent root1 = (Parent) fxmlLoader.load();
-            
-//            fxmlFIGC.AddDataFromCustomer(FormInfo.getCusID());
-            Stage stage = (Stage) btnSubmit.getScene().getWindow();
+        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Customer_Add")) {
+            AlertLoginAgain.alertLogin();
+            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            Stage stage = (Stage) BookingCall.getScene().getWindow();
             stage.close();
-
-            Stage stage1 = new Stage();
-            stage1.setScene(new Scene(root1));
-            stage1.show();
-
+            stageMainForm.close();
+            showFormLogin.showFormLogin();
         } else {
-            handleValidAction();
-            System.out.println("false");
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/FXMLFormInforOfGuest.fxml"));
+            FXMLFormInforOfGuestController fxmlFIGC = fxmlLoader.getController();
+
+            FormInfo Form = new FormInfo();
+            LabelContent.setStyle("-fx-text-fill: red;");
+            if (FormInfo.isString(txtLastName.getText()) && FormInfo.isString(txtFirstName.getText()) && FormInfo.validatePhoneNumber(txtPhoneNumber.getText()) && FormInfo.validateEmail(txtEmail.getText())) {
+                boolean sex = sexMale.isSelected();
+                System.out.println(Float.parseFloat(txtDiscount.getText()));
+                Form.AddNewCustomer(txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), txtPassport.getText(), dateBirthDay.getValue(), txtCompany.getText(), sex, "admin", Float.parseFloat(txtDiscount.getText()));
+                txtFirstName.setText("");
+                txtLastName.setText("");
+                txtEmail.setText("");
+                txtPhoneNumber.setText("");
+                txtPassport.setText("");
+                dateBirthDay.setValue(null);
+                txtCompany.setText("");
+                txtDiscount.setText("");
+
+                LabelContent.setStyle("-fx-text-fill: green;");
+                LabelContent.setText("Success");
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                String logtime;
+                logtime = dateFormat.format(cal.getTime());
+
+                Customer Customer = new Customer();
+
+                if (!DAO.checkFirstLogin().equals(1)) {
+                    DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + Customer.getCusID(), logtime);
+                }
+                Parent root1 = (Parent) fxmlLoader.load();
+
+//            fxmlFIGC.AddDataFromCustomer(FormInfo.getCusID());
+                Stage stage = (Stage) btnSubmit.getScene().getWindow();
+                stage.close();
+
+                Stage stage1 = new Stage();
+                stage1.setScene(new Scene(root1));
+                stage1.show();
+
+            } else {
+                handleValidAction();
+                System.out.println("false");
+            }
         }
     }
 

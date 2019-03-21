@@ -5,7 +5,7 @@
  */
 package models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,7 +17,8 @@ import javafx.beans.property.StringProperty;
  */
 public class Customer {
 
-    public StringProperty CusID, User, FName, LName, Email, Passport, Phone, Company, Date;
+    public StringProperty CusID, User, FName, MName, LName, Email, Passport, Phone, Company;
+    public LocalDateTime Date;
     public BooleanProperty Sex, Active;
     public float Discount;
     
@@ -25,115 +26,165 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String CusID, String User, String FName, String LName, String Email, String Passport, String Phone, String Company, String Date, Boolean Sex, Boolean Active, float Discount) {
+    public Customer(String CusID, String User, String FName, String MName, String LName, String Email, String Passport, String Phone, String Company, Boolean Sex, Boolean Active, float Discount) {
         this.CusID =  new SimpleStringProperty(CusID);
         this.User =  new SimpleStringProperty(User);
         this.FName =  new SimpleStringProperty(FName);
+        this.MName = new SimpleStringProperty(MName);
         this.LName =  new SimpleStringProperty(LName);
         this.Email =  new SimpleStringProperty(Email);
         this.Passport =  new SimpleStringProperty(Passport);
         this.Phone =  new SimpleStringProperty(Phone);
         this.Company =  new SimpleStringProperty(Company);
-        this.Date =  new SimpleStringProperty(Date);
         this.Sex =  new SimpleBooleanProperty(Sex);
         this.Active = new SimpleBooleanProperty(Active);
         this.Discount = Discount;
     }
-
-    public String getCusID() {
-        return CusID.get();
+    
+    public LocalDateTime getDate() {
+        return Date;
     }
-
-    public void setCusID(String CusID) {
-        this.CusID = new SimpleStringProperty(CusID);
+    public void setDate(LocalDateTime Date) {    
+        this.Date = Date;
     }
-
-    public String getUser() {
-        return User.get();
-    }
-
-    public void setUser(String User) {
-        this.User = new SimpleStringProperty(User);
-    }
-
-    public String getFName() {
-        return FName.get();
-    }
-
-    public void setFName(String FName) {
-        this.FName = new SimpleStringProperty(FName);
-    }
-
-    public String getLName() {
-        return LName.get();
-    }
-
-    public void setLName(String LName) {
-        this.LName = new SimpleStringProperty(LName);
-    }
-
-    public String getEmail() {
-        return Email.get();
-    }
-
-    public void setEmail(String Email) {
-        this.Email = new SimpleStringProperty(Email);
-    }
-
-    public String getPassport() {
-        return Passport.get();
-    }
-
-    public void setPassport(String Passport) {
-        this.Passport = new SimpleStringProperty(Passport);
-    }
-
-    public String getPhone() {
-        return Phone.get();
-    }
-
-    public void setPhone(String Phone) {
-        this.Phone = new SimpleStringProperty(Phone);
-    }
-
-    public String getCompany() {
-        return Company.get();
-    }
-
-    public void setCompany(String Company) {
-        this.Company = new SimpleStringProperty(Company);
-    }
-
-    public String getDate() {
-        return Date.get();
-    }
-
-    public void setDate(String Date) {
-        this.Date = new SimpleStringProperty(Date);
-    }
-
-    public Boolean getSex() {
-        return Sex.get();
-    }
-
-    public void setSex(Boolean Sex) {
-        this.Sex = new SimpleBooleanProperty(Sex);
-    }
-
-    public Boolean getActive() {
-        return Active.get();
-    }
-
-    public void setActive(Boolean Active) {
-        this.Active = new SimpleBooleanProperty(Active);
-    }
-
     public float getDiscount() {
         return Discount;
     }
 
     public void setDiscount(float Discount) {
         this.Discount = Discount;
+    }
+
+    public final String getCusID() {
+        return CusID.get();
+    }
+
+    public final void setCusID(String value) {
+        CusID.set(value);
+    }
+
+    public StringProperty CusIDProperty() {
+        return CusID;
+    }
+
+    public final String getUser() {
+        return User.get();
+    }
+
+    public final void setUser(String value) {
+        User.set(value);
+    }
+
+    public StringProperty UserProperty() {
+        return User;
+    }
+
+    public final String getFName() {
+        return FName.get();
+    }
+
+    public final void setFName(String value) {
+        FName.set(value);
+    }
+
+    public StringProperty FNameProperty() {
+        return FName;
+    }
+
+    public final String getMName() {
+        return MName.get();
+    }
+
+    public final void setMName(String value) {
+        MName.set(value);
+    }
+
+    public StringProperty MNameProperty() {
+        return MName;
+    }
+
+    public final String getLName() {
+        return LName.get();
+    }
+
+    public final void setLName(String value) {
+        LName.set(value);
+    }
+
+    public StringProperty LNameProperty() {
+        return LName;
+    }
+
+    public final String getEmail() {
+        return Email.get();
+    }
+
+    public final void setEmail(String value) {
+        Email.set(value);
+    }
+
+    public StringProperty EmailProperty() {
+        return Email;
+    }
+
+    public final String getPassport() {
+        return Passport.get();
+    }
+
+    public final void setPassport(String value) {
+        Passport.set(value);
+    }
+
+    public StringProperty PassportProperty() {
+        return Passport;
+    }
+
+    public final String getPhone() {
+        return Phone.get();
+    }
+
+    public final void setPhone(String value) {
+        Phone.set(value);
+    }
+
+    public StringProperty PhoneProperty() {
+        return Phone;
+    }
+
+    public final String getCompany() {
+        return Company.get();
+    }
+
+    public final void setCompany(String value) {
+        Company.set(value);
+    }
+
+    public StringProperty CompanyProperty() {
+        return Company;
+    }
+
+    public final boolean isSex() {
+        return Sex.get();
+    }
+
+    public final void setSex(boolean value) {
+        Sex.set(value);
+    }
+
+    public BooleanProperty SexProperty() {
+        return Sex;
+    }
+
+    public final boolean isActive() {
+        return Active.get();
+    }
+
+    public final void setActive(boolean value) {
+        Active.set(value);
+    }
+
+    public BooleanProperty ActiveProperty() {
+        return Active;
     }
 
 }

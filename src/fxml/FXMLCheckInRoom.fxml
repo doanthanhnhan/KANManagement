@@ -33,7 +33,23 @@
                <children>
                   <VBox prefHeight="672.0" prefWidth="229.0">
                      <children>
-                        <JFXButton prefHeight="75.0" prefWidth="237.0" ripplerFill="#9194d0" style="-fx-background-color: #6447cd; -fx-background-radius: 500;" text="Check in" textAlignment="CENTER" textFill="WHITE">
+                        <JFXButton fx:id="CheckInBtn" onAction="#CheckInBtn" prefHeight="75.0" prefWidth="237.0" ripplerFill="#9194d0" style="-fx-background-color: #6447cd; -fx-background-radius: 500;" text="Check in" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="BookingBtn" onAction="#BookingBtn" prefHeight="75.0" prefWidth="237.0" ripplerFill="#9194d0" style="-fx-background-color: #6447cd; -fx-background-radius: 500;" text="Booking" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="CustomerBtn" onAction="#CustomerBtn" prefHeight="75.0" prefWidth="237.0" ripplerFill="#9194d0" style="-fx-background-color: #6447cd; -fx-background-radius: 500;" text="Customer" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

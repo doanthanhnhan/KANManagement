@@ -104,12 +104,9 @@ public class CheckInRoomDAOImple {
         ResultSet rs = getAllDataCustomer();
 
         while (rs.next()) {
-
-            Date date = rs.getDate("CustomerBirthday");
-            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-            String strDate = dateFormat.format(date);
-
-            list.add(new Customer(rs.getString("CustomerID"), rs.getString("UserName"), rs.getString("CustomerFirstName"), rs.getString("CustomerLastName"), rs.getString("CustomerEmail"), rs.getString("CustomerPassport"), rs.getString("CustomerPhoneNumber"), rs.getString("Company"), strDate, rs.getBoolean("Sex"), rs.getBoolean("Active"), rs.getFloat("Discount")));
+            Customer Customer = new Customer();
+            list.add(new Customer(rs.getString("CustomerID"), rs.getString("UserName"), rs.getString("CustomerFirstName"),rs.getString("CustomerMidName"), rs.getString("CustomerLastName"), rs.getString("CustomerEmail"), rs.getString("CustomerPassport"), rs.getString("CustomerPhoneNumber"), rs.getString("Company"), rs.getBoolean("Sex"), rs.getBoolean("Active"), rs.getFloat("Discount")));
+            Customer.setDate(rs.getTimestamp("CustomerBirthday").toLocalDateTime());
         }
 
         return list;
@@ -123,37 +120,33 @@ public class CheckInRoomDAOImple {
         ResultSet rs = getAllDataBooking();
 
         while (rs.next()) {
-
-            Date date = rs.getDate("DateBook");
-            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-            String strDate = dateFormat.format(date);
-
-            list.add(new BookingInfo(rs.getString("BookingID"), rs.getString("CustomerID"), rs.getString("RoomID"), rs.getString("UserName"), rs.getString("Note"), rs.getString("Flight"), strDate, rs.getBoolean("BookDrive"), rs.getInt("NumberGuest")));
+            BookingInfo BookingInfo = new BookingInfo();
+            list.add(new BookingInfo(rs.getString("BookingID"), rs.getString("CustomerID"), rs.getString("RoomID"), rs.getString("UserName"), rs.getString("Note"), rs.getString("Flight"), rs.getBoolean("BookDrive"), rs.getInt("NumberGuest")));
+            BookingInfo.setDate(rs.getTimestamp("DateBook").toLocalDateTime());
         }
         
         return list;
 
     }
 
-    public static ObservableList<CheckInRoom> listAddTableCheckIn() throws SQLException {
+    public static ObservableList<CheckIn> listAddTableCheckIn() throws SQLException {
 
-        ObservableList<CheckInRoom> list = FXCollections.observableArrayList();
+        ObservableList<CheckIn> list = FXCollections.observableArrayList();
 
         ResultSet rs = getAllDataBooking();
 
-        String check;
-
         while (rs.next()) {
-            if (rs.getBoolean("BookDrive")) {
-                check = "Yes";
-            } else {
-                check = "No";
-            }
-            Date date = rs.getDate("DateBook");
-            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-            String strDate = dateFormat.format(date);
-
-            list.add(new CheckInRoom(rs.getString("BookingID"), rs.getString("FirstName") + " " + rs.getString("LastName"), rs.getString("Phone"), rs.getString("Email"), rs.getString("Company"), rs.getString("Note"), rs.getString("RoomType"), rs.getString("Flight"), check, Integer.toString(rs.getInt("NumberGuest")), strDate));
+            CheckIn CheckIn = new CheckIn();
+            CheckIn.setCheckID(rs.getString("CheckInID"));
+            CheckIn.setBookID(rs.getString("BookingID"));
+            CheckIn.setCusID(rs.getString("CustomerID"));
+            CheckIn.setRoomID(rs.getString("RoomID"));
+            CheckIn.setCheckType(rs.getString("CheckInType"));
+            CheckIn.setCusPack(rs.getString("CustomerPackage"));
+            CheckIn.setDateIn(rs.getTimestamp("CheckInDate").toLocalDateTime());
+            CheckIn.setDateOut(rs.getTimestamp("LeaveDate").toLocalDateTime());
+            CheckIn.setNumGuest(rs.getInt("NumberOfCustomer"));
+            list.add(CheckIn); 
         }
 
         return list;
@@ -228,27 +221,8 @@ public class CheckInRoomDAOImple {
         String check;
 
         while (rs.next()) {
-            if (rs.getBoolean("BookDrive")) {
-                check = "Yes";
-            } else {
-                check = "No";
-            }
-            Date date = rs.getDate("DateBook");
-            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-            String strDate = dateFormat.format(date);
 
             CheckInRoom cir = new CheckInRoom();
-            cir.setID(rs.getString("BookingID"));
-            cir.setName(rs.getString("FirstName") + " " + rs.getString("LastName"));
-            cir.setPhone(rs.getString("Phone"));
-            cir.setMail(rs.getString("Email"));
-            cir.setCompany(rs.getString("Company"));
-            cir.setNote(rs.getString("Note"));
-            cir.setRoomType(rs.getString("RoomType"));
-            cir.setFlight(rs.getString("Flight"));
-            cir.setDrive(check);
-            cir.setNum(Integer.toString(rs.getInt("NumberGuest")));
-            cir.setDate(strDate);
 
             list.add(cir);
         }

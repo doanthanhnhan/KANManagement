@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,11 +58,11 @@ public class FormInfo implements DAOFormInfo {
             Connection connection = connectDB.connectSQLServer();
             String exm = "UPDATE BookingInfo SET Note = ?,NumberGuest = ?,DateBook = ?,BookDrive = ?,Flight = ? WHERE BookingID = ?;";
             PreparedStatement ps = connection.prepareStatement(exm);
-
+            BookingInfo BookingInfo = new BookingInfo();
             ps.setString(6, ID);
             ps.setString(1, Note);;
             ps.setInt(2, Number);
-            ps.setDate(3, java.sql.Date.valueOf(Date));
+            ps.setTimestamp(3, Timestamp.valueOf(BookingInfo.getDate()));
             ps.setBoolean(4, Check);
             ps.setString(5, Flight);
             ps.execute();
@@ -88,14 +89,14 @@ public class FormInfo implements DAOFormInfo {
             try (Connection connection = connectDB.connectSQLServer()) {
                 String exm = "Insert into Customers(CustomerID,CustomerFirstName,CustomerLastName,CustomerBirthDay,CustomerPhoneNumber,CustomerPassport,CustomerEmail,Active,Company,Sex,Username,Discount) values(?,?,?,?,?,?,?,?,?,?,?,?)";
                 PreparedStatement ps = connection.prepareStatement(exm);
-                
+                Customer Customer = new Customer();
                 String ID = "CUS" + Integer.toString(new Random().nextInt(999)) + Integer.toString(new Random().nextInt(99)) + "test";
                 boolean Check = true;
                 setCusID(ID);
                 ps.setString(1, ID);
                 ps.setString(2, FName);
                 ps.setString(3, LName);
-                ps.setDate(4, java.sql.Date.valueOf(BirthDay));
+                ps.setTimestamp(4, Timestamp.valueOf(Customer.getDate()));
                 ps.setString(5, Phone);
                 ps.setString(6, Passport);
                 ps.setString(7, Mail);
@@ -105,6 +106,35 @@ public class FormInfo implements DAOFormInfo {
                 ps.setString(11, userName);
                 ps.setFloat(12, Discount);
                 System.out.println("Discount = " + Discount);
+                ps.execute();
+                ps.close();
+            }
+        } catch (SQLException | ClassNotFoundException ex1) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+    }
+    
+    public void AddNewCheckIn() {
+        try {
+            try (Connection connection = connectDB.connectSQLServer()) {
+                String exm = "Insert into CheckInOrders(CheckInID,BookingID,CustomerID,RoomID,UserName,CheckInType,NumberOfCustomer,CheckInDate,LeaveDate,CustomerPackage,Active) values(?,?,?,?,?,?,?,?,?,?,?)";
+                PreparedStatement ps = connection.prepareStatement(exm);
+                CheckIn ck = new CheckIn();
+                String ID = "CKI" + Integer.toString(new Random().nextInt(999)) + Integer.toString(new Random().nextInt(99)) + "test";
+                boolean Check = true;
+                
+                ps.setString(1, ID);
+                ps.setString(2, ck.getBookID());
+                ps.setString(3, ck.getCusID());
+                ps.setString(4, ck.getRoomID());
+                ps.setString(5, "admin");
+                ps.setString(6, ck.getCheckType());
+                ps.setInt(7, ck.getNumGuest());
+                ps.setTimestamp(8, Timestamp.valueOf(ck.getDateIn()));
+                ps.setTimestamp(9, Timestamp.valueOf(ck.getDateOut()));
+                ps.setString(10, ck.getCusPack());
+                ps.setBoolean(11, Check);
+               
                 ps.execute();
                 ps.close();
             }

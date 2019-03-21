@@ -216,7 +216,7 @@ public class FXMLMainFormController implements Initializable {
             menu_Add.getItems().remove(menuItem_Add_Booking);
         }
         if (!userRole.ischeckBooking_Delete()) {
-            //menu_Add.getItems().remove(menuItem_Add_Booking);
+//            menu_Add.getItems().remove(menuItem_Add_Booking);
         }
         if (!userRole.ischeckBooking_Edit()) {
             menu_Edit.getItems().remove(menuItem_Edit_Booking);

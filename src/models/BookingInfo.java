@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,21 +16,21 @@ import javafx.beans.property.StringProperty;
  * @author ASUS
  */
 public class BookingInfo {
-     public StringProperty BookID, CusID, RoomID, User, Note, Flight, Date;
+     public StringProperty BookID, CusID, RoomID, User, Note, Flight;
+     public LocalDateTime Date;
      public BooleanProperty Drive;
      public int NumGuest;
 
     public BookingInfo() {
     }
 
-    public BookingInfo(String BookID, String CusID, String RoomID, String User, String Note, String Flight, String Date, Boolean Drive, int NumGuest) {
+    public BookingInfo(String BookID, String CusID, String RoomID, String User, String Note, String Flight, Boolean Drive, int NumGuest) {
         this.BookID = new SimpleStringProperty(BookID);
         this.CusID = new SimpleStringProperty(CusID);
         this.RoomID = new SimpleStringProperty(RoomID);
         this.User = new SimpleStringProperty(User);
         this.Note = new SimpleStringProperty(Note);
         this.Flight = new SimpleStringProperty(Flight);
-        this.Date = new SimpleStringProperty(Date);
         this.Drive = new SimpleBooleanProperty(Drive);
         this.NumGuest = NumGuest;
     }
@@ -82,13 +83,14 @@ public class BookingInfo {
         this.Flight = new SimpleStringProperty(Flight);
     }
 
-    public String getDate() {
-        return Date.get();
+    public LocalDateTime getDate() {
+        return Date;
     }
 
-    public void setDate(String Date) {
-        this.Date = new SimpleStringProperty(Date);
+    public void setDate(LocalDateTime Date) {
+        this.Date = Date;
     }
+
 
     public Boolean getDrive() {
         return Drive.get();

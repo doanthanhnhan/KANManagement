@@ -37,7 +37,7 @@ public class Test1 extends Application {
 
 
 
-        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLFormInforOfGuest.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLRenewCusFormCheck.fxml"));
 
 //            stage.setTitle("KANManagementLogin");
 //        }

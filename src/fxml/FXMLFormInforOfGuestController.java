@@ -10,7 +10,10 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import controllers.ConnectControllers;
 import controllers.FXMLCheckInRoomController;
+import controllers.FXMLLoginController;
+import controllers.FXMLMainFormController;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import java.net.URL;
@@ -18,7 +21,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -42,10 +48,16 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import models.BookingInfo;
+import models.Customer;
+import models.DAO;
 import models.DAOFormInfo;
+import models.DAOcheckRole;
 import models.formatCalender;
 import models.FormInfo;
+import utils.AlertLoginAgain;
 import utils.connectDB;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -119,6 +131,13 @@ public class FXMLFormInforOfGuestController implements Initializable {
     @FXML
     private JFXTextField txtNote;
 
+    @FXML
+    private JFXButton Skip;
+
+    private showFXMLLogin showFormLogin = new showFXMLLogin();
+
+    private FXMLMainFormController fXMLMainFormController;
+
     Boolean CheckEdit = false;
     String ID;
     /**
@@ -183,41 +202,62 @@ public class FXMLFormInforOfGuestController implements Initializable {
 
     @FXML
     private void handleSubmitAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException, Exception {
-        if (!CheckEdit) {
-            FormInfo Form = new FormInfo();
-
-            LabelContent.setStyle("-fx-text-fill: red;");
-
-            if (!RoomIDCombo.getValue().isEmpty() && !CustomerIDCombo.getValue().isEmpty() && FormInfo.validateNumber(txtNumberofGuest.getText()) && !datePickerDateArrive.getValue().equals(null)) {
-
-                Form.AddNewBooking(txtNote.getText(), parseInt(txtNumberofGuest.getText()), datePickerDateArrive.getValue(), check1.isSelected(), txtFlightNumber.getText(), RoomIDCombo.getValue(), CustomerIDCombo.getValue());
-
-                txtNumberofGuest.setText("");
-                datePickerDateArrive.setValue(null);
-                txtFlightNumber.setText("");
-
-                LabelContent.setStyle("-fx-text-fill: green;");
-                LabelContent.setText("Success");
-            } else {
-                handleValidAction();
-            }
+        if (!DAO.checkFirstLogin().equals(0) && !DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Customer_Add")) {
+            AlertLoginAgain.alertLogin();
+            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            Stage stage = (Stage) CustomerCall.getScene().getWindow();
+            stage.close();
+            stageMainForm.close();
+            showFormLogin.showFormLogin();
         } else {
-            FormInfo Form = new FormInfo();
+            if (!CheckEdit) {
+                FormInfo Form = new FormInfo();
 
-            LabelContent.setStyle("-fx-text-fill: red;");
+                LabelContent.setStyle("-fx-text-fill: red;");
 
-            if (!RoomIDCombo.getValue().isEmpty() && !CustomerIDCombo.getValue().isEmpty() && FormInfo.validateNumber(txtNumberofGuest.getText()) && !datePickerDateArrive.getValue().equals(null)) {
-                String ID = "";
-                Form.EditBooking(txtNote.getText(), parseInt(txtNumberofGuest.getText()), datePickerDateArrive.getValue(), check1.isSelected(), txtFlightNumber.getText(), ID);
+                if (!RoomIDCombo.getValue().isEmpty() && !CustomerIDCombo.getValue().isEmpty() && FormInfo.validateNumber(txtNumberofGuest.getText()) && !datePickerDateArrive.getValue().equals(null)) {
 
-                txtNumberofGuest.setText("");
-                datePickerDateArrive.setValue(null);
-                txtFlightNumber.setText("");
+                    Form.AddNewBooking(txtNote.getText(), parseInt(txtNumberofGuest.getText()), datePickerDateArrive.getValue(), check1.isSelected(), txtFlightNumber.getText(), RoomIDCombo.getValue(), CustomerIDCombo.getValue());
 
-                LabelContent.setStyle("-fx-text-fill: green;");
-                LabelContent.setText("Success");
+                    txtNumberofGuest.setText("");
+                    datePickerDateArrive.setValue(null);
+                    txtFlightNumber.setText("");
+
+                    LabelContent.setStyle("-fx-text-fill: green;");
+                    LabelContent.setText("Success");
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Calendar cal = Calendar.getInstance();
+                    String logtime;
+                    logtime = dateFormat.format(cal.getTime());
+
+                    BookingInfo BookingInfo = new BookingInfo();
+
+                    if (!DAO.checkFirstLogin().equals(1)) {
+                        DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + BookingInfo.getBookID(), logtime);
+                    }
+                } else {
+                    handleValidAction();
+                }
             } else {
-                handleValidAction();
+                FormInfo Form = new FormInfo();
+
+                LabelContent.setStyle("-fx-text-fill: red;");
+
+                if (!RoomIDCombo.getValue().isEmpty() && !CustomerIDCombo.getValue().isEmpty() && FormInfo.validateNumber(txtNumberofGuest.getText()) && !datePickerDateArrive.getValue().equals(null)) {
+                    String ID = "";
+                    Form.EditBooking(txtNote.getText(), parseInt(txtNumberofGuest.getText()), datePickerDateArrive.getValue(), check1.isSelected(), txtFlightNumber.getText(), ID);
+
+                    txtNumberofGuest.setText("");
+                    datePickerDateArrive.setValue(null);
+                    txtFlightNumber.setText("");
+
+                    LabelContent.setStyle("-fx-text-fill: green;");
+                    LabelContent.setText("Success");
+                } else {
+                    handleValidAction();
+                }
             }
         }
 
@@ -240,9 +280,11 @@ public class FXMLFormInforOfGuestController implements Initializable {
         this.ID = ID;
         CheckEdit = true;
     }
-    public void AddDataFromCustomer(String CusID){
+
+    public void AddDataFromCustomer(String CusID) {
         CustomerIDCombo.setValue(CusID);
     }
+
     @FXML
     private void CustomerCall(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/FXMLCustomer.fxml"));
@@ -250,10 +292,23 @@ public class FXMLFormInforOfGuestController implements Initializable {
 
         Stage stage = (Stage) CustomerCall.getScene().getWindow();
         stage.close();
-        
+
         Stage stage1 = new Stage();
         stage1.setScene(new Scene(root1));
         stage1.show();
-        
+
+    }
+
+    @FXML
+    void SkipBtn(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/FXMLCheckIn.fxml"));
+        Parent root1 = (Parent) fxmlLoader.load();
+
+        Stage stage = (Stage) CustomerCall.getScene().getWindow();
+        stage.close();
+
+        Stage stage1 = new Stage();
+        stage1.setScene(new Scene(root1));
+        stage1.show();
     }
 }
