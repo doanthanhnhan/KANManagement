@@ -126,7 +126,7 @@ public class DAO {
         InfoEmployee Emp = new InfoEmployee();
         Connection connection = connectDB.connectSQLServer();
         // Tạo đối tượng Statement.
-        String sql = "select Serect_Question,Serect_Answer,Active from Users where UserName = ?";
+        String sql = "select Secret_Question,Secret_Answer,Active from Users where UserName = ?";
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         PreparedStatement pt = connection.prepareStatement(sql);
         pt.setString(1, User);
@@ -289,8 +289,8 @@ public class DAO {
             Emp.setHiredate(rs.getString("HireDate"));
             Emp.setJob(rs.getString("Job"));
             Emp.setEDLEVEL(rs.getInt("EducatedLevel"));
-            Emp.setSerect_Question(rs.getString("Serect_Question"));
-            Emp.setSerect_Answer(rs.getString("Serect_Answer"));
+            Emp.setSerect_Question(rs.getString("Secret_Question"));
+            Emp.setSerect_Answer(rs.getString("Secret_Answer"));
             Emp.setBirthdate(rs.getString("Birthday"));
             Emp.setSalary(rs.getString("Salary"));
             Emp.setBonus(rs.getString("Bonus"));
@@ -437,7 +437,7 @@ public class DAO {
 
     public static void SetPass(String User, String Pass, String Question, String Answer) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp = "UPDATE Users SET PassWord = ?, Serect_Question = ? ,Serect_Answer = ? WHERE UserName = ?";
+        String exp = "UPDATE Users SET PassWord = ?, Secret_Question = ? ,Secret_Answer = ? WHERE UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, Pass);
         pt.setString(2, Question);

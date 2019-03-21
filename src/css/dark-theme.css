@@ -49,6 +49,9 @@
         derive(-fx-accent, 30%) 99%
         );
 }
+.progress-indicator .indicator {
+    -fx-background-color: transparent ;
+}
 .glyph-icon{
     -fx-fill: -fx-primarycolor;
 }
@@ -212,6 +215,10 @@
     -fx-prompt-text-fill: -fx-primarytextcolor;    
     -fx-font-size : 14px;
     -fx-font-weight: bold;    
+}
+/*Make prompt text float*/
+.jfx-date-picker > .jfx-text-field {
+    -jfx-label-float: true;
 }
 
 /*ROOM STATUS FORM*/

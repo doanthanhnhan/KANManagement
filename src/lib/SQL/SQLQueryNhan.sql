@@ -108,6 +108,7 @@ CREATE TABLE ServicesOrders(
 	-- Create columns		
 	OrderID varchar(50) NOT NULL,
 	CustomerID varchar(30) NOT NULL,
+	RoomID varchar(10) NOT NULL,
 	UserName varchar(20) NOT NULL,	
 	ServiceOrderDate datetime NOT NULL,
 	ServiceNote nvarchar(200),	
@@ -163,9 +164,10 @@ CREATE TABLE UserLogs(
 	CONSTRAINT pk_ID_UserLogs PRIMARY KEY (ID)
 )
 
+DROP TABLE Departments
 CREATE TABLE Departments(
 	-- Create columns
-	DepartmentID varchar(10) NOT NULL,		
+	DepartmentID varchar(20) NOT NULL,		
 	DepartmentName nvarchar(50) NOT NULL,
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
@@ -196,7 +198,8 @@ CREATE TABLE Employees(
 	[Image] varbinary(MAX),
 	-- Create constraint
 	CONSTRAINT pk_EmployeeID_Employees PRIMARY KEY (EmployeeID),
-	CONSTRAINT uc_EmployeeID_Employees UNIQUE (EmployeeID)
+	CONSTRAINT uc_EmployeeID_Employees UNIQUE (EmployeeID),
+	CONSTRAINT df_DepartmentID_Employees DEFAULT 'Free' FOR DepartmentID
 )
 
 CREATE TABLE Users(
@@ -285,8 +288,11 @@ ADD CONSTRAINT fk_EmployeeID_Users FOREIGN KEY (EmployeeID) REFERENCES Employees
 ALTER TABLE [Role]
 ADD CONSTRAINT fk_EmployeeID_Role FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID);
 
+
 ALTER TABLE Employees
-ADD CONSTRAINT fk_RoleID_Employees FOREIGN KEY (RoleID) REFERENCES [Role](RoleID);
+ADD CONSTRAINT fk_RoleID_Employees FOREIGN KEY (RoleID) REFERENCES [Role](RoleID),	
+	CONSTRAINT fk_DepartmentID_Employees FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID);
+
 
 ALTER TABLE Rooms
 ADD CONSTRAINT fk_CustomerID_Rooms FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
@@ -321,6 +327,10 @@ ADD CONSTRAINT fk_OrderID_ServicesOrderDetails FOREIGN KEY (OrderID) REFERENCES 
 	CONSTRAINT fk_UserName_ServicesOrderDetails FOREIGN KEY (UserName) REFERENCES Users(UserName);
 
 -- CREATE VIEW --
+DROP VIEW view_UserRole
+CREATE VIEW view_UserRole AS
+SELECT R.*, E.EmployeeFirstName, E.EmployeeMidName, E.EmployeeLastName FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID
+SELECT * FROM view_UserRole
 
 -- CREATE STORE PROCEDURE --
 CREATE PROC sp_Rooms_With_Status
@@ -522,7 +532,4 @@ DELETE FROM CheckInOrders
 
 SELECT R.*, U.UserName FROM [Role] R, Users U WHERE R.EmployeeID=U.EmployeeID
 
-DROP VIEW view_UserRole
-CREATE VIEW view_UserRole AS
-SELECT R.*, E.EmployeeFirstName, E.EmployeeMidName, E.EmployeeLastName FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID
-SELECT * FROM view_UserRole
+
