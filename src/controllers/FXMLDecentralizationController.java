@@ -15,9 +15,6 @@ import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,13 +29,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -47,8 +41,6 @@ import models.ButtonDecentralization;
 import models.DAO;
 import models.DAOcheckRole;
 import models.DecentralizationModel;
-import models.InfoEmployee;
-import models.boolDecentralizationModel;
 import utils.StageLoader;
 
 /**
@@ -87,7 +79,6 @@ public class FXMLDecentralizationController implements Initializable {
     private String delete;
     private String view;
     private String edit;
-
     /**
      * Initializes the controller class.
      *
@@ -96,6 +87,7 @@ public class FXMLDecentralizationController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ConnectControllers.setfXMLDecentralizationController(this);
         try {
             listEmp = DAOcheckRole.getAllDecentralization();
         } catch (SQLException | ClassNotFoundException ex) {

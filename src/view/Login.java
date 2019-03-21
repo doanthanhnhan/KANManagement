@@ -30,7 +30,7 @@ public class Login extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        if (checkLogin == 0) {
+        if (DAO.checkFirstLogin() == 0) {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
             stage.setTitle("Add New Employee");
             Scene scene = new Scene(root);

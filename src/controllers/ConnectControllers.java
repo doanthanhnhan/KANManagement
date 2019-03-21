@@ -21,7 +21,15 @@ public class ConnectControllers {
     public static FXMLListRoomsController fXMLListRoomsController;
     public static FXMLInfoEmployeeController fXMLInfoEmployeeController;
     public static FXMLSplashScreenController fXMLSplashScreenController;
+    public static FXMLDecentralizationController fXMLDecentralizationController;
 
+    public static FXMLDecentralizationController getfXMLDecentralizationController() {
+        return fXMLDecentralizationController;
+    }
+
+    public static void setfXMLDecentralizationController(FXMLDecentralizationController fXMLDecentralizationController) {
+        ConnectControllers.fXMLDecentralizationController = fXMLDecentralizationController;
+    }
     public static FXMLInfoEmployeeController getfXMLInfoEmployeeController() {
         return fXMLInfoEmployeeController;
     }
