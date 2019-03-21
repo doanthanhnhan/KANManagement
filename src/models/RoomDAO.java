@@ -16,4 +16,5 @@ public interface RoomDAO {
     void addRoom(Room room);
     void editRoom(Room room, Boolean active);
     void deleteRoom(Room room);
+    void deleteRoomEX(RoomEX roomEX);
 }

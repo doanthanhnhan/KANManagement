@@ -5,12 +5,14 @@
  */
 package models;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.util.converter.LocalDateTimeStringConverter;
 
 /**
  *
@@ -18,20 +20,21 @@ import javafx.beans.property.StringProperty;
  */
 public class ServiceOrder {
 
-    private final StringProperty serviceOrderID;
-    private final StringProperty roomID;
-    private final StringProperty serviceID;
-    private final IntegerProperty serviceQuantity;
-    private Calendar serviceOrderTime;
-    private final StringProperty serviceNote;
+    private StringProperty serviceOrderID;
+    private StringProperty roomID;
+    private StringProperty customerID;   
+    private StringProperty userName;   
+    private IntegerProperty serviceQuantity;
+    private LocalDateTime serviceOrderTime;
+    private StringProperty serviceNote;
 
     public ServiceOrder() {
-        this.serviceOrderID = new SimpleStringProperty();
-        this.serviceID = new SimpleStringProperty();
+        this.serviceOrderID = new SimpleStringProperty();        
         this.roomID = new SimpleStringProperty();
+        this.customerID = new SimpleStringProperty();
+        this.userName = new SimpleStringProperty();
         this.serviceNote = new SimpleStringProperty();
         this.serviceQuantity = new SimpleIntegerProperty();
-        this.serviceOrderTime = new GregorianCalendar();
     }
 
     public final String getServiceOrderID() {
@@ -56,19 +59,7 @@ public class ServiceOrder {
 
     public StringProperty roomIDProperty() {
         return roomID;
-    }
-
-    public final String getServiceID() {
-        return serviceID.get();
-    }
-
-    public final void setServiceID(String value) {
-        serviceID.set(value);
-    }
-
-    public StringProperty serviceIDProperty() {
-        return serviceID;
-    }
+    }   
 
     public final int getServiceQuantity() {
         return serviceQuantity.get();
@@ -94,12 +85,36 @@ public class ServiceOrder {
         return serviceNote;
     }
 
-    public Calendar getServiceOrderTime() {
+    public LocalDateTime getServiceOrderTime() {
         return serviceOrderTime;
     }
 
-    public void setServiceOrderTime(Calendar serviceOrderTime) {
+    public void setServiceOrderTime(LocalDateTime serviceOrderTime) {
         this.serviceOrderTime = serviceOrderTime;
+    }
+
+    public final String getCustomerID() {
+        return customerID.get();
+    }
+
+    public final void setCustomerID(String value) {
+        customerID.set(value);
+    }
+
+    public StringProperty customerIDProperty() {
+        return customerID;
+    }
+
+    public final String getUserName() {
+        return userName.get();
+    }
+
+    public final void setUserName(String value) {
+        userName.set(value);
+    }
+
+    public StringProperty userNameProperty() {
+        return userName;
     }
 
 }

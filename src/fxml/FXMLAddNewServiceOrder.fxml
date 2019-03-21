@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1366.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewServiceOrderController">
+   <children>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+                           <children>
+                              <JFXTextField fx:id="txt_Order_ID" labelFloat="true" prefWidth="300.0" promptText="Order ID">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXTextField>
+                              <JFXComboBox fx:id="comboBox_Customer_ID" prefWidth="300.0" promptText="Customer ID" />
+                              <JFXDatePicker fx:id="datePicker_Order_Date" editable="false" onAction="#format_Order_Date" prefWidth="300.0" promptText="Order date" VBox.vgrow="ALWAYS" />
+                              <JFXTextField fx:id="txt_Note" labelFloat="true" layoutX="10.0" layoutY="61.0" prefWidth="300.0" promptText="Note">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="30.0" layoutY="30.0" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+                           <children>
+                              <JFXComboBox fx:id="comboBox_Service_ID" prefWidth="300.0" promptText="Service ID" />
+                              <JFXTextField fx:id="txt_Service_Name" labelFloat="true" prefWidth="300.0" promptText="Service name">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXTextField>
+                              <HBox prefWidth="300.0" spacing="10.0">
+                                 <children>
+                                    <JFXTextField fx:id="txt_Service_Unit" labelFloat="true" prefWidth="300.0" promptText="Unit">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="txt_Service_Price" labelFloat="true" layoutX="10.0" layoutY="10.0" prefWidth="300.0" promptText="Price">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="111.0" prefWidth="300.0" spacing="10.0">
+                                 <children>
+                                    <JFXTextField fx:id="txt_Service_Inventory" labelFloat="true" prefWidth="300.0" promptText="Inventory">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXDatePicker fx:id="datePicker_Import_Date" editable="false" onAction="#format_Import_Date" prefWidth="300.0" promptText="Import date" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="30.0" layoutY="30.0" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+                           <children>
+                              <JFXComboBox fx:id="comboBox_Room_ID" prefWidth="300.0" promptText="Room ID" />
+                              <HBox prefWidth="300.0" spacing="10.0">
+                                 <children>
+                                    <JFXTextField fx:id="txt_Order_Quantity" labelFloat="true" prefWidth="300.0" promptText="Order quantity">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="txt_Discount" labelFloat="true" layoutX="10.0" layoutY="10.0" prefWidth="300.0" promptText="Discount">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
+                              <JFXTextArea fx:id="txtArea_Service_Description" labelFloat="true" promptText="Service Description">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="17.0" />
+                                 </VBox.margin>
+                              </JFXTextArea>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="670.0" layoutY="30.0" prefHeight="200.0" spacing="20.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="TOP" styleClass="label-with-image" text="Service image">
+                                 <graphic>
+                                    <ImageView fx:id="imageView_Service_Image" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="1072.0" layoutY="30.0" prefHeight="200.0" spacing="13.0">
+                           <children>
+                              <JFXButton fx:id="btn_Add_Service" prefHeight="50.0" prefWidth="120.0" styleClass="btn-green-color" text="Add service" />
+                              <JFXButton fx:id="btn_Edit_Service" layoutX="10.0" layoutY="85.0" prefHeight="50.0" prefWidth="120.0" styleClass="btn-warning-color" text="Edit service" />
+                              <JFXButton fx:id="btn_Save_Order" layoutX="10.0" layoutY="120.0" prefHeight="50.0" prefWidth="120.0" styleClass="btn-red-color" text="Save order" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <TableView fx:id="tableView_Service_Order_Detail" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn prefWidth="75.0" text="C1" />
+                <TableColumn prefWidth="75.0" text="C2" />
+              </columns>
+            </TableView>
+         </center>
+         <bottom>
+            <HBox fx:id="hBoxContent" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

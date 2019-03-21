@@ -5,7 +5,13 @@
  */
 package view;
 
+import com.sun.javafx.application.LauncherImpl;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,9 +25,12 @@ import models.DAO;
  */
 public class Login extends Application {
 
+    private static final int COUNT_LIMIT = 50000;
+    private int checkLogin;
+
     @Override
     public void start(Stage stage) throws Exception {
-        if (DAO.checkFirstLogin().equals(0)) {
+        if (DAO.checkFirstLogin() == 0) {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
             stage.setTitle("Add New Employee");
             Scene scene = new Scene(root);
@@ -37,11 +46,32 @@ public class Login extends Application {
         stage.show();
     }
 
+    @Override
+    public void init() throws Exception {
+        Thread checkDB = new Thread(() -> {
+            try {
+                checkLogin = DAO.checkFirstLogin();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("Load DB finished! checkLogin = " + checkLogin);
+        });
+        checkDB.start();
+        for (int i = 0; i < COUNT_LIMIT; i++) {
+            double progress = (100 * i) / COUNT_LIMIT;
+            LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(progress));
+            //System.out.println(progress);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
+        LauncherImpl.launchApplication(Login.class, MainFXPreloader.class, args);
     }
 
 }

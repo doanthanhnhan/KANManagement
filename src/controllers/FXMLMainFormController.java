@@ -43,6 +43,7 @@ import javafx.stage.Stage;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
 import utils.FormatName;
+import utils.GetInetAddress;
 
 import utils.MyTimer;
 
@@ -58,6 +59,7 @@ public class FXMLMainFormController implements Initializable {
     FXMLLoginController fxmlLoginController;
     RoleDAOImpl roleDAOImpl;
     public boolDecentralizationModel userRole;
+    public String macAdress;
 
     @FXML
     private MenuBar mainMenuBar;
@@ -194,6 +196,9 @@ public class FXMLMainFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //Set FXMLMainFormController reference
         ConnectControllers.setfXMLMainFormController(this);
+
+        //Set MACAddress
+        setMacAdress(GetInetAddress.getMacAddress());
 
         //Initialize roleDAOImpl
         roleDAOImpl = new RoleDAOImpl();
@@ -395,6 +400,14 @@ public class FXMLMainFormController implements Initializable {
         this.userRole = userRole;
     }
 
+    public String getMacAdress() {
+        return macAdress;
+    }
+
+    public void setMacAdress(String macAdress) {
+        this.macAdress = macAdress;
+    }
+
     private void initMenuBar() {
         MenuItem regis = new MenuItem("Registration User");
         regis.setOnAction((event) -> {
@@ -567,21 +580,23 @@ public class FXMLMainFormController implements Initializable {
      * @param tabName
      */
     public void task_Insert_Tab_With_Indicator(String formPath, String tabID, String tabName) {
-        Label label_Task_Status = new Label();
-        //Set timer and start
-        MyTimer myTimer = new MyTimer();
-        myTimer.create_myTimer(label_Task_Status);
+        Platform.runLater(() -> {
+            Label label_Task_Status = new Label();
+            //Set timer and start
+            MyTimer myTimer = new MyTimer();
+            myTimer.create_myTimer(label_Task_Status);
 
-        //Add label to bottom
-        hbox_Bottom.getChildren().add(0, label_Task_Status);
+            //Add label to bottom
+            hbox_Bottom.getChildren().add(0, label_Task_Status);
+            //Setting progressBar
+            progressBar_MainTask.setVisible(true);
+            progressBar_MainTask.progressProperty().unbind();
+            //Create new task
+            Task loadOverview = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    System.out.println("Loading tab...");
 
-        //Create new task
-        Task loadOverview = new Task() {
-            @Override
-            protected Object call() throws Exception {
-                System.out.println("Loading tab...");
-
-                Platform.runLater(() -> {
                     //Checking existing tab
                     if (openTabs.containsKey(formPath)) {
                         mainTabPane.getSelectionModel().select(openTabs.get(formPath));
@@ -593,7 +608,9 @@ public class FXMLMainFormController implements Initializable {
                             Tab subTab = new Tab(tabName);
                             subTab.setContent(subPane);
                             subTab.setId(tabID);
-                            mainTabPane.getTabs().add(subTab);
+                            Platform.runLater(() -> {
+                                mainTabPane.getTabs().add(subTab);
+                            });
                             mainTabPane.getSelectionModel().select(subTab);
                             openTabs.put(formPath, subTab);
                             subTab.setOnClosed(e -> openTabs.remove(formPath));
@@ -604,30 +621,29 @@ public class FXMLMainFormController implements Initializable {
 
                     //Stop timer
                     myTimer.stop_Timer(label_Task_Status);
-                });
+                    return null;
+                }
+            };
+            //Binding progress bar with task
+            progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
 
-                return null;
-            }
-        };
-        progressBar_MainTask.setVisible(true);
-        progressBar_MainTask.progressProperty().unbind();
-        progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
+            loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    System.out.println("Finished");
+                    Platform.runLater(() -> {
+                        label_Task_Status.setText("Finished");
+                        //Hide progressBar
+                        progressBar_MainTask.progressProperty().unbind();
+                        progressBar_MainTask.setProgress(0);
+                        progressBar_MainTask.setVisible(false);
+                        hbox_Bottom.getChildren().remove(label_Task_Status);
+                    });
+                }
+            });
 
-        loadOverview.setOnSucceeded(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                System.out.println("Finished");
-                Platform.runLater(() -> {
-                    label_Task_Status.setText("Finished");
-                    progressBar_MainTask.progressProperty().unbind();
-                    progressBar_MainTask.setProgress(0);
-                    progressBar_MainTask.setVisible(false);
-                    hbox_Bottom.getChildren().remove(label_Task_Status);
-                });
-            }
+            new Thread(loadOverview).start();
         });
-
-        new Thread(loadOverview).start();
     }
 
 }

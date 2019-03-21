@@ -126,7 +126,7 @@ public class DAO {
         InfoEmployee Emp = new InfoEmployee();
         Connection connection = connectDB.connectSQLServer();
         // Tạo đối tượng Statement.
-        String sql = "select Serect_Question,Serect_Answer,Active from Users where UserName = ?";
+        String sql = "select Secret_Question,Secret_Answer,Active from Users where UserName = ?";
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         PreparedStatement pt = connection.prepareStatement(sql);
         pt.setString(1, User);
@@ -289,8 +289,8 @@ public class DAO {
             Emp.setHiredate(rs.getString("HireDate"));
             Emp.setJob(rs.getString("Job"));
             Emp.setEDLEVEL(rs.getInt("EducatedLevel"));
-            Emp.setSerect_Question(rs.getString("Serect_Question"));
-            Emp.setSerect_Answer(rs.getString("Serect_Answer"));
+            Emp.setSerect_Question(rs.getString("Secret_Question"));
+            Emp.setSerect_Answer(rs.getString("Secret_Answer"));
             Emp.setBirthdate(rs.getString("Birthday"));
             Emp.setSalary(rs.getString("Salary"));
             Emp.setBonus(rs.getString("Bonus"));
@@ -437,7 +437,7 @@ public class DAO {
 
     public static void SetPass(String User, String Pass, String Question, String Answer) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp = "UPDATE Users SET PassWord = ?, Serect_Question = ? ,Serect_Answer = ? WHERE UserName = ?";
+        String exp = "UPDATE Users SET PassWord = ?, Secret_Question = ? ,Secret_Answer = ? WHERE UserName = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, Pass);
         pt.setString(2, Question);
@@ -448,6 +448,7 @@ public class DAO {
         connection.close();
     }
 
+    //Insert to UserLogs
     public static void setUserLogs(String User, String Content, String Logtime) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String ex = "Insert Into UserLogs(UserName,LogContent,LogTime,Active) Values (?,?,?,?)";
@@ -459,7 +460,24 @@ public class DAO {
         pts.execute();
         pts.close();
         connection.close();
+    }
 
+    public static void setUserLogs_With_MAC(String User, String Content, String Logtime, String macAddress) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            String ex = "Insert Into UserLogs(UserName,LogContent,LogTime,Active,MACAdress) Values (?,?,?,?,?)";
+            PreparedStatement pts = connection.prepareStatement(ex);
+            pts.setString(1, User);
+            pts.setString(2, Content);
+            pts.setString(3, Logtime);
+            pts.setInt(4, 1);
+            pts.setString(5, macAddress);
+            pts.execute();
+            pts.close();
+            connection.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 // Xử lý update lại pass khi người dùng forget pass
 

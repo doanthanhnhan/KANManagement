@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import static controllers.FXMLListServiceTypeController.serviceTypeItem;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.awt.image.BufferedImage;
@@ -21,6 +22,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +48,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import models.DAO;
 import models.ServiceTypeDAOImpl;
 import models.ServiceType;
 import utils.FormatName;
@@ -216,6 +219,9 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 validateForm();
                 if (check_Validate) {
                     addNewServiceType();
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceType ID: " 
+                            + FormatName.format(serviceID.getText()), 
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Add successful!");
                 }
                 return null;
@@ -258,6 +264,9 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                     ServiceType updateServiceType = getDataFromForm();
                     //Updating to DB
                     serviceTypeDAOImpl.editServiceType(updateServiceType, true);
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Update ServiceType ID: " 
+                            + FormatName.format(serviceID.getText()), 
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Updating successful!");
                 }
                 return null;

@@ -5,7 +5,10 @@
  */
 package controllers;
 
+import static controllers.FXMLListServiceTypeController.serviceTypeItem;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -29,9 +32,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import models.DAO;
 import models.RoomAction;
 import models.RoomEX;
 import models.RoomDAOImpl;
+import utils.FormatName;
 import utils.StageLoader;
 
 /**
@@ -49,6 +54,7 @@ public class FXMLListRoomsController implements Initializable {
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<RoomEX> filteredData;
+    private FXMLMainFormController mainFormController;
 
     @FXML
     private TableView<RoomEX> table_Rooms;
@@ -72,6 +78,7 @@ public class FXMLListRoomsController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("List Rooms initialize...");
         ConnectControllers.setfXMLListRoomsController(this);
+        mainFormController = ConnectControllers.getfXMLMainFormController();
         setColumns();
         showRoomsData();
         //ConnectControllers.setfXMLListRoomEXController(this);
@@ -217,7 +224,10 @@ public class FXMLListRoomsController implements Initializable {
         alert.showAndWait();
         System.out.println(alert.getResult());
         if (alert.getResult() == ButtonType.OK) {
-            //roomEXDAOImpl.deleteRoomEX(roomEXItem);
+            roomEXDAOImpl.deleteRoomEX(roomEXItem);
+            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete Room ID: " 
+                            + FormatName.format(serviceTypeItem.getServiceID()), 
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
             System.out.println("Delete successful");
             showRoomsData();
         }

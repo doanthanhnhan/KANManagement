@@ -91,12 +91,6 @@ public class FXMLInfoEmployeeController implements Initializable {
     private HBox Hboxbtn;
     @FXML
     private JFXButton btnInfo;
-    private Pattern pattern;
-    private Pattern patternEmail;
-    private Pattern patternFLName;
-    private Pattern patternIDNumber;
-    private Pattern patternELevel;
-    private Pattern patternSalary;
     @FXML
     private VBox vBox_Employee_Info;
     @FXML
@@ -145,7 +139,6 @@ public class FXMLInfoEmployeeController implements Initializable {
     private ImageView imgService;
     @FXML
     private JFXButton btnCancel;
-    private ObservableList<String> list_Role = FXCollections.observableArrayList();
     public static Boolean validateInfoEmployee = false;
     public static Boolean check_delete;
     private String userLogin = FXMLLoginController.User_Login;
@@ -763,6 +756,8 @@ public class FXMLInfoEmployeeController implements Initializable {
             } else {
                 try {
                     System.out.println("checkRegis = " + FXMLMainFormController.checkRegis);
+                    System.out.println("mainform check = "+ DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit"));
+                    System.out.println("checkloginRegis= "+ !FXMLLoginController.checkLoginRegis);
                     if (DAO.check_Email(Email.getText()) && !check_delete && !Emp.getGmail().equals(Email.getText())) {
                         Platform.runLater(() -> {
                             notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
@@ -826,6 +821,14 @@ public class FXMLInfoEmployeeController implements Initializable {
                             HboxContent.getChildren().add(label);
                             check_delete = false;
                             validateInfoEmployee = true;
+                            if (FXMLListEmployeeController.check_form_list) {
+                                fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+                                try {
+                                    fXMLListEmployeeController.table_ListEmployee.setItems(DAO.getAllInfoEmployee());
+                                } catch (ClassNotFoundException | SQLException ex) {
+                                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
                             System.out.println("Vào chỗ submit admin");
                         });
                     } else {

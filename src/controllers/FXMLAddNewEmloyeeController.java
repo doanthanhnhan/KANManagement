@@ -21,11 +21,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
@@ -35,8 +31,6 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -49,7 +43,6 @@ import utils.PatternValided;
 import utils.FormatName;
 import utils.StageLoader;
 import utils.showFXMLLogin;
-import view.Login;
 
 /**
  * FXML Controller class
@@ -77,6 +70,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     private JFXButton btnAddNew;
     @FXML
     private HBox HboxContent;
+    private FXMLDecentralizationController fXMLDecentralizationController;
     private FXMLListEmployeeController fXMLListEmployeeController;
     private FXMLMainFormController fXMLMainFormController;
     @FXML
@@ -92,7 +86,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         try {
             if (DAO.checkFirstLogin().equals(0)) {
                 newId.setDisable(true);
@@ -334,6 +328,10 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             if (FXMLListEmployeeController.check_form_list) {
                                 fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
                                 fXMLListEmployeeController.table_ListEmployee.setItems(DAO.getAllInfoEmployee());
+                            }
+                            if (FXMLDecentralizationController.check_form_list) {
+                                fXMLDecentralizationController = ConnectControllers.getfXMLDecentralizationController();
+                                fXMLDecentralizationController.tableDecentralization.setItems(DAOcheckRole.getAllDecentralization());
                             }
                         } catch (SQLException ex) {
                             Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);

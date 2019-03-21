@@ -20,7 +20,16 @@ public class ConnectControllers {
     public static FXMLListEmployeeController fXMLListEmployeeController;
     public static FXMLListRoomsController fXMLListRoomsController;
     public static FXMLInfoEmployeeController fXMLInfoEmployeeController;
+    public static FXMLSplashScreenController fXMLSplashScreenController;
+    public static FXMLDecentralizationController fXMLDecentralizationController;
 
+    public static FXMLDecentralizationController getfXMLDecentralizationController() {
+        return fXMLDecentralizationController;
+    }
+
+    public static void setfXMLDecentralizationController(FXMLDecentralizationController fXMLDecentralizationController) {
+        ConnectControllers.fXMLDecentralizationController = fXMLDecentralizationController;
+    }
     public static FXMLInfoEmployeeController getfXMLInfoEmployeeController() {
         return fXMLInfoEmployeeController;
     }
@@ -93,6 +102,14 @@ public class ConnectControllers {
 
     public static void setfXMLListRoomsController(FXMLListRoomsController fXMLListRoomsController) {
         ConnectControllers.fXMLListRoomsController = fXMLListRoomsController;
+    }
+
+    public static FXMLSplashScreenController getfXMLSplashScreenController() {
+        return fXMLSplashScreenController;
+    }
+
+    public static void setfXMLSplashScreenController(FXMLSplashScreenController fXMLSplashScreenController) {
+        ConnectControllers.fXMLSplashScreenController = fXMLSplashScreenController;
     }
 
 }

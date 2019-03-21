@@ -114,6 +114,7 @@ public class StageLoader {
         layout.getChildren().addAll(indicator, status);
         layout.setStyle("-fx-padding: 10;");
         stage.setScene(new Scene(layout, 250, 150));
+        stage.getIcons().add(new Image("/images/KAN Logo.png"));
         stage.show();
         //});
 
