@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface ServiceOrderDetailDAO {
     List<ServiceOrderDetail> getAllServiceOrdersDetails();
+    List<ServiceOrderDetail> get_All_Details_In_One_Order(String serviceOrderID);
     void addServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail);
     void editServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail, Boolean active);
     void deleteServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail);

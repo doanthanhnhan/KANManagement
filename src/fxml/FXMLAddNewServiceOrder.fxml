@@ -115,9 +115,9 @@
                         </VBox>
                         <VBox alignment="CENTER" layoutX="1072.0" layoutY="30.0" prefHeight="200.0" spacing="13.0">
                            <children>
-                              <JFXButton fx:id="btn_Add_Service" prefHeight="50.0" prefWidth="120.0" styleClass="btn-green-color" text="Add service" />
-                              <JFXButton fx:id="btn_Edit_Service" layoutX="10.0" layoutY="85.0" prefHeight="50.0" prefWidth="120.0" styleClass="btn-warning-color" text="Edit service" />
-                              <JFXButton fx:id="btn_Save_Order" layoutX="10.0" layoutY="120.0" prefHeight="50.0" prefWidth="120.0" styleClass="btn-red-color" text="Save order" />
+                              <JFXButton fx:id="btn_Add_Service" onAction="#add_Service_Action" prefHeight="50.0" prefWidth="120.0" styleClass="btn-green-color" text="Add service" />
+                              <JFXButton fx:id="btn_Edit_Service" layoutX="10.0" layoutY="85.0" onAction="#edit_Service_Action" prefHeight="50.0" prefWidth="120.0" styleClass="btn-warning-color" text="Edit service" />
+                              <JFXButton fx:id="btn_Save_Order" layoutX="10.0" layoutY="120.0" onAction="#save_Order_Action" prefHeight="50.0" prefWidth="120.0" styleClass="btn-red-color" text="Save order" />
                            </children>
                         </VBox>
                      </children>

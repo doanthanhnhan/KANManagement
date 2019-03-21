@@ -14,15 +14,25 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
+import models.Customer;
+import models.CustomerDAOImpl;
 import models.RoleDAOImpl;
+import models.Room;
+import models.RoomDAOImpl;
 import models.ServiceOrder;
 import models.ServiceOrderDAOImpl;
 import models.ServiceOrderDetail;
@@ -40,19 +50,29 @@ import utils.formatCalender;
  * @author Doan Thanh Nhan
  */
 public class FXMLAddNewServiceOrderController implements Initializable {
-    
+
     ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
-    
+    ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
+    ObservableList<Room> listRooms = FXCollections.observableArrayList();
+    ObservableList<Customer> listCustomers = FXCollections.observableArrayList();
+
+    ObservableList<String> listServiceTypesID = FXCollections.observableArrayList();
+    ObservableList<String> listRoomsID = FXCollections.observableArrayList();
+    ObservableList<String> listCustomersID = FXCollections.observableArrayList();
+
     FXMLMainFormController mainFormController;
-    
+
+    ServiceTypeDAOImpl serviceTypeDAOImpl;
     ServiceOrderDAOImpl serviceOrderDAOImpl;
     ServiceOrderDetailDAOImpl serviceOrderDetailDAOImpl;
-    ServiceTypeDAOImpl serviceTypeDAOImpl;
+
+    RoomDAOImpl roomDAOImpl;
+    CustomerDAOImpl customerDAOImpl;
     RoleDAOImpl roleDAOImpl;
-    
+
     public boolDecentralizationModel userRole;
     private Boolean check_Validate;
-    
+
     @FXML
     private JFXTextField txt_Order_ID;
     @FXML
@@ -93,8 +113,6 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     private HBox hBoxContent;
     @FXML
     private TableView<ServiceOrderDetail> tableView_Service_Order_Detail;
-    
-    
 
     /**
      * Initializes the controller class.
@@ -102,10 +120,25 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         mainFormController = ConnectControllers.getfXMLMainFormController();
+        serviceTypeDAOImpl = new ServiceTypeDAOImpl();
         serviceOrderDAOImpl = new ServiceOrderDAOImpl();
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
+        roomDAOImpl = new RoomDAOImpl();
+        customerDAOImpl = new CustomerDAOImpl();
+        roleDAOImpl = new RoleDAOImpl();
+
+        listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
+        
+        listServiceTypesID = serviceTypeDAOImpl.getAllServiceTypeID();
+        listCustomersID = customerDAOImpl.getAllCustomersID();
+        listRoomsID = roomDAOImpl.getAllRoomID();
+
+        //Initialize comboBox
+        comboBox_Customer_ID.getItems().addAll(listCustomersID);
+        comboBox_Room_ID.getItems().addAll(listRoomsID);
+        comboBox_Service_ID.getItems().addAll(listServiceTypesID);
     }
-    
+
     public ServiceOrder get_Service_Order_Data() {
         ServiceOrder serviceOrder = new ServiceOrder();
         serviceOrder.setCustomerID(comboBox_Customer_ID.getValue());
@@ -117,7 +150,7 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         serviceOrder.setUserName(mainFormController.userRole.getEmployee_ID());
         return serviceOrder;
     }
-    
+
     public ServiceOrderDetail get_Service_Order_Detail_Data() {
         ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail();
         serviceOrderDetail.setActive(true);
@@ -139,19 +172,63 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         ServiceOrderDetail serviceOrderDetail = get_Service_Order_Detail_Data();
         serviceOrderDetailDAOImpl.addServiceOrdersDetail(serviceOrderDetail);
     }
+    
+    private void setColumns() {
+        TableColumn<ServiceOrderDetail, String> serviceIDCol = new TableColumn<>("Service ID");
+        TableColumn<ServiceOrderDetail, String> serviceNameCol = new TableColumn<>("Service name");
+        TableColumn<ServiceOrderDetail, String> serviceUnitCol = new TableColumn<>("Service unit");
+        TableColumn<ServiceOrderDetail, Float> servicePriceCol = new TableColumn<>("Service price");
+        TableColumn<ServiceOrderDetail, Integer> serviceInventoryCol = new TableColumn<>("Inventory");
+        TableColumn<ServiceOrderDetail, LocalDateTime> serviceInputDateCol = new TableColumn<>("Import date");
+        TableColumn<ServiceOrderDetail, ImageView> serviceImageCol = new TableColumn<>("Service image");
+        TableColumn<ServiceOrderDetail, String> serviceDescriptionCol = new TableColumn<>("Service description");
 
-    @FXML
-    private void format_Order_Date(ActionEvent event) {
-        String pattern = "dd-MM-yyyy";
-        formatCalender.format(pattern, datePicker_Order_Date);
+        TableColumn numberCol = new TableColumn("#");
+        numberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServiceType, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ServiceType, String> p) {
+                return new ReadOnlyObjectWrapper((tableView_Service_Order_Detail.getItems().indexOf(p.getValue()) + 1) + "");
+            }
+        });
+        numberCol.setSortable(false);
+
+        // Định nghĩa cách để lấy dữ liệu cho mỗi ô.
+        // Lấy giá trị từ các thuộc tính của ServiceType.
+        serviceIDCol.setCellValueFactory(new PropertyValueFactory<>("serviceID"));
+        serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
+        serviceUnitCol.setCellValueFactory(new PropertyValueFactory<>("serviceUnit"));
+        servicePriceCol.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
+        serviceInventoryCol.setCellValueFactory(new PropertyValueFactory<>("serviceInventory"));
+        serviceInputDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceInputDate"));
+        serviceImageCol.setCellValueFactory(new PropertyValueFactory<>("imageView"));
+        serviceDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("serviceDescription"));
+
+        numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceUnitCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        servicePriceCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceInventoryCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceInputDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceDescriptionCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceDescriptionCol.setPrefWidth(200);
+        serviceImageCol.setStyle("-fx-alignment: CENTER;");
+
+        // Thêm cột vào bảng
+        tableView_Service_Order_Detail.getColumns().clear();
+        tableView_Service_Order_Detail.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol,
+                servicePriceCol, serviceInventoryCol, serviceInputDateCol, serviceDescriptionCol, serviceImageCol);
+
+        // Xét xắp xếp theo userName
+        //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
     }
-    
-    @FXML
-    private void format_Import_Date(ActionEvent event) {
-        String pattern = "dd-MM-yyyy";
-        formatCalender.format(pattern, datePicker_Import_Date);
+
+    public void showUsersData() {
+        listServiceOrderDetails = serviceOrderDetailDAOImpl.get_All_Details_In_One_Order("");
+        //table_ServiceType.getItems().clear();
+        tableView_Service_Order_Detail.setItems(listServiceOrderDetails);       
     }
-    
+
     public void validateForm() {
         if (PatternValided.validateTextField(hBoxContent, txt_Discount, "^[\\d][\\d]*\\.?[\\d]*$",
                 "DISCOUNT MUST NOT BE EMPTY !!!",
@@ -183,5 +260,30 @@ public class FXMLAddNewServiceOrderController implements Initializable {
             System.out.println("Add finished");
             check_Validate = true;
         }
+    }
+
+    @FXML
+    private void format_Order_Date(ActionEvent event) {
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, datePicker_Order_Date);
+    }
+
+    @FXML
+    private void format_Import_Date(ActionEvent event) {
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, datePicker_Import_Date);
+    }
+
+    @FXML
+    private void add_Service_Action(ActionEvent event) {
+        listServiceOrderDetails = serviceOrderDetailDAOImpl.get_All_Details_In_One_Order("");
+    }
+
+    @FXML
+    private void edit_Service_Action(ActionEvent event) {
+    }
+
+    @FXML
+    private void save_Order_Action(ActionEvent event) {
     }
 }

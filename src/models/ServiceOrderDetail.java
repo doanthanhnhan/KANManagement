@@ -5,6 +5,7 @@
  */
 package models;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
@@ -18,24 +19,22 @@ import javafx.beans.property.StringProperty;
  *
  * @author Doan Thanh Nhan
  */
-public class ServiceOrderDetail {
+public class ServiceOrderDetail extends ServiceType {
 
     private StringProperty orderID;
-    private StringProperty serviceID;
-    private StringProperty userName;
     private IntegerProperty serviceQuantity;
-    private FloatProperty servicePrice;
+    private FloatProperty servicePriceTotal;
     private FloatProperty serviceDiscount;
     private BooleanProperty active;
+    private JFXButton serviceRemoveButton;
 
     public ServiceOrderDetail() {
         this.active = new SimpleBooleanProperty();
         this.orderID = new SimpleStringProperty();
         this.serviceDiscount = new SimpleFloatProperty();
-        this.serviceID = new SimpleStringProperty();
-        this.servicePrice = new SimpleFloatProperty();
+        this.servicePriceTotal = new SimpleFloatProperty();
         this.serviceQuantity = new SimpleIntegerProperty();
-        this.userName = new SimpleStringProperty();
+        this.serviceRemoveButton = new JFXButton("Remove");
     }
 
     public final String getOrderID() {
@@ -48,30 +47,6 @@ public class ServiceOrderDetail {
 
     public StringProperty orderIDProperty() {
         return orderID;
-    }
-
-    public final String getServiceID() {
-        return serviceID.get();
-    }
-
-    public final void setServiceID(String value) {
-        serviceID.set(value);
-    }
-
-    public StringProperty serviceIDProperty() {
-        return serviceID;
-    }
-
-    public final String getUserName() {
-        return userName.get();
-    }
-
-    public final void setUserName(String value) {
-        userName.set(value);
-    }
-
-    public StringProperty userNameProperty() {
-        return userName;
     }
 
     public final int getServiceQuantity() {
@@ -110,16 +85,24 @@ public class ServiceOrderDetail {
         return active;
     }
 
-    public final float getServicePrice() {
-        return servicePrice.get();
+    public final float getServicePriceTotal() {
+        return servicePriceTotal.get();
     }
 
-    public final void setServicePrice(float value) {
-        servicePrice.set(value);
+    public final void setServicePriceTotal(float value) {
+        servicePriceTotal.set(value);
     }
 
-    public FloatProperty servicePriceProperty() {
-        return servicePrice;
+    public FloatProperty servicePriceTotalProperty() {
+        return servicePriceTotal;
+    }
+
+    public JFXButton getServiceRemoveButton() {
+        return serviceRemoveButton;
+    }
+
+    public void setServiceRemoveButton(JFXButton serviceRemoveButton) {
+        this.serviceRemoveButton = serviceRemoveButton;
     }
 
 }

@@ -648,4 +648,10 @@ public class FXMLMainFormController implements Initializable {
         });
     }
 
+    @FXML
+    private void handle_MenuItem_Add_Service_Order_Action(ActionEvent event) {
+        System.out.println("Add new Service Order menu item clicked!");
+        formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Add new Service Order");
+    }
+
 }

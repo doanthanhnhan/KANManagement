@@ -66,7 +66,7 @@
                               <MenuItem fx:id="menuItem_Add_Employee" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Employee_Action" text="Add new Employee" />
                               <MenuItem fx:id="menuItem_Add_Role" mnemonicParsing="false" text="Add new Role" />
                               <MenuItem fx:id="menuItem_Add_Room" mnemonicParsing="false" text="Add new Room" />
-                              <MenuItem fx:id="menuItem_Add_Service_Order" mnemonicParsing="false" text="Add new Service Order" />
+                              <MenuItem fx:id="menuItem_Add_Service_Order" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Service_Order_Action" text="Add new Service Order" />
                               <MenuItem fx:id="menuItem_Add_Service_Order_Details" mnemonicParsing="false" text="Add new Service Order Detail" />
                               <MenuItem fx:id="menuItem_Add_Service_Type" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Service_Type_Action" text="Add new Service Type" />
                               <MenuItem fx:id="menuItem_Add_User" mnemonicParsing="false" onAction="#handle_MenuItem_Add_User_Action" text="Add new User" />

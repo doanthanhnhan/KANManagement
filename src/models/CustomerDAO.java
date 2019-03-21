@@ -11,11 +11,10 @@ import java.util.List;
  *
  * @author Doan Thanh Nhan
  */
-public interface RoomDAO {
-    List<Room> getAllRoom();
-    List<String> getAllRoomID();
-    void addRoom(Room room);
-    void editRoom(Room room, Boolean active);
-    void deleteRoom(Room room);
-    void deleteRoomEX(RoomEX roomEX);
+public interface CustomerDAO {
+    List<Customer> getAllCustomers();
+    List<String> getAllCustomersID();
+    void addCustomer(Customer customer);
+    void editCustomer(Customer customer, Boolean active);
+    void deleteCustomer(Customer customer);
 }

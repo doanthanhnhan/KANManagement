@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -55,6 +55,30 @@ public class RoomDAOImpl implements RoomDAO {
                     room.setActive(rs.getBoolean("Active"));
 
                     listRooms.add(room);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+            alert.show();
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRooms;
+    }
+
+    @Override
+    public ObservableList<String> getAllRoomID() {
+        String sql = "SELECT RoomID FROM Rooms";
+        ObservableList<String> listRooms = FXCollections.observableArrayList();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    String roomID;
+                    roomID = rs.getString("RoomID");                                  
+
+                    listRooms.add(roomID);
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {

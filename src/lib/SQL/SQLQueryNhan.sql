@@ -495,6 +495,27 @@ INSERT INTO ServiceType(ServiceID, UserName, ServiceName, ServiceUnit, ServicePr
 ('KANService005', 'admin', N'Seven UP', N'can', 2, 99999, '2019-03-01'),
 ('KANService006', 'admin', N'Aquafina 500ml', N'bottle', 1.5, 99999, '2019-03-01')
 
+SELECT * FROM ServicesOrders
+DELETE FROM ServicesOrders
+INSERT INTO ServicesOrders(OrderID, CustomerID, RoomID, UserName, ServiceOrderDate) VALUES
+('Order001','KANCUS001', 'R0201', 'admin', '2019-02-20'),
+('Order002','KANCUS002', 'R0202', 'admin', '2019-02-20')
+
+SELECT * FROM ServicesOrderDetails
+DELETE FROM ServicesOrderDetails
+INSERT INTO ServicesOrderDetails(OrderID, ServiceID, UserName, ServiceQuantity, Price, Discount) VALUES
+('Order001','KANService002', 'admin', 5, 50, 0.1),
+('Order001','KANService003', 'admin', 10, 50, 0.2),
+('Order001','KANService004', 'admin', 5, 10, 0.3),
+('Order002','KANService002', 'admin', 7, 70, 0.1),
+('Order002','KANService004', 'admin', 15, 30, 0.3),
+('Order002','KANService006', 'admin', 10, 15, 0.05),
+
+SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.* FROM ServicesOrderDetails SOD 
+INNER JOIN ServiceType ST
+ON SOD.ServiceID = ST.ServiceID
+WHERE SOD.OrderID='Order001' 
+
 INSERT INTO BookingInfo(BookingID, CustomerID, RoomID, UserName, NumberGuest, DateBook) VALUES
 ('1902200001', 'KANCUS001', 'R0201', 'admin', 2, '2019-02-20'),
 ('1902200002', 'KANCUS002', 'R0202', 'admin', 1, '2019-02-20'),

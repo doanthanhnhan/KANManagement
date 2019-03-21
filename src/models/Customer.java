@@ -21,32 +21,44 @@ public class Customer {
     public LocalDateTime Date;
     public BooleanProperty Sex, Active;
     public float Discount;
-    
 
     public Customer() {
+        this.CusID = new SimpleStringProperty();
+        this.User = new SimpleStringProperty();
+        this.FName = new SimpleStringProperty();
+        this.MName = new SimpleStringProperty();
+        this.LName = new SimpleStringProperty();
+        this.Email = new SimpleStringProperty();
+        this.Passport = new SimpleStringProperty();
+        this.Phone = new SimpleStringProperty();
+        this.Company = new SimpleStringProperty();
+        this.Sex = new SimpleBooleanProperty();
+        this.Active = new SimpleBooleanProperty();
     }
 
     public Customer(String CusID, String User, String FName, String MName, String LName, String Email, String Passport, String Phone, String Company, Boolean Sex, Boolean Active, float Discount) {
-        this.CusID =  new SimpleStringProperty(CusID);
-        this.User =  new SimpleStringProperty(User);
-        this.FName =  new SimpleStringProperty(FName);
+        this.CusID = new SimpleStringProperty(CusID);
+        this.User = new SimpleStringProperty(User);
+        this.FName = new SimpleStringProperty(FName);
         this.MName = new SimpleStringProperty(MName);
-        this.LName =  new SimpleStringProperty(LName);
-        this.Email =  new SimpleStringProperty(Email);
-        this.Passport =  new SimpleStringProperty(Passport);
-        this.Phone =  new SimpleStringProperty(Phone);
-        this.Company =  new SimpleStringProperty(Company);
-        this.Sex =  new SimpleBooleanProperty(Sex);
+        this.LName = new SimpleStringProperty(LName);
+        this.Email = new SimpleStringProperty(Email);
+        this.Passport = new SimpleStringProperty(Passport);
+        this.Phone = new SimpleStringProperty(Phone);
+        this.Company = new SimpleStringProperty(Company);
+        this.Sex = new SimpleBooleanProperty(Sex);
         this.Active = new SimpleBooleanProperty(Active);
         this.Discount = Discount;
     }
-    
+
     public LocalDateTime getDate() {
         return Date;
     }
-    public void setDate(LocalDateTime Date) {    
+
+    public void setDate(LocalDateTime Date) {
         this.Date = Date;
     }
+
     public float getDiscount() {
         return Discount;
     }
