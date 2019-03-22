@@ -413,7 +413,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     public Boolean validateTextArea(JFXTextArea textField, String regexString, String warningEmpty, String warningPattern) {
         Boolean check;
         Pattern pattern = Pattern.compile(regexString);
-        if (!textField.getText().equalsIgnoreCase("") && !pattern.matcher(textField.getText()).matches()) {
+        if (!textField.getText().isEmpty() && !pattern.matcher(textField.getText()).matches()) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");

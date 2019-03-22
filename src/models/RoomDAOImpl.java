@@ -69,6 +69,45 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
+    public ObservableList<Room> getAllStatusRooms(String roomStatus) {
+        String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName' \n"
+                + "FROM Rooms R, Customers C\n"
+                + "WHERE R.CustomerID = C.CustomerID AND R.RoomStatus='" + roomStatus + "'";
+        ObservableList<Room> listRooms = FXCollections.observableArrayList();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    Room room = new Room();
+                    room.setRoomID(rs.getString("RoomID"));
+                    room.setCustomerID(rs.getString("CustomerID"));
+                    room.setCustomerName(FormatName.format(rs.getString("CustomerFullName")));
+                    room.setUserName(rs.getString("UserName"));
+                    room.setRoomType(rs.getString("RoomType"));
+                    room.setRoomPhoneNumber(rs.getString("PhoneNumber"));
+                    room.setRoomOnFloor(rs.getInt("RoomOnFloor"));
+                    room.setRoomArea(rs.getFloat("RoomArea"));
+                    room.setRoomStatus(rs.getString("RoomStatus"));
+                    room.setRoomClean(rs.getBoolean("Clean"));
+                    room.setRoomRepaired(rs.getBoolean("Repaired"));
+                    room.setRoomInProgress(rs.getBoolean("InProgress"));
+                    room.setDayRemaining(rs.getInt("DayRemaining"));
+                    room.setActive(rs.getBoolean("Active"));
+
+                    listRooms.add(room);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+            alert.show();
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRooms;
+    }
+
+    @Override
     public ObservableList<String> getAllRoomID() {
         String sql = "SELECT RoomID FROM Rooms";
         ObservableList<String> listRooms = FXCollections.observableArrayList();
@@ -76,7 +115,80 @@ public class RoomDAOImpl implements RoomDAO {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
                 while (rs.next()) {
                     String roomID;
-                    roomID = rs.getString("RoomID");                                  
+                    roomID = rs.getString("RoomID");
+
+                    listRooms.add(roomID);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+            alert.show();
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRooms;
+    }
+
+    @Override
+    public ObservableList<String> getAllStatusRoomID(String roomStatus) {
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomStatus='" + roomStatus + "'";
+        ObservableList<String> listRooms = FXCollections.observableArrayList();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    String roomID;
+                    roomID = rs.getString("RoomID");
+
+                    listRooms.add(roomID);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+            alert.show();
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRooms;
+    }
+
+    @Override
+    public ObservableList<String> getAllCustomerID() {
+        String sql = "SELECT CustomerID FROM Rooms";
+        ObservableList<String> listRooms = FXCollections.observableArrayList();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    String roomID;
+                    roomID = rs.getString("CustomerID");
+
+                    listRooms.add(roomID);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+            alert.show();
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRooms;
+    }
+
+    @Override
+    public ObservableList<String> getAllStatusCustomerID(String roomStatus) {
+        String sql = "SELECT CustomerID FROM Rooms WHERE RoomStatus='" + roomStatus + "'"
+                + " GROUP BY CustomerID";
+        ObservableList<String> listRooms = FXCollections.observableArrayList();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    String roomID;
+                    roomID = rs.getString("CustomerID");
 
                     listRooms.add(roomID);
                 }

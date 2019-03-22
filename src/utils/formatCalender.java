@@ -16,7 +16,7 @@ import javafx.scene.control.DatePicker;
  */
 public class formatCalender {
     public static void format(String pattern,DatePicker idNgayGiao){
-        idNgayGiao.setPromptText(pattern.toLowerCase());
+        //idNgayGiao.setPromptText(pattern.toLowerCase());
         idNgayGiao.setConverter(new StringConverter<LocalDate>() {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
             @Override

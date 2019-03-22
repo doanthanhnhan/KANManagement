@@ -34,7 +34,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
     @Override
     public ObservableList<ServiceOrder> getAllServiceOrders() {
-        String sql = "SELECT OrderID, RoomID, CustomerID, ServiceQuantity, ServiceOrderTime, ServiceNote FROM ServiceOrders WHERE ACTIVE=1";
+        String sql = "SELECT OrderID, RoomID, CustomerID, UserName, ServiceOrderDate, ServiceNote FROM ServicesOrders WHERE ACTIVE=1";
         ObservableList<ServiceOrder> listServiceOrders = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -42,10 +42,10 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
                     ServiceOrder serviceOrder = new ServiceOrder();
                     serviceOrder.setCustomerID(rs.getString("CustomerID"));
                     serviceOrder.setServiceOrderID(rs.getString("OrderID"));
-                    serviceOrder.setRoomID(rs.getString("RoomID"));
-                    serviceOrder.setServiceQuantity(rs.getInt("ServiceQuantity"));
+                    serviceOrder.setRoomID(rs.getString("RoomID"));                    
+                    serviceOrder.setUserName(rs.getString("UserName"));                    
                     serviceOrder.setServiceNote(rs.getNString("ServiceNote"));                    
-                    serviceOrder.setServiceOrderTime(rs.getTimestamp("ServiceOrderTime").toLocalDateTime());                   
+                    serviceOrder.setServiceOrderTime(rs.getTimestamp("ServiceOrderDate").toLocalDateTime());                   
 
                     listServiceOrders.add(serviceOrder);
                 }
@@ -58,13 +58,13 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
     @Override
     public void addServiceOrder(ServiceOrder serviceOrder) {
-        String sql = "INSERT INTO ServiceOrders (OrderID, RoomID, CustomerID, ServiceQuantity, ServiceOrderTime, ServiceNote) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO ServicesOrders (OrderID, RoomID, CustomerID, UserName, ServiceOrderDate, ServiceNote) VALUES (?,?,?,?,?,?)";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceOrder.getServiceOrderID());
                 stmt.setString(2, serviceOrder.getRoomID());
                 stmt.setString(3, serviceOrder.getCustomerID());
-                stmt.setFloat(4, serviceOrder.getServiceQuantity());
+                stmt.setString(4, serviceOrder.getUserName());
                 stmt.setTimestamp(5, Timestamp.valueOf(serviceOrder.getServiceOrderTime()));               
                 stmt.setNString(6, serviceOrder.getServiceNote());
                 stmt.executeUpdate();
@@ -76,15 +76,15 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
     @Override
     public void editServiceOrder(ServiceOrder serviceOrder, Boolean active) {
-        String sql = "UPDATE ServiceOrders SET OrderID=?, RoomID=?, CustomerID=?, "
-                + "ServiceQuantity=?, ServiceOrderTime=?, ServiceNote=?  "
+        String sql = "UPDATE ServicesOrders SET OrderID=?, RoomID=?, CustomerID=?, "
+                + "UserName=?, ServiceOrderDate=?, ServiceNote=?  "
                 + "WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceOrder.getServiceOrderID());
                 stmt.setString(2, serviceOrder.getRoomID());
                 stmt.setString(3, serviceOrder.getCustomerID());
-                stmt.setFloat(4, serviceOrder.getServiceQuantity());
+                stmt.setString(4, serviceOrder.getUserName());
                 stmt.setTimestamp(5, Timestamp.valueOf(serviceOrder.getServiceOrderTime()));               
                 stmt.setNString(6, serviceOrder.getServiceNote());
                 stmt.setString(7, serviceOrder.getServiceOrderID());
@@ -97,7 +97,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
     @Override
     public void deleteServiceOrder(ServiceOrder serviceOrder) {
-        String sql = "DELETE FROM ServiceOrders WHERE ServiceID=?";
+        String sql = "DELETE FROM ServicesOrders WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceOrder.getServiceOrderID());

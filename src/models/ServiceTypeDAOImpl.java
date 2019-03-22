@@ -47,7 +47,12 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                     if (rs.getBlob("Image") != null) {
                         serviceType.setServiceImage(rs.getBlob("Image"));
                     }
-                    serviceType.setServiceDescription(rs.getNString("ServiceDescription"));
+                    if(rs.getNString("ServiceDescription") != null){
+                        serviceType.setServiceDescription(rs.getNString("ServiceDescription"));
+                    } else {
+                        serviceType.setServiceDescription("");
+                    }
+                    
                     if (serviceType.getServiceImage() != null) {
                         byte[] bytes = serviceType.getServiceImage().getBytes(1l, (int) serviceType.getServiceImage().length());
                         BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));

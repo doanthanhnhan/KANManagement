@@ -31,7 +31,7 @@
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </JFXTextField>
-                              <JFXComboBox fx:id="comboBox_Customer_ID" prefWidth="300.0" promptText="Customer ID" />
+                              <JFXComboBox fx:id="comboBox_Customer_ID" labelFloat="true" prefWidth="300.0" promptText="Customer ID" />
                               <JFXDatePicker fx:id="datePicker_Order_Date" editable="false" onAction="#format_Order_Date" prefWidth="300.0" promptText="Order date" VBox.vgrow="ALWAYS" />
                               <JFXTextField fx:id="txt_Note" labelFloat="true" layoutX="10.0" layoutY="61.0" prefWidth="300.0" promptText="Note">
                                  <font>
@@ -42,7 +42,7 @@
                         </VBox>
                         <VBox layoutX="30.0" layoutY="30.0" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
                            <children>
-                              <JFXComboBox fx:id="comboBox_Service_ID" prefWidth="300.0" promptText="Service ID" />
+                              <JFXComboBox fx:id="comboBox_Service_ID" labelFloat="true" prefWidth="300.0" promptText="Service ID" />
                               <JFXTextField fx:id="txt_Service_Name" labelFloat="true" prefWidth="300.0" promptText="Service name">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
@@ -76,7 +76,7 @@
                         </VBox>
                         <VBox layoutX="30.0" layoutY="30.0" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
                            <children>
-                              <JFXComboBox fx:id="comboBox_Room_ID" prefWidth="300.0" promptText="Room ID" />
+                              <JFXComboBox fx:id="comboBox_Room_ID" labelFloat="true" prefWidth="300.0" promptText="Room ID" />
                               <HBox prefWidth="300.0" spacing="10.0">
                                  <children>
                                     <JFXTextField fx:id="txt_Order_Quantity" labelFloat="true" prefWidth="300.0" promptText="Order quantity">
@@ -105,7 +105,7 @@
                            <children>
                               <Label alignment="CENTER" contentDisplay="TOP" styleClass="label-with-image" text="Service image">
                                  <graphic>
-                                    <ImageView fx:id="imageView_Service_Image" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="imageView_Service_Image" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" />
                                  </graphic>
                                  <font>
                                     <Font name="System Bold" size="15.0" />

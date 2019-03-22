@@ -13,7 +13,11 @@ import java.util.List;
  */
 public interface RoomDAO {
     List<Room> getAllRoom();
-    List<String> getAllRoomID();
+    List<Room> getAllStatusRooms(String roomStatus);
+    List<String> getAllRoomID();    
+    List<String> getAllStatusRoomID(String roomStatus);
+    List<String> getAllCustomerID();
+    List<String> getAllStatusCustomerID(String roomStatus);
     void addRoom(Room room);
     void editRoom(Room room, Boolean active);
     void deleteRoom(Room room);

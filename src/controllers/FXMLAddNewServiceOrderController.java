@@ -13,6 +13,7 @@ import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -30,6 +31,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import models.Customer;
 import models.CustomerDAOImpl;
+import models.DAO;
 import models.RoleDAOImpl;
 import models.Room;
 import models.RoomDAOImpl;
@@ -72,6 +74,8 @@ public class FXMLAddNewServiceOrderController implements Initializable {
 
     public boolDecentralizationModel userRole;
     private Boolean check_Validate;
+    private Boolean check_ComboBox_CustomerID_Action;
+    private Boolean check_ComboBox_RoomID_Action;
 
     @FXML
     private JFXTextField txt_Order_ID;
@@ -127,16 +131,68 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         customerDAOImpl = new CustomerDAOImpl();
         roleDAOImpl = new RoleDAOImpl();
 
-        listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
+        check_Validate = false;
+        check_ComboBox_CustomerID_Action = false;
+        check_ComboBox_RoomID_Action = false;
         
+        listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
+        listRooms = roomDAOImpl.getAllStatusRooms("Occupied");
+
         listServiceTypesID = serviceTypeDAOImpl.getAllServiceTypeID();
-        listCustomersID = customerDAOImpl.getAllCustomersID();
-        listRoomsID = roomDAOImpl.getAllRoomID();
+        listCustomersID = roomDAOImpl.getAllStatusCustomerID("Occupied");
+        listRoomsID = roomDAOImpl.getAllStatusRoomID("Occupied");
 
         //Initialize comboBox
         comboBox_Customer_ID.getItems().addAll(listCustomersID);
         comboBox_Room_ID.getItems().addAll(listRoomsID);
         comboBox_Service_ID.getItems().addAll(listServiceTypesID);
+
+        //Initialize OrderID
+        txt_Order_ID.setText("KAN-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+        txt_Order_ID.setDisable(true);
+
+        //Set comboBox function
+        comboBox_Customer_ID.setOnAction((event) -> {
+            check_ComboBox_CustomerID_Action = true;
+            if (!check_ComboBox_RoomID_Action) {
+                for (Room roomCustomer : listRooms) {
+                    if (roomCustomer.getCustomerID().equals(comboBox_Customer_ID.getValue())) {
+                        comboBox_Room_ID.setValue(roomCustomer.getRoomID());
+                        break;
+                    }
+                }
+            }
+            check_ComboBox_CustomerID_Action = false;
+        });
+        comboBox_Room_ID.setOnAction((event) -> {
+            check_ComboBox_RoomID_Action = true;
+            if (!check_ComboBox_CustomerID_Action) {
+                for (Room room : listRooms) {
+                    if (room.getRoomID().equals(comboBox_Room_ID.getValue())) {
+                        comboBox_Customer_ID.setValue(room.getCustomerID());
+                        break;
+                    }
+                }
+            }
+            check_ComboBox_RoomID_Action = false;
+        });
+
+        comboBox_Service_ID.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                for (ServiceType serviceType : listServiceTypes) {
+                    if (serviceType.getServiceID().equals(newValue)) {
+                        txt_Service_Name.setText(serviceType.getServiceName());
+                        txt_Service_Unit.setText(serviceType.getServiceUnit());
+                        txt_Service_Price.setText(serviceType.getServicePrice().toString());
+                        txt_Service_Inventory.setText(serviceType.getServiceInventory().toString());
+                        datePicker_Import_Date.setValue(serviceType.getServiceInputDate().toLocalDate());
+                        txtArea_Service_Description.setText(serviceType.getServiceDescription());
+                        imageView_Service_Image.setImage(serviceType.getImageView().getImage());
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     public ServiceOrder get_Service_Order_Data() {
@@ -172,7 +228,7 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         ServiceOrderDetail serviceOrderDetail = get_Service_Order_Detail_Data();
         serviceOrderDetailDAOImpl.addServiceOrdersDetail(serviceOrderDetail);
     }
-    
+
     private void setColumns() {
         TableColumn<ServiceOrderDetail, String> serviceIDCol = new TableColumn<>("Service ID");
         TableColumn<ServiceOrderDetail, String> serviceNameCol = new TableColumn<>("Service name");
@@ -226,7 +282,7 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     public void showUsersData() {
         listServiceOrderDetails = serviceOrderDetailDAOImpl.get_All_Details_In_One_Order("");
         //table_ServiceType.getItems().clear();
-        tableView_Service_Order_Detail.setItems(listServiceOrderDetails);       
+        tableView_Service_Order_Detail.setItems(listServiceOrderDetails);
     }
 
     public void validateForm() {
@@ -285,5 +341,11 @@ public class FXMLAddNewServiceOrderController implements Initializable {
 
     @FXML
     private void save_Order_Action(ActionEvent event) {
+        System.out.println("Save order button clicked.");
+        ServiceOrder serviceOrder = get_Service_Order_Data();
+        serviceOrderDAOImpl.addServiceOrder(serviceOrder);
+        DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceOrderID: "
+                + FormatName.format(txt_Order_ID.getText()),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
     }
 }
