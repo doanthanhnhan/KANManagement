@@ -54,14 +54,14 @@ import utils.showFXMLLogin;
  * @author Doan Thanh Nhan
  */
 public class FXMLListEmployeeController implements Initializable {
-    
+
     public boolDecentralizationModel userRole;
     RoleDAOImpl roleDAOImpl;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     ObservableList<InfoEmployee> listEmp = FXCollections.observableArrayList();
     public static Boolean check_Edit_Action = false;
     public static InfoEmployee Emp;
-    public  static Boolean check_form_list = false;
+    public static Boolean check_form_list = false;
     private static final int ROWS_PER_PAGE = 4;
     private FilteredList<InfoEmployee> filteredData;
 
@@ -88,7 +88,7 @@ public class FXMLListEmployeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         FXMLMainFormController.checkRegis = true;
-        check_Edit_Action =true;
+        check_Edit_Action = true;
         setColumns();
         showUsersData();
         ConnectControllers.setfXMLListEmployeeController(this);
@@ -229,7 +229,7 @@ public class FXMLListEmployeeController implements Initializable {
 
     public void showUsersData() {
         try {
-            listEmp = DAO.getAllInfoEmployee();
+            listEmp = DAO.getAllInfoEmployee(FXMLLoginController.User_Login);
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -245,6 +245,7 @@ public class FXMLListEmployeeController implements Initializable {
                     || Emp.getEmployee_ID().toLowerCase().contains(newValue.toLowerCase())
                     || Emp.getFirst_Name().toLowerCase().contains(newValue.toLowerCase())
                     || Emp.getMid_Name().toLowerCase().contains(newValue.toLowerCase())
+                    || Emp.getGmail().toLowerCase().contains(newValue.toLowerCase())
                     || Emp.getSex().equals(male_Female(newValue))
                     || Emp.getLast_Name().toLowerCase().contains(newValue.toLowerCase())
                     || Emp.getAddress().toLowerCase().contains(newValue.toLowerCase())

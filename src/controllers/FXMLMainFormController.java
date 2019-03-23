@@ -288,9 +288,9 @@ public class FXMLMainFormController implements Initializable {
         if (!userRole.ischeckEmployee_Delete()) {
             //menu_Add.getItems().remove(menuItem_Add_Booking);
         }
-        if (!userRole.ischeckEmployee_Edit()) {
-            menu_Edit.getItems().remove(menuItem_Edit_Employee);
-        }
+//        if (!userRole.ischeckEmployee_Edit()) {
+//            menu_Edit.getItems().remove(menuItem_Edit_Employee);
+//        }
         if (!userRole.ischeckEmployee_View()) {
             menu_View.getItems().remove(menuItem_List_Employees);
         }

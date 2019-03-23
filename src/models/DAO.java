@@ -131,6 +131,12 @@ public class DAO {
         PreparedStatement pt = connection.prepareStatement(sql);
         pt.setString(1, User);
         ResultSet rs = pt.executeQuery();
+        if (!rs.next()) {
+            pt.close();
+            rs.close();
+            connection.close();
+            return null;
+        }
         while (rs.next()) {
             Emp.setActive(rs.getBoolean("Active"));
             Emp.setSerect_Question(rs.getString("Serect_Question"));
@@ -184,12 +190,96 @@ public class DAO {
         return false;
     }
 
-// Lấy ra Info của User
     public static ObservableList<InfoEmployee> getAllInfoEmployee() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<InfoEmployee> list = FXCollections.observableArrayList();
-        String sql = "select * from Employees where active = 1 and EmployeeID !='admin'";
+        String sql = "select * from Employees where active = 1";
         PreparedStatement pt = connection.prepareStatement(sql);
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            InfoEmployee Emp = new InfoEmployee();
+            Emp.setEmployee_ID(rs.getString("EmployeeID"));
+            Emp.setActive(rs.getBoolean("Active"));
+            Emp.setFirst_Name(rs.getString("EmployeeFirstName"));
+            if (rs.getString("EmployeeMidName") == null) {
+                Emp.setMid_Name("");
+            } else {
+                Emp.setMid_Name(rs.getString("EmployeeMidName"));
+            }
+            Emp.setLast_Name(rs.getString("EmployeeLastName"));
+            if (rs.getString("DepartmentID") == null) {
+                Emp.setWork_Dept("");
+            } else {
+                Emp.setWork_Dept(rs.getString("DepartmentID"));
+            }
+            if (rs.getString("PhoneNumber") == null) {
+                Emp.setPhone_No("");
+            } else {
+                Emp.setPhone_No(rs.getString("PhoneNumber"));
+            }
+            if (rs.getString("Job") == null) {
+                Emp.setJob("");
+            } else {
+                Emp.setJob(rs.getString("Job"));
+            }
+            Emp.setEDLEVEL(rs.getInt("EducatedLevel"));
+            Emp.setHiredate(rs.getString("HireDate"));
+
+            Emp.setBirthdate(rs.getString("Birthday"));
+            if (rs.getString("Salary") == null) {
+                Emp.setSalary("");
+            } else {
+                Emp.setSalary(rs.getString("Salary"));
+            }
+            if (rs.getString("Bonus") == null) {
+                Emp.setBonus("");
+            } else {
+                Emp.setBonus(rs.getString("Bonus"));
+            }
+            if (rs.getString("Address") == null) {
+                Emp.setAddress("");
+            } else {
+                Emp.setAddress(rs.getString("Address"));
+            }
+            if (rs.getString("Comm") == null) {
+                Emp.setComm("");
+            } else {
+                Emp.setComm(rs.getString("Comm"));
+            }
+            Emp.setGmail(rs.getString("Email"));
+            if (rs.getString("IDNumber") == null) {
+                Emp.setId_number("");
+            } else {
+                Emp.setId_number(rs.getString("IDNumber"));
+            }
+            Emp.setServiceImage(rs.getBlob("Image"));
+            if (rs.getBlob("Image") != null) {
+                try {
+                    byte[] bytes = Emp.getServiceImage().getBytes(1l, (int) Emp.getServiceImage().length());
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+                    Image image = SwingFXUtils.toFXImage(img, null);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(50);
+                    imageView.setFitWidth(50);
+                    Emp.setImageView(imageView);
+                } catch (IOException ex) {
+                    Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            Emp.setSex(rs.getBoolean("Sex"));
+            list.add(Emp);
+        }
+        return list;
+    }
+
+// Lấy ra Info của User
+    public static ObservableList<InfoEmployee> getAllInfoEmployee(String user) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<InfoEmployee> list = FXCollections.observableArrayList();
+        String sql = "select * from Employees where active = 1 and EmployeeID != ?";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        pt.setString(1, user);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
         while (rs.next()) {

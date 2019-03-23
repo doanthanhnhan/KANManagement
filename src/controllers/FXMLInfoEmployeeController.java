@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -59,6 +60,7 @@ import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
 import utils.FormatName;
+import utils.GetInetAddress;
 import utils.PatternValided;
 import utils.StageLoader;
 import utils.showFXMLLogin;
@@ -207,22 +209,22 @@ public class FXMLInfoEmployeeController implements Initializable {
                     } else {
                         Female.setSelected(true);
                     }
-                    if (Emp.getWork_Dept() != null) {
+                    if (!Emp.getWork_Dept().isEmpty()) {
                         DepartmentId.setText(Emp.getWork_Dept());
                     }
-                    if (Emp.getJob() != null) {
+                    if (!Emp.getJob().isEmpty()) {
                         Job.setText(Emp.getWork_Dept());
                     }
-                    if (Emp.getComm() != null || !Emp.getComm().equals(0)) {
+                    if (Emp.getComm().isEmpty()) {
                         Comm.setText(Emp.getComm());
                     }
-                    if (Emp.getSalary() != null || !Emp.getSalary().equals(0)) {
+                    if (!Emp.getSalary().isEmpty()) {
                         Salary.setText(Emp.getSalary());
                     }
-                    if (Emp.getBonus() != null || !Emp.getBonus().equals(0)) {
+                    if (!Emp.getBonus().isEmpty()) {
                         Bonus.setText(Emp.getBonus());
                     }
-                    if (Emp.getEDLEVEL() != null) {
+                    if (!Emp.getEDLEVEL().toString().isEmpty()) {
                         EducatedLevel.setText(String.valueOf(Emp.getEDLEVEL()));
                     }
                     newPhone.setText(Emp.getPhone_No());
@@ -331,10 +333,10 @@ public class FXMLInfoEmployeeController implements Initializable {
             System.out.println("Kiem tra newItem: " + newItem);
             if (newItem != null && !newItem.equals("")) {
                 try {
-                    if (!FXMLListEmployeeController.check_form_list){
+                    if (!FXMLListEmployeeController.check_form_list) {
                         Emp = DAO.getInfoEmployee(boxId.getValue());
                     }
-                    
+
                 } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -790,6 +792,8 @@ public class FXMLInfoEmployeeController implements Initializable {
                             } catch (IOException | ClassNotFoundException ex) {
                                 Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update " + boxId.getValue(),
+                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                             newPhone.setText("");
                             boxId.setValue(null);
                             birthday.setValue(null);
@@ -822,11 +826,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                             validateInfoEmployee = true;
                             if (FXMLListEmployeeController.check_Edit_Action) {
                                 fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
-                                try {
-                                    fXMLListEmployeeController.table_ListEmployee.setItems(DAO.getAllInfoEmployee());
-                                } catch (ClassNotFoundException | SQLException ex) {
-                                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                                fXMLListEmployeeController.showUsersData();
                             }
                             System.out.println("Vào chỗ submit admin");
                         });
@@ -840,6 +840,8 @@ public class FXMLInfoEmployeeController implements Initializable {
                             } catch (ClassNotFoundException | SQLException ex) {
                                 Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update " + boxId.getValue(),
+                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                             check_delete = false;
                             validateInfoEmployee = true;
                             System.out.println("Vào chỗ submit user");
@@ -850,7 +852,6 @@ public class FXMLInfoEmployeeController implements Initializable {
                 }
             }
         }
-        System.out.println("Ket thuc ham validation");
     }
 
     public void enter_Submit_Action() {

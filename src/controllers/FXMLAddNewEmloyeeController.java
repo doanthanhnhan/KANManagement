@@ -16,6 +16,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -41,6 +43,7 @@ import models.notificationFunction;
 import utils.AlertLoginAgain;
 import utils.PatternValided;
 import utils.FormatName;
+import utils.GetInetAddress;
 import utils.StageLoader;
 import utils.showFXMLLogin;
 
@@ -302,11 +305,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             MD5Encrypt m;
                             m = new MD5Encrypt();
                             String Password = m.hashPass("123456");
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                            Calendar cal = Calendar.getInstance();
-                            String logtime;
-                            logtime = dateFormat.format(cal.getTime());
-                            DAO.AddUser(newId.getText(), Username, Password, logtime);
+                            DAO.AddUser(newId.getText(), Username, Password, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
                             if (DAO.checkFirstLogin().equals(1)) {
                                 DAO.setRoleAdmin(newId.getText());
                             } else {
@@ -317,7 +316,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                                     "KAN@123456", "Default username and password", content);
 
                             if (!DAO.checkFirstLogin().equals(1)) {
-                                DAO.setUserLogs(FXMLLoginController.User_Login, "Create " + newId.getText(), logtime);
+                                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create "+ newId.getText(),
+                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
                             }
                             newFirstname.setText("");
                             newMidname.setText("");
@@ -325,13 +325,13 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             newGmail.setText("");
                             newId.setText("");
                             newId.requestFocus();
-                            if (FXMLListEmployeeController.check_form_list) {
+                            if (FXMLListEmployeeController.check_Edit_Action) {
                                 fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
-                                fXMLListEmployeeController.table_ListEmployee.setItems(DAO.getAllInfoEmployee());
+                                fXMLListEmployeeController.showUsersData();
                             }
                             if (FXMLDecentralizationController.check_form_list) {
                                 fXMLDecentralizationController = ConnectControllers.getfXMLDecentralizationController();
-                                fXMLDecentralizationController.tableDecentralization.setItems(DAOcheckRole.getAllDecentralization());
+                                fXMLListEmployeeController.showUsersData();
                             }
                         } catch (SQLException ex) {
                             Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);

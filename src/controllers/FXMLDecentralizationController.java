@@ -27,6 +27,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
@@ -79,6 +80,8 @@ public class FXMLDecentralizationController implements Initializable {
     private String delete;
     private String view;
     private String edit;
+        @FXML
+    private ContextMenu contextMenu_Main;
     /**
      * Initializes the controller class.
      *
@@ -87,6 +90,9 @@ public class FXMLDecentralizationController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        contextMenu_Main.getItems().remove(menuItem_Add);
+        contextMenu_Main.getItems().remove(menuItem_Delete);
+        contextMenu_Main.getItems().remove(menuItem_Edit);
         ConnectControllers.setfXMLDecentralizationController(this);
         try {
             listEmp = DAOcheckRole.getAllDecentralization();
@@ -203,18 +209,6 @@ public class FXMLDecentralizationController implements Initializable {
             }
         });
         // Check item when click on table
-        tableDecentralization.setOnMouseClicked((MouseEvent event) -> {
-            if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
-                    && tableDecentralization.getSelectionModel().getSelectedItem() != null) {
-                menuItem_Edit.setDisable(false);
-                menuItem_Delete.setDisable(false);
-                Emp = tableDecentralization.getSelectionModel().getSelectedItem();
-            } else {
-                menuItem_Edit.setDisable(true);
-                menuItem_Delete.setDisable(true);
-            }
-        });
-        System.out.println("hello");
     }
 
     private void changeTableView(int index, int limit) {

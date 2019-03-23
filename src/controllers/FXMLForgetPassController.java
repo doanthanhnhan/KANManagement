@@ -15,6 +15,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -37,6 +39,7 @@ import javafx.stage.Stage;
 import models.DAO;
 import models.InfoEmployee;
 import models.notificationFunction;
+import utils.GetInetAddress;
 import utils.PatternValided;
 import utils.MD5Encrypt;
 
@@ -184,19 +187,19 @@ public class FXMLForgetPassController implements Initializable {
             Emp = DAO.getInfoForgetPassEmployee(UserForget);
             MD5Encrypt m = new MD5Encrypt();
 //            Kiểm tra account block thì ko cho thực hiện bất kì điều gì nữa
-            if (!Emp.getActive()) {
+            if(Emp == null){
+                System.out.println("ko ton tai");
+            }
+            else if (!Emp.getActive()) {
                 notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "ACCOUNT IS LOCKED !!!");
             } //          Xử lý  khi câu hỏi và câu trả lời chính xác
             else if (Emp.getSerect_Question().equals(m.hashPass(txtSerectQuestion.getValue()))
                     && Emp.getSerect_Answer().equals(m.hashPass(textSerectAnswer.getText()))) {
 
                 DAO.forgetPass(txtForgetUsername.getText(), m.hashPass(txtForgetPassword.getText()));
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                Calendar cal = Calendar.getInstance();
-                String logtime;
-                logtime = dateFormat.format(cal.getTime());
                 String content = "Change New Password";
-                DAO.setUserLogs(txtForgetUsername.getText(), content, logtime);
+                DAO.setUserLogs_With_MAC(txtForgetUsername.getText(), content,
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                 Stage stage = (Stage) btnSubmit.getScene().getWindow();
                 stage.close();
             } else {

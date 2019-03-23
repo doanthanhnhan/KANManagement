@@ -16,6 +16,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -40,6 +42,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.notificationFunction;
+import utils.GetInetAddress;
 import utils.MD5Encrypt;
 import utils.StageLoader;
 
@@ -144,7 +147,7 @@ public class FXMLLoginController implements Initializable {
             public void handle(Event event) {
                 System.out.println("Finished");
                 Platform.runLater(() -> {
-                    btnLogin.setDisable(false);                    
+                    btnLogin.setDisable(false);
                     stageLoader.closeStage();
                     stageLoader.stopTimeline();
                 });
@@ -242,13 +245,9 @@ public class FXMLLoginController implements Initializable {
                                         stageEdit.initStyle(StageStyle.UNDECORATED);
 
                                     } else {
-
-                                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                        Calendar cal = Calendar.getInstance();
-                                        String logtime;
-                                        logtime = dateFormat.format(cal.getTime());
-                                        DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
-                                        DAO.reset_CheckLogin(txtUserName.getText(), logtime);
+                                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Login",
+                                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                                        DAO.reset_CheckLogin(txtUserName.getText(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
                                         stageEdit.setTitle("KANManagement");
                                     }
@@ -278,11 +277,7 @@ public class FXMLLoginController implements Initializable {
             notificationFunction.notification(txtUserName, hboxContent, "USER MUST NOT EMPTY !!!");
         } else {
             Emp = DAO.getListCheckLogin(txtUserName.getText());
-            if (Emp == null) {
-                notificationFunction.notification(txtUserName, hboxContent, "ACCOUNT DOES NOT EXIST !!!");
-            } else if (!Emp.getActive()) {
-                notificationFunction.notification(txtUserName, hboxContent, "ACCOUNT IS LOCKED !!!");
-            } else if (!DAO.checkSetPass(txtUserName.getText())) {
+            if (!DAO.checkSetPass(txtUserName.getText())&& Emp != null) {
                 notificationFunction.notification(txtUserName, hboxContent, "USER DOESN'T HAVE SECRET QUESTIONS!!!");
             } else {
                 User_Login = txtUserName.getText();
