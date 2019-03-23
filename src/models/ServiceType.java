@@ -30,6 +30,16 @@ public class ServiceType {
     public ServiceType() {
     }
 
+    public ServiceType(ServiceType serviceType) {
+        this.serviceID = serviceType.getServiceID();
+        this.serviceName = serviceType.getServiceName();
+        this.serviceUnit = serviceType.getServiceID();
+        this.servicePrice = serviceType.getServicePrice();
+        this.serviceImage = serviceType.getServiceImage();
+        this.imageView = serviceType.getImageView();
+        this.serviceDescription = serviceType.getServiceDescription();
+    }
+
     public ServiceType(String serviceID, String serviceName, String serviceUnit, Float servicePrice, Blob serviceImage, ImageView imageView, String serviceDescription) {
         this.serviceID = serviceID;
         this.serviceName = serviceName;

@@ -188,7 +188,19 @@ public class FXMLForgetPassController implements Initializable {
             MD5Encrypt m = new MD5Encrypt();
 //            Kiểm tra account block thì ko cho thực hiện bất kì điều gì nữa
             if(Emp == null){
-                System.out.println("ko ton tai");
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(300, 35);
+                label.setText("QUESTION OR ANSWER WRONG!!!");
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                txtSerectQuestion.requestFocus();
             }
             else if (!Emp.getActive()) {
                 notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "ACCOUNT IS LOCKED !!!");

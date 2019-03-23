@@ -245,9 +245,12 @@ public class FXMLLoginController implements Initializable {
                                         stageEdit.initStyle(StageStyle.UNDECORATED);
 
                                     } else {
-                                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Login",
+
+                                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Login successful",
                                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                         DAO.reset_CheckLogin(txtUserName.getText(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+
+
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
                                         stageEdit.setTitle("KANManagement");
                                     }

@@ -485,6 +485,9 @@ WHERE R.CustomerID = C.CustomerID
 SELECT * FROM Rooms
 DELETE FROM Rooms
 
+SELECT CustomerID, COUNT(CustomerID) FROM Rooms WHERE RoomStatus='Occupied'
+GROUP BY CustomerID
+
 SELECT * FROM ServiceType
 DELETE FROM ServiceType
 INSERT INTO ServiceType(ServiceID, UserName, ServiceName, ServiceUnit, ServicePrice, ServiceInventory, InputDate) VALUES
