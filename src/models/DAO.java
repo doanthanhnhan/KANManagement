@@ -7,6 +7,7 @@ package models;
 
 import controllers.FXMLAddNewServiceTypeController;
 import controllers.FXMLInfoEmployeeController;
+import controllers.FXMLLoginController;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,10 +26,14 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
@@ -39,8 +44,108 @@ import javax.sql.rowset.serial.SerialBlob;
  * @author Admin
  */
 public class DAO {
-// Lấy ra thông tin của tài khoản đăng nhập
+// reset lại số lần gõ sai theo dia chi Mac
 
+    public static void reset_CheckMac(String MACAddress) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String ex = "UPDATE CheckBlockMacAddress set Times = ? where MACAddress=?";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setInt(1, 0);
+        pts.setString(2, MACAddress);
+        pts.execute();
+        pts.close();
+        connection.close();
+    }
+    public static Integer check_Active_MacAddress(String MACAddress) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String sql = "select Active from CheckBlockMacAddress where MACAddress=?";
+        PreparedStatement pp = connection.prepareStatement(sql);
+        pp.setString(1, MACAddress);
+        ResultSet rsp;
+        rsp = pp.executeQuery();
+        int active = 0;
+        while (rsp.next()) {
+            active = rsp.getInt("Active");
+        }
+        pp.close();
+        rsp.close();
+        connection.close();
+        return active;
+    }
+//    check Invalid Mac
+
+    public static boolean check_invalid(String MACAddress) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String sql = "select * from CheckBlockMacAddress where MACAddress=?";
+        PreparedStatement pp = connection.prepareStatement(sql);
+        pp.setString(1, MACAddress);
+        ResultSet rsp;
+        rsp = pp.executeQuery();
+        if (rsp.next()) {
+            rsp.close();
+            pp.close();
+            connection.close();
+            return true;
+        }
+        rsp.close();
+        pp.close();
+        connection.close();
+        return false;
+    }
+//    checkMacAddress
+
+    public static void check_MacAddress(String Time, String MACAddress) throws SQLException, ClassNotFoundException {
+        if (!check_invalid(MACAddress)) {
+            Connection connection = connectDB.connectSQLServer();
+            String sql = "Insert Into CheckBlockMacAddress(MACAddress,Times) values(?,?)";
+            PreparedStatement pp = connection.prepareStatement(sql);
+            pp.setString(1, MACAddress);
+            pp.setInt(2, 0);
+            pp.execute();
+            connection.close();
+            pp.close();
+        }
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "select Times from CheckBlockMacAddress where MACAddress = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, MACAddress);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        int Count = 0;
+        while (rs.next()) {
+            Count = rs.getInt("Times");
+        }
+        Count++;
+        rs.close();
+        pt.close();
+        String ex = "UPDATE CheckBlockMacAddress SET Times = ? WHERE MACAddress = ?";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setInt(1, Count);
+        pts.setString(2, MACAddress);
+        pts.execute();
+        pts.close();
+        if (Count == 7) {
+            String e = "UPDATE CheckBlockMacAddress SET Active = ? WHERE MACAddress = ?";
+            PreparedStatement p = connection.prepareStatement(e);
+            p.setInt(1, 0);
+            p.setString(2, MACAddress);
+            p.execute();
+            p.close();
+            DAO.setUserLogs_With_MAC(MACAddress, "MacAddress is Locked",
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), MACAddress);
+            p.close();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Your device has been blocked from using this program !!!");
+            alert.setContentText("Please contact the administrator for reuse !!!");
+            alert.showAndWait();
+            Platform.exit();
+        }
+        connection.close();
+        pts.close();
+    }
+
+// Lấy ra thông tin của tài khoản đăng nhập
     public static InfoEmployee getListCheckLogin(String User) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         // Tạo đối tượng Statement.

@@ -201,6 +201,7 @@ public class FXMLForgetPassController implements Initializable {
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
                 txtSerectQuestion.requestFocus();
+                DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
             }
             else if (!Emp.getActive()) {
                 notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "ACCOUNT IS LOCKED !!!");
@@ -236,6 +237,7 @@ public class FXMLForgetPassController implements Initializable {
                     DAO.reset_CheckLogin(txtForgetUsername.getText(), logtime);
                 }
                 DAO.check_Login(txtForgetUsername.getText(), logtime);
+                DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
             }
         }
     }
