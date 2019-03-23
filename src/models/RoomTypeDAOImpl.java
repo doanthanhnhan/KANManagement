@@ -10,13 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import utils.FormatName;
 import utils.connectDB;
 
 /**
@@ -34,8 +32,8 @@ public class RoomTypeDAOImpl implements RoomTypeDAO {
                 while (rs.next()) {
                     RoomType roomType = new RoomType();
                     roomType.setType(rs.getString("RoomType"));
-                    roomType.setDiscount(rs.getFloat("Discount"));
-                    roomType.setPrice(rs.getFloat("Price"));
+                    roomType.setDiscount(rs.getBigDecimal("Discount"));
+                    roomType.setPrice(rs.getBigDecimal("Price"));
                     roomType.setActive(rs.getBoolean("Active"));
 
                     listRoomTypes.add(roomType);
@@ -59,8 +57,8 @@ public class RoomTypeDAOImpl implements RoomTypeDAO {
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, roomType.getType());
-                stmt.setFloat(2, roomType.getPrice());
-                stmt.setFloat(3, roomType.getDiscount());
+                stmt.setBigDecimal(2, roomType.getPrice());
+                stmt.setBigDecimal(3, roomType.getDiscount());
                 stmt.setBoolean(4, roomType.isActive());
                 stmt.executeUpdate();
             }
@@ -81,8 +79,8 @@ public class RoomTypeDAOImpl implements RoomTypeDAO {
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, roomType.getType());
-                stmt.setFloat(2, roomType.getPrice());
-                stmt.setFloat(3, roomType.getDiscount());
+                stmt.setBigDecimal(2, roomType.getPrice());
+                stmt.setBigDecimal(3, roomType.getDiscount());
                 stmt.setBoolean(4, roomType.isActive());
                 stmt.setString(5, roomType.getType());
                 stmt.executeUpdate();

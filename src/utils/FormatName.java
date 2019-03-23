@@ -31,11 +31,21 @@ public class FormatName {
             return str;
         }
     }
-    
+    public static String format_Trim_Space(String str){
+        if(str.equals("")){
+            return str;
+        }
+        else{
+            str = (str.replaceAll("[\\s]\\s{1,}", " ")).trim();            
+            return str;
+        }
+    }
     public static void main(String[] args) {
         String str = "338/32 hoàng     diỆU  đà     NẵnG     ";
-        str = format(str);
+//        str = format(str);
+//        System.out.println(str);
+        str = format_Trim_Space(str);
         System.out.println(str);
-//        
+
     }
 }

@@ -11,7 +11,9 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.FXMLListServiceTypeController.serviceTypeItem;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +26,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -152,14 +155,30 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         comboBox_Customer_ID.getItems().addAll(listCustomersID);
         comboBox_Room_ID.getItems().addAll(listRoomsID);
         comboBox_Service_ID.getItems().addAll(listServiceTypesID);
+        comboBox_Service_ID.setDisable(true);
 
         //Initialize OrderID
         txt_Order_ID.setText("KAN-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
-        txt_Order_ID.setDisable(true);
+        txt_Order_ID.setEditable(false);
 
         //Initialize Buttons
         btn_Add_Service.setDisable(true);
         btn_Edit_Service.setDisable(true);
+
+        //Initialize Text field
+        txt_Discount.setEditable(false);
+        txt_Order_Quantity.setEditable(false);
+        txt_Service_Inventory.setEditable(false);
+        txt_Service_Name.setEditable(false);
+        txt_Service_Price.setEditable(false);
+        txt_Service_Unit.setEditable(false);
+        txtArea_Service_Description.setEditable(false);
+
+        //Initialize DatePicker
+        datePicker_Import_Date.setDisable(true);
+        datePicker_Order_Date.setDisable(true);
+        formatCalender.format("dd-MM-yyyy", datePicker_Order_Date);
+        datePicker_Order_Date.setValue(LocalDate.now());
 
         //Set comboBox function
         comboBox_Customer_ID.setOnAction((event) -> {
@@ -187,35 +206,51 @@ public class FXMLAddNewServiceOrderController implements Initializable {
             check_ComboBox_RoomID_Action = false;
         });
 
-        comboBox_Service_ID.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                for (ServiceType serviceType : listServiceTypes) {
-                    if (serviceType.getServiceID().equals(newValue)) {
-                        txt_Service_Name.setText(serviceType.getServiceName());
-                        txt_Service_Unit.setText(serviceType.getServiceUnit());
-                        txt_Service_Price.setText(serviceType.getServicePrice().toString());
-                        txt_Service_Inventory.setText(serviceType.getServiceInventory().toString());
-                        datePicker_Import_Date.setValue(serviceType.getServiceInputDate().toLocalDate());
-                        txtArea_Service_Description.setText(serviceType.getServiceDescription());
-                        imageView_Service_Image.setImage(serviceType.getImageView().getImage());
+        comboBox_Service_ID.setOnAction((event) -> {
+            for (ServiceType serviceType : listServiceTypes) {
+                if (serviceType.getServiceID().equals(comboBox_Service_ID.getValue())) {
+                    txt_Service_Name.setText(serviceType.getServiceName());
+                    txt_Service_Unit.setText(serviceType.getServiceUnit());
+                    txt_Service_Price.setText(serviceType.getServicePrice().toString());
+                    txt_Service_Inventory.setText(serviceType.getServiceInventory().toString());
+                    txt_Discount.setText("0");
+                    txt_Order_Quantity.setText("1");
+                    datePicker_Import_Date.setValue(serviceType.getServiceInputDate().toLocalDate());
+                    txtArea_Service_Description.setText(serviceType.getServiceDescription());
+                    imageView_Service_Image.setImage(serviceType.getImageView().getImage());
 
-                        selected_Service_Type = new ServiceType(serviceType);
-                        break;
-                    }
-
+                    selected_Service_Type = new ServiceType(serviceType);
+                    
+                    txt_Order_Quantity.requestFocus();
+                    btn_Add_Service.setDisable(false);
+                    btn_Edit_Service.setDisable(true);
+                    break;
                 }
+
             }
         });
-        
+
         //Select object ServiceOrderDetail from table
         // Check item when click on table
         tableView_Service_Order_Detail.setOnMouseClicked((MouseEvent event) -> {
             if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
                     && tableView_Service_Order_Detail.getSelectionModel().getSelectedItem() != null) {
-//                menuItem_Edit.setDisable(false);
-//                menuItem_Delete.setDisable(false);
+                btn_Add_Service.setDisable(true);
+                btn_Edit_Service.setDisable(false);
                 System.out.println(tableView_Service_Order_Detail.getSelectionModel().getSelectedItem().getServiceID());
                 selected_Service_Order_Detail = tableView_Service_Order_Detail.getSelectionModel().getSelectedItem();
+
+                txtArea_Service_Description.setText(selected_Service_Order_Detail.getServiceDescription());
+                txt_Discount.setText(String.valueOf(selected_Service_Order_Detail.getServiceDiscount()));
+                txt_Order_Quantity.setText(String.valueOf(selected_Service_Order_Detail.getServiceQuantity()));
+                txt_Service_Inventory.setText(String.valueOf(selected_Service_Order_Detail.getServiceInventory()));
+                txt_Service_Name.setText(selected_Service_Order_Detail.getServiceName());
+                txt_Service_Price.setText(String.valueOf(selected_Service_Order_Detail.getServicePrice()));
+                txt_Service_Unit.setText(selected_Service_Order_Detail.getServiceUnit());
+
+                //Set double time to ignore event of comboBox
+                comboBox_Service_ID.setValue(selected_Service_Order_Detail.getServiceID());
+                comboBox_Service_ID.setValue(selected_Service_Order_Detail.getServiceID());
             } else {
 //                menuItem_Edit.setDisable(true);
 //                menuItem_Delete.setDisable(true);
@@ -230,6 +265,17 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     public void refresh_After_Remove() {
         showUsersData();
         refresh_Service_Type();
+        
+        txtArea_Service_Description.setText("");
+        txt_Discount.setText("");
+        txt_Order_Quantity.setText("");
+        txt_Service_Inventory.setText("");
+        txt_Service_Name.setText("");
+        txt_Service_Price.setText("");
+        txt_Service_Unit.setText("");
+        datePicker_Import_Date.setValue(null);
+        comboBox_Service_ID.setValue(null);
+        imageView_Service_Image.setImage(null);
     }
 
     public void refresh_After_Add() {
@@ -257,8 +303,8 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         ServiceOrder serviceOrder = new ServiceOrder();
         serviceOrder.setCustomerID(comboBox_Customer_ID.getValue());
         serviceOrder.setRoomID(comboBox_Room_ID.getValue());
-        serviceOrder.setServiceNote(FormatName.format(txt_Note.getText()));
-        serviceOrder.setServiceOrderID(FormatName.format(txt_Order_ID.getText()));
+        serviceOrder.setServiceNote(FormatName.format_Trim_Space(txt_Note.getText()));
+        serviceOrder.setServiceOrderID(txt_Order_ID.getText());
         //Setting localdatetime (DatePicker + LocalTime.now())
         serviceOrder.setServiceOrderTime(LocalDateTime.of(datePicker_Order_Date.getValue(), LocalTime.now()));
         serviceOrder.setUserName(mainFormController.userRole.getEmployee_ID());
@@ -268,10 +314,10 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     public ServiceOrderDetail get_Service_Order_Detail_Data() {
         ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail();
         serviceOrderDetail.setActive(true);
-        serviceOrderDetail.setOrderID(FormatName.format(txt_Order_ID.getText()));
-        serviceOrderDetail.setServiceDiscount(Float.valueOf(txt_Discount.getText()));
+        serviceOrderDetail.setOrderID(txt_Order_ID.getText());
+        serviceOrderDetail.setServiceDiscount(BigDecimal.valueOf(Double.valueOf(txt_Discount.getText())));
         serviceOrderDetail.setServiceID(FormatName.format(comboBox_Service_ID.getValue()));
-        serviceOrderDetail.setServicePriceTotal(Float.valueOf(txt_Service_Price.getText()) * Integer.valueOf(txt_Order_Quantity.getText()));
+        serviceOrderDetail.setServicePriceTotal(BigDecimal.valueOf(Double.valueOf(txt_Service_Price.getText()) * Integer.valueOf(txt_Order_Quantity.getText())));
         serviceOrderDetail.setServiceQuantity(Integer.valueOf(txt_Order_Quantity.getText()));
         serviceOrderDetail.setUserName(mainFormController.userRole.getEmployee_ID());
         return serviceOrderDetail;
@@ -285,6 +331,21 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     public void add_New_ServiceOrderDetail() {
         ServiceOrderDetail serviceOrderDetail = get_Service_Order_Detail_Data();
         serviceOrderDetailDAOImpl.addServiceOrdersDetail(serviceOrderDetail);
+
+        //Update service type infomations
+        selected_Service_Type.setServiceInventory(Integer.valueOf(txt_Service_Inventory.getText()) - Integer.valueOf(txt_Order_Quantity.getText()));
+        selected_Service_Type.setServiceInputDate(LocalDateTime.now());
+        selected_Service_Type.setUserName(mainFormController.getUserRole().getEmployee_ID());
+        serviceTypeDAOImpl.editServiceType(selected_Service_Type, true);
+
+        DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceOrderDetail, ServiceName: "
+                + FormatName.format(txt_Service_Name.getText()),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+
+        refresh_After_Add();
+        
+        btn_Add_Service.setDisable(true);
+        comboBox_Service_ID.requestFocus();
     }
 
     private void setColumns() {
@@ -293,8 +354,8 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         TableColumn<ServiceOrderDetail, String> serviceUnitCol = new TableColumn<>("Service unit");
         TableColumn<ServiceOrderDetail, Float> servicePriceCol = new TableColumn<>("Service price");
         TableColumn<ServiceOrderDetail, Integer> serviceQuantityCol = new TableColumn<>("Order quantity");
-        TableColumn<ServiceOrderDetail, Float> serviceTotalPriceCol = new TableColumn<>("Total");
-        TableColumn<ServiceOrderDetail, Float> serviceDiscountCol = new TableColumn<>("Discount");
+        TableColumn<ServiceOrderDetail, BigDecimal> serviceTotalPriceCol = new TableColumn<>("Total");
+        TableColumn<ServiceOrderDetail, BigDecimal> serviceDiscountCol = new TableColumn<>("Discount");
         TableColumn<ServiceOrderDetail, ImageView> serviceImageCol = new TableColumn<>("Service image");
         TableColumn<ServiceOrderDetail, String> serviceDescriptionCol = new TableColumn<>("Service description");
         TableColumn<ServiceOrderDetail, JFXButton> serviceRemoveCol = new TableColumn<>("Action");
@@ -349,8 +410,8 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         //table_ServiceType.getItems().clear();
         tableView_Service_Order_Detail.setItems(listServiceOrderDetails);
     }
-    
-    public void update_Service_Type_After_Remove(){
+
+    public void update_Service_Type_After_Remove() {
         selected_Service_Type.setServiceInventory(selected_Service_Order_Detail.getServiceInventory() + selected_Service_Order_Detail.getServiceQuantity());
         selected_Service_Type.setServiceInputDate(LocalDateTime.now());
         selected_Service_Type.setUserName(mainFormController.getUserRole().getEmployee_ID());
@@ -404,22 +465,51 @@ public class FXMLAddNewServiceOrderController implements Initializable {
 
     @FXML
     private void add_Service_Action(ActionEvent event) {
+        //Add serviceorderdetail
         ServiceOrderDetail serviceOrderDetail = get_Service_Order_Detail_Data();
-        serviceOrderDetailDAOImpl.addServiceOrdersDetail(serviceOrderDetail);
-        selected_Service_Type.setServiceInventory(Integer.valueOf(txt_Service_Inventory.getText()) - Integer.valueOf(txt_Order_Quantity.getText()));
-        selected_Service_Type.setServiceInputDate(LocalDateTime.now());
-        selected_Service_Type.setUserName(mainFormController.getUserRole().getEmployee_ID());
-        serviceTypeDAOImpl.editServiceType(selected_Service_Type, true);
+        if (tableView_Service_Order_Detail.getItems().size() > 0) {
+            Boolean check_serviceID = false;
+            for (ServiceOrderDetail sod : tableView_Service_Order_Detail.getItems()) {
+                if (sod.getServiceID().equals(serviceOrderDetail.getServiceID())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Message");
+                    alert.setHeaderText("Duplicated service warning");
+                    alert.setContentText("Selected service existed! If you want to change informations of this service, please use Edit Function!");
+                    alert.show();
+                    check_serviceID = true;
+                    break;
+                }
+            }
+            if (!check_serviceID) {
+                add_New_ServiceOrderDetail();
+            }
+        } else {
+            add_New_ServiceOrderDetail();
+        }
 
-        DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceOrderDetail, ServiceName: "
-                + FormatName.format(txt_Service_Name.getText()),
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
-
-        refresh_After_Add();
     }
 
     @FXML
     private void edit_Service_Action(ActionEvent event) {
+        //Add serviceorderdetail
+        ServiceOrderDetail serviceOrderDetail = get_Service_Order_Detail_Data();
+        serviceOrderDetailDAOImpl.editServiceOrdersDetail(serviceOrderDetail, true);
+        //Update service type infomations
+        selected_Service_Type.setServiceInventory(Integer.valueOf(txt_Service_Inventory.getText())
+                + selected_Service_Order_Detail.getServiceQuantity()
+                - Integer.valueOf(txt_Order_Quantity.getText()));
+        selected_Service_Type.setServiceInputDate(LocalDateTime.now());
+        selected_Service_Type.setUserName(mainFormController.getUserRole().getEmployee_ID());
+        serviceTypeDAOImpl.editServiceType(selected_Service_Type, true);
+
+        DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Edit ServiceOrderDetail, ServiceName: "
+                + FormatName.format(txt_Service_Name.getText()),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+
+        refresh_After_Add();
+        
+        btn_Edit_Service.setDisable(true);
+        comboBox_Service_ID.requestFocus();
     }
 
     @FXML
@@ -431,8 +521,16 @@ public class FXMLAddNewServiceOrderController implements Initializable {
                 + FormatName.format(txt_Order_ID.getText()),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
 
-        btn_Add_Service.setDisable(false);
-        btn_Edit_Service.setDisable(false);
+        btn_Save_Order.setDisable(true);        
+        
+        comboBox_Customer_ID.setDisable(true);
+        comboBox_Room_ID.setDisable(true);
+        comboBox_Service_ID.setDisable(false);
+        comboBox_Service_ID.requestFocus();
+        txt_Note.setDisable(true);
+        
+        txt_Discount.setEditable(true);
+        txt_Order_Quantity.setEditable(true);
         setColumns();
         showUsersData();
     }

@@ -705,4 +705,16 @@ public class FXMLMainFormController implements Initializable {
         formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Add new Service Order");
     }
 
+    @FXML
+    private void handle_MenuItem_List_Service_Orders_Action(ActionEvent event) {
+        System.out.println("List service orders item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listRooms_Tab", "Rooms");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_Service_Orders_Details_Action(ActionEvent event) {
+        System.out.println("List service orders details item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listRooms_Tab", "Rooms");
+    }
+
 }

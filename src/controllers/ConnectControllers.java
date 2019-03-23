@@ -18,6 +18,8 @@ public class ConnectControllers {
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
     public static FXMLAddNewServiceOrderController fXMLAddNewServiceOrderController;
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
+    public static FXMLListServiceOrderController fXMLListServiceOrderController;
+    public static FXMLListServiceOrderDetailController fXMLListServiceOrderDetailController;
     public static FXMLListEmployeeController fXMLListEmployeeController;
     public static FXMLListRoomsController fXMLListRoomsController;
     public static FXMLInfoEmployeeController fXMLInfoEmployeeController;
@@ -31,6 +33,7 @@ public class ConnectControllers {
     public static void setfXMLDecentralizationController(FXMLDecentralizationController fXMLDecentralizationController) {
         ConnectControllers.fXMLDecentralizationController = fXMLDecentralizationController;
     }
+
     public static FXMLInfoEmployeeController getfXMLInfoEmployeeController() {
         return fXMLInfoEmployeeController;
     }
@@ -119,6 +122,22 @@ public class ConnectControllers {
 
     public static void setfXMLAddNewServiceOrderController(FXMLAddNewServiceOrderController fXMLAddNewServiceOrderController) {
         ConnectControllers.fXMLAddNewServiceOrderController = fXMLAddNewServiceOrderController;
+    }
+
+    public static FXMLListServiceOrderController getfXMLListServiceOrderController() {
+        return fXMLListServiceOrderController;
+    }
+
+    public static void setfXMLListServiceOrderController(FXMLListServiceOrderController fXMLListServiceOrderController) {
+        ConnectControllers.fXMLListServiceOrderController = fXMLListServiceOrderController;
+    }
+
+    public static FXMLListServiceOrderDetailController getfXMLListServiceOrderDetailController() {
+        return fXMLListServiceOrderDetailController;
+    }
+
+    public static void setfXMLListServiceOrderDetailController(FXMLListServiceOrderDetailController fXMLListServiceOrderDetailController) {
+        ConnectControllers.fXMLListServiceOrderDetailController = fXMLListServiceOrderDetailController;
     }
 
 }

@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.sql.Blob;
@@ -303,8 +304,8 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         serviceType.setServiceInventory(Integer.parseInt(FormatName.format(serviceInventory.getText())));
         //Setting localdatetime (DatePicker + LocalTime.now())
         serviceType.setServiceInputDate(LocalDateTime.of(serviceImportDate.getValue(), LocalTime.now()));
-        serviceType.setServiceDescription(FormatName.format(txtArea_Service_Description.getText()));
-        serviceType.setServicePrice(Float.parseFloat(servicePrice.getText()));
+        serviceType.setServiceDescription(FormatName.format_Trim_Space(txtArea_Service_Description.getText()));
+        serviceType.setServicePrice(BigDecimal.valueOf(Double.valueOf(servicePrice.getText())));
         BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
         byte[] res;
         try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {

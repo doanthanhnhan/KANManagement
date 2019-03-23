@@ -35,6 +35,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import models.DAO;
 import models.RoleDAOImpl;
+import models.ServiceOrderDetail;
 import models.ServiceType;
 import models.ServiceTypeDAOImpl;
 import models.boolDecentralizationModel;
@@ -46,7 +47,7 @@ import utils.StageLoader;
  *
  * @author Doan Thanh Nhan
  */
-public class FXMLListServiceTypeController implements Initializable {
+public class FXMLListServiceOrderDetailController implements Initializable {
 
     ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
     ServiceTypeDAOImpl serviceTypeDAOImpl;
@@ -61,7 +62,6 @@ public class FXMLListServiceTypeController implements Initializable {
     
     private FXMLMainFormController mainFormController;
 
-    @FXML
     private TableView<ServiceType> table_ServiceType;
     @FXML
     private MenuItem menuItem_Edit;
@@ -77,6 +77,8 @@ public class FXMLListServiceTypeController implements Initializable {
     private Pagination pagination;
     @FXML
     private ContextMenu contextMenu_Main;
+    @FXML
+    private TableView<ServiceOrderDetail> table_Service_Order_Detail;
 
     /**
      * Initializes the controller class.
@@ -84,7 +86,7 @@ public class FXMLListServiceTypeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("List Service Type initialize...");
-        ConnectControllers.setfXMLListServiceTypeController(this);
+        //ConnectControllers.setfXMLListServiceTypeController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
         serviceTypeDAOImpl = new ServiceTypeDAOImpl();
         roleDAOImpl = new RoleDAOImpl();

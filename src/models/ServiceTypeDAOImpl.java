@@ -14,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -43,7 +42,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                     serviceType.setServiceID(rs.getString("ServiceID"));
                     serviceType.setServiceName(rs.getNString("ServiceName"));
                     serviceType.setServiceUnit(rs.getNString("ServiceUnit"));
-                    serviceType.setServicePrice(rs.getFloat("ServicePrice"));
+                    serviceType.setServicePrice(rs.getBigDecimal("ServicePrice"));
                     if (rs.getBlob("Image") != null) {
                         serviceType.setServiceImage(rs.getBlob("Image"));
                     }
@@ -108,7 +107,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setString(1, serviceType.getServiceID());
                 stmt.setNString(2, serviceType.getServiceName());
                 stmt.setNString(3, serviceType.getServiceUnit());
-                stmt.setFloat(4, serviceType.getServicePrice());
+                stmt.setBigDecimal(4, serviceType.getServicePrice());
                 stmt.setBlob(5, serviceType.getServiceImage());
                 stmt.setBoolean(6, true);
                 stmt.setNString(7, serviceType.getServiceDescription());
@@ -140,7 +139,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setString(1, serviceType.getServiceID());
                 stmt.setNString(2, serviceType.getServiceName());
                 stmt.setNString(3, serviceType.getServiceUnit());
-                stmt.setFloat(4, serviceType.getServicePrice());
+                stmt.setBigDecimal(4, serviceType.getServicePrice());
                 stmt.setBlob(5, serviceType.getServiceImage());
                 stmt.setBoolean(6, active);
                 stmt.setNString(7, serviceType.getServiceDescription());

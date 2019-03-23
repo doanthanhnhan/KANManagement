@@ -48,8 +48,8 @@
                               <MenuItem fx:id="menuItem_List_Employees" mnemonicParsing="false" onAction="#handle_MenuItem_List_Employee_Action" text="List Employees" />
                               <MenuItem fx:id="menuItem_List_Role" mnemonicParsing="false" onAction="#handle_MenuItem_List_Role_Action" text="List Role" />
                               <MenuItem fx:id="menuItem_List_Rooms" mnemonicParsing="false" onAction="#handle_MenuItem_List_Rooms_Action" text="List Rooms" />
-                              <MenuItem fx:id="menuItem_List_Service_Orders" mnemonicParsing="false" text="List Service Orders" />
-                              <MenuItem fx:id="menuItem_List_Service_Orders_Details" mnemonicParsing="false" text="List Service Orders Details" />
+                              <MenuItem fx:id="menuItem_List_Service_Orders" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Orders_Action" text="List Service Orders" />
+                              <MenuItem fx:id="menuItem_List_Service_Orders_Details" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Orders_Details_Action" text="List Service Orders Details" />
                               <MenuItem fx:id="menuItem_List_Service_Type" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Type_Action" text="List Service Type" />
                               <MenuItem fx:id="menuItem_List_Users" mnemonicParsing="false" text="List Users" />
                               <MenuItem fx:id="menuItem_List_User_Role" mnemonicParsing="false" text="List User Role" />

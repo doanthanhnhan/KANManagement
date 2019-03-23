@@ -19,7 +19,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -29,7 +28,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
-import utils.FormatName;
 import utils.connectDB;
 
 /**
@@ -50,8 +48,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceOrderDetail.setServiceID(rs.getString("ServiceID"));
                 serviceOrderDetail.setUserName(rs.getString("UserName"));
                 serviceOrderDetail.setServiceQuantity(rs.getInt("ServiceQuantity"));
-                serviceOrderDetail.setServicePrice(rs.getFloat("Price"));
-                serviceOrderDetail.setServiceDiscount(rs.getFloat("Discount"));
+                serviceOrderDetail.setServicePriceTotal(rs.getBigDecimal("Price"));
+                serviceOrderDetail.setServiceDiscount(rs.getBigDecimal("Discount"));
                 serviceOrderDetail.setActive(rs.getBoolean("Active"));
 
                 listServiceOrderDetails.add(serviceOrderDetail);
@@ -82,8 +80,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceOrderDetail.setServiceID(rs.getString("ServiceID"));
                 serviceOrderDetail.setUserName(rs.getString("UserName"));
                 serviceOrderDetail.setServiceQuantity(rs.getInt("ServiceQuantity"));
-                serviceOrderDetail.setServicePriceTotal(rs.getFloat("Price"));
-                serviceOrderDetail.setServiceDiscount(rs.getFloat("Discount"));
+                serviceOrderDetail.setServicePriceTotal(rs.getBigDecimal("Price"));
+                serviceOrderDetail.setServiceDiscount(rs.getBigDecimal("Discount"));
                 serviceOrderDetail.setActive(rs.getBoolean("Active"));
 
                 JFXButton serviceRemoveButton = new JFXButton("Remove");
@@ -103,7 +101,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                     
                     ServiceType serviceType = new ServiceType();
                     ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
-                    //Date are not changed
+                    //Data are not changed
                     serviceType.setImageView(serviceOrderDetail.getImageView());
                     serviceType.setServiceDescription(serviceOrderDetail.getServiceDescription());
                     serviceType.setServiceID(serviceOrderDetail.getServiceID());
@@ -123,7 +121,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
                 serviceOrderDetail.setServiceName(rs.getNString("ServiceName"));
                 serviceOrderDetail.setServiceUnit(rs.getNString("ServiceUnit"));
-                serviceOrderDetail.setServicePrice(rs.getFloat("ServicePrice"));
+                serviceOrderDetail.setServicePrice(rs.getBigDecimal("ServicePrice"));
                 if (rs.getBlob("Image") != null) {
                     serviceOrderDetail.setServiceImage(rs.getBlob("Image"));
                 }
@@ -165,8 +163,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 stmt.setString(2, serviceOrderDetail.getServiceID());
                 stmt.setString(3, serviceOrderDetail.getUserName());
                 stmt.setInt(4, serviceOrderDetail.getServiceQuantity());
-                stmt.setFloat(5, serviceOrderDetail.getServicePriceTotal());
-                stmt.setFloat(6, serviceOrderDetail.getServiceDiscount());
+                stmt.setBigDecimal(5, serviceOrderDetail.getServicePriceTotal());
+                stmt.setBigDecimal(6, serviceOrderDetail.getServiceDiscount());
                 stmt.setBoolean(7, true);
 
                 stmt.executeUpdate();
@@ -185,17 +183,18 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
     public void editServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail, Boolean active) {
         String sql = "UPDATE ServicesOrderDetails SET OrderID=?, ServiceID=?, UserName=?, "
                 + "ServiceQuantity=?, Price=?, Discount=?, Active=? "
-                + "WHERE ServiceID=?";
+                + "WHERE ServiceID=? AND OrderID=?";
 
         try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, serviceOrderDetail.getOrderID());
             stmt.setString(2, serviceOrderDetail.getServiceID());
             stmt.setString(3, serviceOrderDetail.getUserName());
             stmt.setInt(4, serviceOrderDetail.getServiceQuantity());
-            stmt.setFloat(5, serviceOrderDetail.getServicePrice());
-            stmt.setFloat(6, serviceOrderDetail.getServiceDiscount());
+            stmt.setBigDecimal(5, serviceOrderDetail.getServicePriceTotal());
+            stmt.setBigDecimal(6, serviceOrderDetail.getServiceDiscount());
             stmt.setBoolean(7, true);
-            stmt.setString(8, serviceOrderDetail.getOrderID());
+            stmt.setString(8, serviceOrderDetail.getServiceID());
+            stmt.setString(9, serviceOrderDetail.getOrderID());
             stmt.executeUpdate();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);

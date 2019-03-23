@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.math.BigDecimal;
 import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Calendar;
@@ -20,7 +21,7 @@ public class ServiceType {
     private String userName;
     private String serviceName;
     private String serviceUnit;
-    private Float servicePrice;
+    private BigDecimal servicePrice;
     private Integer serviceInventory;
     private LocalDateTime serviceInputDate;
     private Blob serviceImage;
@@ -44,7 +45,6 @@ public class ServiceType {
         this.serviceID = serviceID;
         this.serviceName = serviceName;
         this.serviceUnit = serviceUnit;
-        this.servicePrice = servicePrice;
         this.serviceImage = serviceImage;
         this.imageView = imageView;
         this.serviceDescription = serviceDescription;
@@ -82,11 +82,11 @@ public class ServiceType {
         this.serviceUnit = serviceUnit;
     }
 
-    public Float getServicePrice() {
+    public BigDecimal getServicePrice() {
         return servicePrice;
     }
 
-    public void setServicePrice(Float servicePrice) {
+    public void setServicePrice(BigDecimal servicePrice) {
         this.servicePrice = servicePrice;
     }
 

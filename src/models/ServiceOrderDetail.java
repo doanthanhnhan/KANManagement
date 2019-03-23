@@ -6,11 +6,10 @@
 package models;
 
 import com.jfoenix.controls.JFXButton;
+import java.math.BigDecimal;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -23,16 +22,14 @@ public class ServiceOrderDetail extends ServiceType {
 
     private StringProperty orderID;
     private IntegerProperty serviceQuantity;
-    private FloatProperty servicePriceTotal;
-    private FloatProperty serviceDiscount;
+    private BigDecimal servicePriceTotal;
+    private BigDecimal serviceDiscount;
     private BooleanProperty active;
     private JFXButton serviceRemoveButton;
 
     public ServiceOrderDetail() {
         this.active = new SimpleBooleanProperty();
         this.orderID = new SimpleStringProperty();
-        this.serviceDiscount = new SimpleFloatProperty();
-        this.servicePriceTotal = new SimpleFloatProperty();
         this.serviceQuantity = new SimpleIntegerProperty();
         this.serviceRemoveButton = new JFXButton("Remove");
     }
@@ -61,16 +58,12 @@ public class ServiceOrderDetail extends ServiceType {
         return serviceQuantity;
     }
 
-    public final float getServiceDiscount() {
-        return serviceDiscount.get();
-    }
-
-    public final void setServiceDiscount(float value) {
-        serviceDiscount.set(value);
-    }
-
-    public FloatProperty serviceDiscountProperty() {
+    public BigDecimal getServiceDiscount() {
         return serviceDiscount;
+    }
+
+    public void setServiceDiscount(BigDecimal serviceDiscount) {
+        this.serviceDiscount = serviceDiscount;
     }
 
     public final boolean isActive() {
@@ -85,16 +78,12 @@ public class ServiceOrderDetail extends ServiceType {
         return active;
     }
 
-    public final float getServicePriceTotal() {
-        return servicePriceTotal.get();
-    }
-
-    public final void setServicePriceTotal(float value) {
-        servicePriceTotal.set(value);
-    }
-
-    public FloatProperty servicePriceTotalProperty() {
+    public BigDecimal getServicePriceTotal() {
         return servicePriceTotal;
+    }
+
+    public void setServicePriceTotal(BigDecimal servicePriceTotal) {
+        this.servicePriceTotal = servicePriceTotal;
     }
 
     public JFXButton getServiceRemoveButton() {

@@ -5,10 +5,9 @@
  */
 package models;
 
+import java.math.BigDecimal;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -19,14 +18,12 @@ import javafx.beans.property.StringProperty;
 public class RoomType {
 
     private StringProperty type;
-    private FloatProperty price;
-    private FloatProperty discount;
+    private BigDecimal price;
+    private BigDecimal discount;
     private BooleanProperty active;
 
     public RoomType() {
         this.active = new SimpleBooleanProperty();
-        this.discount = new SimpleFloatProperty();
-        this.price = new SimpleFloatProperty();
         this.type = new SimpleStringProperty();
     }
 
@@ -42,28 +39,20 @@ public class RoomType {
         return type;
     }
 
-    public final float getPrice() {
-        return price.get();
-    }
-
-    public final void setPrice(float value) {
-        price.set(value);
-    }
-
-    public FloatProperty priceProperty() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public final float getDiscount() {
-        return discount.get();
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public final void setDiscount(float value) {
-        discount.set(value);
-    }
-
-    public FloatProperty discountProperty() {
+    public BigDecimal getDiscount() {
         return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
     }
 
     public final boolean isActive() {

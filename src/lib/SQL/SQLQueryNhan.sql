@@ -556,4 +556,4 @@ DELETE FROM CheckInOrders
 
 SELECT R.*, U.UserName FROM [Role] R, Users U WHERE R.EmployeeID=U.EmployeeID
 
-
+SELECT * FROM UserLogs
