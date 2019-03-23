@@ -202,6 +202,9 @@ public class FXMLAddNewServiceOrderController implements Initializable {
             }
         });
     }
+    public void refresh_Service_Type(){
+        listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
+    }
     public ServiceType get_Service_Type_Data(){
         ServiceType serviceType = new ServiceType(selected_Service_Type);        
         return serviceType;
@@ -352,7 +355,18 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     private void add_Service_Action(ActionEvent event) {
         ServiceOrderDetail serviceOrderDetail = get_Service_Order_Detail_Data();
         serviceOrderDetailDAOImpl.addServiceOrdersDetail(serviceOrderDetail);
+        selected_Service_Type.setServiceInventory(Integer.valueOf(txt_Service_Inventory.getText())-Integer.valueOf(txt_Order_Quantity.getText()));
+        selected_Service_Type.setServiceInputDate(LocalDateTime.now());
+        selected_Service_Type.setUserName(mainFormController.getUserRole().getEmployee_ID());
+        serviceTypeDAOImpl.editServiceType(selected_Service_Type, true);
+        
+        DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceOrderDetail, ServiceName: "
+                + FormatName.format(txt_Service_Name.getText()),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+        
         showUsersData();
+        refresh_Service_Type();
+        
         txtArea_Service_Description.setText("");
         txt_Discount.setText("");
         txt_Order_Quantity.setText("");
@@ -363,9 +377,7 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         datePicker_Import_Date.setValue(null);
         comboBox_Service_ID.setValue(null);
         
-        DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceOrderDetail, ServiceName: "
-                + FormatName.format(txt_Service_Name.getText()),
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+        
     }
 
     @FXML

@@ -6,6 +6,8 @@
 package models;
 
 import com.jfoenix.controls.JFXButton;
+import controllers.ConnectControllers;
+import controllers.FXMLMainFormController;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +28,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
+import utils.FormatName;
 import utils.connectDB;
 
 /**
@@ -66,7 +71,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
         String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.* FROM ServicesOrderDetails SOD \n"
                 + "INNER JOIN ServiceType ST\n"
                 + "ON SOD.ServiceID = ST.ServiceID\n"
-                + "WHERE SOD.OrderID='" + serviceOrderID +"'";
+                + "WHERE SOD.OrderID='" + serviceOrderID + "'";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
         try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -83,7 +88,12 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 JFXButton serviceRemoveButton = new JFXButton("Remove");
                 serviceRemoveButton.getStyleClass().add("btn-red-color");
                 serviceRemoveButton.setOnAction((event) -> {
+                    FXMLMainFormController mainFormController = new FXMLMainFormController();
+                    mainFormController = ConnectControllers.getfXMLMainFormController();
                     deleteServiceOrdersDetail(serviceOrderDetail);
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceOrderDetail, ServiceName: "
+                            + serviceOrderDetail.getServiceName(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                 });
                 serviceOrderDetail.setServiceRemoveButton(serviceRemoveButton);
 
