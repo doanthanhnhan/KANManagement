@@ -10,14 +10,15 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.DAO;
+import utils.GetInetAddress;
 
 /**
  *
@@ -30,20 +31,28 @@ public class Login extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        if (DAO.checkFirstLogin() == 0) {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
-            stage.setTitle("Add New Employee");
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-        } else {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
-            stage.setTitle("Login");
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+        if (DAO.check_invalid(GetInetAddress.getMacAddress()) && DAO.check_Active_MacAddress(GetInetAddress.getMacAddress()).equals(0)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Your device has been blocked from using this program !!!");
+            alert.setContentText("Please contact the administrator for reuse !!!");
+            alert.showAndWait();
+        } else{
+            if (DAO.checkFirstLogin() == 0) {
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+                stage.setTitle("Add New Employee");
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            } else {
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+                stage.setTitle("Login");
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            }
+            stage.resizableProperty().setValue(Boolean.FALSE);
+            stage.getIcons().add(new Image("/images/KAN Logo.png"));
+            stage.show();
         }
-        stage.resizableProperty().setValue(Boolean.FALSE);
-        stage.getIcons().add(new Image("/images/KAN Logo.png"));
-        stage.show();
     }
 
     @Override

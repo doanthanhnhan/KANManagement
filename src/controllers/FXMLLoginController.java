@@ -178,7 +178,12 @@ public class FXMLLoginController implements Initializable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            notificationFunction.notification(txtUserName, hboxContent, "USER OR PASSWORD WRONG!!!");
+                            try {
+                                DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
+                            } catch (SQLException | ClassNotFoundException ex) {
+                                Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            notificationFunction.notification(txtUserName, hboxContent, "USER OR PASSWORD WRONG !!!");
                         }
                     });
                 } else {
@@ -196,6 +201,7 @@ public class FXMLLoginController implements Initializable {
                             @Override
                             public void run() {
                                 try {
+                                    DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     Calendar cal = Calendar.getInstance();
                                     String logtime;
@@ -249,8 +255,7 @@ public class FXMLLoginController implements Initializable {
                                         DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Login successful",
                                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                         DAO.reset_CheckLogin(txtUserName.getText(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
-
-
+                                        DAO.reset_CheckMac(GetInetAddress.getMacAddress());
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
                                         stageEdit.setTitle("KANManagement");
                                     }
