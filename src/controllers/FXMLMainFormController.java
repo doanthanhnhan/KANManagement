@@ -46,6 +46,7 @@ import utils.FormatName;
 import utils.GetInetAddress;
 
 import utils.MyTimer;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -462,9 +463,15 @@ public class FXMLMainFormController implements Initializable {
         alert.setContentText("Are you sure to log out?");
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
+            try {
+                //formLoader("/fxml/FXMLLogin.fxml", "/images/KAN Logo.png", "Login");
+                showFXMLLogin showLogin = new showFXMLLogin();
+                showLogin.showFormLogin();
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Stage stage = (Stage) btn_Toolbar_User_Logout.getScene().getWindow();
-            stage.close();
-            formLoader("/fxml/FXMLLogin.fxml", "/images/KAN Logo.png", "Login");
+            stage.close();            
         }
     }
 

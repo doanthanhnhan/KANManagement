@@ -66,7 +66,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
         String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.* FROM ServicesOrderDetails SOD \n"
                 + "INNER JOIN ServiceType ST\n"
                 + "ON SOD.ServiceID = ST.ServiceID\n"
-                + "WHERE SOD.OrderID=" + serviceOrderID;
+                + "WHERE SOD.OrderID='" + serviceOrderID +"'";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
         try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -76,7 +76,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceOrderDetail.setServiceID(rs.getString("ServiceID"));
                 serviceOrderDetail.setUserName(rs.getString("UserName"));
                 serviceOrderDetail.setServiceQuantity(rs.getInt("ServiceQuantity"));
-                serviceOrderDetail.setServicePrice(rs.getFloat("Price"));
+                serviceOrderDetail.setServicePriceTotal(rs.getFloat("Price"));
                 serviceOrderDetail.setServiceDiscount(rs.getFloat("Discount"));
                 serviceOrderDetail.setActive(rs.getBoolean("Active"));
 
@@ -131,7 +131,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 stmt.setString(2, serviceOrderDetail.getServiceID());
                 stmt.setString(3, serviceOrderDetail.getUserName());
                 stmt.setInt(4, serviceOrderDetail.getServiceQuantity());
-                stmt.setFloat(5, serviceOrderDetail.getServicePrice());
+                stmt.setFloat(5, serviceOrderDetail.getServicePriceTotal());
                 stmt.setFloat(6, serviceOrderDetail.getServiceDiscount());
                 stmt.setBoolean(7, true);
 
