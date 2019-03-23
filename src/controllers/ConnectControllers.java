@@ -16,6 +16,7 @@ public class ConnectControllers {
     public static FXMLForgetPassController fXMLForgetPassController;
     public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController;
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
+    public static FXMLAddNewServiceOrderController fXMLAddNewServiceOrderController;
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
     public static FXMLListEmployeeController fXMLListEmployeeController;
     public static FXMLListRoomsController fXMLListRoomsController;
@@ -110,6 +111,14 @@ public class ConnectControllers {
 
     public static void setfXMLSplashScreenController(FXMLSplashScreenController fXMLSplashScreenController) {
         ConnectControllers.fXMLSplashScreenController = fXMLSplashScreenController;
+    }
+
+    public static FXMLAddNewServiceOrderController getfXMLAddNewServiceOrderController() {
+        return fXMLAddNewServiceOrderController;
+    }
+
+    public static void setfXMLAddNewServiceOrderController(FXMLAddNewServiceOrderController fXMLAddNewServiceOrderController) {
+        ConnectControllers.fXMLAddNewServiceOrderController = fXMLAddNewServiceOrderController;
     }
 
 }

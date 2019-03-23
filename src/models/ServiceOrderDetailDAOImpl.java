@@ -7,6 +7,7 @@ package models;
 
 import com.jfoenix.controls.JFXButton;
 import controllers.ConnectControllers;
+import controllers.FXMLAddNewServiceOrderController;
 import controllers.FXMLMainFormController;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -89,11 +90,34 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceRemoveButton.getStyleClass().add("btn-red-color");
                 serviceRemoveButton.setOnAction((event) -> {
                     FXMLMainFormController mainFormController = new FXMLMainFormController();
+                    FXMLAddNewServiceOrderController addNewServiceOrderController = new FXMLAddNewServiceOrderController();
                     mainFormController = ConnectControllers.getfXMLMainFormController();
+                    addNewServiceOrderController = ConnectControllers.getfXMLAddNewServiceOrderController();
+
                     deleteServiceOrdersDetail(serviceOrderDetail);
+                    
                     DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceOrderDetail, ServiceName: "
                             + serviceOrderDetail.getServiceName(),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+                    //addNewServiceOrderController.update_Service_Type_After_Remove();
+                    
+                    ServiceType serviceType = new ServiceType();
+                    ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
+                    //Date are not changed
+                    serviceType.setImageView(serviceOrderDetail.getImageView());
+                    serviceType.setServiceDescription(serviceOrderDetail.getServiceDescription());
+                    serviceType.setServiceID(serviceOrderDetail.getServiceID());
+                    serviceType.setServiceImage(serviceOrderDetail.getServiceImage());
+                    serviceType.setServiceName(serviceOrderDetail.getServiceName());
+                    serviceType.setServicePrice(serviceOrderDetail.getServicePrice());
+                    serviceType.setServiceUnit(serviceOrderDetail.getServiceUnit());
+                    //Data are changed
+                    serviceType.setServiceInventory(serviceOrderDetail.getServiceInventory() + serviceOrderDetail.getServiceQuantity());
+                    serviceType.setServiceInputDate(LocalDateTime.now());
+                    serviceType.setUserName(mainFormController.getUserRole().getEmployee_ID());
+                    serviceTypeDAOImpl.editServiceType(serviceType, true);
+                    //Refresh
+                    addNewServiceOrderController.refresh_After_Remove();
                 });
                 serviceOrderDetail.setServiceRemoveButton(serviceRemoveButton);
 
