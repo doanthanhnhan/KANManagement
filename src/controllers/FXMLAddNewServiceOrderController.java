@@ -203,8 +203,7 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         });
     }
     public ServiceType get_Service_Type_Data(){
-        ServiceType serviceType = new ServiceType();
-        //serviceType.set
+        ServiceType serviceType = new ServiceType(selected_Service_Type);        
         return serviceType;
     }
     public ServiceOrder get_Service_Order_Data() {

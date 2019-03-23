@@ -16,6 +16,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -40,6 +42,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.notificationFunction;
+import utils.FormatName;
+import utils.GetInetAddress;
 import utils.MD5Encrypt;
 import utils.StageLoader;
 
@@ -144,7 +148,7 @@ public class FXMLLoginController implements Initializable {
             public void handle(Event event) {
                 System.out.println("Finished");
                 Platform.runLater(() -> {
-                    btnLogin.setDisable(false);                    
+                    btnLogin.setDisable(false);
                     stageLoader.closeStage();
                     stageLoader.stopTimeline();
                 });
@@ -247,7 +251,9 @@ public class FXMLLoginController implements Initializable {
                                         Calendar cal = Calendar.getInstance();
                                         String logtime;
                                         logtime = dateFormat.format(cal.getTime());
-                                        DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
+//                                        DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
+                                        DAO.setUserLogs_With_MAC(txtUserName.getText(), "Login successful",                                                
+                                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                         DAO.reset_CheckLogin(txtUserName.getText(), logtime);
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
                                         stageEdit.setTitle("KANManagement");
