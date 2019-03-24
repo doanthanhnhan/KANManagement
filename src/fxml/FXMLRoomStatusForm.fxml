@@ -54,16 +54,21 @@
                         <Label id="label_Repaired_Status" fx:id="label_Repair_Status" layoutX="80.0" layoutY="10.0" text="Repaired" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefWidth="200.0" spacing="5.0">
+                  <HBox id="hBox_Buttons" fx:id="hBox_Buttons" alignment="CENTER" prefWidth="200.0" spacing="5.0">
                      <children>
-                        <JFXButton id="btn_CheckIn" fx:id="btn_Check_In" prefWidth="125.0" styleClass="loginBtn" text="Check in">
+                        <JFXButton id="btn_CheckIn" fx:id="btn_Check_In" prefWidth="125.0" styleClass="btn-blue-color" text="Check in">
                            <graphic>
-                              <MaterialDesignIconView glyphName="LOGIN" styleClass="glyph-icon-room-status" />
+                              <MaterialDesignIconView glyphName="LOGIN" styleClass="glyph-icon-white" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton id="btn_CheckOut" fx:id="btn_Check_Out" prefWidth="125.0" styleClass="loginBtn" text="Check out">
+                        <JFXButton id="btn_Services" fx:id="btn_Service" layoutX="136.0" layoutY="10.0" prefWidth="125.0" styleClass="btn-warning-color" text="Services">
                            <graphic>
-                              <MaterialDesignIconView glyphName="LOGOUT" styleClass="glyph-icon-room-status" />
+                              <MaterialDesignIconView glyphName="CART" styleClass="glyph-icon-white" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton id="btn_CheckOut" fx:id="btn_Check_Out" prefWidth="125.0" styleClass="btn-red-color" text="Check out">
+                           <graphic>
+                              <MaterialDesignIconView glyphName="LOGOUT" styleClass="glyph-icon-white" />
                            </graphic>
                         </JFXButton>
                      </children>

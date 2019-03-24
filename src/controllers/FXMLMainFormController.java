@@ -708,13 +708,13 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_List_Service_Orders_Action(ActionEvent event) {
         System.out.println("List service orders item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listRooms_Tab", "Rooms");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listServiceOrders_Tab", "Service Orders");
     }
 
     @FXML
     private void handle_MenuItem_List_Service_Orders_Details_Action(ActionEvent event) {
         System.out.println("List service orders details item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listRooms_Tab", "Rooms");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
     }
 
 }

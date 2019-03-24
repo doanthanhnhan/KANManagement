@@ -9,6 +9,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -52,13 +53,13 @@ public class FXMLListServiceOrderController implements Initializable {
     public boolDecentralizationModel userRole;
 
     public Boolean check_Edit_Action;
-    public static ServiceOrder serviceOrderItem;
+    public ServiceOrder serviceOrderItem;
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<ServiceOrder> filteredData;
-    
-    private FXMLMainFormController mainFormController;    
-    
+
+    private FXMLMainFormController mainFormController;
+
     @FXML
     private MenuItem menuItem_Edit;
     @FXML
@@ -78,6 +79,9 @@ public class FXMLListServiceOrderController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -86,18 +90,19 @@ public class FXMLListServiceOrderController implements Initializable {
         mainFormController = ConnectControllers.getfXMLMainFormController();
         serviceOrderDAOImpl = new ServiceOrderDAOImpl();
         roleDAOImpl = new RoleDAOImpl();
-        check_Edit_Action = new Boolean(false);
+        check_Edit_Action = false;
         setColumns();
-        if(serviceOrderDAOImpl.getAllServiceOrders().size() != 0){
+        if (!serviceOrderDAOImpl.getAllServiceOrders().isEmpty()) {
             showUsersData();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+                alert.show();
+            });
         }
-        
 
         // Check item when click on table
         table_Service_Order.setOnMouseClicked((MouseEvent event) -> {
@@ -160,8 +165,8 @@ public class FXMLListServiceOrderController implements Initializable {
         TableColumn<ServiceOrder, String> orderIDCol = new TableColumn<>("Order ID");
         TableColumn<ServiceOrder, String> customerIDCol = new TableColumn<>("Customer ID");
         TableColumn<ServiceOrder, String> roomIDCol = new TableColumn<>("Room ID");
-        TableColumn<ServiceOrder, String> userNameCol = new TableColumn<>("User name");        
-        TableColumn<ServiceOrder, LocalDateTime> orderDateCol = new TableColumn<>("Order date");        
+        TableColumn<ServiceOrder, String> userNameCol = new TableColumn<>("User name");
+        TableColumn<ServiceOrder, LocalDateTime> orderDateCol = new TableColumn<>("Order date");
         TableColumn<ServiceOrder, String> orderNoteCol = new TableColumn<>("Order note");
 
         TableColumn numberCol = new TableColumn("#");
@@ -180,7 +185,7 @@ public class FXMLListServiceOrderController implements Initializable {
         roomIDCol.setCellValueFactory(new PropertyValueFactory<>("roomID"));
         userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
         orderDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceOrderTime"));
-        orderNoteCol.setCellValueFactory(new PropertyValueFactory<>("serviceNote"));        
+        orderNoteCol.setCellValueFactory(new PropertyValueFactory<>("serviceNote"));
 
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -188,7 +193,7 @@ public class FXMLListServiceOrderController implements Initializable {
         roomIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         userNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        orderNoteCol.setStyle("-fx-alignment: CENTER-LEFT;");        
+        orderNoteCol.setStyle("-fx-alignment: CENTER-LEFT;");
 
         // Thêm cột vào bảng
         table_Service_Order.getColumns().clear();
@@ -210,12 +215,12 @@ public class FXMLListServiceOrderController implements Initializable {
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(
                     serviceOrder -> newValue == null || newValue.isEmpty()
-                    || serviceOrder.getServiceOrderID().toLowerCase().contains(newValue.toLowerCase())                    
+                    || serviceOrder.getServiceOrderID().toLowerCase().contains(newValue.toLowerCase())
                     || serviceOrder.getCustomerID().toLowerCase().contains(newValue.toLowerCase())
                     || serviceOrder.getRoomID().toLowerCase().contains(newValue.toLowerCase())
                     //|| serviceOrder.getServiceNote().toLowerCase().contains(newValue.toLowerCase())
                     || serviceOrder.getServiceOrderTime().toString().contains(newValue.toLowerCase())
-                    || String.valueOf(serviceOrder.getServiceQuantity()).contains(newValue.toLowerCase())                    
+                    || String.valueOf(serviceOrder.getServiceQuantity()).contains(newValue.toLowerCase())
                     || serviceOrder.getUserName().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
@@ -234,7 +239,7 @@ public class FXMLListServiceOrderController implements Initializable {
         this.setCheck_Edit_Action(true);
         System.out.println("Edit clicked and check = " + getCheck_Edit_Action() + " adress: " + getCheck_Edit_Action().hashCode());
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Edit Service order Informations");
 
     }
 
@@ -242,7 +247,7 @@ public class FXMLListServiceOrderController implements Initializable {
     private void handle_MenuItem_Add_Action(ActionEvent event) {
         this.setCheck_Edit_Action(false);
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Add new Service Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Add new Service order Informations");
     }
 
     @FXML
@@ -254,9 +259,9 @@ public class FXMLListServiceOrderController implements Initializable {
         System.out.println(alert.getResult());
         if (alert.getResult() == ButtonType.OK) {
             serviceOrderDAOImpl.deleteServiceOrder(serviceOrderItem);
-            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceOrder ID: " 
-                            + FormatName.format(serviceOrderItem.getServiceOrderID()), 
-                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceOrder ID: "
+                    + FormatName.format(serviceOrderItem.getServiceOrderID()),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
             System.out.println("Delete successful");
             showUsersData();
         }

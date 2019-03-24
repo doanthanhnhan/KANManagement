@@ -7,6 +7,7 @@ package models;
 
 import com.jfoenix.controls.JFXButton;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -26,6 +27,7 @@ public class ServiceOrderDetail extends ServiceType {
     private BigDecimal serviceDiscount;
     private BooleanProperty active;
     private JFXButton serviceRemoveButton;
+    private LocalDateTime serviceOrderDate;
 
     public ServiceOrderDetail() {
         this.active = new SimpleBooleanProperty();
@@ -92,6 +94,14 @@ public class ServiceOrderDetail extends ServiceType {
 
     public void setServiceRemoveButton(JFXButton serviceRemoveButton) {
         this.serviceRemoveButton = serviceRemoveButton;
+    }
+
+    public LocalDateTime getServiceOrderDate() {
+        return serviceOrderDate;
+    }
+
+    public void setServiceOrderDate(LocalDateTime serviceOrderDate) {
+        this.serviceOrderDate = serviceOrderDate;
     }
 
 }

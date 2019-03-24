@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 /**
  * FXML Controller class
@@ -42,6 +43,10 @@ public class FXMLRoomStatusFormController implements Initializable {
     private FontAwesomeIconView icon_Room_Type;
     @FXML
     private AnchorPane anchorPane_Room;
+    @FXML
+    private JFXButton btn_Service;
+    @FXML
+    private HBox hBox_Buttons;
 
     /**
      * Initializes the controller class.

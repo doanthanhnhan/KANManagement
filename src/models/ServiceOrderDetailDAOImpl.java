@@ -38,9 +38,9 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
     @Override
     public ObservableList<ServiceOrderDetail> getAllServiceOrdersDetails() {
-        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.* FROM ServicesOrderDetails SOD "
-                + "INNER JOIN ServiceType ST\n"
-                + "ON SOD.ServiceID = ST.ServiceID\n"
+        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate FROM ServicesOrderDetails SOD "
+                + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID\n"
+                + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID\n"
                 + "WHERE SOD.Active=1";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
@@ -71,8 +71,12 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                     imageView.setFitWidth(50);
                     serviceOrderDetail.setImageView(imageView);
                 }
-                serviceOrderDetail.setServiceInventory(rs.getInt("ServiceInventory"));
+                serviceOrderDetail.setServiceInventory(rs.getInt("ServiceInventory"));               
+                serviceOrderDetail.setServiceImportQuantity(rs.getInt("ImportQuantity"));
                 serviceOrderDetail.setServiceImportDate(rs.getTimestamp("ImportDate").toLocalDateTime());
+                serviceOrderDetail.setServiceExportQuantity(rs.getInt("ExportQuantity"));
+                serviceOrderDetail.setServiceExportDate(rs.getTimestamp("ExportDate").toLocalDateTime());
+                serviceOrderDetail.setServiceOrderDate(rs.getTimestamp("ServiceOrderDate").toLocalDateTime());
 
                 listServiceOrderDetails.add(serviceOrderDetail);
             }

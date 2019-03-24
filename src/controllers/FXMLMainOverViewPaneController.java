@@ -18,7 +18,6 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -32,6 +31,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import models.Room;
@@ -51,6 +51,12 @@ public class FXMLMainOverViewPaneController implements Initializable {
     RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
 
     private FilteredList<Room> filteredRoom;
+
+    FXMLMainFormController mainFormController;
+
+    public Boolean check_Services_Button_Clicked;
+    public String service_Room_ID;
+    public String service_Customer_ID;
 
     @FXML
     private JFXButton btn_OverView_Submit;
@@ -131,11 +137,20 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("list size = " + roomDAOImpl.getAllRoom().size() );
-        if (roomDAOImpl.getAllRoom().size() != 0) {
+        System.out.println("Main overview pane controller initialize...");
+
+        ConnectControllers.setfXMLMainOverViewPaneController(this);
+        mainFormController = ConnectControllers.getfXMLMainFormController();
+
+        check_Services_Button_Clicked = false;
+
+        if (!roomDAOImpl.getAllRoom().isEmpty()) {
             initAddRooms();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -286,6 +301,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 Label label_Repaired_Status = (Label) pane.lookup("#label_Repaired_Status");
                 Label label_Customer_Name = (Label) pane.lookup("#label_Customer_Name");
                 //HBox hbox_Room_Owner_Type = (HBox) pane.lookup("#hbox_Room_Owner_Type");                
+                HBox hBox_Buttons = (HBox) pane.lookup("#hBox_Buttons");
                 FontAwesomeIconView icon_Room_Type = (FontAwesomeIconView) pane.lookup("#icon_Room_Type");
                 FontAwesomeIconView icon_Date_Remaining = (FontAwesomeIconView) pane.lookup("#icon_Date_Remaining");
                 FontAwesomeIconView icon_Clean_Status = (FontAwesomeIconView) pane.lookup("#icon_Clean_Status");
@@ -299,11 +315,21 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 btn_CheckOut.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " check out!");
                 });
+                JFXButton btn_Services = (JFXButton) pane.lookup("#btn_Services");
+                btn_Services.setOnAction((event) -> {
+                    System.out.println("Room " + label_Room_Number.getText() + " services!");
+                    check_Services_Button_Clicked = true;
+                    service_Room_ID = label_Room_Number.getText();
+                    service_Customer_ID = listRoom.getCustomerID();
+                    mainFormController.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png",
+                            "Add new Service Order for Room: " + label_Room_Number.getText());
+                });
                 label_Room_Number.setText(listRoom.getRoomID());
                 label_Room_Status.setText(listRoom.getRoomStatus());
                 label_Customer_Name.setText(listRoom.getCustomerName());
                 if (listRoom.getRoomStatus().equalsIgnoreCase("Available") || listRoom.getRoomStatus().equalsIgnoreCase("Reserved")) {
                     btn_CheckOut.setDisable(true);
+                    hBox_Buttons.getChildren().remove(btn_Services);
                     if (listRoom.getRoomStatus().equalsIgnoreCase("Available")) {
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomAvailable-room-status");
@@ -312,12 +338,15 @@ public class FXMLMainOverViewPaneController implements Initializable {
                         label_Room_Status.getStyleClass().add("label-roomReserved-room-status");
                     }
                 }
-                if (listRoom.getRoomStatus().equalsIgnoreCase("Check out") || listRoom.getRoomStatus().equalsIgnoreCase("Occupied")) {
-                    btn_CheckIn.setDisable(true);
-                    if (listRoom.getRoomStatus().equalsIgnoreCase("Check out")) {
+                if (listRoom.getRoomStatus().equalsIgnoreCase("Out") || listRoom.getRoomStatus().equalsIgnoreCase("Occupied")) {
+
+                    if (listRoom.getRoomStatus().equalsIgnoreCase("Out")) {
+                        btn_CheckIn.setDisable(true);
+                        hBox_Buttons.getChildren().remove(btn_Services);
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomCheckOut-room-status");
                     } else {
+                        hBox_Buttons.getChildren().remove(btn_CheckIn);
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomOccupied-room-status");
                     }

@@ -13,6 +13,7 @@ public class ConnectControllers {
 
     public static FXMLLoginController fXMLLoginController;
     public static FXMLMainFormController fXMLMainFormController;
+    public static FXMLMainOverViewPaneController fXMLMainOverViewPaneController;
     public static FXMLForgetPassController fXMLForgetPassController;
     public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController;
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
@@ -138,6 +139,14 @@ public class ConnectControllers {
 
     public static void setfXMLListServiceOrderDetailController(FXMLListServiceOrderDetailController fXMLListServiceOrderDetailController) {
         ConnectControllers.fXMLListServiceOrderDetailController = fXMLListServiceOrderDetailController;
+    }
+
+    public static FXMLMainOverViewPaneController getfXMLMainOverViewPaneController() {
+        return fXMLMainOverViewPaneController;
+    }
+
+    public static void setfXMLMainOverViewPaneController(FXMLMainOverViewPaneController fXMLMainOverViewPaneController) {
+        ConnectControllers.fXMLMainOverViewPaneController = fXMLMainOverViewPaneController;
     }
 
 }
