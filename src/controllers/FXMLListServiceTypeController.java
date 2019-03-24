@@ -58,7 +58,7 @@ public class FXMLListServiceTypeController implements Initializable {
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<ServiceType> filteredData;
-    
+
     private FXMLMainFormController mainFormController;
 
     @FXML
@@ -90,7 +90,7 @@ public class FXMLListServiceTypeController implements Initializable {
         roleDAOImpl = new RoleDAOImpl();
         check_Edit_Action = new Boolean(false);
         setColumns();
-        if(serviceTypeDAOImpl.getAllServiceType().size() != 0){
+        if (serviceTypeDAOImpl.getAllServiceType().size() != 0) {
             showUsersData();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -99,7 +99,6 @@ public class FXMLListServiceTypeController implements Initializable {
             alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
             alert.show();
         }
-        
 
         // Check item when click on table
         table_ServiceType.setOnMouseClicked((MouseEvent event) -> {
@@ -160,11 +159,15 @@ public class FXMLListServiceTypeController implements Initializable {
 
     private void setColumns() {
         TableColumn<ServiceType, String> serviceIDCol = new TableColumn<>("Service ID");
+        TableColumn<ServiceType, String> userNameCol = new TableColumn<>("User name");
         TableColumn<ServiceType, String> serviceNameCol = new TableColumn<>("Service name");
         TableColumn<ServiceType, String> serviceUnitCol = new TableColumn<>("Service unit");
         TableColumn<ServiceType, BigDecimal> servicePriceCol = new TableColumn<>("Service price");
         TableColumn<ServiceType, Integer> serviceInventoryCol = new TableColumn<>("Inventory");
-        TableColumn<ServiceType, LocalDateTime> serviceInputDateCol = new TableColumn<>("Import date");
+        TableColumn<ServiceType, Integer> serviceImportQuantityCol = new TableColumn<>("Import quantity");
+        TableColumn<ServiceType, Integer> serviceExportQuantityCol = new TableColumn<>("Export quantity");
+        TableColumn<ServiceType, LocalDateTime> serviceImportDateCol = new TableColumn<>("Import date");
+        TableColumn<ServiceType, LocalDateTime> serviceExportDateCol = new TableColumn<>("Export date");
         TableColumn<ServiceType, ImageView> serviceImageCol = new TableColumn<>("Service image");
         TableColumn<ServiceType, String> serviceDescriptionCol = new TableColumn<>("Service description");
 
@@ -180,29 +183,38 @@ public class FXMLListServiceTypeController implements Initializable {
         // Định nghĩa cách để lấy dữ liệu cho mỗi ô.
         // Lấy giá trị từ các thuộc tính của ServiceType.
         serviceIDCol.setCellValueFactory(new PropertyValueFactory<>("serviceID"));
+        userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
         serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         serviceUnitCol.setCellValueFactory(new PropertyValueFactory<>("serviceUnit"));
         servicePriceCol.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
         serviceInventoryCol.setCellValueFactory(new PropertyValueFactory<>("serviceInventory"));
-        serviceInputDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceInputDate"));
+        serviceImportQuantityCol.setCellValueFactory(new PropertyValueFactory<>("serviceImportQuantity"));
+        serviceExportQuantityCol.setCellValueFactory(new PropertyValueFactory<>("serviceExportQuantity"));
+        serviceImportDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceImportDate"));
+        serviceExportDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceExportDate"));
         serviceImageCol.setCellValueFactory(new PropertyValueFactory<>("imageView"));
         serviceDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("serviceDescription"));
 
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        userNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceUnitCol.setStyle("-fx-alignment: CENTER-LEFT;");
         servicePriceCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceInventoryCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        serviceInputDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceImportQuantityCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceExportQuantityCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceImportDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceExportDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceDescriptionCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceDescriptionCol.setPrefWidth(200);
         serviceImageCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         table_ServiceType.getColumns().clear();
-        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol,
-                servicePriceCol, serviceInventoryCol, serviceInputDateCol, serviceDescriptionCol, serviceImageCol);
+        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, userNameCol, serviceNameCol, serviceUnitCol,
+                servicePriceCol, serviceInventoryCol, serviceImportQuantityCol, serviceImportDateCol,
+                serviceExportQuantityCol, serviceExportDateCol, serviceDescriptionCol, serviceImageCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -224,7 +236,10 @@ public class FXMLListServiceTypeController implements Initializable {
                     || serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase())
                     || serviceType.getServicePrice().toString().contains(newValue.toLowerCase())
                     || serviceType.getServiceInventory().toString().contains(newValue.toLowerCase())
-                    || serviceType.getServiceInputDate().toString().contains(newValue.toLowerCase())
+                    || serviceType.getServiceImportQuantity().toString().contains(newValue.toLowerCase())
+                    || serviceType.getServiceExportQuantity().toString().contains(newValue.toLowerCase())
+                    || serviceType.getServiceImportDate().toString().contains(newValue.toLowerCase())
+                    || serviceType.getServiceExportDate().toString().contains(newValue.toLowerCase())
                     || serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
@@ -263,9 +278,9 @@ public class FXMLListServiceTypeController implements Initializable {
         System.out.println(alert.getResult());
         if (alert.getResult() == ButtonType.OK) {
             serviceTypeDAOImpl.deleteServiceType(serviceTypeItem);
-            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceType ID: " 
-                            + FormatName.format(serviceTypeItem.getServiceID()), 
-                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceType ID: "
+                    + FormatName.format(serviceTypeItem.getServiceID()),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
             System.out.println("Delete successful");
             showUsersData();
         }

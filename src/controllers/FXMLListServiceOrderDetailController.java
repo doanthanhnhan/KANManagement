@@ -36,8 +36,8 @@ import javafx.util.Callback;
 import models.DAO;
 import models.RoleDAOImpl;
 import models.ServiceOrderDetail;
-import models.ServiceType;
-import models.ServiceTypeDAOImpl;
+import models.ServiceOrderDetail;
+import models.ServiceOrderDetailDAOImpl;
 import models.boolDecentralizationModel;
 import utils.FormatName;
 import utils.StageLoader;
@@ -49,20 +49,19 @@ import utils.StageLoader;
  */
 public class FXMLListServiceOrderDetailController implements Initializable {
 
-    ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
-    ServiceTypeDAOImpl serviceTypeDAOImpl;
+    ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
+    ServiceOrderDetailDAOImpl serviceOrderDetailDAOImpl;
     RoleDAOImpl roleDAOImpl;
     public boolDecentralizationModel userRole;
 
     public Boolean check_Edit_Action;
-    public static ServiceType serviceTypeItem;
+    public static ServiceOrderDetail serviceOrderDetailItem;
 
     private static final int ROWS_PER_PAGE = 20;
-    private FilteredList<ServiceType> filteredData;
+    private FilteredList<ServiceOrderDetail> filteredData;
     
     private FXMLMainFormController mainFormController;
-
-    private TableView<ServiceType> table_ServiceType;
+    
     @FXML
     private MenuItem menuItem_Edit;
     @FXML
@@ -82,17 +81,19 @@ public class FXMLListServiceOrderDetailController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("List Service Type initialize...");
-        //ConnectControllers.setfXMLListServiceTypeController(this);
+        //ConnectControllers.setfXMLListServiceOrderDetailController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
-        serviceTypeDAOImpl = new ServiceTypeDAOImpl();
+        serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
         roleDAOImpl = new RoleDAOImpl();
-        check_Edit_Action = new Boolean(false);
+        check_Edit_Action = false;
         setColumns();
-        if(serviceTypeDAOImpl.getAllServiceType().size() != 0){
+        if(!serviceOrderDetailDAOImpl.getAllServiceOrdersDetails().isEmpty()){
             showUsersData();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -104,13 +105,13 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         
 
         // Check item when click on table
-        table_ServiceType.setOnMouseClicked((MouseEvent event) -> {
+        table_Service_Order_Detail.setOnMouseClicked((MouseEvent event) -> {
             if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
-                    && table_ServiceType.getSelectionModel().getSelectedItem() != null) {
+                    && table_Service_Order_Detail.getSelectionModel().getSelectedItem() != null) {
                 menuItem_Edit.setDisable(false);
                 menuItem_Delete.setDisable(false);
-                System.out.println(table_ServiceType.getSelectionModel().getSelectedItem().getServiceID());
-                serviceTypeItem = table_ServiceType.getSelectionModel().getSelectedItem();
+                System.out.println(table_Service_Order_Detail.getSelectionModel().getSelectedItem().getServiceID());
+                serviceOrderDetailItem = table_Service_Order_Detail.getSelectionModel().getSelectedItem();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -147,46 +148,46 @@ public class FXMLListServiceOrderDetailController implements Initializable {
     private void changeTableView(int index, int limit) {
 
         int fromIndex = index * limit;
-        int toIndex = Math.min(fromIndex + limit, listServiceTypes.size());
+        int toIndex = Math.min(fromIndex + limit, listServiceOrderDetails.size());
 
         int minIndex = Math.min(toIndex, filteredData.size());
 
-        SortedList<ServiceType> sortedData = new SortedList<>(
+        SortedList<ServiceOrderDetail> sortedData = new SortedList<>(
                 FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
 
-        sortedData.comparatorProperty().bind(table_ServiceType.comparatorProperty());
+        sortedData.comparatorProperty().bind(table_Service_Order_Detail.comparatorProperty());
 
-        table_ServiceType.setItems(sortedData);
+        table_Service_Order_Detail.setItems(sortedData);
 
     }
 
     private void setColumns() {
-        TableColumn<ServiceType, String> serviceIDCol = new TableColumn<>("Service ID");
-        TableColumn<ServiceType, String> serviceNameCol = new TableColumn<>("Service name");
-        TableColumn<ServiceType, String> serviceUnitCol = new TableColumn<>("Service unit");
-        TableColumn<ServiceType, BigDecimal> servicePriceCol = new TableColumn<>("Service price");
-        TableColumn<ServiceType, Integer> serviceInventoryCol = new TableColumn<>("Inventory");
-        TableColumn<ServiceType, LocalDateTime> serviceInputDateCol = new TableColumn<>("Import date");
-        TableColumn<ServiceType, ImageView> serviceImageCol = new TableColumn<>("Service image");
-        TableColumn<ServiceType, String> serviceDescriptionCol = new TableColumn<>("Service description");
+        TableColumn<ServiceOrderDetail, String> serviceIDCol = new TableColumn<>("Order ID");
+        TableColumn<ServiceOrderDetail, String> serviceNameCol = new TableColumn<>("Service ID");
+        TableColumn<ServiceOrderDetail, String> serviceUnitCol = new TableColumn<>("User name");
+        TableColumn<ServiceOrderDetail, BigDecimal> servicePriceCol = new TableColumn<>("Service price");
+        TableColumn<ServiceOrderDetail, Integer> serviceInventoryCol = new TableColumn<>("Inventory");
+        TableColumn<ServiceOrderDetail, LocalDateTime> serviceImportDateCol = new TableColumn<>("Import date");
+        TableColumn<ServiceOrderDetail, ImageView> serviceImageCol = new TableColumn<>("Service image");
+        TableColumn<ServiceOrderDetail, String> serviceDescriptionCol = new TableColumn<>("Service description");
 
         TableColumn numberCol = new TableColumn("#");
-        numberCol.setCellValueFactory(new Callback<CellDataFeatures<ServiceType, String>, ObservableValue<String>>() {
+        numberCol.setCellValueFactory(new Callback<CellDataFeatures<ServiceOrderDetail, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(CellDataFeatures<ServiceType, String> p) {
-                return new ReadOnlyObjectWrapper((table_ServiceType.getItems().indexOf(p.getValue()) + 1) + "");
+            public ObservableValue<String> call(CellDataFeatures<ServiceOrderDetail, String> p) {
+                return new ReadOnlyObjectWrapper((table_Service_Order_Detail.getItems().indexOf(p.getValue()) + 1) + "");
             }
         });
         numberCol.setSortable(false);
 
         // Định nghĩa cách để lấy dữ liệu cho mỗi ô.
-        // Lấy giá trị từ các thuộc tính của ServiceType.
+        // Lấy giá trị từ các thuộc tính của ServiceOrderDetail.
         serviceIDCol.setCellValueFactory(new PropertyValueFactory<>("serviceID"));
         serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         serviceUnitCol.setCellValueFactory(new PropertyValueFactory<>("serviceUnit"));
         servicePriceCol.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
         serviceInventoryCol.setCellValueFactory(new PropertyValueFactory<>("serviceInventory"));
-        serviceInputDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceInputDate"));
+        serviceImportDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceImportDate"));
         serviceImageCol.setCellValueFactory(new PropertyValueFactory<>("imageView"));
         serviceDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("serviceDescription"));
 
@@ -196,43 +197,43 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         serviceUnitCol.setStyle("-fx-alignment: CENTER-LEFT;");
         servicePriceCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceInventoryCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        serviceInputDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        serviceImportDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceDescriptionCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceDescriptionCol.setPrefWidth(200);
         serviceImageCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
-        table_ServiceType.getColumns().clear();
-        table_ServiceType.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol,
-                servicePriceCol, serviceInventoryCol, serviceInputDateCol, serviceDescriptionCol, serviceImageCol);
+        table_Service_Order_Detail.getColumns().clear();
+        table_Service_Order_Detail.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol,
+                servicePriceCol, serviceInventoryCol, serviceImportDateCol, serviceDescriptionCol, serviceImageCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
     }
 
     public void showUsersData() {
-        listServiceTypes = serviceTypeDAOImpl.getAllServiceType();
-        //table_ServiceType.getItems().clear();
-        table_ServiceType.setItems(listServiceTypes);
+        listServiceOrderDetails = serviceOrderDetailDAOImpl.getAllServiceOrdersDetails();
+        //table_ServiceOrderDetail.getItems().clear();
+        table_Service_Order_Detail.setItems(listServiceOrderDetails);
 
         //Set filterData and Pagination
-        filteredData = new FilteredList<>(listServiceTypes, list -> true);
+        filteredData = new FilteredList<>(listServiceOrderDetails, list -> true);
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(
-                    serviceType -> newValue == null || newValue.isEmpty()
-                    || serviceType.getServiceID().toLowerCase().contains(newValue.toLowerCase())
-                    //|| serviceType.getServiceDescription().toLowerCase().contains(newValue.toLowerCase())
-                    || serviceType.getServiceUnit().toLowerCase().contains(newValue.toLowerCase())
-                    || serviceType.getServicePrice().toString().contains(newValue.toLowerCase())
-                    || serviceType.getServiceInventory().toString().contains(newValue.toLowerCase())
-                    || serviceType.getServiceInputDate().toString().contains(newValue.toLowerCase())
-                    || serviceType.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
+                    serviceOrderDetail -> newValue == null || newValue.isEmpty()
+                    || serviceOrderDetail.getServiceID().toLowerCase().contains(newValue.toLowerCase())
+                    //|| serviceOrderDetail.getServiceDescription().toLowerCase().contains(newValue.toLowerCase())
+                    || serviceOrderDetail.getServiceUnit().toLowerCase().contains(newValue.toLowerCase())
+                    || serviceOrderDetail.getServicePrice().toString().contains(newValue.toLowerCase())
+                    || serviceOrderDetail.getServiceInventory().toString().contains(newValue.toLowerCase())
+                    || serviceOrderDetail.getServiceImportDate().toString().contains(newValue.toLowerCase())
+                    || serviceOrderDetail.getServiceName().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
         });
 
-        int totalPage = (int) (Math.ceil(listServiceTypes.size() * 1.0 / ROWS_PER_PAGE));
+        int totalPage = (int) (Math.ceil(listServiceOrderDetails.size() * 1.0 / ROWS_PER_PAGE));
         pagination.setPageCount(totalPage);
         pagination.setCurrentPageIndex(0);
         changeTableView(0, ROWS_PER_PAGE);
@@ -245,7 +246,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         this.setCheck_Edit_Action(true);
         System.out.println("Edit clicked and check = " + getCheck_Edit_Action() + " adress: " + getCheck_Edit_Action().hashCode());
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewServiceOrderDetail.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
 
     }
 
@@ -253,7 +254,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
     private void handle_MenuItem_Add_Action(ActionEvent event) {
         this.setCheck_Edit_Action(false);
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Add new Service Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewServiceOrderDetail.fxml", "/images/KAN Logo.png", "Add new Service Type Informations");
     }
 
     @FXML
@@ -264,9 +265,9 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         alert.showAndWait();
         System.out.println(alert.getResult());
         if (alert.getResult() == ButtonType.OK) {
-            serviceTypeDAOImpl.deleteServiceType(serviceTypeItem);
-            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceType ID: " 
-                            + FormatName.format(serviceTypeItem.getServiceID()), 
+            serviceOrderDetailDAOImpl.deleteServiceOrdersDetail(serviceOrderDetailItem);
+            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceOrderDetail ID: " 
+                            + FormatName.format(serviceOrderDetailItem.getServiceID()), 
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
             System.out.println("Delete successful");
             showUsersData();

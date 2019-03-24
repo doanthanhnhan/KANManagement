@@ -86,7 +86,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="70.0" prefWidth="300.0" spacing="20.0">
                            <children>
-                              <JFXTextField fx:id="serviceInventory" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="100.0" promptText="Inventory" styleClass="text-field" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="serviceInventory" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="100.0" promptText="Imp.Quantity" styleClass="text-field" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>

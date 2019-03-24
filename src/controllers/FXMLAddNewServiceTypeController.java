@@ -1,4 +1,4 @@
-    /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -69,6 +69,8 @@ public class FXMLAddNewServiceTypeController implements Initializable {
     final FileChooser fileChooser = new FileChooser();
     private Boolean check_Validate = false;
 
+    ServiceType serviceTypeUpdate;
+
     @FXML
     private JFXTextField serviceID;
     @FXML
@@ -114,26 +116,47 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
         System.out.println("Check edit action = " + listServiceTypeController.getCheck_Edit_Action() + " adress: " + listServiceTypeController.getCheck_Edit_Action().hashCode());
         //Check form was call from List ServiceType Form
-        if (listServiceTypeController.getCheck_Edit_Action()) {            
+        if (listServiceTypeController.getCheck_Edit_Action()) {
             //Setting values for new form
             serviceID.setDisable(true);
             label_Title.setText("EDITING SERVICE TYPE");
             label_Description.setText("Filling the infomations for editting service type");
-            ServiceType serviceType = FXMLListServiceTypeController.serviceTypeItem;
-            serviceID.setText(serviceType.getServiceID());
-            serviceName.setText(serviceType.getServiceName());
-            serviceUnit.setText(serviceType.getServiceUnit());
-            servicePrice.setText(serviceType.getServicePrice().toString());
-            serviceImportDate.setValue(serviceType.getServiceInputDate().toLocalDate());
-            serviceInventory.setText(serviceType.getServiceInventory().toString());
-            if (serviceType.getImageView() != null) {
-                imgService.setImage(serviceType.getImageView().getImage());
+            serviceTypeUpdate = FXMLListServiceTypeController.serviceTypeItem;
+            serviceID.setText(serviceTypeUpdate.getServiceID());
+            serviceName.setText(serviceTypeUpdate.getServiceName());
+            serviceUnit.setText(serviceTypeUpdate.getServiceUnit());
+            servicePrice.setText(serviceTypeUpdate.getServicePrice().toString());
+            serviceImportDate.setValue(serviceTypeUpdate.getServiceImportDate().toLocalDate());
+            serviceInventory.setText(serviceTypeUpdate.getServiceImportQuantity().toString());
+            if (serviceTypeUpdate.getImageView() != null) {
+                imgService.setImage(serviceTypeUpdate.getImageView().getImage());
             }
-            txtArea_Service_Description.setText(serviceType.getServiceDescription());
+            txtArea_Service_Description.setText(serviceTypeUpdate.getServiceDescription());
             btnAddNew.setText("Update");
 
             //Setting Update button function
             btnAddNew.setOnAction((event) -> {
+                serviceTypeUpdate.setServiceID(FormatName.format(serviceID.getText()));
+                serviceTypeUpdate.setServiceName(FormatName.format(serviceName.getText()));
+                serviceTypeUpdate.setUserName(FormatName.format(mainFormController.userRole.getEmployee_ID()));
+                serviceTypeUpdate.setServiceUnit(FormatName.format(serviceUnit.getText()));
+                serviceTypeUpdate.setServiceInventory(serviceTypeUpdate.getServiceInventory() + Integer.valueOf(serviceInventory.getText()));
+                serviceTypeUpdate.setServiceImportQuantity(serviceTypeUpdate.getServiceImportQuantity() + Integer.valueOf(serviceInventory.getText()));
+                //Setting localdatetime (DatePicker + LocalTime.now())
+                serviceTypeUpdate.setServiceImportDate(LocalDateTime.of(serviceImportDate.getValue(), LocalTime.now()));
+                serviceTypeUpdate.setServiceDescription(FormatName.format_Trim_Space(txtArea_Service_Description.getText()));
+                serviceTypeUpdate.setServicePrice(BigDecimal.valueOf(Double.valueOf(servicePrice.getText())));
+                BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
+                byte[] res;
+                try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
+                    ImageIO.write(bImage, "png", s);
+                    res = s.toByteArray();
+                    Blob blob = new SerialBlob(res);
+                    serviceTypeUpdate.setServiceImage(blob);
+                } catch (SQLException | IOException ex) {
+                    Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
                 submit_Update_Service_Type();
             });
 
@@ -219,8 +242,8 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 validateForm();
                 if (check_Validate) {
                     addNewServiceType();
-                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceType ID: " 
-                            + FormatName.format(serviceID.getText()), 
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceType ID: "
+                            + FormatName.format(serviceID.getText()),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Add successful!");
                 }
@@ -261,11 +284,10 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 });
                 validateForm();
                 if (check_Validate) {
-                    ServiceType updateServiceType = getDataFromForm();
                     //Updating to DB
-                    serviceTypeDAOImpl.editServiceType(updateServiceType, true);
-                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Update ServiceType ID: " 
-                            + FormatName.format(serviceID.getText()), 
+                    serviceTypeDAOImpl.editServiceType(serviceTypeUpdate, true);
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Update ServiceType ID: "
+                            + FormatName.format(serviceID.getText()),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Updating successful!");
                 }
@@ -292,6 +314,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
 
     public void addNewServiceType() {
         ServiceType serviceType = getDataFromForm();
+        serviceType.setServiceInventory(serviceType.getServiceImportQuantity());
         serviceTypeDAOImpl.addServiceType(serviceType);
     }
 
@@ -301,9 +324,10 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         serviceType.setServiceName(FormatName.format(serviceName.getText()));
         serviceType.setUserName(FormatName.format(mainFormController.userRole.getEmployee_ID()));
         serviceType.setServiceUnit(FormatName.format(serviceUnit.getText()));
-        serviceType.setServiceInventory(Integer.parseInt(FormatName.format(serviceInventory.getText())));
+        //serviceType.setServiceInventory(serviceType.getServiceInventory() + Integer.parseInt(FormatName.format(serviceInventory.getText())));
+        serviceType.setServiceImportQuantity(Integer.parseInt(FormatName.format(serviceInventory.getText())));
         //Setting localdatetime (DatePicker + LocalTime.now())
-        serviceType.setServiceInputDate(LocalDateTime.of(serviceImportDate.getValue(), LocalTime.now()));
+        serviceType.setServiceImportDate(LocalDateTime.of(serviceImportDate.getValue(), LocalTime.now()));
         serviceType.setServiceDescription(FormatName.format_Trim_Space(txtArea_Service_Description.getText()));
         serviceType.setServicePrice(BigDecimal.valueOf(Double.valueOf(servicePrice.getText())));
         BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);

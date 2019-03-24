@@ -33,25 +33,28 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public ObservableList<ServiceType> getAllServiceType() {
-        String sql = "SELECT ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, ServiceDescription, ServiceInventory, InputDate FROM ServiceType";
+        String sql = "SELECT ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, ServiceDescription, ServiceInventory, "
+                + "ImportQuantity, ImportDate, ExportQuantity, ExportDate, UserName "
+                + "FROM ServiceType";
         ObservableList<ServiceType> listServiceTypes = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
                 while (rs.next()) {
                     ServiceType serviceType = new ServiceType();
                     serviceType.setServiceID(rs.getString("ServiceID"));
+                    serviceType.setUserName(rs.getString("UserName"));
                     serviceType.setServiceName(rs.getNString("ServiceName"));
                     serviceType.setServiceUnit(rs.getNString("ServiceUnit"));
                     serviceType.setServicePrice(rs.getBigDecimal("ServicePrice"));
                     if (rs.getBlob("Image") != null) {
                         serviceType.setServiceImage(rs.getBlob("Image"));
                     }
-                    if(rs.getNString("ServiceDescription") != null){
+                    if (rs.getNString("ServiceDescription") != null) {
                         serviceType.setServiceDescription(rs.getNString("ServiceDescription"));
                     } else {
                         serviceType.setServiceDescription("");
                     }
-                    
+
                     if (serviceType.getServiceImage() != null) {
                         byte[] bytes = serviceType.getServiceImage().getBytes(1l, (int) serviceType.getServiceImage().length());
                         BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
@@ -62,7 +65,10 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                         serviceType.setImageView(imageView);
                     }
                     serviceType.setServiceInventory(rs.getInt("ServiceInventory"));
-                    serviceType.setServiceInputDate(rs.getTimestamp("InputDate").toLocalDateTime());
+                    serviceType.setServiceImportQuantity(rs.getInt("ImportQuantity"));
+                    serviceType.setServiceExportQuantity(rs.getInt("ExportQuantity"));
+                    serviceType.setServiceImportDate(rs.getTimestamp("ImportDate").toLocalDateTime());
+                    serviceType.setServiceExportDate(rs.getTimestamp("ExportDate").toLocalDateTime());
                     listServiceTypes.add(serviceType);
                 }
             } catch (IOException ex) {
@@ -81,7 +87,7 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public ObservableList<String> getAllServiceTypeID() {
-        String sql = "SELECT ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, ServiceDescription, ServiceInventory, InputDate FROM ServiceType";
+        String sql = "SELECT ServiceID FROM ServiceType";
         ObservableList<String> listServiceTypes = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -100,8 +106,9 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public void addServiceType(ServiceType serviceType) {
-        String sql = "INSERT INTO ServiceType (ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, Active, ServiceDescription, ServiceInventory, InputDate, UserName) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO ServiceType (ServiceID, ServiceName, ServiceUnit, ServicePrice, Image, ServiceDescription, ServiceInventory, "
+                + "ImportQuantity, ImportDate, UserName, Active) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, serviceType.getServiceID());
@@ -109,13 +116,13 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setNString(3, serviceType.getServiceUnit());
                 stmt.setBigDecimal(4, serviceType.getServicePrice());
                 stmt.setBlob(5, serviceType.getServiceImage());
-                stmt.setBoolean(6, true);
-                stmt.setNString(7, serviceType.getServiceDescription());
-                stmt.setInt(8, serviceType.getServiceInventory());
+                stmt.setNString(6, serviceType.getServiceDescription());
+                stmt.setInt(7, serviceType.getServiceInventory());
+                stmt.setInt(8, serviceType.getServiceImportQuantity());
                 //Convert LocalDateTime to Timestamp
-                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceInputDate()));
+                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceImportDate()));               
                 stmt.setString(10, serviceType.getUserName());
-
+                stmt.setBoolean(11, true);
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -131,8 +138,9 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
     @Override
     public void editServiceType(ServiceType serviceType, Boolean active) {
         String sql = "UPDATE ServiceType SET ServiceID=?, ServiceName=?, ServiceUnit=?, ServicePrice=?, "
-                + "Image=?, Active=?, ServiceDescription=?,  "
-                + "ServiceInventory=?, InputDate=?, UserName=? "
+                + "Image=?, ServiceDescription=?,  ServiceInventory=?,"
+                + "ImportQuantity=?, ImportDate=?, ExportQuantity=?, ExportDate=?,"
+                + "UserName=?, Active=? "
                 + "WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -141,12 +149,17 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setNString(3, serviceType.getServiceUnit());
                 stmt.setBigDecimal(4, serviceType.getServicePrice());
                 stmt.setBlob(5, serviceType.getServiceImage());
-                stmt.setBoolean(6, active);
-                stmt.setNString(7, serviceType.getServiceDescription());
-                stmt.setInt(8, serviceType.getServiceInventory());
-                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceInputDate()));
-                stmt.setString(10, serviceType.getUserName());
-                stmt.setNString(11, serviceType.getServiceID());
+                stmt.setNString(6, serviceType.getServiceDescription());
+                stmt.setInt(7, serviceType.getServiceInventory());
+                stmt.setInt(8, serviceType.getServiceImportQuantity());
+                //Convert LocalDateTime to Timestamp
+                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceImportDate()));
+                stmt.setInt(10, serviceType.getServiceExportQuantity());
+                //Convert LocalDateTime to Timestamp
+                stmt.setTimestamp(11, Timestamp.valueOf(serviceType.getServiceExportDate()));
+                stmt.setString(12, serviceType.getUserName());
+                stmt.setBoolean(13, true);
+                stmt.setString(14, serviceType.getServiceID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {

@@ -38,7 +38,10 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
     @Override
     public ObservableList<ServiceOrderDetail> getAllServiceOrdersDetails() {
-        String sql = "SELECT OrderID, ServiceID, UserName, ServiceQuantity, Price, Discount, Active FROM ServicesOrderDetails WHERE Active=1";
+        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.* FROM ServicesOrderDetails SOD "
+                + "INNER JOIN ServiceType ST\n"
+                + "ON SOD.ServiceID = ST.ServiceID\n"
+                + "WHERE SOD.Active=1";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
         try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -52,6 +55,25 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceOrderDetail.setServiceDiscount(rs.getBigDecimal("Discount"));
                 serviceOrderDetail.setActive(rs.getBoolean("Active"));
 
+                serviceOrderDetail.setServiceName(rs.getNString("ServiceName"));
+                serviceOrderDetail.setServiceUnit(rs.getNString("ServiceUnit"));
+                serviceOrderDetail.setServicePrice(rs.getBigDecimal("ServicePrice"));
+                if (rs.getBlob("Image") != null) {
+                    serviceOrderDetail.setServiceImage(rs.getBlob("Image"));
+                }
+                serviceOrderDetail.setServiceDescription(rs.getNString("ServiceDescription"));
+                if (serviceOrderDetail.getServiceImage() != null) {
+                    byte[] bytes = serviceOrderDetail.getServiceImage().getBytes(1l, (int) serviceOrderDetail.getServiceImage().length());
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+                    Image image = SwingFXUtils.toFXImage(img, null);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(50);
+                    imageView.setFitWidth(50);
+                    serviceOrderDetail.setImageView(imageView);
+                }
+                serviceOrderDetail.setServiceInventory(rs.getInt("ServiceInventory"));
+                serviceOrderDetail.setServiceImportDate(rs.getTimestamp("ImportDate").toLocalDateTime());
+
                 listServiceOrderDetails.add(serviceOrderDetail);
             }
         } catch (ClassNotFoundException | SQLException ex) {
@@ -61,6 +83,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
             alert.setHeaderText("Error");
             alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
             alert.show();
+        } catch (IOException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listServiceOrderDetails;
     }
@@ -93,12 +117,12 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                     addNewServiceOrderController = ConnectControllers.getfXMLAddNewServiceOrderController();
 
                     deleteServiceOrdersDetail(serviceOrderDetail);
-                    
+
                     DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceOrderDetail, ServiceName: "
                             + serviceOrderDetail.getServiceName(),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     //addNewServiceOrderController.update_Service_Type_After_Remove();
-                    
+
                     ServiceType serviceType = new ServiceType();
                     ServiceTypeDAOImpl serviceTypeDAOImpl = new ServiceTypeDAOImpl();
                     //Data are not changed
@@ -109,9 +133,12 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                     serviceType.setServiceName(serviceOrderDetail.getServiceName());
                     serviceType.setServicePrice(serviceOrderDetail.getServicePrice());
                     serviceType.setServiceUnit(serviceOrderDetail.getServiceUnit());
+                    serviceType.setServiceImportQuantity(serviceOrderDetail.getServiceImportQuantity());
+                    serviceType.setServiceImportDate(serviceOrderDetail.getServiceImportDate());
                     //Data are changed
                     serviceType.setServiceInventory(serviceOrderDetail.getServiceInventory() + serviceOrderDetail.getServiceQuantity());
-                    serviceType.setServiceInputDate(LocalDateTime.now());
+                    serviceType.setServiceExportQuantity(serviceOrderDetail.getServiceExportQuantity() - serviceOrderDetail.getServiceQuantity());
+                    serviceType.setServiceExportDate(LocalDateTime.now());
                     serviceType.setUserName(mainFormController.getUserRole().getEmployee_ID());
                     serviceTypeDAOImpl.editServiceType(serviceType, true);
                     //Refresh
@@ -136,7 +163,10 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                     serviceOrderDetail.setImageView(imageView);
                 }
                 serviceOrderDetail.setServiceInventory(rs.getInt("ServiceInventory"));
-                serviceOrderDetail.setServiceInputDate(rs.getTimestamp("InputDate").toLocalDateTime());
+                serviceOrderDetail.setServiceImportQuantity(rs.getInt("ImportQuantity"));
+                serviceOrderDetail.setServiceImportDate(rs.getTimestamp("ImportDate").toLocalDateTime());
+                serviceOrderDetail.setServiceExportQuantity(rs.getInt("ExportQuantity"));
+                serviceOrderDetail.setServiceExportDate(rs.getTimestamp("ExportDate").toLocalDateTime());
 
                 listServiceOrderDetails.add(serviceOrderDetail);
             }

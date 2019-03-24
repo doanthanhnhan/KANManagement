@@ -23,7 +23,10 @@ public class ServiceType {
     private String serviceUnit;
     private BigDecimal servicePrice;
     private Integer serviceInventory;
-    private LocalDateTime serviceInputDate;
+    private Integer serviceImportQuantity;
+    private Integer serviceExportQuantity;
+    private LocalDateTime serviceImportDate;
+    private LocalDateTime serviceExportDate;
     private Blob serviceImage;
     private ImageView imageView;
     private String serviceDescription;
@@ -33,18 +36,31 @@ public class ServiceType {
 
     public ServiceType(ServiceType serviceType) {
         this.serviceID = serviceType.getServiceID();
+        this.userName = serviceType.getUserName();
         this.serviceName = serviceType.getServiceName();
         this.serviceUnit = serviceType.getServiceID();
         this.servicePrice = serviceType.getServicePrice();
+        this.serviceInventory = serviceType.getServiceInventory();
+        this.serviceImportQuantity = serviceType.getServiceImportQuantity();
+        this.serviceExportQuantity = serviceType.getServiceExportQuantity();
+        this.serviceImportDate = serviceType.getServiceImportDate();
+        this.serviceExportDate = serviceType.getServiceExportDate();
         this.serviceImage = serviceType.getServiceImage();
         this.imageView = serviceType.getImageView();
         this.serviceDescription = serviceType.getServiceDescription();
     }
 
-    public ServiceType(String serviceID, String serviceName, String serviceUnit, Float servicePrice, Blob serviceImage, ImageView imageView, String serviceDescription) {
+    public ServiceType(String serviceID, String userName, String serviceName, String serviceUnit, BigDecimal servicePrice, Integer serviceInventory, Integer serviceImportQuantity, Integer serviceExportQuantity, LocalDateTime serviceImportDate, LocalDateTime serviceExportDate, Blob serviceImage, ImageView imageView, String serviceDescription) {
         this.serviceID = serviceID;
+        this.userName = userName;
         this.serviceName = serviceName;
         this.serviceUnit = serviceUnit;
+        this.servicePrice = servicePrice;
+        this.serviceInventory = serviceInventory;
+        this.serviceImportQuantity = serviceImportQuantity;
+        this.serviceExportQuantity = serviceExportQuantity;
+        this.serviceImportDate = serviceImportDate;
+        this.serviceExportDate = serviceExportDate;
         this.serviceImage = serviceImage;
         this.imageView = imageView;
         this.serviceDescription = serviceDescription;
@@ -98,12 +114,36 @@ public class ServiceType {
         this.serviceInventory = serviceInventory;
     }
 
-    public LocalDateTime getServiceInputDate() {
-        return serviceInputDate;
+    public Integer getServiceImportQuantity() {
+        return serviceImportQuantity;
     }
 
-    public void setServiceInputDate(LocalDateTime serviceInputDate) {
-        this.serviceInputDate = serviceInputDate;
+    public void setServiceImportQuantity(Integer serviceImportQuantity) {
+        this.serviceImportQuantity = serviceImportQuantity;
+    }
+
+    public Integer getServiceExportQuantity() {
+        return serviceExportQuantity;
+    }
+
+    public void setServiceExportQuantity(Integer serviceExportQuantity) {
+        this.serviceExportQuantity = serviceExportQuantity;
+    }
+
+    public LocalDateTime getServiceImportDate() {
+        return serviceImportDate;
+    }
+
+    public void setServiceImportDate(LocalDateTime serviceImportDate) {
+        this.serviceImportDate = serviceImportDate;
+    }
+
+    public LocalDateTime getServiceExportDate() {
+        return serviceExportDate;
+    }
+
+    public void setServiceExportDate(LocalDateTime serviceExportDate) {
+        this.serviceExportDate = serviceExportDate;
     }
 
     public Blob getServiceImage() {
