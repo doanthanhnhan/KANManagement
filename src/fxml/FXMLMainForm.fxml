@@ -62,7 +62,7 @@
                               <MenuItem fx:id="menuItem_Add_Check_In" mnemonicParsing="false" text="Add new Check In" />
                               <MenuItem fx:id="menuItem_Add_Check_out" mnemonicParsing="false" text="Add new Check Out" />
                               <MenuItem fx:id="menuItem_Add_Customer" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Customer_Action" text="Add new Customer" />
-                              <MenuItem fx:id="menuItem_Add_Department" mnemonicParsing="false" text="Add new Customer" />
+                              <MenuItem fx:id="menuItem_Add_Department" mnemonicParsing="false" text="Add new Department" />
                               <MenuItem fx:id="menuItem_Add_Employee" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Employee_Action" text="Add new Employee" />
                               <MenuItem fx:id="menuItem_Add_Role" mnemonicParsing="false" text="Add new Role" />
                               <MenuItem fx:id="menuItem_Add_Room" mnemonicParsing="false" text="Add new Room" />
@@ -123,7 +123,7 @@
                               <Tooltip contentDisplay="TOP" text="Booking" textAlignment="CENTER" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="btn_Toolbar_Checkin" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                        <Button fx:id="btn_Toolbar_Checkin" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_CheckIn_Action">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

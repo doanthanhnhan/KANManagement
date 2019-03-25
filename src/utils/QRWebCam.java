@@ -28,6 +28,7 @@ import com.google.zxing.common.HybridBinarizer;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
+import javax.swing.JButton;
 
 /**
  *
@@ -42,6 +43,7 @@ public class QRWebCam extends JFrame implements Runnable, ThreadFactory {
     private Webcam webcam = null;
     private WebcamPanel panel = null;
     private JTextArea textarea = null;
+    private JButton btn_Close = null;
     
     //Declare txtQR to reference from another form
     public ReadOnlyObjectWrapper<String> txtQR = new ReadOnlyObjectWrapper<>();
@@ -58,7 +60,7 @@ public class QRWebCam extends JFrame implements Runnable, ThreadFactory {
         
         setLayout(new FlowLayout());
         setTitle("Read QR / Bar Code With Webcam");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         Dimension size = WebcamResolution.QVGA.getSize();
         
@@ -73,8 +75,15 @@ public class QRWebCam extends JFrame implements Runnable, ThreadFactory {
         textarea.setEditable(false);
         textarea.setPreferredSize(size);
         
+        btn_Close = new JButton();
+        btn_Close.setText("Close");
+        btn_Close.addActionListener((e) -> {
+            closePanel();
+        });
+        
         add(panel);
         add(textarea);
+        add(btn_Close);
         
         pack();
         setVisible(true);
@@ -129,6 +138,11 @@ public class QRWebCam extends JFrame implements Runnable, ThreadFactory {
         t.setDaemon(true);
         return t;
     }   
+    
+    private void closePanel(){
+        webcam.close();        
+        this.dispose();        
+    }
    
     //For testing
     public static void main(String[] args) {

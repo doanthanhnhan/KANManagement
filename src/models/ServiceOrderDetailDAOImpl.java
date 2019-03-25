@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -74,7 +75,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                     imageView.setFitWidth(50);
                     serviceOrderDetail.setImageView(imageView);
                 }
-                serviceOrderDetail.setServiceInventory(rs.getInt("ServiceInventory"));               
+                serviceOrderDetail.setServiceInventory(rs.getInt("ServiceInventory"));
                 serviceOrderDetail.setServiceImportQuantity(rs.getInt("ImportQuantity"));
                 serviceOrderDetail.setServiceImportDate(rs.getTimestamp("ImportDate").toLocalDateTime());
                 serviceOrderDetail.setServiceExportQuantity(rs.getInt("ExportQuantity"));
@@ -174,6 +175,73 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceOrderDetail.setServiceImportDate(rs.getTimestamp("ImportDate").toLocalDateTime());
                 serviceOrderDetail.setServiceExportQuantity(rs.getInt("ExportQuantity"));
                 serviceOrderDetail.setServiceExportDate(rs.getTimestamp("ExportDate").toLocalDateTime());
+
+                listServiceOrderDetails.add(serviceOrderDetail);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+            alert.show();
+        } catch (IOException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listServiceOrderDetails;
+    }
+
+    @Override
+    public ObservableList<ServiceOrderDetail> get_All_Details_Of_CheckInRoom(String roomID, String checkInDate) {
+        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, "
+                + "SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, "
+                + "CIO.CheckInDate "
+                + "FROM ServicesOrderDetails SOD "
+                + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID\n"
+                + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID\n"
+                + "INNER JOIN CheckInOrders CIO ON SO.RoomID = CIO.RoomID\n"
+                + "WHERE CIO.CheckInDate='"
+                + checkInDate
+                + "' AND CIO.RoomID='"
+                + roomID
+                + "' AND SOD.Active=1";
+        ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
+
+        try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail();
+                serviceOrderDetail.setOrderID(rs.getString("OrderID"));
+                serviceOrderDetail.setCustomerID(rs.getString("CustomerID"));
+                serviceOrderDetail.setRoomID(rs.getString("RoomID"));
+                serviceOrderDetail.setServiceID(rs.getString("ServiceID"));
+                serviceOrderDetail.setUserName(rs.getString("UserName"));
+                serviceOrderDetail.setServiceQuantity(rs.getInt("ServiceQuantity"));
+                serviceOrderDetail.setServicePriceTotal(rs.getBigDecimal("Price"));
+                serviceOrderDetail.setServiceDiscount(rs.getBigDecimal("Discount"));
+                serviceOrderDetail.setActive(rs.getBoolean("Active"));
+
+                serviceOrderDetail.setServiceName(rs.getNString("ServiceName"));
+                serviceOrderDetail.setServiceUnit(rs.getNString("ServiceUnit"));
+                serviceOrderDetail.setServicePrice(rs.getBigDecimal("ServicePrice"));
+                if (rs.getBlob("Image") != null) {
+                    serviceOrderDetail.setServiceImage(rs.getBlob("Image"));
+                }
+                serviceOrderDetail.setServiceDescription(rs.getNString("ServiceDescription"));
+                if (serviceOrderDetail.getServiceImage() != null) {
+                    byte[] bytes = serviceOrderDetail.getServiceImage().getBytes(1l, (int) serviceOrderDetail.getServiceImage().length());
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+                    Image image = SwingFXUtils.toFXImage(img, null);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(50);
+                    imageView.setFitWidth(50);
+                    serviceOrderDetail.setImageView(imageView);
+                }
+                serviceOrderDetail.setServiceInventory(rs.getInt("ServiceInventory"));
+                serviceOrderDetail.setServiceImportQuantity(rs.getInt("ImportQuantity"));
+                serviceOrderDetail.setServiceImportDate(rs.getTimestamp("ImportDate").toLocalDateTime());
+                serviceOrderDetail.setServiceExportQuantity(rs.getInt("ExportQuantity"));
+                serviceOrderDetail.setServiceExportDate(rs.getTimestamp("ExportDate").toLocalDateTime());
+                serviceOrderDetail.setServiceOrderDate(rs.getTimestamp("ServiceOrderDate").toLocalDateTime());
 
                 listServiceOrderDetails.add(serviceOrderDetail);
             }

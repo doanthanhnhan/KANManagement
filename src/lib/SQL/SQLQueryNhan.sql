@@ -95,7 +95,9 @@ CREATE TABLE CheckOutOrders(
 	CheckInDate date NOT NULL,
 	CheckOutDate date NOT NULL,		
 	CustomerPayment varchar(50) NOT NULL,
-	CustomerBill decimal(18,3) NOT NULL,	
+	CustomerBill decimal(18,3) NOT NULL,
+	Discount decimal(4,3) DEFAULT 0,
+	Tax decimal(6,3) DEFAULT 0,	
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
 	CONSTRAINT pk_CheckOutID_CheckOutOrders PRIMARY KEY (CheckOutID),
@@ -536,9 +538,12 @@ INSERT INTO ServicesOrderDetails(OrderID, ServiceID, UserName, ServiceQuantity, 
 ('Order002','KANService004', 'admin', 15, 30, 0.3),
 ('Order002','KANService006', 'admin', 10, 15, 0.05),
 
-SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID FROM ServicesOrderDetails SOD 
+SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, CIO.CheckInDate
+FROM ServicesOrderDetails SOD 
 INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID
 INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID 
+INNER JOIN CheckInOrders CIO ON SO.RoomID = CIO.RoomID
+WHERE CIO.CheckInDate='2019-03-20' AND CIO.RoomID='R0201'
 WHERE SOD.OrderID='Order001' 
 
 INSERT INTO BookingInfo(BookingID, CustomerID, RoomID, UserName, NumberGuest, DateBook) VALUES

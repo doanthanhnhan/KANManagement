@@ -725,4 +725,8 @@ public class FXMLMainFormController implements Initializable {
         task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
     }
 
+    @FXML
+    private void handle_Toolbar_CheckIn_Action(ActionEvent event) {
+    }
+
 }

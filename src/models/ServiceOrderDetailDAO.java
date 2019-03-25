@@ -14,6 +14,7 @@ import java.util.List;
 public interface ServiceOrderDetailDAO {
     List<ServiceOrderDetail> getAllServiceOrdersDetails();
     List<ServiceOrderDetail> get_All_Details_In_One_Order(String serviceOrderID);
+    List<ServiceOrderDetail> get_All_Details_Of_CheckInRoom(String roomID, String checkInDate);
     void addServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail);
     void editServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail, Boolean active);
     void deleteServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail);
