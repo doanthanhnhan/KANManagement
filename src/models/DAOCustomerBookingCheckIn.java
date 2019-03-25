@@ -9,7 +9,10 @@ import java.net.MalformedURLException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import utils.connectDB;
 
@@ -40,5 +43,32 @@ public class DAOCustomerBookingCheckIn {
         pt.execute();
         pt.close();
         connection.close();
+    }
+//    Check invalid CustomerID
+
+    public static boolean check_IDCustomer(String ID) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "select CustomerID from Customers where CustomerID = ?";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            if (rs.next()) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return false;
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
     }
 }

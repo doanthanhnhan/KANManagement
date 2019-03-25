@@ -140,6 +140,7 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         serviceOrderDAOImpl = new ServiceOrderDAOImpl();
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
         roomDAOImpl = new RoomDAOImpl();
+
         roleDAOImpl = new RoleDAOImpl();
 
         check_Validate = false;

@@ -14,6 +14,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -32,9 +33,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Customer;
+import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.formatCalender;
 import models.notificationFunction;
+import utils.GetInetAddress;
 import utils.PatternValided;
 
 /**
@@ -97,6 +100,7 @@ public class FXMLInfoCustomerController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
@@ -240,6 +244,8 @@ public class FXMLInfoCustomerController implements Initializable {
             notificationFunction.notification(LastName, HboxContent, "LASTNAME INVALID (Example: Nguyễn, Trần,...) !!!");
         } else if (!PatternValided.PatternEmail(Email.getText()) && !Email.getText().equals("")) {
             notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
+        } else if (!DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getText())) {
+            notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID ALREADY EXIST !!!");
         } else {
             Customer ctm = new Customer();
             String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -261,6 +267,31 @@ public class FXMLInfoCustomerController implements Initializable {
             } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
+            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Creat customer " + CustomerID.getText(),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+//            messenge when add complete
+            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
+            icon.setSize("16");
+            icon.setStyleClass("jfx-glyhp-icon-finish");
+            Label label = new Label();
+            label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
+            label.setPrefSize(300, 35);
+            label.setText("Create " + CustomerID.getText() + " COMPLETE!!!");
+            HboxContent.setSpacing(10);
+            HboxContent.getChildren().clear();
+            HboxContent.getChildren().add(icon);
+            HboxContent.getChildren().add(label);
+//            reset textfield when add complete
+            CustomerID.setText("");
+            FirstName.setText("");
+            MidName.setText("");
+            LastName.setText("");
+            Email.setText("");
+            birthday.setValue(null);
+            PhoneNumber.setText("");
+            Passport.setText("");
+            Discount.setText("0");
+            Company.setText("");
         }
     }
 }
