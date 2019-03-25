@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPaneInfoEmployee" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLInfoCustomerController">
+<AnchorPane id="AnchorPane" fx:id="anchorPaneInfoCustomer" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLInfoCustomerController">
    <children>
       <VBox fx:id="vBox_Employee_Info" layoutX="-6.0" layoutY="-7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -243,7 +243,7 @@
             </HBox>
             <HBox fx:id="Hboxbtn" alignment="CENTER">
                <children>
-                  <JFXButton fx:id="btnInfo" buttonType="RAISED" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                  <JFXButton fx:id="btnInfo" buttonType="RAISED" onAction="#btnSubmitAddCustomer" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

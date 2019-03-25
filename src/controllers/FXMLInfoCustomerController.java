@@ -10,7 +10,6 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
-import static controllers.FXMLInfoEmployeeController.check_delete;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
@@ -23,8 +22,11 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -45,6 +47,7 @@ import models.notificationFunction;
 import utils.AlertLoginAgain;
 import utils.GetInetAddress;
 import utils.PatternValided;
+import utils.StageLoader;
 import utils.showFXMLLogin;
 
 /**
@@ -56,7 +59,7 @@ public class FXMLInfoCustomerController implements Initializable {
 
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     @FXML
-    private AnchorPane anchorPaneInfoEmployee;
+    private AnchorPane anchorPaneInfoCustomer;
     @FXML
     private VBox vBox_Employee_Info;
     @FXML
@@ -118,87 +121,147 @@ public class FXMLInfoCustomerController implements Initializable {
         Discount.setText("0");
 //        set UserName
         Username.setText(FXMLLoginController.User_Login);
-//        set action for btnInfo
-        btnInfo.setOnAction((event) -> {
-            formSubmitAction();
-        });
 //   set enter for textfield
         CustomerID.setOnKeyPressed((KeyEvent event) -> {
-            CustomerID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                CustomerID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         birthday.valueProperty().addListener((obs, oldItem, newItem) -> {
-            birthday.setStyle("-jfx-default-color: #6447cd;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                birthday.setStyle("-jfx-default-color: #6447cd;");
+                HboxContent.getChildren().clear();
+            });
         });
         birthday.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         PhoneNumber.setOnKeyPressed((KeyEvent event) -> {
-            PhoneNumber.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                PhoneNumber.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         Email.setOnKeyPressed((KeyEvent event) -> {
-            Email.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                Email.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         Passport.setOnKeyPressed((KeyEvent event) -> {
-            Passport.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                Passport.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         FirstName.setOnKeyPressed((KeyEvent event) -> {
-            FirstName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                FirstName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         MidName.setOnKeyPressed((KeyEvent event) -> {
-            MidName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                MidName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         LastName.setOnKeyPressed((KeyEvent event) -> {
-            LastName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                LastName.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         Company.setOnKeyPressed((KeyEvent event) -> {
-            Company.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                Company.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         Discount.setOnKeyPressed((KeyEvent event) -> {
-            Discount.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            HboxContent.getChildren().clear();
+            Platform.runLater(() -> {
+                Discount.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                formSubmitAction();
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     @FXML
+
     private void Format_Show_Calender(ActionEvent event) {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, birthday);
@@ -211,23 +274,62 @@ public class FXMLInfoCustomerController implements Initializable {
         stage.close();
     }
 
-    public void formSubmitAction() {
-        try {
-            if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Customer_Add")) {
-                AlertLoginAgain.alertLogin();
-                fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
-                Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
-                Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
-                stage.close();
-                stageMainForm.close();
-                try {
-                    showFormLogin.showFormLogin();
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+    @FXML
+    private void btnSubmitAddCustomer() throws ClassNotFoundException, SQLException, IOException {
+        if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Customer_Add")) {
+            AlertLoginAgain.alertLogin();
+            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            Stage stage = (Stage) anchorPaneInfoCustomer.getScene().getWindow();
+            stage.close();
+            stageMainForm.close();
+            try {
+                showFormLogin.showFormLogin();
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            btnInfo.setDisable(true);
+            // Đoạn này làm loading (đang làm chạy vô tận)
+
+            // Khai báo stage nhìn xuyên thấu
+            StageLoader stageLoader = new StageLoader();
+            stageLoader.loadingIndicator("Loading");
+            Task loadOverview = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            HboxContent.getChildren().clear();
+                        }
+                    });
+                    formSubmitAction();
+                    return null;
                 }
-            } else if (CustomerID.getText() == null || CustomerID.getText().equals("")) {
+            };
+
+            loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    Platform.runLater(() -> {
+                        btnInfo.setDisable(false);
+                        stageLoader.stopTimeline();
+                        stageLoader.closeStage();
+                    });
+                }
+            });
+            new Thread(loadOverview).start();
+        }
+    }
+
+    public void formSubmitAction() {
+        if (CustomerID.getText() == null || CustomerID.getText().equals("")) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID MUST NOT EMPTY !!!");
-            } else if (birthday.getValue() == null) {
+            });
+        } else if (birthday.getValue() == null) {
+            Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
                 icon.setStyleClass("jfx-glyhp-icon");
@@ -243,31 +345,57 @@ public class FXMLInfoCustomerController implements Initializable {
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
                 birthday.requestFocus();
-            } else if (PhoneNumber.getText() == null || PhoneNumber.getText().equals("")) {
+            });
+        } else if (PhoneNumber.getText() == null || PhoneNumber.getText().equals("")) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
-            } else if (Passport.getText() == null || Passport.getText().equals("")) {
+            });
+        } else if (Passport.getText() == null || Passport.getText().equals("")) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(Passport, HboxContent, "PASSPORT MUST NOT EMPTY !!!");
-            } else if (FirstName.getText() == null || FirstName.getText().equals("")) {
+            });
+        } else if (FirstName.getText() == null || FirstName.getText().equals("")) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(FirstName, HboxContent, "FIRST NAME MUST NOT EMPTY !!!");
-            } else if (LastName.getText() == null || LastName.getText().equals("")) {
+            });
+        } else if (LastName.getText() == null || LastName.getText().equals("")) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(LastName, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
-            } else if (!PatternValided.PatternID(CustomerID.getText())) {
+            });
+        } else if (!PatternValided.PatternID(CustomerID.getText())) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID IS INCORRECT !!!");
-            } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText())) {
+            });
+        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText())) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
-            } else if (!PatternValided.PatternCMND(Passport.getText())) {
+            });
+        } else if (!PatternValided.PatternCMND(Passport.getText())) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(Passport, HboxContent, "PASSPORT IS INCORRECT !!!");
-            } else if (!PatternValided.PatternName(FirstName.getText())) {
+            });
+        } else if (!PatternValided.PatternName(FirstName.getText())) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(FirstName, HboxContent, "FIRST NAME INVALID (Example: Nguyễn, Lê,...) !!!");
-            } else if (!PatternValided.PatternName(MidName.getText()) && !MidName.getText().equals("")) {
+            });
+        } else if (!PatternValided.PatternName(MidName.getText()) && !MidName.getText().equals("")) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(MidName, HboxContent, "MIDNAME INVALID (Example: Thị, Văn,...) !!!");
-            } else if (!PatternValided.PatternName(LastName.getText())) {
+            });
+        } else if (!PatternValided.PatternName(LastName.getText())) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(LastName, HboxContent, "LASTNAME INVALID (Example: Nguyễn, Trần,...) !!!");
-            } else if (!PatternValided.PatternEmail(Email.getText()) && !Email.getText().equals("")) {
+            });
+        } else if (!PatternValided.PatternEmail(Email.getText()) && !Email.getText().equals("")) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
-            } else if (!DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getText())) {
+            });
+        } else if (!DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getText())) {
+            Platform.runLater(() -> {
                 notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID ALREADY EXIST !!!");
-            } else {
+            });
+        } else {
+            Platform.runLater(() -> {
                 Customer ctm = new Customer();
                 String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 ctm.setCusID(CustomerID.getText());
@@ -288,7 +416,7 @@ public class FXMLInfoCustomerController implements Initializable {
                 } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Creat customer " + CustomerID.getText(),
+                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create customer " + CustomerID.getText(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
 //            messenge when add complete
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
@@ -298,6 +426,7 @@ public class FXMLInfoCustomerController implements Initializable {
                 label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(300, 35);
                 label.setText("Create " + CustomerID.getText() + " COMPLETE!!!");
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
                 HboxContent.setSpacing(10);
                 HboxContent.getChildren().clear();
                 HboxContent.getChildren().add(icon);
@@ -313,9 +442,7 @@ public class FXMLInfoCustomerController implements Initializable {
                 Passport.setText("");
                 Discount.setText("0");
                 Company.setText("");
-            }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
     }
 }
