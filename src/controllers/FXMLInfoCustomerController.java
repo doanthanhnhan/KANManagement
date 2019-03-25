@@ -9,8 +9,11 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import static controllers.ConnectControllers.fXMLMainFormController;
+import static controllers.FXMLInfoEmployeeController.check_delete;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,10 +39,13 @@ import javafx.stage.Stage;
 import models.Customer;
 import models.DAO;
 import models.DAOCustomerBookingCheckIn;
+import models.DAOcheckRole;
 import models.formatCalender;
 import models.notificationFunction;
+import utils.AlertLoginAgain;
 import utils.GetInetAddress;
 import utils.PatternValided;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -47,6 +54,7 @@ import utils.PatternValided;
  */
 public class FXMLInfoCustomerController implements Initializable {
 
+    private showFXMLLogin showFormLogin = new showFXMLLogin();
     @FXML
     private AnchorPane anchorPaneInfoEmployee;
     @FXML
@@ -204,94 +212,110 @@ public class FXMLInfoCustomerController implements Initializable {
     }
 
     public void formSubmitAction() {
-        if (CustomerID.getText() == null || CustomerID.getText().equals("")) {
-            notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID MUST NOT EMPTY !!!");
-        } else if (birthday.getValue() == null) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("BIRTHDAY MUST NOT EMPTY !!!");
-            birthday.setStyle("-jfx-default-color: RED;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            birthday.requestFocus();
-        } else if (PhoneNumber.getText() == null || PhoneNumber.getText().equals("")) {
-            notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
-        } else if (Passport.getText() == null || Passport.getText().equals("")) {
-            notificationFunction.notification(Passport, HboxContent, "PASSPORT MUST NOT EMPTY !!!");
-        } else if (FirstName.getText() == null || FirstName.getText().equals("")) {
-            notificationFunction.notification(FirstName, HboxContent, "FIRST NAME MUST NOT EMPTY !!!");
-        } else if (LastName.getText() == null || LastName.getText().equals("")) {
-            notificationFunction.notification(LastName, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
-        } else if (!PatternValided.PatternID(CustomerID.getText())) {
-            notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID IS INCORRECT !!!");
-        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText())) {
-            notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
-        } else if (!PatternValided.PatternCMND(Passport.getText())) {
-            notificationFunction.notification(Passport, HboxContent, "PASSPORT IS INCORRECT !!!");
-        } else if (!PatternValided.PatternName(FirstName.getText())) {
-            notificationFunction.notification(FirstName, HboxContent, "FIRST NAME INVALID (Example: Nguyễn, Lê,...) !!!");
-        } else if (!PatternValided.PatternName(MidName.getText()) && !MidName.getText().equals("")) {
-            notificationFunction.notification(MidName, HboxContent, "MIDNAME INVALID (Example: Thị, Văn,...) !!!");
-        } else if (!PatternValided.PatternName(LastName.getText())) {
-            notificationFunction.notification(LastName, HboxContent, "LASTNAME INVALID (Example: Nguyễn, Trần,...) !!!");
-        } else if (!PatternValided.PatternEmail(Email.getText()) && !Email.getText().equals("")) {
-            notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
-        } else if (!DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getText())) {
-            notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID ALREADY EXIST !!!");
-        } else {
-            Customer ctm = new Customer();
-            String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            ctm.setCusID(CustomerID.getText());
-            ctm.setUser(Username.getText());
-            ctm.setDate(date);
-            ctm.setActive(true);
-            ctm.setSex(Male.isSelected());
-            ctm.setCompany(Company.getText());
-            ctm.setDiscount(Float.valueOf(Discount.getText()));
-            ctm.setEmail(Email.getText());
-            ctm.setPassport(Passport.getText());
-            ctm.setFName(FirstName.getText());
-            ctm.setMName(MidName.getText());
-            ctm.setLName(LastName.getText());
-            ctm.setPhone(PhoneNumber.getText());
-            try {
-                DAOCustomerBookingCheckIn.AddNewCustomer(ctm);
-            } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Creat customer " + CustomerID.getText(),
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+        try {
+            if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Customer_Add")) {
+                AlertLoginAgain.alertLogin();
+                fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+                Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+                Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
+                stage.close();
+                stageMainForm.close();
+                try {
+                    showFormLogin.showFormLogin();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (CustomerID.getText() == null || CustomerID.getText().equals("")) {
+                notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID MUST NOT EMPTY !!!");
+            } else if (birthday.getValue() == null) {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setText("BIRTHDAY MUST NOT EMPTY !!!");
+                birthday.setStyle("-jfx-default-color: RED;");
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                birthday.requestFocus();
+            } else if (PhoneNumber.getText() == null || PhoneNumber.getText().equals("")) {
+                notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
+            } else if (Passport.getText() == null || Passport.getText().equals("")) {
+                notificationFunction.notification(Passport, HboxContent, "PASSPORT MUST NOT EMPTY !!!");
+            } else if (FirstName.getText() == null || FirstName.getText().equals("")) {
+                notificationFunction.notification(FirstName, HboxContent, "FIRST NAME MUST NOT EMPTY !!!");
+            } else if (LastName.getText() == null || LastName.getText().equals("")) {
+                notificationFunction.notification(LastName, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
+            } else if (!PatternValided.PatternID(CustomerID.getText())) {
+                notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID IS INCORRECT !!!");
+            } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText())) {
+                notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
+            } else if (!PatternValided.PatternCMND(Passport.getText())) {
+                notificationFunction.notification(Passport, HboxContent, "PASSPORT IS INCORRECT !!!");
+            } else if (!PatternValided.PatternName(FirstName.getText())) {
+                notificationFunction.notification(FirstName, HboxContent, "FIRST NAME INVALID (Example: Nguyễn, Lê,...) !!!");
+            } else if (!PatternValided.PatternName(MidName.getText()) && !MidName.getText().equals("")) {
+                notificationFunction.notification(MidName, HboxContent, "MIDNAME INVALID (Example: Thị, Văn,...) !!!");
+            } else if (!PatternValided.PatternName(LastName.getText())) {
+                notificationFunction.notification(LastName, HboxContent, "LASTNAME INVALID (Example: Nguyễn, Trần,...) !!!");
+            } else if (!PatternValided.PatternEmail(Email.getText()) && !Email.getText().equals("")) {
+                notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
+            } else if (!DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getText())) {
+                notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID ALREADY EXIST !!!");
+            } else {
+                Customer ctm = new Customer();
+                String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                ctm.setCusID(CustomerID.getText());
+                ctm.setUser(Username.getText());
+                ctm.setDate(date);
+                ctm.setActive(true);
+                ctm.setSex(Male.isSelected());
+                ctm.setCompany(Company.getText());
+                ctm.setDiscount(Float.valueOf(Discount.getText()));
+                ctm.setEmail(Email.getText());
+                ctm.setPassport(Passport.getText());
+                ctm.setFName(FirstName.getText());
+                ctm.setMName(MidName.getText());
+                ctm.setLName(LastName.getText());
+                ctm.setPhone(PhoneNumber.getText());
+                try {
+                    DAOCustomerBookingCheckIn.AddNewCustomer(ctm);
+                } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Creat customer " + CustomerID.getText(),
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
 //            messenge when add complete
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon-finish");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(300, 35);
-            label.setText("Create " + CustomerID.getText() + " COMPLETE!!!");
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon-finish");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(300, 35);
+                label.setText("Create " + CustomerID.getText() + " COMPLETE!!!");
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
 //            reset textfield when add complete
-            CustomerID.setText("");
-            FirstName.setText("");
-            MidName.setText("");
-            LastName.setText("");
-            Email.setText("");
-            birthday.setValue(null);
-            PhoneNumber.setText("");
-            Passport.setText("");
-            Discount.setText("0");
-            Company.setText("");
+                CustomerID.setText("");
+                FirstName.setText("");
+                MidName.setText("");
+                LastName.setText("");
+                Email.setText("");
+                birthday.setValue(null);
+                PhoneNumber.setText("");
+                Passport.setText("");
+                Discount.setText("0");
+                Company.setText("");
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
