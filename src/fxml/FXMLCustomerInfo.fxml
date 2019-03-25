@@ -243,7 +243,7 @@
             </HBox>
             <HBox fx:id="Hboxbtn" alignment="CENTER">
                <children>
-                  <JFXButton fx:id="btnInfo" buttonType="RAISED" onAction="#btnSubmitAddCustomer" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                  <JFXButton fx:id="btnInfo" buttonType="RAISED" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

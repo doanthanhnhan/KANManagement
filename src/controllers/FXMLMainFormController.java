@@ -209,7 +209,7 @@ public class FXMLMainFormController implements Initializable {
 
         //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
-        
+
         //Initialize OverView Pane
         task_Insert_Tab_With_Indicator("/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
 
@@ -474,7 +474,7 @@ public class FXMLMainFormController implements Initializable {
                 Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
             }
             Stage stage = (Stage) btn_Toolbar_User_Logout.getScene().getWindow();
-            stage.close();            
+            stage.close();
         }
     }
 
@@ -529,12 +529,21 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("Add new User menu item clicked!");
         formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New User");
     }
+
     @FXML
     private void handle_MenuItem_Add_Customer_Action(ActionEvent event) {
         checkRegis = true;
         System.out.println("Add new Customer menu item clicked!");
         formLoader("/fxml/FXMLCustomerInfo.fxml", "/images/KAN Logo.png", "Add New Customer");
     }
+
+    @FXML
+    private void handle_MenuItem_Add_Booking_Action(ActionEvent event) {
+        checkRegis = true;
+        System.out.println("Add new Customer menu item clicked!");
+        formLoader("/fxml/FXMLBookingInfo.fxml", "/images/KAN Logo.png", "Add Booking");
+    }
+
     @FXML
     private void handle_MenuItem_Add_Service_Type_Action(ActionEvent event) {
         System.out.println("Add new Service Type menu item clicked!");

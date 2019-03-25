@@ -5,9 +5,8 @@
  */
 package models;
 
-import java.time.LocalDateTime;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -16,23 +15,21 @@ import javafx.beans.property.StringProperty;
  * @author ASUS
  */
 public class BookingInfo {
-     public StringProperty BookID, CusID, RoomID, User, Note, Flight;
-     public LocalDateTime Date;
-     public BooleanProperty Drive;
-     public int NumGuest;
+
+    public StringProperty BookID, CusID, RoomID, User, Note, Date;
+    public IntegerProperty NumGuest;
 
     public BookingInfo() {
     }
 
-    public BookingInfo(String BookID, String CusID, String RoomID, String User, String Note, String Flight, Boolean Drive, int NumGuest) {
+    public BookingInfo(String BookID, String CusID, String RoomID, String User, String Note, Integer NumGuest, String Date) {
         this.BookID = new SimpleStringProperty(BookID);
         this.CusID = new SimpleStringProperty(CusID);
         this.RoomID = new SimpleStringProperty(RoomID);
         this.User = new SimpleStringProperty(User);
         this.Note = new SimpleStringProperty(Note);
-        this.Flight = new SimpleStringProperty(Flight);
-        this.Drive = new SimpleBooleanProperty(Drive);
-        this.NumGuest = NumGuest;
+        this.NumGuest = new SimpleIntegerProperty(NumGuest);
+        this.Date = new SimpleStringProperty(Date);
     }
 
     public String getBookID() {
@@ -75,37 +72,22 @@ public class BookingInfo {
         this.Note = new SimpleStringProperty(Note);
     }
 
-    public String getFlight() {
-        return Flight.get();
-    }
-
-    public void setFlight(String Flight) {
-        this.Flight = new SimpleStringProperty(Flight);
-    }
-
-    public LocalDateTime getDate() {
-        return Date;
-    }
-
-    public void setDate(LocalDateTime Date) {
-        this.Date = Date;
-    }
 
 
-    public Boolean getDrive() {
-        return Drive.get();
+    public String getDate() {
+        return Date.get();
     }
 
-    public void setDrive(Boolean Drive) {
-        this.Drive = new SimpleBooleanProperty(Drive);
+    public void setDate(String Date) {
+        this.Date = new SimpleStringProperty(Date);
     }
 
-    public int getNumGuest() {
-        return NumGuest;
+    public Integer getNumGuest() {
+        return NumGuest.get();
     }
 
-    public void setNumGuest(int NumGuest) {
-        this.NumGuest = NumGuest;
+    public void setNumGuest(Integer NumGuest) {
+        this.NumGuest = new SimpleIntegerProperty(NumGuest);
     }
-     
+
 }

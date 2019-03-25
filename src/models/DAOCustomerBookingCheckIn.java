@@ -11,8 +11,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import utils.connectDB;
 
@@ -21,6 +24,23 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    Get all Id of Customer
+
+    public static ObservableList<String> getAllIdCustomer() throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        // Tạo đối tượng Statement.
+        Statement statement = connection.createStatement();
+        String sql = "select CustomerID from Customers";
+
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = statement.executeQuery(sql);
+        ObservableList listIdUser = FXCollections.observableArrayList();
+        while (rs.next()) {
+            listIdUser.add(rs.getString("CustomerID"));
+        }
+        connection.close();
+        return listIdUser;
+    }
 //    Add new Customer
 
     public static void AddNewCustomer(Customer ctm) throws MalformedURLException, SQLException, ClassNotFoundException {

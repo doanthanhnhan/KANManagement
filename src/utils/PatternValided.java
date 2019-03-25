@@ -65,6 +65,11 @@ public class PatternValided {
         return Salary.matcher(value).matches();
     }
 
+    public static Boolean PatternNumberGuest(String value) {
+        Pattern Number = Pattern.compile("[1-8]");
+        return Number.matcher(value).matches();
+    }
+
     /**
      * Pattern validation for JFXTextField
      *

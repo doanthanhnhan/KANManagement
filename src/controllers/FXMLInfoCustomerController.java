@@ -23,7 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -117,6 +116,13 @@ public class FXMLInfoCustomerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        btnInfo.setOnAction((event) -> {
+            try {
+                btnSubmitAddCustomer();
+            } catch (ClassNotFoundException | SQLException | IOException ex) {
+                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
 //        set discount
         Discount.setText("0");
 //        set UserName
@@ -261,7 +267,6 @@ public class FXMLInfoCustomerController implements Initializable {
     }
 
     @FXML
-
     private void Format_Show_Calender(ActionEvent event) {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, birthday);
@@ -274,8 +279,7 @@ public class FXMLInfoCustomerController implements Initializable {
         stage.close();
     }
 
-    @FXML
-    private void btnSubmitAddCustomer() throws ClassNotFoundException, SQLException, IOException {
+    public void btnSubmitAddCustomer() throws ClassNotFoundException, SQLException, IOException {
         if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Customer_Add")) {
             AlertLoginAgain.alertLogin();
             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
@@ -298,13 +302,11 @@ public class FXMLInfoCustomerController implements Initializable {
             Task loadOverview = new Task() {
                 @Override
                 protected Object call() throws Exception {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            HboxContent.getChildren().clear();
-                        }
+                    Platform.runLater(() -> {
+                        HboxContent.getChildren().clear();
+                        formSubmitAction();
                     });
-                    formSubmitAction();
+
                     return null;
                 }
             };
@@ -418,6 +420,18 @@ public class FXMLInfoCustomerController implements Initializable {
                 }
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create customer " + CustomerID.getText(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                //            reset textfield when add complete
+
+                FirstName.setText("");
+                MidName.setText("");
+                LastName.setText("");
+                Email.setText("");
+                PhoneNumber.setText("");
+                Passport.setText("");
+                Discount.setText("0");
+                Company.setText("");
+                birthday.setValue(null);
+
 //            messenge when add complete
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
                 icon.setSize("16");
@@ -425,23 +439,13 @@ public class FXMLInfoCustomerController implements Initializable {
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(300, 35);
-                label.setText("Create " + CustomerID.getText() + " COMPLETE!!!");
+                label.setText("Create  COMPLETE!!!");
                 HboxContent.setAlignment(Pos.CENTER_LEFT);
                 HboxContent.setSpacing(10);
                 HboxContent.getChildren().clear();
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
-//            reset textfield when add complete
                 CustomerID.setText("");
-                FirstName.setText("");
-                MidName.setText("");
-                LastName.setText("");
-                Email.setText("");
-                birthday.setValue(null);
-                PhoneNumber.setText("");
-                Passport.setText("");
-                Discount.setText("0");
-                Company.setText("");
             });
         }
     }
