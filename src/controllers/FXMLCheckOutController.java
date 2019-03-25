@@ -8,8 +8,10 @@ package controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -84,7 +86,7 @@ public class FXMLCheckOutController implements Initializable {
     @FXML
     private TableView<ServiceOrderDetail> tableView_Service_Order;
     @FXML
-    private TableView<?> tableView_Total_Bill;
+    private JFXTextArea txt_Area_Total_Bill;
 
     /**
      * Initializes the controller class.
@@ -96,6 +98,7 @@ public class FXMLCheckOutController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
         // Init for testing
+        total_Room = new BigDecimal(BigInteger.ZERO);
         txt_Room_ID.setText("R0201");
         datePicker_Check_In.setValue(LocalDate.parse("2019-03-20"));
         setColumns();
@@ -157,8 +160,11 @@ public class FXMLCheckOutController implements Initializable {
         //table_ServiceType.getItems().clear();
         tableView_Service_Order.setItems(list_Service_Order_Details);
         for (ServiceOrderDetail list_Service_Order_Detail : list_Service_Order_Details) {
-           //total_Service = list_Service_Order_Detail.getServicePriceTotal() + total_Service;
+            total_Service = total_Service.add(list_Service_Order_Detail.getServicePriceTotal()
+                    .multiply(BigDecimal.ONE.subtract(list_Service_Order_Detail.getServiceDiscount())));
+            System.out.println("Total service = " + total_Service);
         }
+        txt_Area_Total_Bill.setText(total_Service.toString());
     }
 
     @FXML

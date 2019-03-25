@@ -15,6 +15,7 @@ public interface RoomDAO {
     List<Room> getAllRoom();
     List<Room> getAllStatusRooms(String roomStatus);
     List<String> getAllRoomID();    
+    List<String> getAll_Available_RoomID();    
     List<String> getAllStatusRoomID(String roomStatus);
     List<String> getAllCustomerID();
     List<String> getAllStatusCustomerID(String roomStatus);

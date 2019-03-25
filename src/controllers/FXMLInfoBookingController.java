@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -39,6 +40,7 @@ import javafx.stage.Stage;
 import models.BookingInfo;
 import models.DAOCustomerBookingCheckIn;
 import models.DAOcheckRole;
+import models.RoomDAOImpl;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
@@ -90,12 +92,23 @@ public class FXMLInfoBookingController implements Initializable {
     @FXML
     private JFXButton btnCancel;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
+    
+    ObservableList<String> listRoomID;
+    RoomDAOImpl roomDAOImpl;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        //Getting Available roomID
+        roomDAOImpl = new RoomDAOImpl();
+        listRoomID = roomDAOImpl.getAllStatusRoomID("Available");
+        
+        //Initialize combobox RoomID
+        boxIdRoom.getItems().addAll(listRoomID);
+        
         btnInfo.setOnAction((event) -> {
             try {
                 btnSubmitBooking();

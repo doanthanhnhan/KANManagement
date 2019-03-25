@@ -132,6 +132,30 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
+    public List<String> getAll_Available_RoomID() {
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomStatus='Avaiable'";
+        ObservableList<String> listRooms = FXCollections.observableArrayList();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    String roomID;
+                    roomID = rs.getString("RoomID");
+
+                    listRooms.add(roomID);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+            alert.show();
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRooms;
+    }
+
+    @Override
     public ObservableList<String> getAllStatusRoomID(String roomStatus) {
         String sql = "SELECT RoomID FROM Rooms WHERE RoomStatus='" + roomStatus + "'";
         ObservableList<String> listRooms = FXCollections.observableArrayList();
