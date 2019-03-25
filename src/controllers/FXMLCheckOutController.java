@@ -98,7 +98,7 @@ public class FXMLCheckOutController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
         // Init for testing
-        total_Room = new BigDecimal(BigInteger.ZERO);
+        total_Service = new BigDecimal(BigInteger.ZERO);
         txt_Room_ID.setText("R0201");
         datePicker_Check_In.setValue(LocalDate.parse("2019-03-20"));
         setColumns();
@@ -164,7 +164,7 @@ public class FXMLCheckOutController implements Initializable {
                     .multiply(BigDecimal.ONE.subtract(list_Service_Order_Detail.getServiceDiscount())));
             System.out.println("Total service = " + total_Service);
         }
-        txt_Area_Total_Bill.setText(total_Service.toString());
+        txt_Area_Total_Bill.setText("Total service amount = " + total_Service.toString());
     }
 
     @FXML

@@ -90,7 +90,7 @@
                         </VBox>
                         <VBox spacing="20.0">
                            <children>
-                              <JFXTextArea fx:id="txt_Area_Total_Bill" labelFloat="true" prefHeight="300.0" promptText="Bill detail">
+                              <JFXTextArea fx:id="txt_Area_Total_Bill" labelFloat="true" prefHeight="300.0" prefWidth="500.0" promptText="Bill detail">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
