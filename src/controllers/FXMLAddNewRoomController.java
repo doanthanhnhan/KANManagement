@@ -39,6 +39,7 @@ import utils.StageLoader;
  *
  * @author Doan Thanh Nhan
  */
+
 public class FXMLAddNewRoomController implements Initializable {
 
     public static ObservableList<Room> listRooms;

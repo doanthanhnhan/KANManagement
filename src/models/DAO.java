@@ -56,6 +56,7 @@ public class DAO {
         pts.close();
         connection.close();
     }
+//    check sự tồn tại của địa chỉ Mac trong Database
     public static Integer check_Active_MacAddress(String MACAddress) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String sql = "select Active from CheckBlockMacAddress where MACAddress=?";
