@@ -38,7 +38,7 @@ public class ServiceType {
         this.serviceID = serviceType.getServiceID();
         this.userName = serviceType.getUserName();
         this.serviceName = serviceType.getServiceName();
-        this.serviceUnit = serviceType.getServiceID();
+        this.serviceUnit = serviceType.getServiceUnit();
         this.servicePrice = serviceType.getServicePrice();
         this.serviceInventory = serviceType.getServiceInventory();
         this.serviceImportQuantity = serviceType.getServiceImportQuantity();

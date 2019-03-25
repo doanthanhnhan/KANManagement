@@ -493,13 +493,13 @@ GROUP BY CustomerID
 
 SELECT * FROM ServiceType
 DELETE FROM ServiceType
-INSERT INTO ServiceType(ServiceID, UserName, ServiceName, ServiceUnit, ServicePrice, ServiceInventory, InputDate) VALUES
-('KANService001', 'admin', N'Laundry', N'time', 0, 99999, '2019-03-01'),
-('KANService002', 'admin', N'Fruit basket', N'set', 10, 99999, '2019-03-01'),
-('KANService003', 'admin', N'Heineiken 330ml', N'can', 5, 99999, '2019-03-01'),
-('KANService004', 'admin', N'Cocacola 330ml', N'can', 2, 99999, '2019-03-01'),
-('KANService005', 'admin', N'Seven UP', N'can', 2, 99999, '2019-03-01'),
-('KANService006', 'admin', N'Aquafina 500ml', N'bottle', 1.5, 99999, '2019-03-01')
+INSERT INTO ServiceType(ServiceID, UserName, ServiceName, ServiceUnit, ServicePrice, ServiceInventory,ImportQuantity, ImPortDate) VALUES
+('KANService001', 'admin', N'Laundry', N'time', 0, 99999, 99999,'2019-03-01'),
+('KANService002', 'admin', N'Fruit basket', N'set', 10, 99999, 99999,'2019-03-01'),
+('KANService003', 'admin', N'Heineiken 330ml', N'can', 5, 99999, 99999,'2019-03-01'),
+('KANService004', 'admin', N'Cocacola 330ml', N'can', 2, 99999, 99999,'2019-03-01'),
+('KANService005', 'admin', N'Seven UP', N'can', 2, 99999, 99999,'2019-03-01'),
+('KANService006', 'admin', N'Aquafina 500ml', N'bottle', 1.5, 99999, 99999,'2019-03-01')
 
 SELECT * FROM ServicesOrders
 DELETE FROM ServicesOrders
@@ -517,9 +517,9 @@ INSERT INTO ServicesOrderDetails(OrderID, ServiceID, UserName, ServiceQuantity, 
 ('Order002','KANService004', 'admin', 15, 30, 0.3),
 ('Order002','KANService006', 'admin', 10, 15, 0.05),
 
-SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.* FROM ServicesOrderDetails SOD 
-INNER JOIN ServiceType ST
-ON SOD.ServiceID = ST.ServiceID
+SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate FROM ServicesOrderDetails SOD 
+INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID
+INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID 
 WHERE SOD.OrderID='Order001' 
 
 INSERT INTO BookingInfo(BookingID, CustomerID, RoomID, UserName, NumberGuest, DateBook) VALUES

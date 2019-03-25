@@ -22,6 +22,8 @@ import javafx.beans.property.StringProperty;
 public class ServiceOrderDetail extends ServiceType {
 
     private StringProperty orderID;
+    private StringProperty customerID;
+    private StringProperty roomID;
     private IntegerProperty serviceQuantity;
     private BigDecimal servicePriceTotal;
     private BigDecimal serviceDiscount;
@@ -32,6 +34,8 @@ public class ServiceOrderDetail extends ServiceType {
     public ServiceOrderDetail() {
         this.active = new SimpleBooleanProperty();
         this.orderID = new SimpleStringProperty();
+        this.customerID = new SimpleStringProperty();
+        this.roomID = new SimpleStringProperty();
         this.serviceQuantity = new SimpleIntegerProperty();
         this.serviceRemoveButton = new JFXButton("Remove");
     }
@@ -102,6 +106,30 @@ public class ServiceOrderDetail extends ServiceType {
 
     public void setServiceOrderDate(LocalDateTime serviceOrderDate) {
         this.serviceOrderDate = serviceOrderDate;
+    }
+
+    public final String getCustomerID() {
+        return customerID.get();
+    }
+
+    public final void setCustomerID(String value) {
+        customerID.set(value);
+    }
+
+    public StringProperty customerIDProperty() {
+        return customerID;
+    }
+
+    public final String getRoomID() {
+        return roomID.get();
+    }
+
+    public final void setRoomID(String value) {
+        roomID.set(value);
+    }
+
+    public StringProperty roomIDProperty() {
+        return roomID;
     }
 
 }

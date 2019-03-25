@@ -165,6 +165,8 @@ public class FXMLListServiceOrderDetailController implements Initializable {
 
     private void setColumns() {
         TableColumn<ServiceOrderDetail, String> orderIDCol = new TableColumn<>("Order ID");
+        TableColumn<ServiceOrderDetail, String> customerIDCol = new TableColumn<>("Customer ID");
+        TableColumn<ServiceOrderDetail, String> roomIDCol = new TableColumn<>("Room ID");
         TableColumn<ServiceOrderDetail, String> serviceIDCol = new TableColumn<>("Service ID");
         TableColumn<ServiceOrderDetail, String> userNameCol = new TableColumn<>("User name");
         TableColumn<ServiceOrderDetail, String> serviceNameCol = new TableColumn<>("Service name");
@@ -190,6 +192,8 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         // Định nghĩa cách để lấy dữ liệu cho mỗi ô.
         // Lấy giá trị từ các thuộc tính của ServiceOrderDetail.
         orderIDCol.setCellValueFactory(new PropertyValueFactory<>("orderID"));
+        customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        roomIDCol.setCellValueFactory(new PropertyValueFactory<>("roomID"));
         serviceIDCol.setCellValueFactory(new PropertyValueFactory<>("serviceID"));
         userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
         serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
@@ -205,6 +209,8 @@ public class FXMLListServiceOrderDetailController implements Initializable {
 
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        customerIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        roomIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceUnitCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -220,7 +226,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
 
         // Thêm cột vào bảng
         table_Service_Order_Detail.getColumns().clear();
-        table_Service_Order_Detail.getColumns().addAll(numberCol, orderIDCol, serviceIDCol, serviceNameCol, serviceUnitCol,
+        table_Service_Order_Detail.getColumns().addAll(numberCol, orderIDCol, customerIDCol, roomIDCol, serviceIDCol, serviceNameCol, serviceUnitCol,
                 servicePriceCol, serviceInventoryCol, serviceQuantityCol, serviceOrderDateCol, serviceTotalPriceCol, serviceDiscountCol,
                 serviceDescriptionCol, serviceImageCol);
 

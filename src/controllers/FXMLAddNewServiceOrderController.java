@@ -10,7 +10,6 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-import static controllers.FXMLListServiceTypeController.serviceTypeItem;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
@@ -22,7 +21,6 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -273,6 +271,9 @@ public class FXMLAddNewServiceOrderController implements Initializable {
                 btn_Save_Order.setText("Edit order");
                 btn_Save_Order.setDisable(true);
 
+                //Initialize ComboBox
+                comboBox_Customer_ID.setValue(listServiceOrderController.serviceOrderItem.getCustomerID());
+                comboBox_Room_ID.setValue(listServiceOrderController.serviceOrderItem.getRoomID());
                 //Setting after loading finished
                 comboBox_Customer_ID.setDisable(true);
                 comboBox_Room_ID.setDisable(true);
@@ -299,6 +300,9 @@ public class FXMLAddNewServiceOrderController implements Initializable {
                 //Initialize Button
                 btn_Save_Order.setText("Edit order");
                 btn_Save_Order.setDisable(true);
+                //Initialize ComboBox
+                comboBox_Customer_ID.setValue(listServiceOrderDetailController.serviceOrderDetailItem.getCustomerID());
+                comboBox_Room_ID.setValue(listServiceOrderDetailController.serviceOrderDetailItem.getRoomID());
 
                 //Setting after loading finished
                 comboBox_Customer_ID.setDisable(true);

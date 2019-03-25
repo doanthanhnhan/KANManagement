@@ -38,7 +38,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
     @Override
     public ObservableList<ServiceOrderDetail> getAllServiceOrdersDetails() {
-        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate FROM ServicesOrderDetails SOD "
+        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID "
+                + "FROM ServicesOrderDetails SOD "
                 + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID\n"
                 + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID\n"
                 + "WHERE SOD.Active=1";
@@ -48,6 +49,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
             while (rs.next()) {
                 ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail();
                 serviceOrderDetail.setOrderID(rs.getString("OrderID"));
+                serviceOrderDetail.setCustomerID(rs.getString("CustomerID"));
+                serviceOrderDetail.setRoomID(rs.getString("RoomID"));
                 serviceOrderDetail.setServiceID(rs.getString("ServiceID"));
                 serviceOrderDetail.setUserName(rs.getString("UserName"));
                 serviceOrderDetail.setServiceQuantity(rs.getInt("ServiceQuantity"));
