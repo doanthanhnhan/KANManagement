@@ -36,6 +36,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import models.Room;
 import models.RoomDAOImpl;
+import models.RoomProperty;
 
 /**
  * FXML Controller class
@@ -45,6 +46,7 @@ import models.RoomDAOImpl;
 public class FXMLMainOverViewPaneController implements Initializable {
 
     public static ObservableList<Room> listRooms;
+    public ObservableList<RoomProperty> listRoomProperties;
     ObservableList<String> list_Status = FXCollections.observableArrayList();
     ObservableList<String> list_Type = FXCollections.observableArrayList();
     ObservableList<String> list_HouseKeeping = FXCollections.observableArrayList();
@@ -147,7 +149,10 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
         ConnectControllers.setfXMLMainOverViewPaneController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
-
+        
+        //Initialize label room property
+        init_Label_Room_Property();
+        
         check_Services_Button_Clicked = false;
 
         if (!roomDAOImpl.getAllRoom().isEmpty()) {
@@ -283,6 +288,62 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
     }
 
+    public void init_Label_Room_Property(){
+        listRoomProperties = roomDAOImpl.getAllRoomProperties();       
+        for (RoomProperty roomProperty : listRoomProperties) {
+            
+            switch (roomProperty.getRoomPropertyName()) {
+                case "Available":
+                    label_Available_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Reserved":
+                    label_Reserved_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Occupied":
+                    label_Occupied_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Out":
+                    label_Checkout_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Single":
+                    label_Single_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Double":
+                    label_Double_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Triple":
+                    label_Triple_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Family":
+                    label_Family_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Deluxe":
+                    label_Deluxe_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Clean":
+                    label_Clean_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Not Clean":
+                    label_NotClean_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Repaired":
+                    label_Repair_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Not Repaired":
+                    label_Not_Repair_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Checking":
+                    label_InProgress_Rooms.setText(roomProperty.getRoomCount().toString());
+                    break;
+                case "Not Checking":
+                    label_Remaining_Days.setText(roomProperty.getRoomCount().toString());
+                    break;
+                    
+                default:
+                    throw new AssertionError();
+            }            
+        }
+    }
     public void add_Rooms_With_Condition(
             ObservableList<Room> list_Rooms,
             Pane parentPane,

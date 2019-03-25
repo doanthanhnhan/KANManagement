@@ -335,6 +335,25 @@ CREATE VIEW view_UserRole AS
 SELECT R.*, E.EmployeeFirstName, E.EmployeeMidName, E.EmployeeLastName FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID
 SELECT * FROM view_UserRole
 
+CREATE VIEW view_RoomProperty AS
+SELECT RoomType AS 'PropertyName', COUNT(RoomType) AS 'Total' FROM Rooms GROUP BY RoomType
+UNION
+SELECT RoomStatus, COUNT(RoomStatus) AS 'Total' FROM Rooms GROUP BY RoomStatus
+UNION
+SELECT CASE WHEN Clean = 1 THEN 'Clean' ELSE 'Not Clean' END AS 'RoomStatus', COUNT(Clean) AS 'Total'
+FROM Rooms
+GROUP BY Clean
+UNION
+SELECT CASE WHEN Repaired = 1 THEN 'Repaired' ELSE 'Not Repaired' END AS 'RoomStatus', COUNT(Repaired) AS 'Total'
+FROM Rooms
+GROUP BY Repaired
+UNION
+SELECT CASE WHEN InProgress = 1 THEN 'Checking' ELSE 'Not Checking' END AS 'RoomStatus', COUNT(InProgress) AS 'Total'
+FROM Rooms
+GROUP BY InProgress
+
+SELECT * FROM view_RoomProperty
+
 -- CREATE STORE PROCEDURE --
 CREATE PROC sp_Rooms_With_Status
 AS
@@ -486,7 +505,7 @@ SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName A
 FROM Rooms R, Customers C
 WHERE R.CustomerID = C.CustomerID
 SELECT * FROM Rooms
-DELETE FROM Rooms
+DELETE FROM Rooms    
 
 SELECT CustomerID, COUNT(CustomerID) FROM Rooms WHERE RoomStatus='Occupied'
 GROUP BY CustomerID
@@ -517,7 +536,7 @@ INSERT INTO ServicesOrderDetails(OrderID, ServiceID, UserName, ServiceQuantity, 
 ('Order002','KANService004', 'admin', 15, 30, 0.3),
 ('Order002','KANService006', 'admin', 10, 15, 0.05),
 
-SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate FROM ServicesOrderDetails SOD 
+SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID FROM ServicesOrderDetails SOD 
 INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID
 INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID 
 WHERE SOD.OrderID='Order001' 

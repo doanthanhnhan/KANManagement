@@ -385,7 +385,31 @@ public class RoomDAOImpl implements RoomDAO {
             alert.show();
         }
     }
+    
+    public ObservableList<RoomProperty> getAllRoomProperties(){
+        String sql = "SELECT * FROM view_RoomProperty";
+        ObservableList<RoomProperty> listRooms = FXCollections.observableArrayList();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    RoomProperty room = new RoomProperty();
+                    room.setRoomPropertyName(rs.getString("PropertyName"));
+                    room.setRoomCount(rs.getInt("Total"));                    
 
+                    listRooms.add(room);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+            alert.show();
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRooms;
+    }
+//public 
     public static void main(String[] args) {
         RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
         ObservableList<Room> listRooms = FXCollections.observableArrayList();

@@ -209,6 +209,9 @@ public class FXMLMainFormController implements Initializable {
 
         //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+        
+        //Initialize OverView Pane
+        task_Insert_Tab_With_Indicator("/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
 
         //SETTING ROLE TO FORM
         //Get user role        
