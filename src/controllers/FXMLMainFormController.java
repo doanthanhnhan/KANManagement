@@ -529,7 +529,12 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("Add new User menu item clicked!");
         formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New User");
     }
-
+    @FXML
+    private void handle_MenuItem_Add_Customer_Action(ActionEvent event) {
+        checkRegis = true;
+        System.out.println("Add new Customer menu item clicked!");
+        formLoader("/fxml/FXMLCustomerInfo.fxml", "/images/KAN Logo.png", "Add New Customer");
+    }
     @FXML
     private void handle_MenuItem_Add_Service_Type_Action(ActionEvent event) {
         System.out.println("Add new Service Type menu item clicked!");

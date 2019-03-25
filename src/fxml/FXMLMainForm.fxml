@@ -61,7 +61,7 @@
                               <MenuItem fx:id="menuItem_Add_Booking" mnemonicParsing="false" text="Add new Booking" />
                               <MenuItem fx:id="menuItem_Add_Check_In" mnemonicParsing="false" text="Add new Check In" />
                               <MenuItem fx:id="menuItem_Add_Check_out" mnemonicParsing="false" text="Add new Check Out" />
-                              <MenuItem fx:id="menuItem_Add_Customer" mnemonicParsing="false" text="Add new Customer" />
+                              <MenuItem fx:id="menuItem_Add_Customer" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Customer_Action" text="Add new Customer" />
                               <MenuItem fx:id="menuItem_Add_Department" mnemonicParsing="false" text="Add new Customer" />
                               <MenuItem fx:id="menuItem_Add_Employee" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Employee_Action" text="Add new Employee" />
                               <MenuItem fx:id="menuItem_Add_Role" mnemonicParsing="false" text="Add new Role" />
