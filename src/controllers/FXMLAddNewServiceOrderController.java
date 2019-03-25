@@ -34,7 +34,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import models.Customer;
-import models.CustomerDAOImpl;
 import models.DAO;
 import models.RoleDAOImpl;
 import models.Room;
@@ -76,7 +75,6 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     ServiceOrderDetailDAOImpl serviceOrderDetailDAOImpl;
 
     RoomDAOImpl roomDAOImpl;
-    CustomerDAOImpl customerDAOImpl;
     RoleDAOImpl roleDAOImpl;
 
     public boolDecentralizationModel userRole;
@@ -142,7 +140,6 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         serviceOrderDAOImpl = new ServiceOrderDAOImpl();
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
         roomDAOImpl = new RoomDAOImpl();
-        customerDAOImpl = new CustomerDAOImpl();
         roleDAOImpl = new RoleDAOImpl();
 
         check_Validate = false;

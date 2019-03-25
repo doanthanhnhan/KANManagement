@@ -63,7 +63,7 @@
                                     <Insets left="80.0" right="80.0" top="20.0" />
                                  </HBox.margin>
                                  <children>
-                                    <JFXTextField fx:id="Username" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="User Name" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                    <JFXTextField fx:id="Username" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="User Name" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                        <font>
                                           <Font name="System Bold" size="14.0" />
                                        </font>
@@ -192,7 +192,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="Company" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Company" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="Email" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Email" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
@@ -204,7 +204,19 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="Discount" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Discount" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="Company" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Company" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="Discount" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Discount" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>

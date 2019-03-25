@@ -7,7 +7,9 @@ package models;
 
 import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -17,26 +19,14 @@ import javafx.beans.property.StringProperty;
  */
 public class Customer {
 
-    public StringProperty CusID, User, FName, MName, LName, Email, Passport, Phone, Company;
-    public LocalDateTime Date;
+    public StringProperty CusID, User, FName, MName, LName, Email, Passport, Phone, Company, Date;
     public BooleanProperty Sex, Active;
-    public float Discount;
+    public FloatProperty Discount;
 
     public Customer() {
-        this.CusID = new SimpleStringProperty();
-        this.User = new SimpleStringProperty();
-        this.FName = new SimpleStringProperty();
-        this.MName = new SimpleStringProperty();
-        this.LName = new SimpleStringProperty();
-        this.Email = new SimpleStringProperty();
-        this.Passport = new SimpleStringProperty();
-        this.Phone = new SimpleStringProperty();
-        this.Company = new SimpleStringProperty();
-        this.Sex = new SimpleBooleanProperty();
-        this.Active = new SimpleBooleanProperty();
     }
 
-    public Customer(String CusID, String User, String FName, String MName, String LName, String Email, String Passport, String Phone, String Company, Boolean Sex, Boolean Active, float Discount) {
+    public Customer(String CusID, String User, String FName, String MName, String LName, String Email, String Passport, String Phone, String Company, Boolean Sex, Boolean Active, Float Discount, String Date) {
         this.CusID = new SimpleStringProperty(CusID);
         this.User = new SimpleStringProperty(User);
         this.FName = new SimpleStringProperty(FName);
@@ -45,158 +35,127 @@ public class Customer {
         this.Email = new SimpleStringProperty(Email);
         this.Passport = new SimpleStringProperty(Passport);
         this.Phone = new SimpleStringProperty(Phone);
+        this.Date = new SimpleStringProperty(Date);
         this.Company = new SimpleStringProperty(Company);
         this.Sex = new SimpleBooleanProperty(Sex);
         this.Active = new SimpleBooleanProperty(Active);
-        this.Discount = Discount;
+        this.Discount = new SimpleFloatProperty(Discount);
     }
+    //    CusId
 
-    public LocalDateTime getDate() {
-        return Date;
-    }
-
-    public void setDate(LocalDateTime Date) {
-        this.Date = Date;
-    }
-
-    public float getDiscount() {
-        return Discount;
-    }
-
-    public void setDiscount(float Discount) {
-        this.Discount = Discount;
-    }
-
-    public final String getCusID() {
+    public String getCusID() {
         return CusID.get();
     }
 
-    public final void setCusID(String value) {
-        CusID.set(value);
+    public void setCusID(String CusID) {
+        this.CusID = new SimpleStringProperty(CusID);
     }
+//    User
 
-    public StringProperty CusIDProperty() {
-        return CusID;
-    }
-
-    public final String getUser() {
+    public String getUser() {
         return User.get();
     }
 
-    public final void setUser(String value) {
-        User.set(value);
+    public void setUser(String User) {
+        this.User = new SimpleStringProperty(User);
     }
+//    Fname
 
-    public StringProperty UserProperty() {
-        return User;
-    }
-
-    public final String getFName() {
+    public String getFName() {
         return FName.get();
     }
 
-    public final void setFName(String value) {
-        FName.set(value);
+    public void setFName(String FName) {
+        this.FName = new SimpleStringProperty(FName);
     }
+// LName
 
-    public StringProperty FNameProperty() {
-        return FName;
-    }
-
-    public final String getMName() {
-        return MName.get();
-    }
-
-    public final void setMName(String value) {
-        MName.set(value);
-    }
-
-    public StringProperty MNameProperty() {
-        return MName;
-    }
-
-    public final String getLName() {
+    public String getLName() {
         return LName.get();
     }
 
-    public final void setLName(String value) {
-        LName.set(value);
+    public void setLName(String LName) {
+        this.LName = new SimpleStringProperty(LName);
+    }
+//MName
+
+    public String getMName() {
+        return MName.get();
     }
 
-    public StringProperty LNameProperty() {
-        return LName;
+    public void setMName(String MName) {
+        this.MName = new SimpleStringProperty(MName);
     }
+//Email
 
-    public final String getEmail() {
+    public String getEmail() {
         return Email.get();
     }
 
-    public final void setEmail(String value) {
-        Email.set(value);
+    public void setEmail(String Email) {
+        this.Email = new SimpleStringProperty(Email);
     }
+//Passport
 
-    public StringProperty EmailProperty() {
-        return Email;
-    }
-
-    public final String getPassport() {
+    public String getPassport() {
         return Passport.get();
     }
 
-    public final void setPassport(String value) {
-        Passport.set(value);
+    public void setPassport(String Passport) {
+        this.Passport = new SimpleStringProperty(Passport);
     }
+//Phone
 
-    public StringProperty PassportProperty() {
-        return Passport;
-    }
-
-    public final String getPhone() {
+    public String getPhone() {
         return Phone.get();
     }
 
-    public final void setPhone(String value) {
-        Phone.set(value);
+    public void setPhone(String Phone) {
+        this.Phone = new SimpleStringProperty(Phone);
+    }
+//Date
+
+    public String getDate() {
+        return Date.get();
     }
 
-    public StringProperty PhoneProperty() {
-        return Phone;
+    public void setDate(String Date) {
+        this.Date = new SimpleStringProperty(Date);
     }
+//Company
 
-    public final String getCompany() {
+    public String getCompany() {
         return Company.get();
     }
 
-    public final void setCompany(String value) {
-        Company.set(value);
+    public void setCompany(String Company) {
+        this.Company = new SimpleStringProperty(Company);
+    }
+//  Discount
+
+    public Float getDiscount() {
+        return Discount.get();
     }
 
-    public StringProperty CompanyProperty() {
-        return Company;
+    public void setDiscount(Float Discount) {
+        this.Discount = new SimpleFloatProperty(Discount);
     }
+//    active
 
-    public final boolean isSex() {
-        return Sex.get();
-    }
-
-    public final void setSex(boolean value) {
-        Sex.set(value);
-    }
-
-    public BooleanProperty SexProperty() {
-        return Sex;
-    }
-
-    public final boolean isActive() {
+    public Boolean getActive() {
         return Active.get();
     }
 
-    public final void setActive(boolean value) {
-        Active.set(value);
+    public void setActive(Boolean Active) {
+        this.Active = new SimpleBooleanProperty(Active);
+    }
+//    Sex
+
+    public Boolean getSex() {
+        return Sex.get();
     }
 
-    public BooleanProperty ActiveProperty() {
-        return Active;
+    public void setSex(Boolean Sex) {
+        this.Sex = new SimpleBooleanProperty(Sex);
     }
-
 }
