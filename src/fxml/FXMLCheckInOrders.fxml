@@ -71,7 +71,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="CheckInID" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Check In Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="CheckInID" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Check In Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
@@ -85,7 +85,7 @@
                            <children>
                               <HBox fx:id="HboxBoxId" alignment="CENTER" prefHeight="35.0" prefWidth="400.0" spacing="10.0">
                                  <children>
-                                    <JFXComboBox fx:id="boxBookingID" editable="true" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Booking Id">
+                                    <JFXComboBox fx:id="boxBookingID" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Booking Id">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>

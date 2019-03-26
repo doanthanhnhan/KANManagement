@@ -77,7 +77,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="CustomerID" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Customer Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="CustomerID" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Customer Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
@@ -110,7 +110,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="Passport" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Passport" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="Passport" focusColor="#6447cd" labelFloat="true" onKeyReleased="#actionSetCustomerID" prefHeight="35.0" prefWidth="400.0" promptText="Passport / Id Card" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>

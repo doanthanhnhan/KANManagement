@@ -225,6 +225,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 NumberOfCustomer.setText(String.valueOf(bk.getNumGuest()));
                 RoomID.setText(bk.getRoomID());
                 CheckInDate.setValue(LocalDate.now());
+                CheckInID.setText("CI-"+newItem);
                 String pattern = "dd-MM-yyyy";
                 formatCalender.format(pattern, CheckInDate);
             }
@@ -338,8 +339,8 @@ public class FXMLCheckInOrdersController implements Initializable {
             });
         } else {
             Platform.runLater(() -> {
-                String dateIn = CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                String dateIn = CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+                String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
                 CheckIn ck = new CheckIn();
                 ck.setBookID(boxBookingID.getValue());
                 ck.setUser(Username.getText());
@@ -367,6 +368,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 LeaveDate.setValue(null);
                 boxCheckInType.setValue(null);
                 CustomerPackage.setText("");
+                refreshIdUser();
             });
         }
     }

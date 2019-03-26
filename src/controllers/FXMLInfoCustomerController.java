@@ -449,4 +449,8 @@ public class FXMLInfoCustomerController implements Initializable {
             });
         }
     }
+    @FXML
+    private void actionSetCustomerID(){
+        CustomerID.setText(Passport.getText());
+    }
 }

@@ -26,7 +26,7 @@ public class PatternValided {
     }
 
     public static Boolean PatternID(String id) {
-        Pattern patternID = Pattern.compile("^(?=.{4,12}$)[a-zA-Z][a-zA-Z0-9_]+$");
+        Pattern patternID = Pattern.compile("^(?=.{4,30}$)[a-zA-Z][a-zA-Z0-9_-]+$");
         return patternID.matcher(id).matches();
     }
 

@@ -24,9 +24,9 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
-//    Add new checkIn
-    //    Add new Customer
+//    Check CustomerID
 
+//    Add new checkIn
     public static void AddNewCheckIn(CheckIn ck) throws MalformedURLException, SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         String exm = "Insert into CheckInOrders values(?,?,?,?,?,?,?,?,?,?,?)";
@@ -46,11 +46,12 @@ public class DAOCustomerBookingCheckIn {
         pt.close();
         connection.close();
     }
+
     //    get Add bookingID use for checkin
-        public static ObservableList<String> getAllBookingID() throws ClassNotFoundException, SQLException {
+    public static ObservableList<String> getAllBookingID() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<String> list_Booking_ID = FXCollections.observableArrayList();
-        String sql = "select Bookinginfo.BookingID from Bookinginfo, CheckInOrders  where Bookinginfo.BookingID != CheckInOrders.BookingID";
+        String sql = "select Bookinginfo.BookingID from Bookinginfo WHERE Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
         PreparedStatement pt = connection.prepareStatement(sql);
 
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
@@ -61,7 +62,8 @@ public class DAOCustomerBookingCheckIn {
         return list_Booking_ID;
     }
 //    get Add info booking
-        public static BookingInfo getAllBookingInfo(String bookingID) throws ClassNotFoundException, SQLException {
+
+    public static BookingInfo getAllBookingInfo(String bookingID) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         BookingInfo bk = new BookingInfo();
         String sql = "select * from BookingInfo where BookingID=?";
@@ -69,7 +71,7 @@ public class DAOCustomerBookingCheckIn {
         pt.setString(1, bookingID);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
-        while (rs.next()) {   
+        while (rs.next()) {
             bk.setCusID(rs.getString("CustomerID"));
             bk.setRoomID(rs.getString("RoomID"));
             bk.setNumGuest(rs.getInt("NumberGuest"));
