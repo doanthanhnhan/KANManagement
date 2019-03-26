@@ -6,6 +6,8 @@
 package models;
 
 import java.time.LocalDateTime;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -14,124 +16,94 @@ import javafx.beans.property.StringProperty;
  * @author ASUS
  */
 public class CheckIn {
-    public int NumGuest;
-    public StringProperty CheckID, BookID, CusID, RoomID, User, CusPack, CheckType;
-    public LocalDateTime DateIn, DateOut;
 
-    public final String getCheckID() {
-        return CheckID.get();
+    public IntegerProperty NumberOfCustomer;
+    public StringProperty CheckID, BookID, CusID, RoomID, User, CusPack, CheckType, DateIn, DateOut;
+
+    public Integer getNumberOfCustomer() {
+        return NumberOfCustomer.get();
     }
 
-    public final void setCheckID(String value) {
-        CheckID.set(value);
+    public void setNumberOfCustomer(Integer NumberOfCustomer) {
+        this.NumberOfCustomer = new SimpleIntegerProperty(NumberOfCustomer);
     }
 
-    public StringProperty CheckIDProperty() {
-        return CheckID;
-    }
-
-    public final String getBookID() {
-        return BookID.get();
-    }
-
-    public final void setBookID(String value) {
-        BookID.set(value);
-    }
-
-    public StringProperty BookIDProperty() {
-        return BookID;
-    }
-
-    public final String getCusID() {
-        return CusID.get();
-    }
-
-    public final void setCusID(String value) {
-        CusID.set(value);
-    }
-
-    public StringProperty CusIDProperty() {
-        return CusID;
-    }
-
-    public final String getRoomID() {
-        return RoomID.get();
-    }
-
-    public final void setRoomID(String value) {
-        RoomID.set(value);
-    }
-
-    public StringProperty RoomIDProperty() {
-        return RoomID;
-    }
-
-    public final String getUser() {
-        return User.get();
-    }
-
-    public final void setUser(String value) {
-        User.set(value);
-    }
-
-    public StringProperty UserProperty() {
-        return User;
-    }
-
-    public final String getCusPack() {
-        return CusPack.get();
-    }
-
-    public final void setCusPack(String value) {
-        CusPack.set(value);
-    }
-
-    public StringProperty CusPackProperty() {
-        return CusPack;
-    }
-
-    public final String getCheckType() {
+    public String getCheckType() {
         return CheckType.get();
     }
 
-    public final void setCheckType(String value) {
-        CheckType.set(value);
+    public void setCheckType(String CheckType) {
+        this.CheckType = new SimpleStringProperty(CheckType);
     }
 
-    public StringProperty CheckTypeProperty() {
-        return CheckType;
-    }
-    
-    public int getNumGuest() {
-        return NumGuest;
+    public String getDateIn() {
+        return DateIn.get();
     }
 
-    public void setNumGuest(int NumGuest) {
-        this.NumGuest = NumGuest;
+    public void setDateIn(String DateIn) {
+        this.DateIn = new SimpleStringProperty(DateIn);
     }
 
-    public LocalDateTime getDateIn() {
-        return DateIn;
+    public String getDateOut() {
+        return DateOut.get();
     }
 
-    public void setDateIn(LocalDateTime DateIn) {
-        this.DateIn = DateIn;
+    public void setDateOut(String DateOut) {
+        this.DateOut = new SimpleStringProperty(DateOut);
     }
 
-    public LocalDateTime getDateOut() {
-        return DateOut;
+    public String getRoomID() {
+        return RoomID.get();
     }
 
-    public void setDateOut(LocalDateTime DateOut) {
-        this.DateOut = DateOut;
+    public void setRoomID(String RoomID) {
+        this.RoomID = new SimpleStringProperty(RoomID);
     }
 
+    public String getCheckID() {
+        return CheckID.get();
+    }
 
+    public void setCheckID(String CheckID) {
+        this.CheckID = new SimpleStringProperty(CheckID);
+    }
+
+    public String getCusID() {
+        return CusID.get();
+    }
+
+    public void setCusID(String CusID) {
+        this.CusID = new SimpleStringProperty(CusID);
+    }
+
+    public String getBookID() {
+        return BookID.get();
+    }
+
+    public void setBookID(String BookID) {
+        this.BookID = new SimpleStringProperty(BookID);
+    }
+
+    public String getUser() {
+        return User.get();
+    }
+
+    public void setUser(String User) {
+        this.User = new SimpleStringProperty(User);
+    }
+
+    public String getCusPack() {
+        return CusPack.get();
+    }
+
+    public void setCusPack(String CusPack) {
+        this.CusPack = new SimpleStringProperty(CusPack);
+    }
 
     public CheckIn() {
     }
 
-    public CheckIn(String CheckID, String BookID, String CusID, String RoomID, String User, String CusPack, String CheckType) {
+    public CheckIn(String CheckID, String BookID, String CusID, String RoomID, String User, String CusPack, String CheckType, String DateIn, String DateOut, Integer NumberOfCustomer) {
         this.CheckID = new SimpleStringProperty(CheckID);
         this.BookID = new SimpleStringProperty(BookID);
         this.CusID = new SimpleStringProperty(CusID);
@@ -139,5 +111,8 @@ public class CheckIn {
         this.User = new SimpleStringProperty(User);
         this.CusPack = new SimpleStringProperty(CusPack);
         this.CheckType = new SimpleStringProperty(CheckType);
+        this.DateIn = new SimpleStringProperty(DateIn);
+        this.DateOut = new SimpleStringProperty(DateOut);
+        this.NumberOfCustomer = new SimpleIntegerProperty(NumberOfCustomer);
     }
 }

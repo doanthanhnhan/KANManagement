@@ -24,6 +24,28 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    Add new checkIn
+    //    Add new Customer
+
+    public static void AddNewCheckIn(CheckIn ck) throws MalformedURLException, SQLException, ClassNotFoundException {
+        Connection connection = connectDB.connectSQLServer();
+        String exm = "Insert into CheckInOrders values(?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement pt = connection.prepareStatement(exm);
+        pt.setString(1, ck.getCheckID());
+        pt.setString(2, ck.getBookID());
+        pt.setString(3, ck.getCusID());
+        pt.setString(4, ck.getRoomID());
+        pt.setString(5, ck.getUser());
+        pt.setString(6, ck.getCheckType());
+        pt.setInt(7, ck.getNumberOfCustomer());
+        pt.setString(8, ck.getDateIn());
+        pt.setString(9, ck.getDateIn());
+        pt.setString(10, ck.getCusPack());
+        pt.setInt(11, 1);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
     //    get Add bookingID
         public static ObservableList<String> getAllBookingID() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();

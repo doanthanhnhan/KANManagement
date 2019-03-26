@@ -135,7 +135,7 @@
                      <children>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="NumberOfCustomer" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Number Of Customer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="NumberOfCustomer" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Number Of Customer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
@@ -168,7 +168,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXComboBox fx:id="boxCheckInType" editable="true" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Check In Type">
+                              <JFXComboBox fx:id="boxCheckInType" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Check In Type">
                                  <HBox.margin>
                                     <Insets left="80.0" right="80.0" top="30.0" />
                                  </HBox.margin>
