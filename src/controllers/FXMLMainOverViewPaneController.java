@@ -57,8 +57,11 @@ public class FXMLMainOverViewPaneController implements Initializable {
     FXMLMainFormController mainFormController;
 
     public Boolean check_Services_Button_Clicked;
+    public Boolean check_Check_In_Button_Clicked;
+    public Boolean check_Check_Out_Button_Clicked;
     public String service_Room_ID;
     public String service_Customer_ID;
+    public String service_Customer_Full_Name;
 
     @FXML
     private JFXButton btn_OverView_Submit;
@@ -371,10 +374,17 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 JFXButton btn_CheckIn = (JFXButton) pane.lookup("#btn_CheckIn");
                 btn_CheckIn.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " check in!");
+                    check_Check_In_Button_Clicked = true;
                 });
                 JFXButton btn_CheckOut = (JFXButton) pane.lookup("#btn_CheckOut");
                 btn_CheckOut.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " check out!");
+                    check_Check_Out_Button_Clicked = true;
+                    service_Room_ID = label_Room_Number.getText();
+                    service_Customer_ID = listRoom.getCustomerID();
+                    service_Customer_Full_Name = listRoom.getCustomerName();
+                    mainFormController.formLoader("/fxml/FXMLCheckOut.fxml", "/images/KAN Logo.png",
+                            "Check out order for Room: " + label_Room_Number.getText());
                 });
                 JFXButton btn_Services = (JFXButton) pane.lookup("#btn_Services");
                 btn_Services.setOnAction((event) -> {

@@ -11,9 +11,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -53,16 +55,20 @@ public class RoomDAOImpl implements RoomDAO {
                     room.setRoomInProgress(rs.getBoolean("InProgress"));
                     room.setDayRemaining(rs.getInt("DayRemaining"));
                     room.setActive(rs.getBoolean("Active"));
-
+                    room.setBookingDate(rs.getTimestamp("BookingDate").toLocalDateTime());
+                    room.setCheckInDate(rs.getTimestamp("CheckInDate").toLocalDateTime());
+                    room.setLeaveDate(rs.getTimestamp("LeaveDate").toLocalDateTime());
                     listRooms.add(room);
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+            });
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listRooms;
@@ -375,6 +381,58 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
+    public void editCheckInRoom(Room room, Boolean active) {
+        String sql = "UPDATE Rooms SET CustomerID=?, UserName=?, RoomStatus=?, "
+                + "DayRemaining=?, CheckInDate=?, LeaveDate=? "
+                + "WHERE RoomID=?";
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, room.getCustomerID());
+                stmt.setString(2, room.getUserName());
+                stmt.setString(3, room.getRoomStatus());
+                stmt.setInt(4, room.getDayRemaining());
+                stmt.setTimestamp(5, Timestamp.valueOf(room.getCheckInDate()));
+                stmt.setTimestamp(6, Timestamp.valueOf(room.getLeaveDate()));
+                stmt.setString(7, room.getRoomID());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+            alert.show();
+        }
+    }
+
+    @Override
+    public void editBookingRoom(Room room, Boolean active) {
+        String sql = "UPDATE Rooms SET CustomerID=?, UserName=?, RoomStatus=?, "
+                + "DayRemaining=?, BookingDate=?, LeaveDate=? "
+                + "WHERE RoomID=?";
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, room.getCustomerID());
+                stmt.setString(2, room.getUserName());
+                stmt.setString(3, room.getRoomStatus());
+                stmt.setInt(4, room.getDayRemaining());
+                stmt.setTimestamp(5, Timestamp.valueOf(room.getBookingDate()));
+                stmt.setTimestamp(6, Timestamp.valueOf(room.getLeaveDate()));
+                stmt.setString(7, room.getRoomID());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+            alert.show();
+        }
+    }
+
+    @Override
     public void deleteRoom(Room room) {
         String sql = "DELETE FROM Rooms WHERE RoomID=?";
         try {
@@ -409,8 +467,8 @@ public class RoomDAOImpl implements RoomDAO {
             alert.show();
         }
     }
-    
-    public ObservableList<RoomProperty> getAllRoomProperties(){
+
+    public ObservableList<RoomProperty> getAllRoomProperties() {
         String sql = "SELECT * FROM view_RoomProperty";
         ObservableList<RoomProperty> listRooms = FXCollections.observableArrayList();
         try {
@@ -418,7 +476,7 @@ public class RoomDAOImpl implements RoomDAO {
                 while (rs.next()) {
                     RoomProperty room = new RoomProperty();
                     room.setRoomPropertyName(rs.getString("PropertyName"));
-                    room.setRoomCount(rs.getInt("Total"));                    
+                    room.setRoomCount(rs.getInt("Total"));
 
                     listRooms.add(room);
                 }
@@ -434,6 +492,7 @@ public class RoomDAOImpl implements RoomDAO {
         return listRooms;
     }
 //public 
+
     public static void main(String[] args) {
         RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
         ObservableList<Room> listRooms = FXCollections.observableArrayList();

@@ -21,6 +21,8 @@ public interface RoomDAO {
     List<String> getAllStatusCustomerID(String roomStatus);
     void addRoom(Room room);
     void editRoom(Room room, Boolean active);
+    void editCheckInRoom(Room room, Boolean active);
+    void editBookingRoom(Room room, Boolean active);
     void deleteRoom(Room room);
     void deleteRoomEX(RoomEX roomEX);
 }

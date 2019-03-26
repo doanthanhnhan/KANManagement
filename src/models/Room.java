@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
@@ -34,6 +35,9 @@ public class Room {
     private BooleanProperty roomInProgress;
     private IntegerProperty dayRemaining;
     private BooleanProperty Active;
+    private LocalDateTime bookingDate;
+    private LocalDateTime checkInDate;
+    private LocalDateTime leaveDate;
 
     public Room() {
         this.roomID = new SimpleStringProperty();
@@ -218,6 +222,30 @@ public class Room {
 
     public IntegerProperty dayRemainingProperty() {
         return dayRemaining;
+    }
+
+    public LocalDateTime getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(LocalDateTime bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public LocalDateTime getCheckInDate() {
+        return checkInDate;
+    }
+
+    public void setCheckInDate(LocalDateTime checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    public LocalDateTime getLeaveDate() {
+        return leaveDate;
+    }
+
+    public void setLeaveDate(LocalDateTime leaveDate) {
+        this.leaveDate = leaveDate;
     }
 
     @Override

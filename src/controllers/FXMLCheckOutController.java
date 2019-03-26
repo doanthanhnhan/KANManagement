@@ -96,9 +96,19 @@ public class FXMLCheckOutController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        mainFormController = ConnectControllers.getfXMLMainFormController();
+        mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
+        
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
-        // Init for testing
+        // Init bigdecimal variable
         total_Service = new BigDecimal(BigInteger.ZERO);
+        total_Room = new BigDecimal(BigInteger.ZERO);
+        
+        //CHECKING FORM IS CALLED
+        if (true) {
+            
+        }
         txt_Room_ID.setText("R0201");
         datePicker_Check_In.setValue(LocalDate.parse("2019-03-20"));
         setColumns();
