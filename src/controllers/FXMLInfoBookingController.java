@@ -10,8 +10,6 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
-import static controllers.FXMLInfoEmployeeController.check_delete;
-import static controllers.FXMLInfoEmployeeController.validateInfoEmployee;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
@@ -30,9 +28,13 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -96,15 +98,61 @@ public class FXMLInfoBookingController implements Initializable {
     @FXML
     private JFXButton btnCancel;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
-
+    private FXMLMainFormController fXMLMainFormController;
     ObservableList<String> listRoomID;
     RoomDAOImpl roomDAOImpl;
+    public static String bookingIdConect;
+    public static String roomIdConect;
+    public static String numberofcustomer;
+    public static String customerIdConect;
+    public static boolean checkInfoBooking = false;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if (FXMLInfoCustomerController.checkInfoCustomer) {
+            checkInfoBooking = true;
+            boxIdCustomer.setDisable(true);
+            boxIdRoom.setDisable(true);
+            BookingID.setDisable(true);
+            boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
+            boxIdRoom.setValue("R0204");
+            btnInfo.setOnAction((event) -> {
+                try {
+                    btnSubmitBooking();
+                    Platform.runLater(() -> {
+                        Stage stageEdit = new Stage();
+                        stageEdit.resizableProperty().setValue(Boolean.FALSE);
+                        Parent root = null;
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCheckInOrders.fxml"));
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                        Scene scene = new Scene(root);
+                        stageEdit.setScene(scene);
+                        stageEdit.show();
+                        Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
+                        stage.close();
+                    });
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            });
+        } else {
+            btnInfo.setOnAction((event) -> {
+                try {
+                    btnSubmitBooking();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+        BookingID.setText("BK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSSSS")));
         NumberGuest.setText("0");
         //Getting Available roomID
         roomDAOImpl = new RoomDAOImpl();
@@ -113,13 +161,6 @@ public class FXMLInfoBookingController implements Initializable {
         //Initialize combobox RoomID
         boxIdRoom.getItems().addAll(listRoomID);
 
-        btnInfo.setOnAction((event) -> {
-            try {
-                btnSubmitBooking();
-            } catch (ClassNotFoundException | SQLException | IOException ex) {
-                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
         Username.setText(FXMLLoginController.User_Login);
         BookingID.setOnKeyPressed((KeyEvent event) -> {
             Platform.runLater(() -> {
@@ -352,6 +393,13 @@ public class FXMLInfoBookingController implements Initializable {
             });
         } else {
             Platform.runLater(() -> {
+                System.out.println(FXMLInfoCustomerController.checkInfoCustomer);
+                if (FXMLInfoCustomerController.checkInfoCustomer) {
+                    bookingIdConect = BookingID.getText();
+                    roomIdConect = boxIdRoom.getValue();
+                    numberofcustomer = NumberGuest.getText();
+                    customerIdConect = boxIdCustomer.getValue();
+                }
                 String date = DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 BookingInfo bk = new BookingInfo();
                 bk.setBookID(BookingID.getText());
@@ -371,7 +419,7 @@ public class FXMLInfoBookingController implements Initializable {
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                 boxIdRoom.setValue(null);
                 boxIdCustomer.setValue(null);
-                BookingID.setText("");  
+                BookingID.setText("");
                 Note.setText("");
                 NumberGuest.setText("0");
                 DateBook.setValue(null);

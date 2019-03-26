@@ -113,13 +113,34 @@ public class FXMLCheckInOrdersController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        btnInfo.setOnAction((event) -> {
-            try {
-                enter_Submit_Action();
-            } catch (ClassNotFoundException | SQLException | IOException ex) {
-                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+        if (FXMLInfoBookingController.checkInfoBooking) {
+            CustomerID.setText(FXMLInfoBookingController.customerIdConect);
+            boxBookingID.setDisable(true);
+            boxBookingID.setValue(FXMLInfoBookingController.bookingIdConect);
+            RoomID.setText(FXMLInfoBookingController.roomIdConect);
+            CheckInID.setText("CI-" + RoomID.getText());
+            NumberOfCustomer.setDisable(true);
+            LeaveDate.setDisable(false);
+            NumberOfCustomer.setText(FXMLInfoBookingController.numberofcustomer);
+            btnInfo.setOnAction((event) -> {
+                try {
+                    enter_Submit_Action();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Stage stage = (Stage) anchorPaneCheckInOrders.getScene().getWindow();
+                stage.close();
+            });
+        } else {
+            btnInfo.setOnAction((event) -> {
+                try {
+                    enter_Submit_Action();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+
         LeaveDate.setDisable(true);
 //        set box booking id 
         refreshIdUser();
@@ -225,7 +246,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 NumberOfCustomer.setText(String.valueOf(bk.getNumGuest()));
                 RoomID.setText(bk.getRoomID());
                 CheckInDate.setValue(LocalDate.now());
-                CheckInID.setText("CI-"+newItem);
+                CheckInID.setText("CI-" + newItem);
                 String pattern = "dd-MM-yyyy";
                 formatCalender.format(pattern, CheckInDate);
             }
@@ -339,8 +360,8 @@ public class FXMLCheckInOrdersController implements Initializable {
             });
         } else {
             Platform.runLater(() -> {
-                String dateIn = CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
-                String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+                String dateIn = CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 CheckIn ck = new CheckIn();
                 ck.setBookID(boxBookingID.getValue());
                 ck.setUser(Username.getText());
@@ -358,7 +379,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                     Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Check In for booking id = " + boxBookingID.getValue(),
-                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
                 CheckInID.setText("");
                 boxBookingID.setValue(null);
                 CustomerID.setText("");

@@ -7,13 +7,21 @@ package controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAOCustomerBookingCheckIn;
@@ -26,8 +34,6 @@ import utils.PatternValided;
  * @author Admin
  */
 public class FXMLCheckIdCardCustomerController implements Initializable {
-
-    private FXMLMainFormController fXMLMainFormController;
     @FXML
     private HBox HboxHeader;
     @FXML
@@ -40,6 +46,10 @@ public class FXMLCheckIdCardCustomerController implements Initializable {
     private JFXButton btnInfo;
     @FXML
     private JFXButton btnCancel;
+    public static boolean checkIdCardCustomer = false;
+    public static String IdCardCustomer;
+    @FXML
+    private AnchorPane anchorPaneCheckIdCard;
 
     /**
      * Initializes the controller class.
@@ -47,28 +57,45 @@ public class FXMLCheckIdCardCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btnInfo.setOnAction((event) -> {
-            check_IdCard();
+            try {
+                check_IdCard();
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLCheckIdCardCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         IdCard.setOnKeyPressed((KeyEvent event) -> {
             IdCard.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
             HboxContent.getChildren().clear();
             if (event.getCode() == KeyCode.ENTER) {
-                check_IdCard();
+                try {
+                    check_IdCard();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLCheckIdCardCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         // TODO
     }
 
-    public void check_IdCard() {
+    public void check_IdCard() throws IOException {
         if (IdCard.getText() == null || IdCard.getText().equals("")) {
             notificationFunction.notification(IdCard, HboxContent, "ID CARD MUST NOT EMPTY !!!");
         } else if (!PatternValided.PatternCMND(IdCard.getText())) {
             notificationFunction.notification(IdCard, HboxContent, "ID CARD IS INCORRECT !!!");
-        } else  if (DAOCustomerBookingCheckIn.check_IDCustomer(IdCard.getText())){
-//            xứ lý trường hợp ID Card chưa tồn tại
+        } else if (DAOCustomerBookingCheckIn.check_IDCustomer(IdCard.getText())) {
+//            xứ lý trường hợp ID Card chưa tồn tại        
+            Stage stageEdit = new Stage();
+            stageEdit.resizableProperty().setValue(Boolean.FALSE);
+            checkIdCardCustomer = true;
+            IdCardCustomer = IdCard.getText();
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCustomerInfo.fxml"));
+            stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+            Scene scene = new Scene(root);
+            stageEdit.setScene(scene);
+            stageEdit.show();
             
-                fXMLMainFormController.formLoader("/fxml/FXMLCustomerInfo.fxml", "/images/KAN Logo.png", "Add New Customer");
-     
+            Stage stage = (Stage) anchorPaneCheckIdCard.getScene().getWindow();
+            stage.close();
         }
     }
 
