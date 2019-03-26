@@ -15,8 +15,10 @@ import static controllers.FXMLInfoEmployeeController.validateInfoEmployee;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -38,12 +40,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.BookingInfo;
+import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.DAOcheckRole;
 import models.RoomDAOImpl;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
+import utils.GetInetAddress;
 import utils.PatternValided;
 import utils.StageLoader;
 import utils.showFXMLLogin;
@@ -92,7 +96,7 @@ public class FXMLInfoBookingController implements Initializable {
     @FXML
     private JFXButton btnCancel;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
-    
+
     ObservableList<String> listRoomID;
     RoomDAOImpl roomDAOImpl;
 
@@ -101,14 +105,14 @@ public class FXMLInfoBookingController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        NumberGuest.setText("0");
         //Getting Available roomID
         roomDAOImpl = new RoomDAOImpl();
         listRoomID = roomDAOImpl.getAllStatusRoomID("Available");
-        
+
         //Initialize combobox RoomID
         boxIdRoom.getItems().addAll(listRoomID);
-        
+
         btnInfo.setOnAction((event) -> {
             try {
                 btnSubmitBooking();
@@ -357,7 +361,20 @@ public class FXMLInfoBookingController implements Initializable {
                 bk.setNote(Note.getText());
                 bk.setNumGuest(Integer.valueOf(NumberGuest.getText()));
                 bk.setUser(Username.getText());
-                System.out.println("Xong");
+                try {
+                    DAOCustomerBookingCheckIn.AddNewBooking(bk);
+                } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+//                set Userlogs
+                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Booking for " + boxIdCustomer.getValue(),
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                boxIdRoom.setValue(null);
+                boxIdCustomer.setValue(null);
+                BookingID.setText("");  
+                Note.setText("");
+                NumberGuest.setText("0");
+                DateBook.setValue(null);
             });
         }
     }

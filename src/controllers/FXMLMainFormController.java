@@ -524,6 +524,13 @@ public class FXMLMainFormController implements Initializable {
     }
 
     @FXML
+    private void handle_MenuItem_CheckIn_Action(ActionEvent event) {
+        checkRegis = true;
+        System.out.println("Add new User menu item clicked!");
+        formLoader("/fxml/FXMLCheckInOrders.fxml", "/images/KAN Logo.png", "Add CheckInOrder");
+    }
+
+    @FXML
     private void handle_MenuItem_Add_User_Action(ActionEvent event) {
         checkRegis = true;
         System.out.println("Add new User menu item clicked!");
