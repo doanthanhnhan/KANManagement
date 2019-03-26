@@ -46,11 +46,11 @@ public class DAOCustomerBookingCheckIn {
         pt.close();
         connection.close();
     }
-    //    get Add bookingID
+    //    get Add bookingID use for checkin
         public static ObservableList<String> getAllBookingID() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<String> list_Booking_ID = FXCollections.observableArrayList();
-        String sql = "select BookingID from BookingInfo";
+        String sql = "select Bookinginfo.BookingID from Bookinginfo, CheckInOrders  where Bookinginfo.BookingID != CheckInOrders.BookingID";
         PreparedStatement pt = connection.prepareStatement(sql);
 
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
