@@ -79,7 +79,7 @@
                               <MenuItem fx:id="menuItem_Edit_Check_In" mnemonicParsing="false" text="Edit Check In" />
                               <MenuItem fx:id="menuItem_Edit_Check_Out" mnemonicParsing="false" text="Edit Check Out" />
                               <MenuItem fx:id="menuItem_Edit_Customer" mnemonicParsing="false" text="Edit Customer" />
-                              <MenuItem fx:id="menuItem_Edit_Department" mnemonicParsing="false" text="Edit Customer" />
+                              <MenuItem fx:id="menuItem_Edit_Department" mnemonicParsing="false" text="Edit Department" />
                               <MenuItem fx:id="menuItem_Edit_Employee" mnemonicParsing="false" onAction="#handle_MenuItem_Edit_Employee_Action" text="Edit Employee" />
                               <MenuItem fx:id="menuItem_Edit_Role" mnemonicParsing="false" text="Edit Role" />
                               <MenuItem fx:id="menuItem_Edit_Room" mnemonicParsing="false" text="Edit Room" />

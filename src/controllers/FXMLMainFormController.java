@@ -481,7 +481,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_Toolbar_CheckOut_Action(ActionEvent event) {
         System.out.println("CheckOut clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOutForm.fxml", "checkOut_Tab", "Check Out");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOut.fxml", "checkOut_Tab", "Check Out");
     }
 
     @FXML
@@ -736,6 +736,8 @@ public class FXMLMainFormController implements Initializable {
 
     @FXML
     private void handle_Toolbar_CheckIn_Action(ActionEvent event) {
+        System.out.println("List service orders details item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
     }
 
 }
