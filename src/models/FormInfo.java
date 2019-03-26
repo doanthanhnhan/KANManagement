@@ -5,7 +5,6 @@
  */
 package models;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,8 +13,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -129,7 +126,7 @@ public class FormInfo implements DAOFormInfo {
                 ps.setString(4, ck.getRoomID());
                 ps.setString(5, "admin");
                 ps.setString(6, ck.getCheckType());
-                ps.setInt(7, ck.getNumGuest());
+                ps.setInt(7, ck.getNumberOfCustomer());
                 ps.setTimestamp(8, Timestamp.valueOf(ck.getDateIn()));
                 ps.setTimestamp(9, Timestamp.valueOf(ck.getDateOut()));
                 ps.setString(10, ck.getCusPack());

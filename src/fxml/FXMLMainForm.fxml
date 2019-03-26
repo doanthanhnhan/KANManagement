@@ -59,7 +59,7 @@
                         <Menu fx:id="menu_Add" mnemonicParsing="false" text="Add">
                            <items>
                               <MenuItem fx:id="menuItem_Add_Booking" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Booking_Action" text="Add new Booking" />
-                              <MenuItem fx:id="menuItem_Add_Check_In" mnemonicParsing="false" text="Add new Check In" />
+                              <MenuItem fx:id="menuItem_Add_Check_In" mnemonicParsing="false" onAction="#handle_MenuItem_CheckIn_Action" text="Add new Check In" />
                               <MenuItem fx:id="menuItem_Add_Check_out" mnemonicParsing="false" text="Add new Check Out" />
                               <MenuItem fx:id="menuItem_Add_Customer" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Customer_Action" text="Add new Customer" />
                               <MenuItem fx:id="menuItem_Add_Department" mnemonicParsing="false" text="Add new Department" />

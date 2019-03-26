@@ -10,20 +10,21 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
-import static controllers.FXMLInfoEmployeeController.check_delete;
-import static controllers.FXMLInfoEmployeeController.validateInfoEmployee;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -32,18 +33,20 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.BookingInfo;
+import models.CheckIn;
 import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.DAOcheckRole;
-import models.RoomDAOImpl;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
@@ -57,10 +60,10 @@ import utils.showFXMLLogin;
  *
  * @author Admin
  */
-public class FXMLInfoBookingController implements Initializable {
+public class FXMLCheckInOrdersController implements Initializable {
 
     @FXML
-    private AnchorPane anchorPaneBooking;
+    private AnchorPane anchorPaneCheckInOrders;
     @FXML
     private VBox vBox_Employee_Info;
     @FXML
@@ -72,21 +75,25 @@ public class FXMLInfoBookingController implements Initializable {
     @FXML
     private JFXTextField Username;
     @FXML
+    private JFXTextField CheckInID;
+    @FXML
     private HBox HboxBoxId;
     @FXML
-    private JFXTextField BookingID;
+    private JFXComboBox<String> boxBookingID;
     @FXML
-    private JFXComboBox<String> boxIdCustomer;
-    @FXML
-    private JFXComboBox<String> boxIdRoom;
+    private JFXTextField RoomID;
     @FXML
     private VBox vBox_Info_Right;
     @FXML
-    private JFXDatePicker DateBook;
+    private JFXTextField NumberOfCustomer;
     @FXML
-    private JFXTextField NumberGuest;
+    private JFXDatePicker CheckInDate;
     @FXML
-    private JFXTextField Note;
+    private JFXDatePicker LeaveDate;
+    @FXML
+    private JFXComboBox<?> boxCheckInType;
+    @FXML
+    private JFXTextField CustomerPackage;
     @FXML
     private HBox HboxContent;
     @FXML
@@ -95,137 +102,142 @@ public class FXMLInfoBookingController implements Initializable {
     private JFXButton btnInfo;
     @FXML
     private JFXButton btnCancel;
+    @FXML
+    private JFXTextField CustomerID;
+    @FXML
+    private FontAwesomeIconView iconRefresh;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
-
-    ObservableList<String> listRoomID;
-    RoomDAOImpl roomDAOImpl;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        NumberGuest.setText("0");
-        //Getting Available roomID
-        roomDAOImpl = new RoomDAOImpl();
-        listRoomID = roomDAOImpl.getAllStatusRoomID("Available");
-
-        //Initialize combobox RoomID
-        boxIdRoom.getItems().addAll(listRoomID);
-
         btnInfo.setOnAction((event) -> {
             try {
-                btnSubmitBooking();
+                enter_Submit_Action();
             } catch (ClassNotFoundException | SQLException | IOException ex) {
                 Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        LeaveDate.setDisable(true);
+//        set box booking id 
+        refreshIdUser();
+//        set value for box checkin type
+        ObservableList list_checkintype = FXCollections.observableArrayList();
+        list_checkintype.add("Reception Desk");
+        list_checkintype.add("Check In Online");
+        list_checkintype.add("Company");
+        list_checkintype.add("Booking");
+        boxCheckInType.setItems(list_checkintype);
+//        set value for username
         Username.setText(FXMLLoginController.User_Login);
-        BookingID.setOnKeyPressed((KeyEvent event) -> {
-            Platform.runLater(() -> {
-                BookingID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                HboxContent.getChildren().clear();
-            });
-            if (event.getCode() == KeyCode.ENTER) {
-                try {
-                    btnSubmitBooking();
-                } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        DateBook.valueProperty().addListener((obs, oldItem, newItem) -> {
-            Platform.runLater(() -> {
-                DateBook.setStyle("-jfx-default-color: #6447cd;");
-                HboxContent.getChildren().clear();
-            });
-        });
-        DateBook.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            Platform.runLater(() -> {
-                HboxContent.getChildren().clear();
-            });
-            if (event.getCode() == KeyCode.ENTER) {
-                try {
-                    btnSubmitBooking();
-                } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        NumberGuest.setOnKeyPressed((KeyEvent event) -> {
-            Platform.runLater(() -> {
-                NumberGuest.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                HboxContent.getChildren().clear();
-            });
-            if (event.getCode() == KeyCode.ENTER) {
-
-                try {
-                    btnSubmitBooking();
-                } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        Note.setOnKeyPressed((KeyEvent event) -> {
-            Platform.runLater(() -> {
-                Note.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                HboxContent.getChildren().clear();
-            });
-            if (event.getCode() == KeyCode.ENTER) {
-
-                try {
-                    btnSubmitBooking();
-                } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        boxIdCustomer.setOnKeyPressed((KeyEvent event) -> {
+//        set value and enter for box booking id
+        boxBookingID.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 System.out.println("Enter pressed");
                 try {
-                    btnSubmitBooking();
+                    enter_Submit_Action();
                 } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
-        boxIdCustomer.valueProperty().addListener((obs, oldItem, newItem) -> {
-            if (newItem != null && !newItem.equals("")) {
+        boxCheckInType.setOnKeyPressed((KeyEvent event) -> {
+            Platform.runLater(() -> {
+                boxCheckInType.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
                 HboxContent.getChildren().clear();
-                boxIdCustomer.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-            }
-        });
-        boxIdRoom.setOnKeyPressed((KeyEvent event) -> {
+            });
             if (event.getCode() == KeyCode.ENTER) {
-                System.out.println("Enter pressed");
                 try {
-                    btnSubmitBooking();
+                    enter_Submit_Action();
                 } catch (ClassNotFoundException | SQLException | IOException ex) {
                     Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
-        boxIdRoom.valueProperty().addListener((obs, oldItem, newItem) -> {
-            if (newItem != null && !newItem.equals("")) {
+        LeaveDate.valueProperty().addListener((obs, oldItem, newItem) -> {
+            Platform.runLater(() -> {
+                LeaveDate.setStyle("-jfx-default-color: #6447cd;");
                 HboxContent.getChildren().clear();
-                boxIdRoom.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+            });
+        });
+        LeaveDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            Platform.runLater(() -> {
+                HboxContent.getChildren().clear();
+            });
+            if (event.getCode() == KeyCode.ENTER) {
+                try {
+                    enter_Submit_Action();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
+        CheckInID.setOnKeyPressed((KeyEvent event) -> {
+            Platform.runLater(() -> {
+                CheckInID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
+            if (event.getCode() == KeyCode.ENTER) {
 
-//        set Item for box Id customer
-        try {
-            boxIdCustomer.setItems(DAOCustomerBookingCheckIn.getAllIdCustomer());
-            // TODO
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                try {
+                    enter_Submit_Action();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        CustomerPackage.setOnKeyPressed((KeyEvent event) -> {
+            Platform.runLater(() -> {
+                CustomerPackage.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+                HboxContent.getChildren().clear();
+            });
+            if (event.getCode() == KeyCode.ENTER) {
+
+                try {
+                    enter_Submit_Action();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+//        install when click box booking id show all info booking
+        boxBookingID.valueProperty().addListener((obs, oldItem, newItem) -> {
+            System.out.println("Kiem tra newItem: " + newItem);
+            if (newItem != null && !newItem.equals("")) {
+                LeaveDate.setDisable(false);
+                LeaveDate.setDayCellFactory(picker -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        LocalDate today = LocalDate.now();
+                        setDisable(empty || date.compareTo(today) < 0);
+                    }
+                });
+                BookingInfo bk = new BookingInfo();
+                try {
+                    bk = DAOCustomerBookingCheckIn.getAllBookingInfo(newItem);
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                CustomerID.setText(bk.getCusID());
+                NumberOfCustomer.setText(String.valueOf(bk.getNumGuest()));
+                RoomID.setText(bk.getRoomID());
+                CheckInDate.setValue(LocalDate.now());
+                String pattern = "dd-MM-yyyy";
+                formatCalender.format(pattern, CheckInDate);
+            }
+            HboxContent.getChildren().clear();
+            boxBookingID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+        });
+        // TODO
     }
 
     @FXML
-    private void Format_Show_Calender(ActionEvent event) {
+    private void Format_Show_Calender_Hiredate(ActionEvent event) {
         String pattern = "dd-MM-yyyy";
-        formatCalender.format(pattern, DateBook);
+        formatCalender.format(pattern, LeaveDate);
     }
 
     @FXML
@@ -235,12 +247,12 @@ public class FXMLInfoBookingController implements Initializable {
         stage.close();
     }
 
-    private void btnSubmitBooking() throws ClassNotFoundException, SQLException, IOException {
-        if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Booking_Add")) {
+    private void enter_Submit_Action() throws ClassNotFoundException, SQLException, IOException {
+        if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "CheckIn_Add")) {
             AlertLoginAgain.alertLogin();
             fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
             Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
-            Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
+            Stage stage = (Stage) anchorPaneCheckInOrders.getScene().getWindow();
             stage.close();
             stageMainForm.close();
             showFormLogin.showFormLogin();
@@ -256,7 +268,7 @@ public class FXMLInfoBookingController implements Initializable {
                 protected Object call() throws Exception {
                     Platform.runLater(() -> {
                         HboxContent.getChildren().clear();
-                        BookingSubmitAction();
+                        CheckInSubmitAction();
                     });
 
                     return null;
@@ -277,12 +289,12 @@ public class FXMLInfoBookingController implements Initializable {
         }
     }
 
-    public void BookingSubmitAction() {
-        if (BookingID.getText() == null || BookingID.getText().equals("")) {
+    public void CheckInSubmitAction() {
+        if (CheckInID.getText() == null || CheckInID.getText().equals("")) {
             Platform.runLater(() -> {
-                notificationFunction.notification(BookingID, HboxContent, "BOOKING ID MUST NOT EMPTY !!!");
+                notificationFunction.notification(CheckInID, HboxContent, "Check In ID MUST NOT EMPTY !!!");
             });
-        } else if (boxIdCustomer.getValue() == null) {
+        } else if (boxBookingID.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -290,18 +302,18 @@ public class FXMLInfoBookingController implements Initializable {
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(350, 35);
-                label.setText("ID CUSTOMER MUST NOT EMPTY !!!");
+                label.setText("ID BOOKING MUST NOT EMPTY !!!");
                 label.setAlignment(Pos.CENTER_LEFT);
-                boxIdCustomer.getStyleClass().removeAll();
-                boxIdCustomer.getStyleClass().add("jfx-combo-box-fault");
+                boxBookingID.getStyleClass().removeAll();
+                boxBookingID.getStyleClass().add("jfx-combo-box-fault");
                 HboxContent.setSpacing(10);
                 HboxContent.setAlignment(Pos.CENTER_LEFT);
                 HboxContent.getChildren().clear();
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
-                boxIdCustomer.requestFocus();
+                boxBookingID.requestFocus();
             });
-        } else if (boxIdRoom.getValue() == null) {
+        } else if (boxCheckInType.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -309,73 +321,65 @@ public class FXMLInfoBookingController implements Initializable {
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(350, 35);
-                label.setText("ID ROOM MUST NOT EMPTY !!!");
+                label.setText("CHECK IN TYPE MUST NOT EMPTY !!!");
                 label.setAlignment(Pos.CENTER_LEFT);
-                boxIdRoom.getStyleClass().removeAll();
-                boxIdRoom.getStyleClass().add("jfx-combo-box-fault");
+                boxCheckInType.getStyleClass().removeAll();
+                boxCheckInType.getStyleClass().add("jfx-combo-box-fault");
                 HboxContent.setSpacing(10);
                 HboxContent.setAlignment(Pos.CENTER_LEFT);
                 HboxContent.getChildren().clear();
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
-                boxIdRoom.requestFocus();
+                boxCheckInType.requestFocus();
             });
-        } else if (DateBook.getValue() == null) {
+        } else if (!PatternValided.PatternID(CheckInID.getText())) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(350, 35);
-                label.setAlignment(Pos.CENTER_LEFT);
-                label.setText("DATE BOOK MUST NOT EMPTY !!!");
-                DateBook.setStyle("-jfx-default-color: RED;");
-                HboxContent.setAlignment(Pos.CENTER_LEFT);
-                HboxContent.setSpacing(10);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                DateBook.requestFocus();
-            });
-        } else if (NumberGuest.getText() == null || NumberGuest.getText().equals("")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(NumberGuest, HboxContent, "NUMBER GUEST MUST NOT EMPTY !!!");
-            });
-        } else if (!PatternValided.PatternID(BookingID.getText())) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(BookingID, HboxContent, "BOOKING ID IS INCORRECT !!!");
-            });
-        } else if (!PatternValided.PatternNumberGuest(NumberGuest.getText())) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(NumberGuest, HboxContent, "NUMBER GUEST IS INCORRECT (1-8) !!!");
+                notificationFunction.notification(CheckInID, HboxContent, "CHECK IN ID IS INCORRECT !!!");
             });
         } else {
             Platform.runLater(() -> {
-                String date = DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                BookingInfo bk = new BookingInfo();
-                bk.setBookID(BookingID.getText());
-                bk.setCusID(boxIdCustomer.getValue());
-                bk.setRoomID(boxIdRoom.getValue());
-                bk.setDate(date);
-                bk.setNote(Note.getText());
-                bk.setNumGuest(Integer.valueOf(NumberGuest.getText()));
-                bk.setUser(Username.getText());
+                String dateIn = CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                CheckIn ck = new CheckIn();
+                ck.setBookID(boxBookingID.getValue());
+                ck.setUser(Username.getText());
+                ck.setCheckID(CheckInID.getText());
+                ck.setCusID(CustomerID.getText());
+                ck.setRoomID(RoomID.getText());
+                ck.setNumberOfCustomer(Integer.valueOf(NumberOfCustomer.getText()));
+                ck.setDateIn(dateIn);
+                ck.setDateOut(dateOut);
+                ck.setCusPack(CustomerPackage.getText());
+                ck.setCheckType((String) boxCheckInType.getValue());
                 try {
-                    DAOCustomerBookingCheckIn.AddNewBooking(bk);
+                    DAOCustomerBookingCheckIn.AddNewCheckIn(ck);
                 } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-//                set Userlogs
-                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Booking for " + boxIdCustomer.getValue(),
+                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Check In for booking id = " + boxBookingID.getValue(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                boxIdRoom.setValue(null);
-                boxIdCustomer.setValue(null);
-                BookingID.setText("");  
-                Note.setText("");
-                NumberGuest.setText("0");
-                DateBook.setValue(null);
+                CheckInID.setText("");
+                boxBookingID.setValue(null);
+                CustomerID.setText("");
+                RoomID.setText("");
+                NumberOfCustomer.setText("");
+                CheckInDate.setValue(null);
+                LeaveDate.setValue(null);
+                boxCheckInType.setValue(null);
+                CustomerPackage.setText("");
             });
         }
     }
+
+    @FXML
+    private void refreshIdUser() {
+        ObservableList list_Booking_Id = FXCollections.observableArrayList();
+        try {
+            //        set add booking id for box booking id
+            boxBookingID.setItems(DAOCustomerBookingCheckIn.getAllBookingID());
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }
