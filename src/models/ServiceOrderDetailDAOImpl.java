@@ -313,11 +313,12 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
     @Override
     public void deleteServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail) {
-        String sql = "DELETE FROM ServicesOrderDetails WHERE ServiceID=? AND OrderID=?";
+        String sql = "UPDATE ServicesOrderDetails SET Active=? WHERE ServiceID=? AND OrderID=?";
 
         try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, serviceOrderDetail.getServiceID());
-            stmt.setString(2, serviceOrderDetail.getOrderID());
+            stmt.setBoolean(1, false);
+            stmt.setString(2, serviceOrderDetail.getServiceID());
+            stmt.setString(3, serviceOrderDetail.getOrderID());
             stmt.executeUpdate();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);

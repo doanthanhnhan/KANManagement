@@ -29,7 +29,7 @@ public class CheckOutDAOImpl implements CheckOutDAO {
     public ObservableList<CheckOut> getAllCheckOut() {
         String sql = "SELECT CheckOutID, CheckInID, CustomerID, RoomID, UserName, CheckInDate, "
                 + "CheckOutDate, CustomerPayment, CustomerBill, Discount, Tax "
-                + "FROM CheckOutOrders";
+                + "FROM CheckOutOrders WHERE Active=1";
         ObservableList<CheckOut> listCheckOuts = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -149,10 +149,11 @@ public class CheckOutDAOImpl implements CheckOutDAO {
 
     @Override
     public void deleteCheckOut(CheckOut checkOut) {
-        String sql = "DELETE FROM CheckOutOrders WHERE CheckOutID=?";
+        String sql = "UPDATE CheckOutOrders SET Active=? WHERE CheckOutID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, checkOut.getCheckOutID());
+                stmt.setBoolean(1, false);
+                stmt.setString(2, checkOut.getCheckOutID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {

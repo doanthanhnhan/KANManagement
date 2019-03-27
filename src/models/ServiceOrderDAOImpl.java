@@ -5,25 +5,16 @@
  */
 package models;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javax.imageio.ImageIO;
 import utils.connectDB;
 
 /**
@@ -97,10 +88,11 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
     @Override
     public void deleteServiceOrder(ServiceOrder serviceOrder) {
-        String sql = "DELETE FROM ServicesOrders WHERE ServiceID=?";
+        String sql = "UPDATE ServicesOrders SET Active=? WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, serviceOrder.getServiceOrderID());
+                stmt.setBoolean(1, false);
+                stmt.setString(2, serviceOrder.getServiceOrderID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {

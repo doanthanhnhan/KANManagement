@@ -109,8 +109,8 @@ public class FXMLCheckOutController implements Initializable {
         if (true) {
             
         }
-        txt_Room_ID.setText("R0201");
-        datePicker_Check_In.setValue(LocalDate.parse("2019-03-20"));
+        txt_Room_ID.setText("R0103");
+        datePicker_Check_In.setValue(LocalDate.parse("2019-03-21"));
         setColumns();
         showUsersData();
     }

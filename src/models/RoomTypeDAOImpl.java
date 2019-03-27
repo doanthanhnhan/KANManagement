@@ -97,10 +97,11 @@ public class RoomTypeDAOImpl implements RoomTypeDAO {
 
     @Override
     public void deleteRoomType(RoomType roomType) {
-        String sql = "DELETE FROM RoomType WHERE RoomType=?";                
+        String sql = "UPDATE RoomType SET Active=? WHERE RoomType=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, roomType.getType());               
+                stmt.setBoolean(1, false);
+                stmt.setString(2, roomType.getType());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -113,4 +114,26 @@ public class RoomTypeDAOImpl implements RoomTypeDAO {
         }
     }
 
+    public ObservableList<String> getAllStringRoomType() {
+        String sql = "SELECT RoomType FROM RoomType WHERE RoomType NOT IN ('Deluxe','Double', 'Family', 'Single', 'Triple')";
+        ObservableList<String> listRoomTypes = FXCollections.observableArrayList();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    String roomType;
+                    roomType = rs.getString("RoomType");
+
+                    listRoomTypes.add(roomType);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any roomTypes in Database or Can't connect to Database");
+            alert.show();
+            Logger.getLogger(RoomTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRoomTypes;
+    }
 }

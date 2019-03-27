@@ -174,10 +174,11 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
 
     @Override
     public void deleteServiceType(ServiceType serviceType) {
-        String sql = "DELETE FROM ServiceType WHERE ServiceID=?";
+        String sql = "UPDATE ServiceType SET Active=? WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, serviceType.getServiceID());
+                stmt.setBoolean(1, false);
+                stmt.setString(2, serviceType.getServiceID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {

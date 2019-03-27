@@ -1,9 +1,9 @@
 ﻿CREATE TABLE Rooms(
 	-- Create columns	
-	RoomID varchar(10) NOT NULL,
-	CustomerID varchar(30) NOT NULL,
-	UserName varchar(20) NOT NULL,	
-	RoomType varchar(20) NOT NULL,	
+	RoomID varchar(100) NOT NULL,
+	CustomerID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,	
+	RoomType varchar(100) NOT NULL,	
 	PhoneNumber varchar(20) NOT NULL,
 	RoomOnFloor tinyint NOT NULL,
 	RoomArea decimal(8,3) NOT NULL,
@@ -23,7 +23,7 @@
 DROP TABLE Rooms
 CREATE TABLE RoomType(
 	-- Create columns		
-	RoomType varchar(20) NOT NULL,	
+	RoomType varchar(100) NOT NULL,	
 	Price decimal(18,3) NOT NULL,
 	Discount decimal(3,2) DEFAULT 0,
 	Active bit DEFAULT 1,
@@ -33,8 +33,8 @@ CREATE TABLE RoomType(
 )
 CREATE TABLE Customers(
 	-- Create columns	
-	CustomerID varchar(30) NOT NULL,
-	UserName varchar(20) NOT NULL,	
+	CustomerID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,	
 	CustomerFirstName varchar(20) NOT NULL,
 	CustomerMidName varchar(20) ,
 	CustomerLastName varchar(20) NOT NULL,
@@ -54,10 +54,10 @@ DROP TABLE Customers
 
 CREATE TABLE BookingInfo (
 	-- Create columns
-	BookingID varchar(30) NOT NULL,
-	CustomerID varchar(30) NOT NULL,	
-	RoomID varchar(10) NOT NULL,
-	UserName varchar(20) NOT NULL,
+	BookingID varchar(100) NOT NULL,
+	CustomerID varchar(100) NOT NULL,	
+	RoomID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,
 	Note nvarchar(1000),	
 	NumberGuest tinyint not null,
 	DateBook date not null	
@@ -69,11 +69,11 @@ DROP TABLE BookingInfo
 
 CREATE TABLE CheckInOrders(
 	-- Create columns	
-	CheckInID varchar(50) NOT NULL,
-	BookingID varchar(30) NOT NULL,
-	CustomerID varchar(30) NOT NULL,
-	RoomID varchar(10) NOT NULL,
-	UserName varchar(20) NOT NULL,
+	CheckInID varchar(100) NOT NULL,
+	BookingID varchar(100) NOT NULL,
+	CustomerID varchar(100) NOT NULL,
+	RoomID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,
 	CheckInType varchar(20) NOT NULL,		
 	NumberOfCustomer tinyint NOT NULL,
 	CheckInDate datetime NOT NULL,
@@ -88,11 +88,11 @@ DROP TABLE CheckInOrders
 
 CREATE TABLE CheckOutOrders(
 	-- Create columns		
-	CheckOutID varchar(50) NOT NULL,
-	CheckInID varchar(50) NOT NULL,
-	CustomerID varchar(30) NOT NULL,		
-	RoomID varchar(10) NOT NULL,
-	UserName varchar(20) NOT NULL,
+	CheckOutID varchar(100) NOT NULL,
+	CheckInID varchar(100) NOT NULL,
+	CustomerID varchar(100) NOT NULL,		
+	RoomID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,
 	CheckInDate date NOT NULL,
 	CheckOutDate date NOT NULL,		
 	CustomerPayment varchar(50) NOT NULL,
@@ -109,10 +109,10 @@ DROP TABLE CheckOutOrders
 
 CREATE TABLE ServicesOrders(
 	-- Create columns		
-	OrderID varchar(50) NOT NULL,
-	CustomerID varchar(30) NOT NULL,
-	RoomID varchar(10) NOT NULL,
-	UserName varchar(20) NOT NULL,	
+	OrderID varchar(100) NOT NULL,
+	CustomerID varchar(100) NOT NULL,
+	RoomID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,	
 	ServiceOrderDate datetime NOT NULL,
 	ServiceNote nvarchar(200),	
 	Active bit DEFAULT 1 NOT NULL,
@@ -125,9 +125,9 @@ DROP TABLE ServicesOrders
 CREATE TABLE ServicesOrderDetails(
 	-- Create columns
 	ID int IDENTITY(1,1),	
-	OrderID varchar(50) NOT NULL,
-	ServiceID varchar(50) NOT NULL,
-	UserName varchar(20) NOT NULL,	
+	OrderID varchar(100) NOT NULL,
+	ServiceID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,	
 	ServiceQuantity int NOT NULL,
 	Price decimal(18,3) NOT NULL,	
 	Discount float,
@@ -139,8 +139,8 @@ DROP TABLE ServicesOrderDetails
 
 CREATE TABLE ServiceType(
 	-- Create columns		
-	ServiceID varchar(50) NOT NULL,
-	UserName varchar(20) NOT NULL,
+	ServiceID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,
 	ServiceName nvarchar(100) NOT NULL,	
 	ServiceUnit nvarchar(20) NOT NULL,
 	ServicePrice decimal(18,3) NOT NULL,
@@ -162,7 +162,7 @@ DROP TABLE ServiceType
 CREATE TABLE UserLogs(
 	-- Create columns
 	ID int IDENTITY(1,1),
-	UserName varchar(20) NOT NULL,	
+	UserName varchar(100) NOT NULL,	
 	LogContent nvarchar(200) NOT NULL,
 	LogTime datetime NOT NULL,
 	Active bit DEFAULT 1 NOT NULL,
@@ -173,8 +173,8 @@ CREATE TABLE UserLogs(
 DROP TABLE Departments
 CREATE TABLE Departments(
 	-- Create columns
-	DepartmentID varchar(20) NOT NULL,		
-	DepartmentName nvarchar(50) NOT NULL,
+	DepartmentID varchar(100) NOT NULL,		
+	DepartmentName nvarchar(100) NOT NULL,
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
 	CONSTRAINT pk_DepartmentID_Departments PRIMARY KEY (DepartmentID),
@@ -183,11 +183,11 @@ CREATE TABLE Departments(
 
 CREATE TABLE Employees(
 -- Create columns
-	EmployeeID varchar(20) NOT NULL,	
+	EmployeeID varchar(100) NOT NULL,	
 	EmployeeFirstName nvarchar(15) NOT NULL,
 	EmployeeMidName nvarchar(25),
 	EmployeeLastName nvarchar(15) NOT NULL,
-	DepartmentID varchar(20),
+	DepartmentID varchar(100) DEFAULT 'Free',
 	PhoneNumber varchar(20),
 	[Address] nvarchar(100),
 	IDNumber varchar(20),
@@ -204,15 +204,14 @@ CREATE TABLE Employees(
 	[Image] varbinary(MAX),
 	-- Create constraint
 	CONSTRAINT pk_EmployeeID_Employees PRIMARY KEY (EmployeeID),
-	CONSTRAINT uc_EmployeeID_Employees UNIQUE (EmployeeID),
-	CONSTRAINT df_DepartmentID_Employees DEFAULT 'Free' FOR DepartmentID
+	CONSTRAINT uc_EmployeeID_Employees UNIQUE (EmployeeID)	
 )
 
 CREATE TABLE Users(
 	-- Create columns
 	ID_User int NOT NULL,
-	EmployeeID varchar(20) NOT NULL,
-	UserName varchar(20),
+	EmployeeID varchar(100) NOT NULL,
+	UserName varchar(100),
 	[PassWord] varchar(255),
 	Active bit NOT NULL,
 	Secret_Question nvarchar(100),
@@ -228,7 +227,7 @@ CREATE TABLE Users(
 CREATE TABLE [Role](
 	-- Create columns
 	RoleID int IDENTITY(1,1),	
-	EmployeeID varchar(20) NOT NULL,
+	EmployeeID varchar(100) NOT NULL,
 	Employee_View bit DEFAULT 0,
 	Employee_Add bit DEFAULT 0,
 	Employee_Edit bit DEFAULT 0,
@@ -294,11 +293,8 @@ ADD CONSTRAINT fk_EmployeeID_Users FOREIGN KEY (EmployeeID) REFERENCES Employees
 ALTER TABLE [Role]
 ADD CONSTRAINT fk_EmployeeID_Role FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID);
 
-
 ALTER TABLE Employees
-ADD CONSTRAINT fk_RoleID_Employees FOREIGN KEY (RoleID) REFERENCES [Role](RoleID),	
-	CONSTRAINT fk_DepartmentID_Employees FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID);
-
+ADD CONSTRAINT fk_DepartmentID_Employees FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID);
 
 ALTER TABLE Rooms
 ADD CONSTRAINT fk_CustomerID_Rooms FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
@@ -427,86 +423,86 @@ DELETE FROM Rooms
 INSERT INTO Rooms (RoomID, RoomType, PhoneNumber, RoomOnFloor, RoomArea, RoomStatus, Clean, 
 Repaired, InProgress, CustomerID, UserName, DayRemaining, BookingDate, CheckInDate, LeaveDate) 
 VALUES 
-('R0101', 'Single', '67890101',1,20,'Available',1,1,1, 'KANFREE', 'admin', 0, NULL, NULL, NULL),
-('R0102', 'Double', '67890102',1,30,'Reserved',0,1,1, 'KANFREE', 'admin', 0, NULL, NULL, NULL),
+('R0101', 'Single', '67890101',1,20,'Available',1,1,1, 'KANFREE', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0102', 'Double', '67890102',1,30,'Reserved',0,1,1, 'KANFREE', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
 ('R0103', 'Triple', '67890103',1,40,'Occupied',1,0,0, 'KANCUS003', 'admin', 10, DATEADD(DD, -5, GETDATE()), DATEADD(DD, -5, GETDATE()), DATEADD(DD, +5, GETDATE())),
-('R0104', 'Family', '67890104',1,50,'Out',1,1,0, 'KANCUS004', 'admin', 0, NULL, NULL, NULL),
-('R0105', 'Deluxe', '67890105',1,60,'Available',0,0,1, 'KANCUS005', 'admin', 0, NULL, NULL, NULL),
+('R0104', 'Family', '67890104',1,50,'Out',1,1,0, 'KANCUS004', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0105', 'Deluxe', '67890105',1,60,'Available',0,0,1, 'KANCUS005', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
 ('R0201', 'Deluxe', '67890201',2,60,'Occupied',1,1,0, 'KANCUS005', 'admin',15,DATEADD(DD, -7, GETDATE()), DATEADD(DD, -7, GETDATE()), DATEADD(DD, +8, GETDATE())),
-('R0202', 'Single', '67890202',2,20,'Out',0,1,0, 'KANCUS003', 'admin',0, NULL, NULL, NULL),
-('R0203', 'Triple', '67890203',2,40,'Reserved',1,1,0, 'KANCUS001', 'admin',0, NULL, NULL, NULL),
-('R0204', 'Double', '67890204',2,30,'Available',1,0,0, 'KANCUS004', 'admin',0, NULL, NULL, NULL),
-('R0205', 'Family', '67890205',2,50,'Available',0,1,1, 'KANCUS002', 'admin',0, NULL, NULL, NULL),
-('R0106', 'Single', '67890106',1,20,'Available',1,1,1, 'KANCUS006', 'admin', 0, NULL, NULL, NULL),
-('R0107', 'Double', '67890107',1,30,'Reserved',0,1,1, 'KANCUS007', 'admin', 0, NULL, NULL, NULL),
-('R0108', 'Triple', '67890108',1,40,'Occupied',1,0,0, 'KANCUS008', 'admin', 8, NULL, NULL, NULL),
-('R0109', 'Family', '67890109',1,50,'Out',1,1,0, 'KANCUS009', 'admin', 0, NULL, NULL, NULL),
-('R0110', 'Deluxe', '67890110',1,60,'Available',0,0,1, 'KANCUS010', 'admin', 0, NULL, NULL, NULL),
-('R0206', 'Deluxe', '67890206',2,60,'Occupied',1,1,0, 'KANCUS010', 'admin',25, NULL, NULL, NULL),
-('R0207', 'Single', '67890207',2,20,'Out',0,1,0, 'KANCUS009', 'admin',0, NULL, NULL, NULL),
-('R0208', 'Triple', '67890208',2,40,'Reserved',1,1,0, 'KANCUS008', 'admin',0, NULL, NULL, NULL),
-('R0209', 'Double', '67890209',2,30,'Available',1,0,0, 'KANCUS007', 'admin',0, NULL, NULL, NULL),
-('R0210', 'Family', '678902105',2,50,'Available',0,1,1, 'KANCUS006', 'admin',0, NULL, NULL, NULL),
-('R0301', 'Single', '67890301',3,20,'Available',1,1,1, 'KANCUS001', 'admin', 0, NULL, NULL, NULL),
-('R0302', 'Double', '67890302',3,30,'Reserved',0,1,1, 'KANCUS002', 'admin', 0, NULL, NULL, NULL),
-('R0303', 'Triple', '67890303',3,40,'Occupied',1,0,0, 'KANCUS003', 'admin', 3, NULL, NULL, NULL),
-('R0304', 'Family', '67890304',3,50,'Out',1,1,0, 'KANCUS004', 'admin', 0, NULL, NULL, NULL),
-('R0305', 'Deluxe', '67890305',3,60,'Occupied',0,0,1, 'KANCUS009', 'admin', 15, NULL, NULL, NULL),
-('R0306', 'Deluxe', '67890306',3,60,'Occupied',1,1,0, 'KANCUS005', 'admin',5, NULL, NULL, NULL),
-('R0307', 'Single', '67890307',3,20,'Out',0,1,0, 'KANCUS003', 'admin',0, NULL, NULL, NULL),
-('R0308', 'Triple', '67890308',3,40,'Reserved',1,1,0, 'KANCUS001', 'admin',0, NULL, NULL, NULL),
-('R0309', 'Double', '67890309',3,30,'Available',1,0,0, 'KANCUS004', 'admin',0, NULL, NULL, NULL),
-('R0310', 'Family', '67890310',3,50,'Occupied',0,1,1, 'KANCUS002', 'admin',9, NULL, NULL, NULL),
-('R0401', 'Single', '67890401',4,20,'Available',1,1,1, 'KANCUS006', 'admin', 0, NULL, NULL, NULL),
-('R0402', 'Double', '67890402',4,30,'Reserved',0,1,1, 'KANCUS007', 'admin', 0, NULL, NULL, NULL),
-('R0403', 'Triple', '67890403',4,40,'Occupied',1,0,0, 'KANCUS008', 'admin', 8, NULL, NULL, NULL),
-('R0404', 'Family', '67890404',4,50,'Out',1,1,0, 'KANCUS009', 'admin', 0, NULL, NULL, NULL),
-('R0405', 'Deluxe', '67890405',4,60,'Available',0,0,1, 'KANCUS010', 'admin', 0, NULL, NULL, NULL),
-('R0406', 'Deluxe', '67890406',4,60,'Occupied',1,1,0, 'KANCUS010', 'admin',25, NULL, NULL, NULL),
-('R0407', 'Single', '67890407',4,20,'Out',0,1,0, 'KANCUS009', 'admin',0, NULL, NULL, NULL),
-('R0408', 'Triple', '67890408',4,40,'Reserved',1,1,0, 'KANCUS008', 'admin',0, NULL, NULL, NULL),
-('R0409', 'Double', '67890409',4,30,'Available',1,0,0, 'KANCUS007', 'admin',0, NULL, NULL, NULL),
-('R0410', 'Family', '67890410',4,50,'Available',0,1,1, 'KANCUS006', 'admin',0, NULL, NULL, NULL),
-('R0501', 'Single', '67890501',5,20,'Available',1,1,1, 'KANCUS001', 'admin', 0, NULL, NULL, NULL),
-('R0502', 'Double', '67890502',5,30,'Reserved',0,1,1, 'KANCUS002', 'admin', 0, NULL, NULL, NULL),
-('R0503', 'Triple', '67890503',5,40,'Occupied',1,0,0, 'KANCUS003', 'admin', 8, NULL, NULL, NULL),
-('R0504', 'Family', '67890504',5,50,'Out',1,1,0, 'KANCUS004', 'admin', 0, NULL, NULL, NULL),
-('R0505', 'Deluxe', '67890505',5,60,'Occupied',0,0,1, 'KANCUS005', 'admin', 30, NULL, NULL, NULL),
-('R0506', 'Deluxe', '67890506',5,60,'Occupied',1,1,0, 'KANCUS006', 'admin',25, NULL, NULL, NULL),
-('R0507', 'Single', '67890507',5,20,'Out',0,1,0, 'KANCUS007', 'admin',0, NULL, NULL, NULL),
-('R0508', 'Triple', '67890508',5,40,'Reserved',1,1,0, 'KANCUS008', 'admin',0, NULL, NULL, NULL),
-('R0509', 'Double', '67890509',5,30,'Occupied',1,0,0, 'KANCUS009', 'admin',8, NULL, NULL, NULL),
-('R0510', 'Family', '67890510',5,50,'Available',0,1,1, 'KANCUS010', 'admin',0, NULL, NULL, NULL),
-('R0601', 'Single', '67890601',6,20,'Available',1,1,1, 'KANCUS011', 'admin', 0, NULL, NULL, NULL),
-('R0602', 'Double', '67890602',6,30,'Reserved',0,1,1, 'KANCUS012', 'admin', 0, NULL, NULL, NULL),
-('R0603', 'Triple', '67890603',6,40,'Occupied',1,0,0, 'KANCUS013', 'admin', 3, NULL, NULL, NULL),
-('R0604', 'Family', '67890604',6,50,'Out',1,1,0, 'KANCUS014', 'admin', 0, NULL, NULL, NULL),
-('R0605', 'Deluxe', '67890605',6,60,'Occupied',0,0,1, 'KANCUS015', 'admin', 15, NULL, NULL, NULL),
-('R0606', 'Deluxe', '67890606',6,60,'Occupied',1,1,0, 'KANCUS016', 'admin',5, NULL, NULL, NULL),
-('R0607', 'Single', '67890607',6,20,'Out',0,1,0, 'KANCUS017', 'admin',0, NULL, NULL, NULL),
-('R0608', 'Triple', '67890608',6,40,'Reserved',1,1,0, 'KANCUS018', 'admin',0, NULL, NULL, NULL),
-('R0609', 'Double', '67890609',6,30,'Occupied',1,0,0, 'KANCUS019', 'admin',2, NULL, NULL, NULL),
-('R0610', 'Family', '67890610',6,50,'Occupied',0,1,1, 'KANCUS020', 'admin',9, NULL, NULL, NULL),
-('R0701', 'Single', '67890701',7,20,'Occupied',1,1,1, 'KANCUS021', 'admin', 4, NULL, NULL, NULL),
-('R0702', 'Double', '67890702',7,30,'Reserved',0,1,1, 'KANCUS022', 'admin', 0, NULL, NULL, NULL),
-('R0703', 'Triple', '67890703',7,40,'Occupied',1,0,0, 'KANCUS023', 'admin', 8, NULL, NULL, NULL),
-('R0704', 'Family', '67890704',7,50,'Out',1,1,0, 'KANCUS024', 'admin', 0, NULL, NULL, NULL),
-('R0705', 'Deluxe', '67890705',7,60,'Available',0,0,1, 'KANCUS025', 'admin', 0, NULL, NULL, NULL),
-('R0706', 'Deluxe', '67890706',7,60,'Occupied',1,1,0, 'KANCUS026', 'admin',25, NULL, NULL, NULL),
-('R0707', 'Single', '67890707',7,20,'Out',0,1,0, 'KANCUS027', 'admin',0, NULL, NULL, NULL),
-('R0708', 'Triple', '67890708',7,40,'Reserved',1,1,0, 'KANCUS028', 'admin',0, NULL, NULL, NULL),
-('R0709', 'Double', '67890709',7,30,'Available',1,0,0, 'KANCUS029', 'admin',0, NULL, NULL, NULL),
-('R0710', 'Family', '67890710',7,50,'Occupied',0,1,1, 'KANCUS030', 'admin',10, NULL, NULL, NULL),
-('R0801', 'Single', '67890801',8,20,'Occupied',1,1,1, 'KANCUS016', 'admin', 11, NULL, NULL, NULL),
-('R0802', 'Double', '67890802',8,30,'Reserved',0,1,1, 'KANCUS027', 'admin', 0, NULL, NULL, NULL),
-('R0803', 'Triple', '67890803',8,40,'Occupied',1,0,0, 'KANCUS008', 'admin', 8, NULL, NULL, NULL),
-('R0804', 'Family', '67890804',8,50,'Out',1,1,0, 'KANCUS009', 'admin', 0, NULL, NULL, NULL),
-('R0805', 'Deluxe', '67890805',8,60,'Available',0,0,1, 'KANCUS014', 'admin', 0, NULL, NULL, NULL),
-('R0806', 'Deluxe', '67890806',8,60,'Occupied',1,1,0, 'KANCUS016', 'admin',25, NULL, NULL, NULL),
-('R0807', 'Single', '67890807',8,20,'Out',0,1,0, 'KANCUS019', 'admin',0, NULL, NULL, NULL),
-('R0808', 'Triple', '67890808',8,40,'Reserved',1,1,0, 'KANCUS028', 'admin',0, NULL, NULL, NULL),
-('R0809', 'Double', '67890809',8,30,'Available',1,0,0, 'KANCUS027', 'admin',0, NULL, NULL, NULL),
-('R0810', 'Family', '67890810',8,50,'Available',0,1,1, 'KANCUS026', 'admin',0, NULL, NULL, NULL),
+('R0202', 'Single', '67890202',2,20,'Out',0,1,0, 'KANCUS003', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0203', 'Triple', '67890203',2,40,'Reserved',1,1,0, 'KANCUS001', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0204', 'Double', '67890204',2,30,'Available',1,0,0, 'KANCUS004', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0205', 'Family', '67890205',2,50,'Available',0,1,1, 'KANCUS002', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0106', 'Single', '67890106',1,20,'Available',1,1,1, 'KANCUS006', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0107', 'Double', '67890107',1,30,'Reserved',0,1,1, 'KANCUS007', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0108', 'Triple', '67890108',1,40,'Occupied',1,0,0, 'KANCUS008', 'admin', 8, GETDATE(), GETDATE(), GETDATE()),
+('R0109', 'Family', '67890109',1,50,'Out',1,1,0, 'KANCUS009', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0110', 'Deluxe', '67890110',1,60,'Available',0,0,1, 'KANCUS010', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0206', 'Deluxe', '67890206',2,60,'Occupied',1,1,0, 'KANCUS010', 'admin',25, GETDATE(), GETDATE(), GETDATE()),
+('R0207', 'Single', '67890207',2,20,'Out',0,1,0, 'KANCUS009', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0208', 'Triple', '67890208',2,40,'Reserved',1,1,0, 'KANCUS008', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0209', 'Double', '67890209',2,30,'Available',1,0,0, 'KANCUS007', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0210', 'Family', '678902105',2,50,'Available',0,1,1, 'KANCUS006', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0301', 'Single', '67890301',3,20,'Available',1,1,1, 'KANCUS001', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0302', 'Double', '67890302',3,30,'Reserved',0,1,1, 'KANCUS002', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0303', 'Triple', '67890303',3,40,'Occupied',1,0,0, 'KANCUS003', 'admin', 3, GETDATE(), GETDATE(), GETDATE()),
+('R0304', 'Family', '67890304',3,50,'Out',1,1,0, 'KANCUS004', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0305', 'Deluxe', '67890305',3,60,'Occupied',0,0,1, 'KANCUS009', 'admin', 15, GETDATE(), GETDATE(), GETDATE()),
+('R0306', 'Deluxe', '67890306',3,60,'Occupied',1,1,0, 'KANCUS005', 'admin',5, GETDATE(), GETDATE(), GETDATE()),
+('R0307', 'Single', '67890307',3,20,'Out',0,1,0, 'KANCUS003', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0308', 'Triple', '67890308',3,40,'Reserved',1,1,0, 'KANCUS001', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0309', 'Double', '67890309',3,30,'Available',1,0,0, 'KANCUS004', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0310', 'Family', '67890310',3,50,'Occupied',0,1,1, 'KANCUS002', 'admin',9, GETDATE(), GETDATE(), GETDATE()),
+('R0401', 'Single', '67890401',4,20,'Available',1,1,1, 'KANCUS006', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0402', 'Double', '67890402',4,30,'Reserved',0,1,1, 'KANCUS007', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0403', 'Triple', '67890403',4,40,'Occupied',1,0,0, 'KANCUS008', 'admin', 8, GETDATE(), GETDATE(), GETDATE()),
+('R0404', 'Family', '67890404',4,50,'Out',1,1,0, 'KANCUS009', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0405', 'Deluxe', '67890405',4,60,'Available',0,0,1, 'KANCUS010', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0406', 'Deluxe', '67890406',4,60,'Occupied',1,1,0, 'KANCUS010', 'admin',25, GETDATE(), GETDATE(), GETDATE()),
+('R0407', 'Single', '67890407',4,20,'Out',0,1,0, 'KANCUS009', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0408', 'Triple', '67890408',4,40,'Reserved',1,1,0, 'KANCUS008', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0409', 'Double', '67890409',4,30,'Available',1,0,0, 'KANCUS007', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0410', 'Family', '67890410',4,50,'Available',0,1,1, 'KANCUS006', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0501', 'Single', '67890501',5,20,'Available',1,1,1, 'KANCUS001', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0502', 'Double', '67890502',5,30,'Reserved',0,1,1, 'KANCUS002', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0503', 'Triple', '67890503',5,40,'Occupied',1,0,0, 'KANCUS003', 'admin', 8, GETDATE(), GETDATE(), GETDATE()),
+('R0504', 'Family', '67890504',5,50,'Out',1,1,0, 'KANCUS004', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0505', 'Deluxe', '67890505',5,60,'Occupied',0,0,1, 'KANCUS005', 'admin', 30, GETDATE(), GETDATE(), GETDATE()),
+('R0506', 'Deluxe', '67890506',5,60,'Occupied',1,1,0, 'KANCUS006', 'admin',25, GETDATE(), GETDATE(), GETDATE()),
+('R0507', 'Single', '67890507',5,20,'Out',0,1,0, 'KANCUS007', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0508', 'Triple', '67890508',5,40,'Reserved',1,1,0, 'KANCUS008', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0509', 'Double', '67890509',5,30,'Occupied',1,0,0, 'KANCUS009', 'admin',8, GETDATE(), GETDATE(), GETDATE()),
+('R0510', 'Family', '67890510',5,50,'Available',0,1,1, 'KANCUS010', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0601', 'Single', '67890601',6,20,'Available',1,1,1, 'KANCUS011', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0602', 'Double', '67890602',6,30,'Reserved',0,1,1, 'KANCUS012', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0603', 'Triple', '67890603',6,40,'Occupied',1,0,0, 'KANCUS013', 'admin', 3, GETDATE(), GETDATE(), GETDATE()),
+('R0604', 'Family', '67890604',6,50,'Out',1,1,0, 'KANCUS014', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0605', 'Deluxe', '67890605',6,60,'Occupied',0,0,1, 'KANCUS015', 'admin', 15, GETDATE(), GETDATE(), GETDATE()),
+('R0606', 'Deluxe', '67890606',6,60,'Occupied',1,1,0, 'KANCUS016', 'admin',5, GETDATE(), GETDATE(), GETDATE()),
+('R0607', 'Single', '67890607',6,20,'Out',0,1,0, 'KANCUS017', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0608', 'Triple', '67890608',6,40,'Reserved',1,1,0, 'KANCUS018', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0609', 'Double', '67890609',6,30,'Occupied',1,0,0, 'KANCUS019', 'admin',2, GETDATE(), GETDATE(), GETDATE()),
+('R0610', 'Family', '67890610',6,50,'Occupied',0,1,1, 'KANCUS020', 'admin',9, GETDATE(), GETDATE(), GETDATE()),
+('R0701', 'Single', '67890701',7,20,'Occupied',1,1,1, 'KANCUS021', 'admin', 4, GETDATE(), GETDATE(), GETDATE()),
+('R0702', 'Double', '67890702',7,30,'Reserved',0,1,1, 'KANCUS022', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0703', 'Triple', '67890703',7,40,'Occupied',1,0,0, 'KANCUS023', 'admin', 8, GETDATE(), GETDATE(), GETDATE()),
+('R0704', 'Family', '67890704',7,50,'Out',1,1,0, 'KANCUS024', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0705', 'Deluxe', '67890705',7,60,'Available',0,0,1, 'KANCUS025', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0706', 'Deluxe', '67890706',7,60,'Occupied',1,1,0, 'KANCUS026', 'admin',25, GETDATE(), GETDATE(), GETDATE()),
+('R0707', 'Single', '67890707',7,20,'Out',0,1,0, 'KANCUS027', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0708', 'Triple', '67890708',7,40,'Reserved',1,1,0, 'KANCUS028', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0709', 'Double', '67890709',7,30,'Available',1,0,0, 'KANCUS029', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0710', 'Family', '67890710',7,50,'Occupied',0,1,1, 'KANCUS030', 'admin',10, GETDATE(), GETDATE(), GETDATE()),
+('R0801', 'Single', '67890801',8,20,'Occupied',1,1,1, 'KANCUS016', 'admin', 11, GETDATE(), GETDATE(), GETDATE()),
+('R0802', 'Double', '67890802',8,30,'Reserved',0,1,1, 'KANCUS027', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0803', 'Triple', '67890803',8,40,'Occupied',1,0,0, 'KANCUS008', 'admin', 8, GETDATE(), GETDATE(), GETDATE()),
+('R0804', 'Family', '67890804',8,50,'Out',1,1,0, 'KANCUS009', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0805', 'Deluxe', '67890805',8,60,'Available',0,0,1, 'KANCUS014', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0806', 'Deluxe', '67890806',8,60,'Occupied',1,1,0, 'KANCUS016', 'admin',25, GETDATE(), GETDATE(), GETDATE()),
+('R0807', 'Single', '67890807',8,20,'Out',0,1,0, 'KANCUS019', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0808', 'Triple', '67890808',8,40,'Reserved',1,1,0, 'KANCUS028', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0809', 'Double', '67890809',8,30,'Available',1,0,0, 'KANCUS027', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0810', 'Family', '67890810',8,50,'Available',0,1,1, 'KANCUS026', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
 
 SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName',
 	DATEDIFF(DAY,R.LeaveDate,GETDATE()) AS 'Day_Remaining'
@@ -614,3 +610,5 @@ DELETE FROM CheckInOrders
 SELECT R.*, U.UserName FROM [Role] R, Users U WHERE R.EmployeeID=U.EmployeeID
 
 SELECT * FROM UserLogs
+
+SELECT * FROM RoomType WHERE RoomType NOT IN ('Deluxe','Double', 'Family', 'Single', 'Triple')

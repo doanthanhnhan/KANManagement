@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" styleClass="mainFxmlClass" stylesheets="@../css/dark-theme.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controllers.FXMLRoomTypeController">
+   <children>
+      <VBox fx:id="vBox_RoomType_Info">
+         <children>
+            <HBox fx:id="hboxHeader">
+               <children>
+                  <HBox prefHeight="129.0" prefWidth="560.0">
+                     <children>
+                        <VBox prefHeight="129.0">
+                           <children>
+                              <HBox prefHeight="53.0" prefWidth="400.0">
+                                 <children>
+                                    <Label prefHeight="53.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="ROOM TYPE">
+                                       <font>
+                                          <Font name="System Bold" size="27.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="60.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label prefHeight="27.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the room type infomation">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox fx:id="hBox_Info_Parent">
+               <children>
+                  <VBox fx:id="vBox_Info_Left">
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <HBox fx:id="HboxBoxId" alignment="CENTER" prefHeight="35.0" prefWidth="400.0" spacing="10.0">
+                                 <children>
+                                    <JFXComboBox fx:id="comboBox_Room_Type" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Room Type Select">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXComboBox>
+                                    <FontAwesomeIconView fx:id="iconRefresh" glyphName="REFRESH" onMouseClicked="#refreshRoomType" size="20" styleClass="jfx-glyhp-icon-refresh">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </FontAwesomeIconView>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="20.0" />
+                                 </HBox.margin>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="txt_Room_Type_Price" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Price" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="txt_Room_Type_Discount" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Discount" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox fx:id="hBoxContent" alignment="CENTER_LEFT">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="20.0" left="80.0" top="20.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="hBoxBtn" alignment="CENTER" prefWidth="560.0" spacing="20.0">
+               <children>
+                  <JFXButton fx:id="btnSubmit" buttonType="RAISED" onAction="#handle_Btn_Submit_Action" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="btnCancel" buttonType="RAISED" onAction="#handle_Btn_Cancel_Action" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Cancel">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets left="80.0" right="80.0" />
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="50.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

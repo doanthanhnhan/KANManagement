@@ -452,10 +452,11 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public void deleteRoomEX(RoomEX roomEX) {
-        String sql = "DELETE FROM Rooms WHERE RoomID=?";
+        String sql = "UPDATE Rooms SET Active=? WHERE RoomID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, roomEX.getRoomID());
+                stmt.setBoolean(1, false);
+                stmt.setString(2, roomEX.getRoomID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -490,7 +491,8 @@ public class RoomDAOImpl implements RoomDAO {
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listRooms;
-    }
+    }    
+    
 //public 
 
     public static void main(String[] args) {
