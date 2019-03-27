@@ -16,9 +16,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -113,14 +116,38 @@ public class FXMLCheckInOrdersController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        btnInfo.setOnAction((event) -> {
-            try {
-                enter_Submit_Action();
-            } catch (ClassNotFoundException | SQLException | IOException ex) {
-                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
         LeaveDate.setDisable(true);
+        if (FXMLInfoBookingController.checkInfoBooking) {
+            CustomerID.setText(FXMLInfoBookingController.customerIdConect);
+            boxBookingID.setDisable(true);
+            boxBookingID.setValue(FXMLInfoBookingController.bookingIdConect);
+            RoomID.setText(FXMLInfoBookingController.roomIdConect);
+            CheckInID.setText("CI-" + FXMLInfoBookingController.bookingIdConect);
+            NumberOfCustomer.setDisable(true);
+            LeaveDate.setDisable(false);
+            CheckInDate.setValue(LocalDate.now());
+            HboxBoxId.getChildren().remove(iconRefresh);
+            String pattern = "dd-MM-yyyy";
+            formatCalender.format(pattern, CheckInDate);
+            NumberOfCustomer.setText(FXMLInfoBookingController.numberofcustomer);
+            btnInfo.setOnAction((event) -> {
+                try {
+                    enter_Submit_Action();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            });
+        } else {
+            btnInfo.setOnAction((event) -> {
+                try {
+                    enter_Submit_Action();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+
 //        set box booking id 
         refreshIdUser();
 //        set value for box checkin type
@@ -224,8 +251,8 @@ public class FXMLCheckInOrdersController implements Initializable {
                 CustomerID.setText(bk.getCusID());
                 NumberOfCustomer.setText(String.valueOf(bk.getNumGuest()));
                 RoomID.setText(bk.getRoomID());
+                CheckInID.setText("CI-" + newItem);
                 CheckInDate.setValue(LocalDate.now());
-                CheckInID.setText("CI-"+newItem);
                 String pattern = "dd-MM-yyyy";
                 formatCalender.format(pattern, CheckInDate);
             }
@@ -339,8 +366,8 @@ public class FXMLCheckInOrdersController implements Initializable {
             });
         } else {
             Platform.runLater(() -> {
-                String dateIn = CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
-                String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+
+                String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 CheckIn ck = new CheckIn();
                 ck.setBookID(boxBookingID.getValue());
                 ck.setUser(Username.getText());
@@ -348,7 +375,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 ck.setCusID(CustomerID.getText());
                 ck.setRoomID(RoomID.getText());
                 ck.setNumberOfCustomer(Integer.valueOf(NumberOfCustomer.getText()));
-                ck.setDateIn(dateIn);
+                ck.setDateIn(String.valueOf(LocalDateTime.now()));
                 ck.setDateOut(dateOut);
                 ck.setCusPack(CustomerPackage.getText());
                 ck.setCheckType((String) boxCheckInType.getValue());
@@ -358,17 +385,23 @@ public class FXMLCheckInOrdersController implements Initializable {
                     Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Check In for booking id = " + boxBookingID.getValue(),
-                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                CheckInID.setText("");
-                boxBookingID.setValue(null);
-                CustomerID.setText("");
-                RoomID.setText("");
-                NumberOfCustomer.setText("");
-                CheckInDate.setValue(null);
-                LeaveDate.setValue(null);
-                boxCheckInType.setValue(null);
-                CustomerPackage.setText("");
-                refreshIdUser();
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                if (FXMLInfoBookingController.checkInfoBooking) {
+                    Stage stage = (Stage) anchorPaneCheckInOrders.getScene().getWindow();
+                    stage.close();
+                    FXMLInfoBookingController.checkInfoBooking=false;
+                } else {
+                    CheckInID.setText("");
+                    boxBookingID.setValue(null);
+                    CustomerID.setText("");
+                    RoomID.setText("");
+                    NumberOfCustomer.setText("");
+                    CheckInDate.setValue(null);
+                    LeaveDate.setValue(null);
+                    boxCheckInType.setValue(null);
+                    CustomerPackage.setText("");
+                    refreshIdUser();
+                }
             });
         }
     }

@@ -39,7 +39,7 @@ public class DAOCustomerBookingCheckIn {
         pt.setString(6, ck.getCheckType());
         pt.setInt(7, ck.getNumberOfCustomer());
         pt.setString(8, ck.getDateIn());
-        pt.setString(9, ck.getDateIn());
+        pt.setString(9, ck.getDateOut());
         pt.setString(10, ck.getCusPack());
         pt.setInt(11, 1);
         pt.execute();

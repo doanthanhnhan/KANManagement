@@ -27,10 +27,14 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -107,6 +111,8 @@ public class FXMLInfoCustomerController implements Initializable {
     private JFXButton btnCancel;
     @FXML
     private JFXTextField Email;
+    public static boolean checkInfoCustomer = false;
+    public static String CustomerIdConect;
 
     /**
      * Initializes the controller class.
@@ -116,6 +122,15 @@ public class FXMLInfoCustomerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println(FXMLCheckIdCardCustomerController.checkIdCardCustomer);
+        if (FXMLCheckIdCardCustomerController.checkIdCardCustomer) {
+            checkInfoCustomer = true;
+            System.out.println(FXMLCheckIdCardCustomerController.IdCardCustomer);
+            Passport.setDisable(true);
+            Passport.setText(FXMLCheckIdCardCustomerController.IdCardCustomer);
+            CustomerID.setText("CTM-" + FXMLCheckIdCardCustomerController.IdCardCustomer);
+            CustomerIdConect = CustomerID.getText();
+        }
         btnInfo.setOnAction((event) -> {
             try {
                 btnSubmitAddCustomer();
@@ -123,6 +138,7 @@ public class FXMLInfoCustomerController implements Initializable {
                 Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+
 //        set discount
         Discount.setText("0");
 //        set UserName
@@ -304,9 +320,9 @@ public class FXMLInfoCustomerController implements Initializable {
                 protected Object call() throws Exception {
                     Platform.runLater(() -> {
                         HboxContent.getChildren().clear();
-                        formSubmitAction();
-                    });
 
+                    });
+                    formSubmitAction();
                     return null;
                 }
             };
@@ -446,11 +462,31 @@ public class FXMLInfoCustomerController implements Initializable {
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
                 CustomerID.setText("");
+// kiem tra chay theo click check in tu main form
+                if (FXMLCheckIdCardCustomerController.checkIdCardCustomer) {
+                    Stage stageEdit = new Stage();
+                    stageEdit.resizableProperty().setValue(Boolean.FALSE);
+                    Parent root = null;
+                    try {
+                        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLBookingInfo.fxml"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                    Scene scene = new Scene(root);
+                    stageEdit.setScene(scene);
+                    stageEdit.show();
+                    Stage stage = (Stage) anchorPaneInfoCustomer.getScene().getWindow();
+                    stage.close();
+                    FXMLCheckIdCardCustomerController.checkIdCardCustomer = false;
+                }
+
             });
         }
     }
+
     @FXML
-    private void actionSetCustomerID(){
-        CustomerID.setText(Passport.getText());
+    private void actionSetCustomerID() {
+        CustomerID.setText("CTM-" + Passport.getText());
     }
 }
