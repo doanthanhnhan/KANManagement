@@ -119,39 +119,14 @@ public class FXMLInfoBookingController implements Initializable {
             BookingID.setDisable(true);
             boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
             boxIdRoom.setValue("R0204");
-            btnInfo.setOnAction((event) -> {
-                try {
-                    btnSubmitBooking();
-                    Platform.runLater(() -> {
-                        Stage stageEdit = new Stage();
-                        stageEdit.resizableProperty().setValue(Boolean.FALSE);
-                        Parent root = null;
-                        try {
-                            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCheckInOrders.fxml"));
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
-                        Scene scene = new Scene(root);
-                        stageEdit.setScene(scene);
-                        stageEdit.show();
-                        Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
-                        stage.close();
-                    });
-                } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            });
-        } else {
-            btnInfo.setOnAction((event) -> {
-                try {
-                    btnSubmitBooking();
-                } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
         }
+        btnInfo.setOnAction((event) -> {
+            try {
+                btnSubmitBooking();
+            } catch (ClassNotFoundException | SQLException | IOException ex) {
+                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         BookingID.setText("BK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSSSS")));
         NumberGuest.setText("0");
         //Getting Available roomID
@@ -362,6 +337,7 @@ public class FXMLInfoBookingController implements Initializable {
                 boxIdRoom.requestFocus();
             });
         } else if (DateBook.getValue() == null) {
+            System.out.println("trong datebook null: " + FXMLInfoCustomerController.checkInfoCustomer);
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -392,14 +368,8 @@ public class FXMLInfoBookingController implements Initializable {
                 notificationFunction.notification(NumberGuest, HboxContent, "NUMBER GUEST IS INCORRECT (1-8) !!!");
             });
         } else {
+            System.out.println("trong else" + FXMLInfoCustomerController.checkInfoCustomer);
             Platform.runLater(() -> {
-                System.out.println(FXMLInfoCustomerController.checkInfoCustomer);
-                if (FXMLInfoCustomerController.checkInfoCustomer) {
-                    bookingIdConect = BookingID.getText();
-                    roomIdConect = boxIdRoom.getValue();
-                    numberofcustomer = NumberGuest.getText();
-                    customerIdConect = boxIdCustomer.getValue();
-                }
                 String date = DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 BookingInfo bk = new BookingInfo();
                 bk.setBookID(BookingID.getText());
@@ -417,12 +387,33 @@ public class FXMLInfoBookingController implements Initializable {
 //                set Userlogs
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Booking for " + boxIdCustomer.getValue(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                boxIdRoom.setValue(null);
-                boxIdCustomer.setValue(null);
-                BookingID.setText("");
-                Note.setText("");
-                NumberGuest.setText("0");
-                DateBook.setValue(null);
+                if (FXMLInfoCustomerController.checkInfoCustomer) {
+                    bookingIdConect = BookingID.getText();
+                    roomIdConect = boxIdRoom.getValue();
+                    numberofcustomer = NumberGuest.getText();
+                    customerIdConect = boxIdCustomer.getValue();
+                    Stage stageEdit = new Stage();
+                    stageEdit.resizableProperty().setValue(Boolean.FALSE);
+                    Parent root = null;
+                    try {
+                        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCheckInOrders.fxml"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                    Scene scene = new Scene(root);
+                    stageEdit.setScene(scene);
+                    stageEdit.show();
+                    Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
+                    stage.close();
+                } else {
+                    boxIdRoom.setValue(null);
+                    boxIdCustomer.setValue(null);
+                    BookingID.setText("");
+                    Note.setText("");
+                    NumberGuest.setText("0");
+                    DateBook.setValue(null);
+                }
             });
         }
     }

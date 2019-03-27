@@ -10,8 +10,6 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
-import static controllers.FXMLCheckIdCardCustomerController.IdCardCustomer;
-import static controllers.FXMLCheckIdCardCustomerController.checkIdCardCustomer;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
@@ -131,33 +129,16 @@ public class FXMLInfoCustomerController implements Initializable {
             Passport.setDisable(true);
             Passport.setText(FXMLCheckIdCardCustomerController.IdCardCustomer);
             CustomerID.setText("CTM-" + FXMLCheckIdCardCustomerController.IdCardCustomer);
-            CustomerIdConect =  CustomerID.getText();
-            btnInfo.setOnAction((event) -> {
-                try {
-                    btnSubmitAddCustomer();
-                    Stage stageEdit = new Stage();
-                    stageEdit.resizableProperty().setValue(Boolean.FALSE);
-                    Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLBookingInfo.fxml"));
-                    stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
-                    Scene scene = new Scene(root);
-                    stageEdit.setScene(scene);
-                    stageEdit.show();
-                    Stage stage = (Stage) anchorPaneInfoCustomer.getScene().getWindow();
-                    stage.close();
-                } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            });
-        } else {
-            btnInfo.setOnAction((event) -> {
-                try {
-                    btnSubmitAddCustomer();
-                } catch (ClassNotFoundException | SQLException | IOException ex) {
-                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
+            CustomerIdConect = CustomerID.getText();
         }
+        btnInfo.setOnAction((event) -> {
+            try {
+                btnSubmitAddCustomer();
+            } catch (ClassNotFoundException | SQLException | IOException ex) {
+                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
 //        set discount
         Discount.setText("0");
 //        set UserName
@@ -339,9 +320,9 @@ public class FXMLInfoCustomerController implements Initializable {
                 protected Object call() throws Exception {
                     Platform.runLater(() -> {
                         HboxContent.getChildren().clear();
-                        formSubmitAction();
-                    });
 
+                    });
+                    formSubmitAction();
                     return null;
                 }
             };
@@ -481,6 +462,24 @@ public class FXMLInfoCustomerController implements Initializable {
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
                 CustomerID.setText("");
+// kiem tra chay theo click check in tu main form
+                if (FXMLCheckIdCardCustomerController.checkIdCardCustomer) {
+                    Stage stageEdit = new Stage();
+                    stageEdit.resizableProperty().setValue(Boolean.FALSE);
+                    Parent root = null;
+                    try {
+                        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLBookingInfo.fxml"));
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                    Scene scene = new Scene(root);
+                    stageEdit.setScene(scene);
+                    stageEdit.show();
+                    Stage stage = (Stage) anchorPaneInfoCustomer.getScene().getWindow();
+                    stage.close();
+                }
+
             });
         }
     }

@@ -152,10 +152,10 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
         ConnectControllers.setfXMLMainOverViewPaneController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
-        
+
         //Initialize label room property
         init_Label_Room_Property();
-        
+
         check_Services_Button_Clicked = false;
 
         if (!roomDAOImpl.getAllRoom().isEmpty()) {
@@ -291,10 +291,10 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
     }
 
-    public void init_Label_Room_Property(){
-        listRoomProperties = roomDAOImpl.getAllRoomProperties();       
+    public void init_Label_Room_Property() {
+        listRoomProperties = roomDAOImpl.getAllRoomProperties();
         for (RoomProperty roomProperty : listRoomProperties) {
-            
+
             switch (roomProperty.getRoomPropertyName()) {
                 case "Available":
                     label_Available_Rooms.setText(roomProperty.getRoomCount().toString());
@@ -341,12 +341,13 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 case "Not Checking":
                     label_Remaining_Days.setText(roomProperty.getRoomCount().toString());
                     break;
-                    
+
                 default:
                     throw new AssertionError();
-            }            
+            }
         }
     }
+
     public void add_Rooms_With_Condition(
             ObservableList<Room> list_Rooms,
             Pane parentPane,
@@ -375,6 +376,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 btn_CheckIn.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " check in!");
                     check_Check_In_Button_Clicked = true;
+                    mainFormController.formLoader("/fxml/FXMLCheckIdCardCustomer.fxml", "/images/KAN Logo.png",
+                            "Check Id Card Customer: " + label_Room_Number.getText());
                 });
                 JFXButton btn_CheckOut = (JFXButton) pane.lookup("#btn_CheckOut");
                 btn_CheckOut.setOnAction((event) -> {
