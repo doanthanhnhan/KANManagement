@@ -540,8 +540,8 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_Add_Customer_Action(ActionEvent event) {
         checkRegis = true;
-        System.out.println("Check Id Card Customer menu item clicked!");
-        formLoader("/fxml/FXMLCútomerInfo.fxml", "/images/KAN Logo.png", "Add New Customer");
+        System.out.println("Add New Customer menu item clicked!");
+        formLoader("/fxml/FXMLCustomerInfo.fxml", "/images/KAN Logo.png", "Add New Customer");
     }
 
     @FXML

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -106,20 +107,15 @@ public class FXMLInfoBookingController implements Initializable {
     public static String numberofcustomer;
     public static String customerIdConect;
     public static boolean checkInfoBooking = false;
+    private FXMLMainOverViewPaneController mainOverViewPaneController;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if (FXMLInfoCustomerController.checkInfoCustomer) {
-            checkInfoBooking = true;
-            boxIdCustomer.setDisable(true);
-            boxIdRoom.setDisable(true);
-            BookingID.setDisable(true);
-            boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
-            boxIdRoom.setValue("R0204");
-        }
+        mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
+
         btnInfo.setOnAction((event) -> {
             try {
                 btnSubmitBooking();
@@ -127,7 +123,7 @@ public class FXMLInfoBookingController implements Initializable {
                 Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        BookingID.setText("BK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSSSS")));
+        BookingID.setText("BK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSSSS")));
         NumberGuest.setText("0");
         //Getting Available roomID
         roomDAOImpl = new RoomDAOImpl();
@@ -235,6 +231,20 @@ public class FXMLInfoBookingController implements Initializable {
             // TODO
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (FXMLInfoCustomerController.checkInfoCustomer) {
+            checkInfoBooking = true;
+            boxIdCustomer.setDisable(true);
+            boxIdRoom.setDisable(true);
+            BookingID.setDisable(true);
+            boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
+            System.out.println("RoomID = " + mainOverViewPaneController.service_Room_ID);
+            boxIdRoom.setValue(mainOverViewPaneController.service_Room_ID);
+            DateBook.setDisable(true);
+            DateBook.setValue(LocalDate.now());
+            String pattern = "dd-MM-yyyy";
+            formatCalender.format(pattern, DateBook);
         }
     }
 
@@ -406,6 +416,7 @@ public class FXMLInfoBookingController implements Initializable {
                     stageEdit.show();
                     Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
                     stage.close();
+                    FXMLInfoCustomerController.checkInfoCustomer = false;
                 } else {
                     boxIdRoom.setValue(null);
                     boxIdCustomer.setValue(null);

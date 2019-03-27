@@ -376,6 +376,9 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 btn_CheckIn.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " check in!");
                     check_Check_In_Button_Clicked = true;
+                    service_Room_ID = label_Room_Number.getText();
+                    service_Customer_ID = listRoom.getCustomerID();
+                    service_Customer_Full_Name = listRoom.getCustomerName();
                     mainFormController.formLoader("/fxml/FXMLCheckIdCardCustomer.fxml", "/images/KAN Logo.png",
                             "Check Id Card Customer: " + label_Room_Number.getText());
                 });

@@ -478,6 +478,7 @@ public class FXMLInfoCustomerController implements Initializable {
                     stageEdit.show();
                     Stage stage = (Stage) anchorPaneInfoCustomer.getScene().getWindow();
                     stage.close();
+                    FXMLCheckIdCardCustomerController.checkIdCardCustomer = false;
                 }
 
             });

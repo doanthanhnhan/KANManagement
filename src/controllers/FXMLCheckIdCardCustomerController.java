@@ -78,11 +78,12 @@ public class FXMLCheckIdCardCustomerController implements Initializable {
     }
 
     public void check_IdCard() throws IOException {
+        System.out.println("check Id Invalid: "+DAOCustomerBookingCheckIn.check_IDCustomer("CTM-"+IdCard.getText()));
         if (IdCard.getText() == null || IdCard.getText().equals("")) {
             notificationFunction.notification(IdCard, HboxContent, "ID CARD MUST NOT EMPTY !!!");
         } else if (!PatternValided.PatternCMND(IdCard.getText())) {
             notificationFunction.notification(IdCard, HboxContent, "ID CARD IS INCORRECT !!!");
-        } else if (DAOCustomerBookingCheckIn.check_IDCustomer(IdCard.getText())) {
+        } else if (DAOCustomerBookingCheckIn.check_IDCustomer("CTM-"+IdCard.getText())) {
 //            xứ lý trường hợp ID Card chưa tồn tại        
             Stage stageEdit = new Stage();
             stageEdit.resizableProperty().setValue(Boolean.FALSE);
