@@ -20,7 +20,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -50,6 +52,8 @@ import models.CheckIn;
 import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.DAOcheckRole;
+import models.Room;
+import models.RoomDAOImpl;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
@@ -110,12 +114,17 @@ public class FXMLCheckInOrdersController implements Initializable {
     @FXML
     private FontAwesomeIconView iconRefresh;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
+    private RoomDAOImpl roomDAOImpl;
+    
+    private FXMLMainOverViewPaneController mainOverViewPaneController;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
+        roomDAOImpl = new RoomDAOImpl();
         LeaveDate.setDisable(true);
         if (FXMLInfoBookingController.checkInfoBooking) {
             CustomerID.setText(FXMLInfoBookingController.customerIdConect);
@@ -386,6 +395,19 @@ public class FXMLCheckInOrdersController implements Initializable {
                 }
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Check In for booking id = " + boxBookingID.getValue(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                
+                //Getting Room infomations to update room Status after checking in - Nhan edit here
+                Room room = new Room();
+                room.setRoomID(RoomID.getText());
+                room.setCustomerID(CustomerID.getText());
+                room.setUserName(Username.getText());
+                room.setRoomStatus("Occupied");
+                room.setCheckInDate(LocalDateTime.now());
+                room.setLeaveDate(LocalDateTime.of(LeaveDate.getValue(), LocalTime.now()));                
+                room.setDayRemaining((int)ChronoUnit.DAYS.between(room.getCheckInDate(),room.getLeaveDate()));                
+                roomDAOImpl.editCheckInRoom(room, true);
+                mainOverViewPaneController.refreshForm();
+                
                 if (FXMLInfoBookingController.checkInfoBooking) {
                     Stage stage = (Stage) anchorPaneCheckInOrders.getScene().getWindow();
                     stage.close();

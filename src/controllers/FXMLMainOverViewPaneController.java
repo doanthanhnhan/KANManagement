@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXComboBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,6 +19,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -161,11 +163,13 @@ public class FXMLMainOverViewPaneController implements Initializable {
         if (!roomDAOImpl.getAllRoom().isEmpty()) {
             initAddRooms();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -402,7 +406,13 @@ public class FXMLMainOverViewPaneController implements Initializable {
                             "Add new Service Order for Room: " + label_Room_Number.getText());
                 });
                 label_Room_Number.setText(listRoom.getRoomID());
-                label_Room_Status.setText(listRoom.getRoomStatus());
+                if (listRoom.getRoomStatus().equals("Reserved")){
+                    label_Room_Status.setText(listRoom.getRoomStatus()+" "+listRoom.getBookingDate().toLocalDate()
+                            .format(DateTimeFormatter.ofPattern("dd-MM-yy")).toString());
+                } else{
+                    label_Room_Status.setText(listRoom.getRoomStatus());
+                }
+                
                 label_Customer_Name.setText(listRoom.getCustomerName());
                 if (listRoom.getRoomStatus().equalsIgnoreCase("Available") || listRoom.getRoomStatus().equalsIgnoreCase("Reserved")) {
                     btn_CheckOut.setDisable(true);
@@ -495,6 +505,25 @@ public class FXMLMainOverViewPaneController implements Initializable {
             }
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainOverViewPaneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void refreshForm() {
+        //Initialize label room property
+        init_Label_Room_Property();
+
+        check_Services_Button_Clicked = false;
+
+        if (!roomDAOImpl.getAllRoom().isEmpty()) {
+            initAddRooms();
+        } else {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 

@@ -16,8 +16,8 @@
          <top>
             <HBox prefWidth="260.0" styleClass="hbox-background-room-status" BorderPane.alignment="CENTER">
                <children>
-                  <Label id="label_Room_Number" fx:id="label_Room_Number" prefWidth="130.0" styleClass="label-roomNumber-room-status" text="Room 101" />
-                  <Label id="label_Room_Status" fx:id="label_Room_Status" alignment="CENTER_RIGHT" prefWidth="130.0" styleClass="label-roomCheckOut-room-status" text="Checked out" />
+                  <Label id="label_Room_Number" fx:id="label_Room_Number" prefWidth="80.0" styleClass="label-roomNumber-room-status" text="Room 101" />
+                  <Label id="label_Room_Status" fx:id="label_Room_Status" alignment="CENTER_RIGHT" prefWidth="180.0" styleClass="label-roomCheckOut-room-status" text="Checked out" />
                </children>
             </HBox>
          </top>

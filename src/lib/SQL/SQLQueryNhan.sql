@@ -8,7 +8,7 @@
 	RoomOnFloor tinyint NOT NULL,
 	RoomArea decimal(8,3) NOT NULL,
 	RoomStatus varchar(10) NOT NULL,
-	DayRemaining tinyint DEFAULT 0,
+	DayRemaining int DEFAULT 0,
 	BookingDate datetime DEFAULT GETDATE(),
 	CheckInDate datetime DEFAULT GETDATE(),
 	LeaveDate datetime DEFAULT GETDATE(),
@@ -35,9 +35,9 @@ CREATE TABLE Customers(
 	-- Create columns	
 	CustomerID varchar(100) NOT NULL,
 	UserName varchar(100) NOT NULL,	
-	CustomerFirstName varchar(20) NOT NULL,
-	CustomerMidName varchar(20) ,
-	CustomerLastName varchar(20) NOT NULL,
+	CustomerFirstName nvarchar(20) NOT NULL,
+	CustomerMidName nvarchar(20) ,
+	CustomerLastName nvarchar(20) NOT NULL,
 	CustomerBirthday date NOT NULL,	
 	CustomerPhoneNumber varchar(20) NOT NULL,
 	CustomerPassport varchar(30),
@@ -427,12 +427,12 @@ VALUES
 ('R0102', 'Double', '67890102',1,30,'Reserved',0,1,1, 'KANFREE', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
 ('R0103', 'Triple', '67890103',1,40,'Occupied',1,0,0, 'KANCUS003', 'admin', 10, DATEADD(DD, -5, GETDATE()), DATEADD(DD, -5, GETDATE()), DATEADD(DD, +5, GETDATE())),
 ('R0104', 'Family', '67890104',1,50,'Out',1,1,0, 'KANCUS004', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
-('R0105', 'Deluxe', '67890105',1,60,'Available',0,0,1, 'KANCUS005', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
+('R0105', 'Deluxe', '67890105',1,60,'Available',1,1,1, 'KANCUS005', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
 ('R0201', 'Deluxe', '67890201',2,60,'Occupied',1,1,0, 'KANCUS005', 'admin',15,DATEADD(DD, -7, GETDATE()), DATEADD(DD, -7, GETDATE()), DATEADD(DD, +8, GETDATE())),
 ('R0202', 'Single', '67890202',2,20,'Out',0,1,0, 'KANCUS003', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
 ('R0203', 'Triple', '67890203',2,40,'Reserved',1,1,0, 'KANCUS001', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
-('R0204', 'Double', '67890204',2,30,'Available',1,0,0, 'KANCUS004', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
-('R0205', 'Family', '67890205',2,50,'Available',0,1,1, 'KANCUS002', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0204', 'Double', '67890204',2,30,'Available',1,1,1, 'KANCUS004', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
+('R0205', 'Family', '67890205',2,50,'Available',1,1,1, 'KANCUS002', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
 ('R0106', 'Single', '67890106',1,20,'Available',1,1,1, 'KANCUS006', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
 ('R0107', 'Double', '67890107',1,30,'Reserved',0,1,1, 'KANCUS007', 'admin', 0, GETDATE(), GETDATE(), GETDATE()),
 ('R0108', 'Triple', '67890108',1,40,'Occupied',1,0,0, 'KANCUS008', 'admin', 8, GETDATE(), GETDATE(), GETDATE()),
@@ -612,3 +612,9 @@ SELECT R.*, U.UserName FROM [Role] R, Users U WHERE R.EmployeeID=U.EmployeeID
 SELECT * FROM UserLogs
 
 SELECT * FROM RoomType WHERE RoomType NOT IN ('Deluxe','Double', 'Family', 'Single', 'Triple')
+
+DELETE FROM CheckInOrders
+DELETE FROM BookingInfo
+DELETE FROM Rooms
+ALTER TABLE Rooms
+ALTER COLUMN DayRemaining int DEFAULT 0;
