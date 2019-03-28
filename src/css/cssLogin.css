@@ -73,6 +73,14 @@
     -fx-font-size : 14px;
     -fx-font-weight: bold;  
 }
+.jfx-date-picker > .jfx-text-field {
+    -jfx-label-float: true;   
+}
+.jfx-date-picker-fix > .jfx-text-field {
+    -jfx-label-float: true;
+    -fx-prompt-text-fill: -fx-primarytextcolor;
+    -fx-text-fill: -fx-primarytextcolor;
+}
 .jfx-glyhp-icon{
     -fx-fill: #FF2625;
 }

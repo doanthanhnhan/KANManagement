@@ -108,12 +108,14 @@ public class FXMLInfoBookingController implements Initializable {
     public static String customerIdConect;
     public static boolean checkInfoBooking = false;
     private FXMLMainOverViewPaneController mainOverViewPaneController;
+    private boolean checkBookingAlready;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        checkBookingAlready=DAOCustomerBookingCheckIn.check_BookingIdCustomer(FXMLInfoCustomerController.CustomerIdConect);
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
 
         btnInfo.setOnAction((event) -> {
@@ -233,7 +235,7 @@ public class FXMLInfoBookingController implements Initializable {
             Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (FXMLInfoCustomerController.checkInfoCustomer) {
+        if (FXMLInfoCustomerController.checkInfoCustomer || !checkBookingAlready) {
             checkInfoBooking = true;
             boxIdCustomer.setDisable(true);
             boxIdRoom.setDisable(true);
@@ -397,7 +399,7 @@ public class FXMLInfoBookingController implements Initializable {
 //                set Userlogs
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Booking for " + boxIdCustomer.getValue(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                if (FXMLInfoCustomerController.checkInfoCustomer) {
+                if (FXMLInfoCustomerController.checkInfoCustomer || !checkBookingAlready) {               
                     bookingIdConect = BookingID.getText();
                     roomIdConect = boxIdRoom.getValue();
                     numberofcustomer = NumberGuest.getText();
@@ -417,14 +419,14 @@ public class FXMLInfoBookingController implements Initializable {
                     Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
                     stage.close();
                     FXMLInfoCustomerController.checkInfoCustomer = false;
-                } else {
-                    boxIdRoom.setValue(null);
-                    boxIdCustomer.setValue(null);
-                    BookingID.setText("");
-                    Note.setText("");
-                    NumberGuest.setText("0");
-                    DateBook.setValue(null);
                 }
+                boxIdRoom.setValue(null);
+                boxIdCustomer.setValue(null);
+                BookingID.setText("");
+                Note.setText("");
+                NumberGuest.setText("0");
+                DateBook.setValue(null);
+
             });
         }
     }

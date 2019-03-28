@@ -123,13 +123,23 @@ public class FXMLCheckInOrdersController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //Setting event mouseclick for iconrefresh
+        iconRefresh.setOnMouseClicked((event) -> {
+            refreshIdUser();
+        });
+        //        set box booking id 
+        refreshIdUser();       
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
         roomDAOImpl = new RoomDAOImpl();
         LeaveDate.setDisable(true);
         if (FXMLInfoBookingController.checkInfoBooking) {
+            System.out.println("check info booking "+FXMLInfoBookingController.checkInfoBooking);
+            System.out.println("booking info conect "+FXMLInfoBookingController.bookingIdConect);
             CustomerID.setText(FXMLInfoBookingController.customerIdConect);
             boxBookingID.setDisable(true);
             boxBookingID.setValue(FXMLInfoBookingController.bookingIdConect);
+            System.out.println("booking info conect "+boxBookingID.getValue());
+            System.out.println("booking info conect "+FXMLInfoBookingController.bookingIdConect);
             RoomID.setText(FXMLInfoBookingController.roomIdConect);
             CheckInID.setText("CI-" + FXMLInfoBookingController.bookingIdConect);
             NumberOfCustomer.setDisable(true);
@@ -156,9 +166,6 @@ public class FXMLCheckInOrdersController implements Initializable {
                 }
             });
         }
-
-//        set box booking id 
-        refreshIdUser();
 //        set value for box checkin type
         ObservableList list_checkintype = FXCollections.observableArrayList();
         list_checkintype.add("Reception Desk");
@@ -428,8 +435,7 @@ public class FXMLCheckInOrdersController implements Initializable {
         }
     }
 
-    @FXML
-    private void refreshIdUser() {
+    public void refreshIdUser() {
         ObservableList list_Booking_Id = FXCollections.observableArrayList();
         try {
             //        set add booking id for box booking id

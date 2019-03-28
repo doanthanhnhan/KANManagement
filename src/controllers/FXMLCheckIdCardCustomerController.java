@@ -34,6 +34,7 @@ import utils.PatternValided;
  * @author Admin
  */
 public class FXMLCheckIdCardCustomerController implements Initializable {
+
     @FXML
     private HBox HboxHeader;
     @FXML
@@ -47,6 +48,7 @@ public class FXMLCheckIdCardCustomerController implements Initializable {
     @FXML
     private JFXButton btnCancel;
     public static boolean checkIdCardCustomer = false;
+    public static boolean checkIdCardCustomerAlready = false;
     public static String IdCardCustomer;
     @FXML
     private AnchorPane anchorPaneCheckIdCard;
@@ -78,12 +80,12 @@ public class FXMLCheckIdCardCustomerController implements Initializable {
     }
 
     public void check_IdCard() throws IOException {
-        System.out.println("check Id Invalid: "+DAOCustomerBookingCheckIn.check_IDCustomer("CTM-"+IdCard.getText()));
+        System.out.println("check Id Invalid: " + DAOCustomerBookingCheckIn.check_IDCustomer("CTM-" + IdCard.getText()));
         if (IdCard.getText() == null || IdCard.getText().equals("")) {
             notificationFunction.notification(IdCard, HboxContent, "ID CARD MUST NOT EMPTY !!!");
         } else if (!PatternValided.PatternCMND(IdCard.getText())) {
             notificationFunction.notification(IdCard, HboxContent, "ID CARD IS INCORRECT !!!");
-        } else if (DAOCustomerBookingCheckIn.check_IDCustomer("CTM-"+IdCard.getText())) {
+        } else if (DAOCustomerBookingCheckIn.check_IDCustomer("CTM-" + IdCard.getText())) {
 //            xứ lý trường hợp ID Card chưa tồn tại        
             Stage stageEdit = new Stage();
             stageEdit.resizableProperty().setValue(Boolean.FALSE);
@@ -94,7 +96,19 @@ public class FXMLCheckIdCardCustomerController implements Initializable {
             Scene scene = new Scene(root);
             stageEdit.setScene(scene);
             stageEdit.show();
-            
+
+            Stage stage = (Stage) anchorPaneCheckIdCard.getScene().getWindow();
+            stage.close();
+        } else if (!DAOCustomerBookingCheckIn.check_IDCustomer("CTM-" + IdCard.getText())) {
+            Stage stageEdit = new Stage();
+            stageEdit.resizableProperty().setValue(Boolean.FALSE);
+            checkIdCardCustomerAlready = true;
+            IdCardCustomer = IdCard.getText();
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCustomerInfo.fxml"));
+            stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+            Scene scene = new Scene(root);
+            stageEdit.setScene(scene);
+            stageEdit.show();
             Stage stage = (Stage) anchorPaneCheckIdCard.getScene().getWindow();
             stage.close();
         }

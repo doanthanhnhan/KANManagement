@@ -24,7 +24,56 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
-//    Check CustomerID
+//    check da booking hay chua
+
+    public static boolean check_BookingIdCustomer(String ID) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) >=0";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            if (rs.next()) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+//    get info customer
+
+    public static Customer getAllCustomerInfo(String id) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        Customer cm = new Customer();
+        String sql = "select * from Customers where CustomerID=?";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        pt.setString(1, id);
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            cm.setFName(rs.getString("CustomerFirstName"));
+            cm.setMName(rs.getString("CustomerMidName"));
+            cm.setLName(rs.getString("CustomerLastName"));
+            cm.setDate(rs.getString("CustomerBirthday"));
+            cm.setPhone(rs.getString("CustomerPhoneNumber"));
+            cm.setEmail(rs.getString("CustomerEmail"));
+            cm.setDiscount(rs.getFloat("Discount"));
+            cm.setCompany(rs.getString("Company"));
+            cm.setSex(rs.getBoolean("Sex"));
+        }
+        return cm;
+    }
 
 //    Add new checkIn
     public static void AddNewCheckIn(CheckIn ck) throws MalformedURLException, SQLException, ClassNotFoundException {

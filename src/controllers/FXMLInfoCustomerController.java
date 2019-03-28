@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -32,6 +33,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -112,6 +114,7 @@ public class FXMLInfoCustomerController implements Initializable {
     @FXML
     private JFXTextField Email;
     public static boolean checkInfoCustomer = false;
+    public static boolean checkInfoCustomerAlready = false;
     public static String CustomerIdConect;
 
     /**
@@ -123,6 +126,22 @@ public class FXMLInfoCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println(FXMLCheckIdCardCustomerController.checkIdCardCustomer);
+
+        //Set datepicker :
+        birthday.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear());
+                setDisable(empty || date.compareTo(today) > 0);
+            }
+        });
+        birthday.setValue(LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear()));
+        birthday.getEditor().setText("Date Of Birth");
+        birthday.setPromptText(null);
+        birthday.getStyleClass().add("jfx-date-picker-fix");
+
+//        trường hợp check in mà customer chưa được tạo
         if (FXMLCheckIdCardCustomerController.checkIdCardCustomer) {
             checkInfoCustomer = true;
             System.out.println(FXMLCheckIdCardCustomerController.IdCardCustomer);
@@ -130,6 +149,60 @@ public class FXMLInfoCustomerController implements Initializable {
             Passport.setText(FXMLCheckIdCardCustomerController.IdCardCustomer);
             CustomerID.setText("CTM-" + FXMLCheckIdCardCustomerController.IdCardCustomer);
             CustomerIdConect = CustomerID.getText();
+        }
+        btnInfo.setOnAction((event) -> {
+            try {
+                btnSubmitAddCustomer();
+            } catch (ClassNotFoundException | SQLException | IOException ex) {
+                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        //        trường hợp check in mà customer đã được tạo
+        if (FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
+            Customer ctm = new Customer();
+            try {
+                ctm = DAOCustomerBookingCheckIn.getAllCustomerInfo("CTM-" + FXMLCheckIdCardCustomerController.IdCardCustomer);
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            checkInfoCustomerAlready = true;
+            PhoneNumber.setText(ctm.getPhone());
+            if (ctm.getSex()) {
+                Male.isSelected();
+                Male.setDisable(true);
+                Female.setDisable(true);
+            } else {
+                Female.isSelected();
+                Male.setDisable(true);
+                Female.setDisable(true);
+            }
+            birthday.setValue(LocalDate.parse(ctm.getDate()));
+            String pattern = "dd-MM-yyyy";
+            formatCalender.format(pattern, birthday);
+            FirstName.setText(ctm.getFName());
+            LastName.setText(ctm.getLName());
+            MidName.setText(ctm.getMName());
+            Email.setText(ctm.getEmail());
+            Company.setText(ctm.getCompany());
+            Discount.setText(String.valueOf(ctm.getDiscount()));
+            birthday.setDisable(true);
+            PhoneNumber.setDisable(true);
+            FirstName.setDisable(true);
+            MidName.setDisable(true);
+            LastName.setDisable(true);
+            Email.setDisable(true);
+            Company.setDisable(true);
+            Passport.setDisable(true);
+            Passport.setText(FXMLCheckIdCardCustomerController.IdCardCustomer);
+            CustomerID.setText("CTM-" + FXMLCheckIdCardCustomerController.IdCardCustomer);
+            CustomerIdConect = CustomerID.getText();
+            btnInfo.setOnAction((event) -> {
+                try {
+                    btnSubmitAddCustomer();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
         }
         btnInfo.setOnAction((event) -> {
             try {
@@ -286,6 +359,8 @@ public class FXMLInfoCustomerController implements Initializable {
     private void Format_Show_Calender(ActionEvent event) {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, birthday);
+        birthday.setPromptText("Date Of Birth");
+        birthday.getStyleClass().remove("jfx-date-picker-fix");
     }
 
     @FXML
@@ -408,62 +483,65 @@ public class FXMLInfoCustomerController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
             });
-        } else if (!DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getText())) {
+        } else if (!DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getText()) && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
             Platform.runLater(() -> {
                 notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID ALREADY EXIST !!!");
             });
         } else {
             Platform.runLater(() -> {
-                Customer ctm = new Customer();
-                String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                ctm.setCusID(CustomerID.getText());
-                ctm.setUser(Username.getText());
-                ctm.setDate(date);
-                ctm.setActive(true);
-                ctm.setSex(Male.isSelected());
-                ctm.setCompany(Company.getText());
-                ctm.setDiscount(Float.valueOf(Discount.getText()));
-                ctm.setEmail(Email.getText());
-                ctm.setPassport(Passport.getText());
-                ctm.setFName(FirstName.getText());
-                ctm.setMName(MidName.getText());
-                ctm.setLName(LastName.getText());
-                ctm.setPhone(PhoneNumber.getText());
-                try {
-                    DAOCustomerBookingCheckIn.AddNewCustomer(ctm);
-                } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create customer " + CustomerID.getText(),
-                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                //            reset textfield when add complete
+                if (!FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
+                    Customer ctm = new Customer();
+                    String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    ctm.setCusID(CustomerID.getText());
+                    ctm.setUser(Username.getText());
+                    ctm.setDate(date);
+                    ctm.setActive(true);
+                    ctm.setSex(Male.isSelected());
+                    ctm.setCompany(Company.getText());
+                    ctm.setDiscount(Float.valueOf(Discount.getText()));
+                    ctm.setEmail(Email.getText());
+                    ctm.setPassport(Passport.getText());
+                    ctm.setFName(FirstName.getText());
+                    ctm.setMName(MidName.getText());
+                    ctm.setLName(LastName.getText());
+                    ctm.setPhone(PhoneNumber.getText());
+                    try {
+                        DAOCustomerBookingCheckIn.AddNewCustomer(ctm);
+                    } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
+                        Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create customer " + CustomerID.getText(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                    //            reset textfield when add complete
 
-                FirstName.setText("");
-                MidName.setText("");
-                LastName.setText("");
-                Email.setText("");
-                PhoneNumber.setText("");
-                Passport.setText("");
-                Discount.setText("0");
-                Company.setText("");
-                birthday.setValue(null);
+                    FirstName.setText("");
+                    MidName.setText("");
+                    LastName.setText("");
+                    Email.setText("");
+                    PhoneNumber.setText("");
+                    Passport.setText("");
+                    Discount.setText("0");
+                    Company.setText("");
+                    birthday.setValue(null);
 
 //            messenge when add complete
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon-finish");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(300, 35);
-                label.setText("Create  COMPLETE!!!");
-                HboxContent.setAlignment(Pos.CENTER_LEFT);
-                HboxContent.setSpacing(10);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                CustomerID.setText("");
+                    FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
+                    icon.setSize("16");
+                    icon.setStyleClass("jfx-glyhp-icon-finish");
+                    Label label = new Label();
+                    label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
+                    label.setPrefSize(300, 35);
+                    label.setText("Create  COMPLETE!!!");
+                    HboxContent.setAlignment(Pos.CENTER_LEFT);
+                    HboxContent.setSpacing(10);
+                    HboxContent.getChildren().clear();
+                    HboxContent.getChildren().add(icon);
+                    HboxContent.getChildren().add(label);
+                    CustomerID.setText("");
+                }
 // kiem tra chay theo click check in tu main form
-                if (FXMLCheckIdCardCustomerController.checkIdCardCustomer) {
+                if (FXMLCheckIdCardCustomerController.checkIdCardCustomer || FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
+
                     Stage stageEdit = new Stage();
                     stageEdit.resizableProperty().setValue(Boolean.FALSE);
                     Parent root = null;
@@ -478,6 +556,7 @@ public class FXMLInfoCustomerController implements Initializable {
                     stageEdit.show();
                     Stage stage = (Stage) anchorPaneInfoCustomer.getScene().getWindow();
                     stage.close();
+                    FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready = false;
                     FXMLCheckIdCardCustomerController.checkIdCardCustomer = false;
                 }
 
