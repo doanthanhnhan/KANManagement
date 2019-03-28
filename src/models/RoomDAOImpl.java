@@ -32,10 +32,62 @@ import utils.connectDB;
 public class RoomDAOImpl implements RoomDAO {
 
     @Override
+    public Room getRoom(String roomID) {
+        String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName',\n"
+                + "DATEDIFF(HOUR,GETDATE(),R.LeaveDate)/24 AS 'Day_Leave',\n"
+                + "DATEDIFF(HOUR,R.BookingDate,GETDATE())/24 AS 'Day_Booking', \n"
+                + "RT.Price, RT.Discount\n"
+                + "FROM Rooms R, Customers C, RoomType RT\n"
+                + "WHERE R.CustomerID = C.CustomerID AND R.RoomType = RT.RoomType AND R.RoomID = '" + roomID + "'";
+        Room room = new Room();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+
+                    room.setRoomID(rs.getString("RoomID"));
+                    room.setCustomerID(rs.getString("CustomerID"));
+                    room.setCustomerName(FormatName.format(rs.getString("CustomerFullName")));
+                    room.setUserName(rs.getString("UserName"));
+                    room.setRoomType(rs.getString("RoomType"));
+                    room.setRoomPhoneNumber(rs.getString("PhoneNumber"));
+                    room.setRoomOnFloor(rs.getInt("RoomOnFloor"));
+                    room.setRoomArea(rs.getFloat("RoomArea"));
+                    room.setRoomStatus(rs.getString("RoomStatus"));
+                    room.setRoomClean(rs.getBoolean("Clean"));
+                    room.setRoomRepaired(rs.getBoolean("Repaired"));
+                    room.setRoomInProgress(rs.getBoolean("InProgress"));
+                    room.setDayRemaining(rs.getInt("DayRemaining"));
+                    room.setActive(rs.getBoolean("Active"));
+                    room.setBookingDate(rs.getTimestamp("BookingDate").toLocalDateTime());
+                    room.setCheckInDate(rs.getTimestamp("CheckInDate").toLocalDateTime());
+                    room.setLeaveDate(rs.getTimestamp("LeaveDate").toLocalDateTime());
+                    room.setDayLeave(rs.getInt("Day_Leave"));
+                    room.setDayBooking(rs.getInt("Day_Booking"));
+                    room.setRoomPrice(rs.getBigDecimal("Price"));
+                    room.setRoomDiscount(rs.getBigDecimal("Discount"));
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+            });
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return room;
+    }
+
+    @Override
     public ObservableList<Room> getAllRoom() {
-        String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName' \n"
-                + "FROM Rooms R, Customers C\n"
-                + "WHERE R.CustomerID = C.CustomerID";
+        String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName',\n"
+                + "DATEDIFF(HOUR,GETDATE(),R.LeaveDate)/24 AS 'Day_Leave',\n"
+                + "DATEDIFF(HOUR,R.BookingDate,GETDATE())/24 AS 'Day_Booking', \n"
+                + "RT.Price, RT.Discount\n"
+                + "FROM Rooms R, Customers C, RoomType RT\n"
+                + "WHERE R.CustomerID = C.CustomerID AND R.RoomType = RT.RoomType";
         ObservableList<Room> listRooms = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -58,6 +110,10 @@ public class RoomDAOImpl implements RoomDAO {
                     room.setBookingDate(rs.getTimestamp("BookingDate").toLocalDateTime());
                     room.setCheckInDate(rs.getTimestamp("CheckInDate").toLocalDateTime());
                     room.setLeaveDate(rs.getTimestamp("LeaveDate").toLocalDateTime());
+                    room.setDayLeave(rs.getInt("Day_Leave"));
+                    room.setDayBooking(rs.getInt("Day_Booking"));
+                    room.setRoomPrice(rs.getBigDecimal("Price"));
+                    room.setRoomDiscount(rs.getBigDecimal("Discount"));
                     listRooms.add(room);
                 }
             }
@@ -65,7 +121,7 @@ public class RoomDAOImpl implements RoomDAO {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Message");
-                alert.setHeaderText("Error");
+                alert.setHeaderText("Error Querry");
                 alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
                 alert.show();
             });
@@ -105,7 +161,7 @@ public class RoomDAOImpl implements RoomDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
             alert.show();
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -129,7 +185,7 @@ public class RoomDAOImpl implements RoomDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
             alert.show();
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -153,7 +209,7 @@ public class RoomDAOImpl implements RoomDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
             alert.show();
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -177,7 +233,7 @@ public class RoomDAOImpl implements RoomDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
             alert.show();
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -201,7 +257,7 @@ public class RoomDAOImpl implements RoomDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
             alert.show();
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -226,7 +282,7 @@ public class RoomDAOImpl implements RoomDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
             alert.show();
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -306,7 +362,7 @@ public class RoomDAOImpl implements RoomDAO {
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
             alert.show();
         }
@@ -339,7 +395,7 @@ public class RoomDAOImpl implements RoomDAO {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Duplicated RoomID in Database or Can't connect to Database");
             alert.show();
         }
@@ -374,7 +430,7 @@ public class RoomDAOImpl implements RoomDAO {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Duplicated Room in Database or Can't connect to Database");
             alert.show();
         }
@@ -400,7 +456,7 @@ public class RoomDAOImpl implements RoomDAO {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Duplicated Room in Database or Can't connect to Database");
             alert.show();
         }
@@ -426,7 +482,7 @@ public class RoomDAOImpl implements RoomDAO {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Duplicated Room in Database or Can't connect to Database");
             alert.show();
         }
@@ -444,7 +500,7 @@ public class RoomDAOImpl implements RoomDAO {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Can't connect to Database");
             alert.show();
         }
@@ -463,7 +519,7 @@ public class RoomDAOImpl implements RoomDAO {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Can't connect to Database");
             alert.show();
         }
@@ -485,16 +541,15 @@ public class RoomDAOImpl implements RoomDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Message");
-            alert.setHeaderText("Error");
+            alert.setHeaderText("Error Querry");
             alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
             alert.show();
             Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listRooms;
-    }    
-    
-//public 
+    }
 
+//public 
     public static void main(String[] args) {
         RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
         ObservableList<Room> listRooms = FXCollections.observableArrayList();

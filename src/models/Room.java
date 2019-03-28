@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.FloatProperty;
@@ -34,10 +35,14 @@ public class Room {
     private BooleanProperty roomRepaired;
     private BooleanProperty roomInProgress;
     private IntegerProperty dayRemaining;
+    private IntegerProperty dayLeave;
+    private IntegerProperty dayBooking;
     private BooleanProperty Active;
     private LocalDateTime bookingDate;
     private LocalDateTime checkInDate;
     private LocalDateTime leaveDate;
+    private BigDecimal roomPrice;
+    private BigDecimal roomDiscount;
 
     public Room() {
         this.roomID = new SimpleStringProperty();
@@ -53,7 +58,11 @@ public class Room {
         this.roomRepaired = new SimpleBooleanProperty();
         this.roomInProgress = new SimpleBooleanProperty();
         this.dayRemaining = new SimpleIntegerProperty();
+        this.dayBooking = new SimpleIntegerProperty();
+        this.dayLeave = new SimpleIntegerProperty();
         this.Active = new SimpleBooleanProperty();
+        this.roomPrice = BigDecimal.ZERO;
+        this.roomDiscount = BigDecimal.ZERO;
     }
 
     public final String getRoomID() {
@@ -246,6 +255,46 @@ public class Room {
 
     public void setLeaveDate(LocalDateTime leaveDate) {
         this.leaveDate = leaveDate;
+    }
+
+    public BigDecimal getRoomPrice() {
+        return roomPrice;
+    }
+
+    public void setRoomPrice(BigDecimal roomPrice) {
+        this.roomPrice = roomPrice;
+    }
+
+    public BigDecimal getRoomDiscount() {
+        return roomDiscount;
+    }
+
+    public void setRoomDiscount(BigDecimal roomDiscount) {
+        this.roomDiscount = roomDiscount;
+    }
+
+    public final int getDayLeave() {
+        return dayLeave.get();
+    }
+
+    public final void setDayLeave(int value) {
+        dayLeave.set(value);
+    }
+
+    public IntegerProperty dayLeaveProperty() {
+        return dayLeave;
+    }
+
+    public final int getDayBooking() {
+        return dayBooking.get();
+    }
+
+    public final void setDayBooking(int value) {
+        dayBooking.set(value);
+    }
+
+    public IntegerProperty dayBookingProperty() {
+        return dayBooking;
     }
 
     @Override

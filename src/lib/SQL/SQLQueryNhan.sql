@@ -505,9 +505,11 @@ VALUES
 ('R0810', 'Family', '67890810',8,50,'Available',0,1,1, 'KANCUS026', 'admin',0, GETDATE(), GETDATE(), GETDATE()),
 
 SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName',
-	DATEDIFF(DAY,R.LeaveDate,GETDATE()) AS 'Day_Remaining'
-	FROM Rooms R, Customers C
-	WHERE R.CustomerID = C.CustomerID
+	DATEDIFF(HOUR,GETDATE(),R.LeaveDate)/24 AS 'Day_Leave',
+	DATEDIFF(HOUR,R.BookingDate,GETDATE())/24 AS 'Day_Booking', 
+	RT.Price, RT.Discount
+	FROM Rooms R, Customers C, RoomType RT
+	WHERE R.CustomerID = C.CustomerID AND R.RoomType = RT.RoomType AND R.RoomID='R0101'
 SELECT * FROM Rooms
 DELETE FROM Rooms
 DELETE FROM BookingInfo    

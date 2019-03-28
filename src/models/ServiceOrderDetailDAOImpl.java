@@ -192,16 +192,16 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
     }
 
     @Override
-    public ObservableList<ServiceOrderDetail> get_All_Details_Of_CheckInRoom(String roomID, String checkInDate) {
+    public ObservableList<ServiceOrderDetail> get_All_Details_Of_CheckInRoom(String roomID, String checkInID) {
         String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, "
                 + "SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, "
-                + "CIO.CheckInDate "
+                + "CIO.CheckInDate, CIO.CheckInID "
                 + "FROM ServicesOrderDetails SOD "
                 + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID\n"
                 + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID\n"
                 + "INNER JOIN CheckInOrders CIO ON SO.RoomID = CIO.RoomID\n"
-                + "WHERE CIO.CheckInDate='"
-                + checkInDate
+                + "WHERE CIO.checkInID='"
+                + checkInID
                 + "' AND CIO.RoomID='"
                 + roomID
                 + "' AND SOD.Active=1";

@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXComboBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,6 +65,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
     public String service_Room_ID;
     public String service_Customer_ID;
     public String service_Customer_Full_Name;
+    public LocalDateTime room_Check_In_Date;
 
     @FXML
     private JFXButton btn_OverView_Submit;
@@ -393,6 +395,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     service_Room_ID = label_Room_Number.getText();
                     service_Customer_ID = listRoom.getCustomerID();
                     service_Customer_Full_Name = listRoom.getCustomerName();
+                    room_Check_In_Date = listRoom.getCheckInDate();
                     mainFormController.formLoader("/fxml/FXMLCheckOut.fxml", "/images/KAN Logo.png",
                             "Check out order for Room: " + label_Room_Number.getText());
                 });
@@ -418,9 +421,11 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     btn_CheckOut.setDisable(true);
                     hBox_Buttons.getChildren().remove(btn_Services);
                     if (listRoom.getRoomStatus().equalsIgnoreCase("Available")) {
+                        label_Date_Remaining.setText("0 day");
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomAvailable-room-status");
                     } else {
+                        label_Date_Remaining.setText(listRoom.getDayBooking()+ " days");
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomReserved-room-status");
                     }
@@ -428,11 +433,13 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 if (listRoom.getRoomStatus().equalsIgnoreCase("Out") || listRoom.getRoomStatus().equalsIgnoreCase("Occupied")) {
 
                     if (listRoom.getRoomStatus().equalsIgnoreCase("Out")) {
+                        label_Date_Remaining.setText("0 day");
                         btn_CheckIn.setDisable(true);
-                        hBox_Buttons.getChildren().remove(btn_Services);
+                        hBox_Buttons.getChildren().remove(btn_Services);                        
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomCheckOut-room-status");
                     } else {
+                        label_Date_Remaining.setText(listRoom.getDayLeave()+ " days");
                         hBox_Buttons.getChildren().remove(btn_CheckIn);
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomOccupied-room-status");
@@ -461,7 +468,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     icon_Date_Remaining.getStyleClass().removeAll();
                     icon_Date_Remaining.getStyleClass().add("glyph-icon-clean-repair-inprogress-status");
                 } else {
-                    label_Date_Remaining.setText(listRoom.getDayRemaining() + " days");
+                    //label_Date_Remaining.setText(listRoom.getDayRemaining() + " days");
                     label_Date_Remaining.getStyleClass().removeAll();
                     label_Date_Remaining.getStyleClass().add("label-Primary-Status");
                     icon_Date_Remaining.setGlyphName("CALENDAR_CHECK_ALT");

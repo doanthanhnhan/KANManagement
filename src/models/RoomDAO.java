@@ -12,6 +12,7 @@ import java.util.List;
  * @author Doan Thanh Nhan
  */
 public interface RoomDAO {
+    Room getRoom(String roomID);
     List<Room> getAllRoom();
     List<Room> getAllStatusRooms(String roomStatus);
     List<String> getAllRoomID();    

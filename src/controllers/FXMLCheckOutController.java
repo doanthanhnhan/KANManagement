@@ -15,6 +15,8 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -25,14 +27,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.util.Callback;
+import models.CheckIn;
 import models.CheckOutDAOImpl;
+import models.DAOCustomerBookingCheckIn;
 import models.Room;
+import models.RoomDAOImpl;
 import models.ServiceOrderDetail;
 import models.ServiceOrderDetailDAOImpl;
-import models.ServiceType;
 import utils.QRWebCam;
+import utils.formatCalender;
 
 /**
  * FXML Controller class
@@ -40,19 +44,24 @@ import utils.QRWebCam;
  * @author Doan Thanh Nhan
  */
 public class FXMLCheckOutController implements Initializable {
-
+    
     private ObservableList<String> list_Payment_Method;
     private ObservableList<Room> list_Rooms;
     private ObservableList<ServiceOrderDetail> list_Service_Order_Details;
-
+    
     private CheckOutDAOImpl checkOutDAOImpl;
+    private RoomDAOImpl roomDAOImpl;
     private ServiceOrderDetailDAOImpl serviceOrderDetailDAOImpl;
+    private StringBuilder string_Total_Bill;
+    private Room roomCheckOut;
+    private CheckIn checkInRoom;
+    
     BigDecimal total_Service;
     BigDecimal total_Room;
-
+    
     FXMLMainFormController mainFormController;
     FXMLMainOverViewPaneController mainOverViewPaneController;
-
+    
     @FXML
     private JFXButton btn_QR_Code_Scanner;
     @FXML
@@ -101,20 +110,52 @@ public class FXMLCheckOutController implements Initializable {
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
         
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
+        roomDAOImpl = new RoomDAOImpl();
+        checkInRoom = DAOCustomerBookingCheckIn.getCheckInRoom(mainOverViewPaneController.service_Room_ID);
+
         // Init bigdecimal variable
         total_Service = new BigDecimal(BigInteger.ZERO);
         total_Room = new BigDecimal(BigInteger.ZERO);
+        string_Total_Bill = new StringBuilder();
+
+        //Init textfield
+        txt_Check_In_ID.setText(checkInRoom.getCheckID());
+        txt_Check_Out_ID.setText("CO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")).toString());
+        txt_Customer_ID.setText(checkInRoom.getCusID());
+        txt_Total_Guests.setText(checkInRoom.getNumberOfCustomer().toString());
+        txt_Full_Name.setText(mainOverViewPaneController.service_Customer_Full_Name);
         
+        txt_Check_In_ID.setDisable(true);
+        txt_Check_Out_ID.setDisable(true);
+        txt_Customer_ID.setDisable(true);
+        txt_Total_Guests.setDisable(true);
+        txt_Full_Name.setDisable(true);
+        
+        //Format calender picker display
+        formatCalender.format("dd-MM-yyyy", datePicker_Check_In);        
+        formatCalender.format("dd-MM-yyyy", datePicker_Check_Out);
+        datePicker_Check_In.setValue(mainOverViewPaneController.room_Check_In_Date.toLocalDate());
+        datePicker_Check_Out.setValue(LocalDate.now());
+        datePicker_Check_In.setDisable(true);
+        datePicker_Check_Out.setDisable(true);
+
         //CHECKING FORM IS CALLED
-        if (true) {
-            
+        if (mainOverViewPaneController.check_Check_Out_Button_Clicked) {
+            roomCheckOut = roomDAOImpl.getRoom(mainOverViewPaneController.service_Room_ID);
+            txt_Room_ID.setText(mainOverViewPaneController.service_Room_ID);
+            datePicker_Check_In.setValue(roomCheckOut.getCheckInDate().toLocalDate());
+            datePicker_Check_Out.setValue(LocalDate.now());
+            datePicker_Check_In.setDisable(true);
+            datePicker_Check_Out.setDisable(true);
+        } else {
+            txt_Room_ID.setText("R0103");
+            datePicker_Check_In.setValue(LocalDate.parse("2019-03-21"));
         }
-        txt_Room_ID.setText("R0103");
-        datePicker_Check_In.setValue(LocalDate.parse("2019-03-21"));
+        
         setColumns();
         showUsersData();
     }
-
+    
     private void setColumns() {
         TableColumn<ServiceOrderDetail, String> orderIDCol = new TableColumn<>("Order ID");
         TableColumn<ServiceOrderDetail, String> serviceNameCol = new TableColumn<>("Service name");
@@ -124,7 +165,7 @@ public class FXMLCheckOutController implements Initializable {
         TableColumn<ServiceOrderDetail, LocalDateTime> serviceOrderDateCol = new TableColumn<>("Order Date");
         TableColumn<ServiceOrderDetail, BigDecimal> serviceTotalPriceCol = new TableColumn<>("Total");
         TableColumn<ServiceOrderDetail, BigDecimal> serviceDiscountCol = new TableColumn<>("Discount");
-
+        
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServiceOrderDetail, String>, ObservableValue<String>>() {
             @Override
@@ -144,7 +185,7 @@ public class FXMLCheckOutController implements Initializable {
         serviceOrderDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceOrderDate"));
         serviceTotalPriceCol.setCellValueFactory(new PropertyValueFactory<>("servicePriceTotal"));
         serviceDiscountCol.setCellValueFactory(new PropertyValueFactory<>("serviceDiscount"));
-
+        
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -164,9 +205,9 @@ public class FXMLCheckOutController implements Initializable {
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
     }
-
+    
     public void showUsersData() {
-        list_Service_Order_Details = serviceOrderDetailDAOImpl.get_All_Details_Of_CheckInRoom(txt_Room_ID.getText(), datePicker_Check_In.getValue().toString());
+        list_Service_Order_Details = serviceOrderDetailDAOImpl.get_All_Details_Of_CheckInRoom(txt_Room_ID.getText(), txt_Check_In_ID.getText());
         //table_ServiceType.getItems().clear();
         tableView_Service_Order.setItems(list_Service_Order_Details);
         for (ServiceOrderDetail list_Service_Order_Detail : list_Service_Order_Details) {
@@ -174,9 +215,17 @@ public class FXMLCheckOutController implements Initializable {
                     .multiply(BigDecimal.ONE.subtract(list_Service_Order_Detail.getServiceDiscount())));
             System.out.println("Total service = " + total_Service);
         }
-        txt_Area_Total_Bill.setText("Total service amount = " + total_Service.toString());
+        Long hours_Stay = ChronoUnit.HOURS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
+        Long days_Stay = (long) ((float) (hours_Stay / 24));
+        Long total_Day_Bill = days_Stay * roomCheckOut.getRoomPrice().longValue();
+        Long total_Discount = total_Day_Bill * (1 - roomCheckOut.getRoomDiscount().longValue());
+        total_Room = total_Room.add(BigDecimal.valueOf(total_Discount));
+        string_Total_Bill.append("Total service amount = ").append(total_Service.toString()).append("\n");
+        string_Total_Bill.append("Total room price = ").append(total_Room.toString()).append("\n");
+        
+        txt_Area_Total_Bill.setText(string_Total_Bill.toString());
     }
-
+    
     @FXML
     private void handle_QRScanner_Action(ActionEvent event) {
         QRWebCam qrWebCam = new QRWebCam();
@@ -186,5 +235,5 @@ public class FXMLCheckOutController implements Initializable {
             }
         });
     }
-
+    
 }

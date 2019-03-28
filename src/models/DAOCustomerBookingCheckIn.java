@@ -14,8 +14,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 
 import utils.connectDB;
 
@@ -50,6 +52,39 @@ public class DAOCustomerBookingCheckIn {
             Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    //Get check in room infomations - Nhan edit
+    public static CheckIn getCheckInRoom(String roomID) {
+        String sql = "SELECT * FROM CheckInOrders WHERE RoomID IN (SELECT RoomID FROM Rooms WHERE RoomStatus = 'Occupied') "
+                + "AND RoomID = '" + roomID + "'";
+        CheckIn checkIn = new CheckIn();
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    checkIn.setCheckID(rs.getString("CheckInID"));
+                    checkIn.setBookID(rs.getString("BookingID"));
+                    checkIn.setCusID(rs.getString("CustomerID"));
+                    checkIn.setRoomID(rs.getString("RoomID"));
+                    checkIn.setUser(rs.getString("UserName"));
+                    checkIn.setCheckType(rs.getString("CheckInType"));
+                    checkIn.setNumberOfCustomer(rs.getInt("NumberOfCustomer"));
+                    checkIn.setDateIn(rs.getString("CheckInDate"));
+                    checkIn.setDateOut(rs.getString("LeaveDate"));
+                    checkIn.setCusPack(rs.getString("CustomerPackage"));                    
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any check in ID in Database or Can't connect to Database");
+                alert.show();
+            });
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return checkIn;
     }
 //    get info customer
 
