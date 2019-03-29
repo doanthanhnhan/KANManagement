@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
+import static controllers.FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
@@ -125,21 +126,25 @@ public class FXMLInfoCustomerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println(FXMLCheckIdCardCustomerController.checkIdCardCustomer);
 
-        //Set datepicker :
-        birthday.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                LocalDate today = LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear());
-                setDisable(empty || date.compareTo(today) > 0);
-            }
-        });
-        birthday.setValue(LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear()));
-        birthday.getEditor().setText("Date Of Birth");
-        birthday.setPromptText(null);
-        birthday.getStyleClass().add("jfx-date-picker-fix");
+        System.out.println(FXMLCheckIdCardCustomerController.checkIdCardCustomer);
+        if (!FXMLCheckIdCardCustomerController.checkIdCardCustomer && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
+            //Set datepicker :
+            birthday.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate today = LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear());
+                    setDisable(empty || date.compareTo(today) > 0);
+                }
+            });
+            birthday.setValue(LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear()));
+            String pattern = "dd-MM-yyyy";
+            formatCalender.format(pattern, birthday);
+            birthday.getEditor().setText("Date Of Birth");
+            birthday.setPromptText(null);
+            birthday.getStyleClass().add("jfx-date-picker-fix");
+        }
 
 //        trường hợp check in mà customer chưa được tạo
         if (FXMLCheckIdCardCustomerController.checkIdCardCustomer) {
@@ -177,8 +182,8 @@ public class FXMLInfoCustomerController implements Initializable {
                 Female.setDisable(true);
             }
             birthday.setValue(LocalDate.parse(ctm.getDate()));
-            String pattern = "dd-MM-yyyy";
-            formatCalender.format(pattern, birthday);
+            String patternt = "dd-MM-yyyy";
+            formatCalender.format(patternt, birthday);
             FirstName.setText(ctm.getFName());
             LastName.setText(ctm.getLName());
             MidName.setText(ctm.getMName());
@@ -439,7 +444,7 @@ public class FXMLInfoCustomerController implements Initializable {
                 HboxContent.getChildren().add(label);
                 birthday.requestFocus();
             });
-        } else if (PhoneNumber.getText() == null || PhoneNumber.getText().equals("")) {
+        } else if (((PhoneNumber.getText() == null || PhoneNumber.getText().equals(""))) && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
             Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
             });
@@ -459,7 +464,7 @@ public class FXMLInfoCustomerController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID IS INCORRECT !!!");
             });
-        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText())) {
+        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText()) && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
             Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
             });
@@ -550,9 +555,16 @@ public class FXMLInfoCustomerController implements Initializable {
                     } catch (IOException ex) {
                         Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
                     }
+
                     stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
                     Scene scene = new Scene(root);
                     stageEdit.setScene(scene);
+                    stageEdit.setOnCloseRequest((event) -> {
+                        checkInfoCustomer = false;
+                        checkInfoCustomerAlready = false;
+                        System.out.println("checkInfoCustomer " + checkInfoCustomer);
+                        System.out.println("checkInfoCustomerAlready " + checkInfoCustomerAlready);
+                    });
                     stageEdit.show();
                     Stage stage = (Stage) anchorPaneInfoCustomer.getScene().getWindow();
                     stage.close();

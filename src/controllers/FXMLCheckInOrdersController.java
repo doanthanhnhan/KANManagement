@@ -418,7 +418,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 if (FXMLInfoBookingController.checkInfoBooking) {
                     Stage stage = (Stage) anchorPaneCheckInOrders.getScene().getWindow();
                     stage.close();
-                    FXMLInfoBookingController.checkInfoBooking=false;
+                    FXMLInfoBookingController.checkInfoBooking=false;  
                 } else {
                     CheckInID.setText("");
                     boxBookingID.setValue(null);

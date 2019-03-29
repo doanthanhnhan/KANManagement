@@ -72,14 +72,17 @@
                            <children>
                               <HBox fx:id="HboxBoxId" alignment="CENTER" prefHeight="35.0" prefWidth="400.0" spacing="10.0">
                                  <HBox.margin>
-                                    <Insets left="80.0" right="80.0" top="20.0" />
+                                    <Insets left="80.0" right="80.0" top="30.0" />
                                  </HBox.margin>
                                  <children>
-                                    <JFXTextField fx:id="BookingID" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Booking Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </JFXTextField>
+                                    <JFXComboBox fx:id="BookingID" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Booking Id">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXComboBox>
                                  </children>
                               </HBox>
                            </children>

@@ -28,30 +28,33 @@ import utils.connectDB;
 public class DAOCustomerBookingCheckIn {
 //    check da booking hay chua
 
-    public static boolean check_BookingIdCustomer(String ID) {
+    public static ObservableList<BookingInfo> check_BookingIdCustomer(String ID) {
+        ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
         try {
             Connection connection = connectDB.connectSQLServer();
             // Tạo đối tượng Statement.
-            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) >=0";
+            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) !=0 And Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
             // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
             PreparedStatement pt = connection.prepareStatement(sql);
             pt.setString(1, ID);
             ResultSet rs = pt.executeQuery();
-            if (rs.next()) {
-                pt.close();
-                connection.close();
-                rs.close();
-                return true;
+            while (rs.next()) {
+                BookingInfo bk = new BookingInfo();
+                bk.setBookID(rs.getString("BookingID"));
+                bk.setCusID(rs.getString("CustomerID"));
+                bk.setRoomID(rs.getString("RoomID"));
+                bk.setNote(rs.getString("Note"));
+                bk.setNumGuest(rs.getInt("NumberGuest"));
+                bk.setUser(rs.getString("UserName"));
+                list_Booking_Info.add(bk);
             }
             pt.close();
             connection.close();
             rs.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return list_Booking_Info;
     }
 
     //Get check in room infomations - Nhan edit
@@ -71,7 +74,7 @@ public class DAOCustomerBookingCheckIn {
                     checkIn.setNumberOfCustomer(rs.getInt("NumberOfCustomer"));
                     checkIn.setDateIn(rs.getString("CheckInDate"));
                     checkIn.setDateOut(rs.getString("LeaveDate"));
-                    checkIn.setCusPack(rs.getString("CustomerPackage"));                    
+                    checkIn.setCusPack(rs.getString("CustomerPackage"));
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {

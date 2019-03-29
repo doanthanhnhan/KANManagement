@@ -10,6 +10,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
+import static controllers.FXMLInfoCustomerController.checkInfoCustomer;
+import static controllers.FXMLInfoCustomerController.checkInfoCustomerAlready;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -77,7 +80,7 @@ public class FXMLInfoBookingController implements Initializable {
     @FXML
     private HBox HboxBoxId;
     @FXML
-    private JFXTextField BookingID;
+    private JFXComboBox<String> BookingID;
     @FXML
     private JFXComboBox<String> boxIdCustomer;
     @FXML
@@ -108,14 +111,16 @@ public class FXMLInfoBookingController implements Initializable {
     public static String customerIdConect;
     public static boolean checkInfoBooking = false;
     private FXMLMainOverViewPaneController mainOverViewPaneController;
-    private boolean checkBookingAlready;
+    private ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        checkBookingAlready=DAOCustomerBookingCheckIn.check_BookingIdCustomer(FXMLInfoCustomerController.CustomerIdConect);
+        if (FXMLInfoCustomerController.checkInfoCustomerAlready) {
+            list_Booking_Info = DAOCustomerBookingCheckIn.check_BookingIdCustomer(FXMLInfoCustomerController.CustomerIdConect);
+        }
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
 
         btnInfo.setOnAction((event) -> {
@@ -125,7 +130,14 @@ public class FXMLInfoBookingController implements Initializable {
                 Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        BookingID.setText("BK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSSSS")));
+        if (list_Booking_Info.isEmpty()) {
+            ObservableList<String> id_booking = FXCollections.observableArrayList();
+            id_booking.add("BK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSSSS")));
+            BookingID.setItems(id_booking);
+            System.out.println("list_Booking_Info is empty");
+            BookingID.setValue(id_booking.get(0));
+            System.out.println(BookingID.getValue());
+        }
         NumberGuest.setText("0");
         //Getting Available roomID
         roomDAOImpl = new RoomDAOImpl();
@@ -234,8 +246,8 @@ public class FXMLInfoBookingController implements Initializable {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        if (FXMLInfoCustomerController.checkInfoCustomer || !checkBookingAlready) {
+//      set value when customer already but not booking and when cutstomer not already
+        if (FXMLInfoCustomerController.checkInfoCustomer || (list_Booking_Info.isEmpty() && FXMLInfoCustomerController.checkInfoCustomerAlready)) {
             checkInfoBooking = true;
             boxIdCustomer.setDisable(true);
             boxIdRoom.setDisable(true);
@@ -247,6 +259,59 @@ public class FXMLInfoBookingController implements Initializable {
             DateBook.setValue(LocalDate.now());
             String pattern = "dd-MM-yyyy";
             formatCalender.format(pattern, DateBook);
+        }
+        if (FXMLInfoCustomerController.checkInfoCustomerAlready && !list_Booking_Info.isEmpty()) {
+            ObservableList<String> list_booking_id = FXCollections.observableArrayList();
+            for (BookingInfo bk : list_Booking_Info) {
+                list_booking_id.add(bk.getBookID());
+            }
+            BookingID.setItems(list_booking_id);
+//            set value for text field when list booking info have size = 1
+            for (BookingInfo bk : list_Booking_Info) {
+                checkInfoBooking = true;
+                boxIdCustomer.setDisable(true);
+                boxIdRoom.setDisable(true);
+                BookingID.setDisable(false);
+                BookingID.setValue(bk.getBookID());
+                boxIdRoom.setValue(bk.getRoomID());
+                DateBook.setDisable(true);
+                DateBook.setValue(LocalDate.now());
+                boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
+                NumberGuest.setText(String.valueOf(bk.getNumGuest()));
+                Note.setText(bk.getNote());
+                NumberGuest.setDisable(true);
+                Note.setDisable(true);
+                String pattern = "dd-MM-yyyy";
+                formatCalender.format(pattern, DateBook);
+                break;
+            }
+            if (list_Booking_Info.size() > 1) {
+                BookingID.valueProperty().addListener((obs, oldItem, newItem) -> {
+                    if (newItem != null && !newItem.equals("")) {
+                        int i;
+                        for (i = 0; i < list_Booking_Info.size(); i++) {
+                            if (newItem.equals(list_Booking_Info.get(i).getBookID())) {
+                                checkInfoBooking = true;
+                                boxIdCustomer.setDisable(true);
+                                boxIdRoom.setDisable(true);
+                                BookingID.setDisable(false);
+                                BookingID.setValue(list_Booking_Info.get(i).getBookID());
+                                boxIdRoom.setValue(list_Booking_Info.get(i).getRoomID());
+                                DateBook.setDisable(true);
+                                DateBook.setValue(LocalDate.now());
+                                boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
+                                NumberGuest.setText(String.valueOf(list_Booking_Info.get(i).getNumGuest()));
+                                Note.setText(list_Booking_Info.get(i).getNote());
+                                NumberGuest.setDisable(true);
+                                Note.setDisable(true);
+                                String pattern = "dd-MM-yyyy";
+                                formatCalender.format(pattern, DateBook);
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -306,11 +371,7 @@ public class FXMLInfoBookingController implements Initializable {
     }
 
     public void BookingSubmitAction() {
-        if (BookingID.getText() == null || BookingID.getText().equals("")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(BookingID, HboxContent, "BOOKING ID MUST NOT EMPTY !!!");
-            });
-        } else if (boxIdCustomer.getValue() == null) {
+        if (boxIdCustomer.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -371,10 +432,6 @@ public class FXMLInfoBookingController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(NumberGuest, HboxContent, "NUMBER GUEST MUST NOT EMPTY !!!");
             });
-        } else if (!PatternValided.PatternID(BookingID.getText())) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(BookingID, HboxContent, "BOOKING ID IS INCORRECT !!!");
-            });
         } else if (!PatternValided.PatternNumberGuest(NumberGuest.getText())) {
             Platform.runLater(() -> {
                 notificationFunction.notification(NumberGuest, HboxContent, "NUMBER GUEST IS INCORRECT (1-8) !!!");
@@ -382,25 +439,27 @@ public class FXMLInfoBookingController implements Initializable {
         } else {
             System.out.println("trong else" + FXMLInfoCustomerController.checkInfoCustomer);
             Platform.runLater(() -> {
-                String date = DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                BookingInfo bk = new BookingInfo();
-                bk.setBookID(BookingID.getText());
-                bk.setCusID(boxIdCustomer.getValue());
-                bk.setRoomID(boxIdRoom.getValue());
-                bk.setDate(date);
-                bk.setNote(Note.getText());
-                bk.setNumGuest(Integer.valueOf(NumberGuest.getText()));
-                bk.setUser(Username.getText());
-                try {
-                    DAOCustomerBookingCheckIn.AddNewBooking(bk);
-                } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                if (list_Booking_Info.isEmpty()) {
+                    String date = DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    BookingInfo bk = new BookingInfo();
+                    bk.setBookID(BookingID.getValue());
+                    bk.setCusID(boxIdCustomer.getValue());
+                    bk.setRoomID(boxIdRoom.getValue());
+                    bk.setDate(date);
+                    bk.setNote(Note.getText());
+                    bk.setNumGuest(Integer.valueOf(NumberGuest.getText()));
+                    bk.setUser(Username.getText());
+                    try {
+                        DAOCustomerBookingCheckIn.AddNewBooking(bk);
+                    } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
+                        Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 //                set Userlogs
-                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Booking for " + boxIdCustomer.getValue(),
-                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                if (FXMLInfoCustomerController.checkInfoCustomer || !checkBookingAlready) {               
-                    bookingIdConect = BookingID.getText();
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Booking for " + boxIdCustomer.getValue(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                }
+                if (FXMLInfoCustomerController.checkInfoCustomer || FXMLInfoCustomerController.checkInfoCustomerAlready) {
+                    bookingIdConect = BookingID.getValue();
                     roomIdConect = boxIdRoom.getValue();
                     numberofcustomer = NumberGuest.getText();
                     customerIdConect = boxIdCustomer.getValue();
@@ -415,18 +474,21 @@ public class FXMLInfoBookingController implements Initializable {
                     stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
                     Scene scene = new Scene(root);
                     stageEdit.setScene(scene);
+                    stageEdit.setOnCloseRequest((event) -> {
+                        checkInfoBooking = false;
+                    });
                     stageEdit.show();
                     Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
                     stage.close();
                     FXMLInfoCustomerController.checkInfoCustomer = false;
+                    FXMLInfoCustomerController.checkInfoCustomerAlready = false;
                 }
                 boxIdRoom.setValue(null);
                 boxIdCustomer.setValue(null);
-                BookingID.setText("");
+                BookingID.setValue("BK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSSSS")));
                 Note.setText("");
                 NumberGuest.setText("0");
                 DateBook.setValue(null);
-
             });
         }
     }

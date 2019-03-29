@@ -95,6 +95,10 @@ public class FXMLCheckIdCardCustomerController implements Initializable {
             stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
             Scene scene = new Scene(root);
             stageEdit.setScene(scene);
+            stageEdit.setOnCloseRequest((event) -> {
+                checkIdCardCustomer = false;
+                System.out.println("checkIdCardCustomer = " + checkIdCardCustomer);
+            });
             stageEdit.show();
 
             Stage stage = (Stage) anchorPaneCheckIdCard.getScene().getWindow();
@@ -108,7 +112,12 @@ public class FXMLCheckIdCardCustomerController implements Initializable {
             stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
             Scene scene = new Scene(root);
             stageEdit.setScene(scene);
+            stageEdit.setOnCloseRequest((event) -> {
+                checkIdCardCustomerAlready = false;
+                System.out.println("checkIdCardCustomerAlready = " + checkIdCardCustomerAlready);
+            });
             stageEdit.show();
+
             Stage stage = (Stage) anchorPaneCheckIdCard.getScene().getWindow();
             stage.close();
         }
