@@ -78,7 +78,7 @@ CREATE TABLE CheckInOrders(
 	NumberOfCustomer tinyint NOT NULL,
 	CheckInDate datetime NOT NULL,
 	LeaveDate datetime NOT NULL,		
-	CustomerPackage varchar(200),	
+	CustomerPackage nvarchar(200),	
 	Active bit DEFAULT 1,
 	-- Create constraint
 	CONSTRAINT pk_CheckInID_CheckInOrders PRIMARY KEY (CheckInID),
@@ -95,7 +95,7 @@ CREATE TABLE CheckOutOrders(
 	UserName varchar(100) NOT NULL,
 	CheckInDate date NOT NULL,
 	CheckOutDate date NOT NULL,		
-	CustomerPayment varchar(50) NOT NULL,
+	CustomerPayment nvarchar(50) NOT NULL,
 	CustomerBill decimal(18,3) NOT NULL,
 	Discount decimal(4,3) DEFAULT 0,
 	Tax decimal(6,3) DEFAULT 0,	
@@ -571,12 +571,12 @@ INSERT INTO ServicesOrderDetails(OrderID, ServiceID, UserName, ServiceQuantity, 
 ('Order002','KANService004', 'admin', 15, 30, 0.3),
 ('Order002','KANService006', 'admin', 10, 15, 0.05),
 
-SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, CIO.CheckInDate
+SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, CIO.CheckInDate, CIO.CheckInID
 FROM ServicesOrderDetails SOD 
 INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID
 INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID 
 INNER JOIN CheckInOrders CIO ON SO.RoomID = CIO.RoomID
-WHERE CIO.CheckInDate='2019-03-20' AND CIO.RoomID='R0201'
+WHERE CIO.CheckInID='CI-BK-2019-03-28-00-17-05-57000' AND CIO.RoomID='R0101' AND SOD.Active=1
 WHERE SOD.OrderID='Order001' 
 
 INSERT INTO BookingInfo(BookingID, CustomerID, RoomID, UserName, NumberGuest, DateBook) VALUES
@@ -606,7 +606,9 @@ INSERT INTO CheckInOrders(CheckInID, BookingID, CustomerID, RoomID, UserName, Ch
 ('CI1903120009', '1903090009', 'KANCUS002', 'R0206', 'admin', 'Reception', 4, '2019-03-09 07:00:00', '2019-04-01 08:00:00'),
 ('CI1903120010', '1903090010', 'KANCUS008', 'R0202', 'admin', 'Reception', 2, '2019-03-09 10:15:00', '2019-04-02 08:00:00')
 
-SELECT * FROM CheckInOrders
+SELECT * FROM CheckInOrders WHERE RoomID IN (SELECT RoomID FROM Rooms WHERE RoomStatus = 'Occupied') AND RoomID = 'R0801'
+
+SELECT RoomID FROM Rooms WHERE RoomStatus = 'Occupied'
 DELETE FROM CheckInOrders
 
 SELECT R.*, U.UserName FROM [Role] R, Users U WHERE R.EmployeeID=U.EmployeeID
