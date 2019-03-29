@@ -27,6 +27,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import models.CheckIn;
 import models.CheckOutDAOImpl;
@@ -56,8 +58,12 @@ public class FXMLCheckOutController implements Initializable {
     private Room roomCheckOut;
     private CheckIn checkInRoom;
 
-    BigDecimal total_Service;
-    BigDecimal total_Room;
+    public Double total_Service = 0.0;
+    public Double total_Service_Discount = 0.0;
+    public Double total_Room = 0.0;
+    public Double total_Room_Discount = 0.0;
+    public Double charge_Room_1st_Day = 0.0;
+    public Double charge_Room_Last_Day = 0.0;
 
     FXMLMainFormController mainFormController;
     FXMLMainOverViewPaneController mainOverViewPaneController;
@@ -96,6 +102,8 @@ public class FXMLCheckOutController implements Initializable {
     private TableView<ServiceOrderDetail> tableView_Service_Order;
     @FXML
     private JFXTextArea txt_Area_Total_Bill;
+    @FXML
+    private WebView webView_ToolTip;
 
     /**
      * Initializes the controller class.
@@ -113,14 +121,25 @@ public class FXMLCheckOutController implements Initializable {
         roomDAOImpl = new RoomDAOImpl();
         checkInRoom = DAOCustomerBookingCheckIn.getCheckInRoom(mainOverViewPaneController.service_Room_ID);
 
-        // Init bigdecimal variable
-        total_Service = new BigDecimal(BigInteger.ZERO);
-        total_Room = new BigDecimal(BigInteger.ZERO);
+        //Init tooltip display
+        WebEngine webEngine = webView_ToolTip.getEngine();
+        webEngine.loadContent(
+                "<h3>Note:</h3> This is calculating room charge method <br>"
+                + "<b>Check in time:</b> <br>"
+                + "     + From 5h00 - 9h00: 50% room price<br>"
+                + "     + From 9h00 - 14h00: 30% room price<br>"
+                + "     + After 14h00: 100% room price<br>"
+                + "<b>Check out time:</b> <br>"
+                + "     + From 12h00 - 15h00: Surcharge 30% room price<br>"
+                + "     + From 15h00 - 18h00: Surcharge 50% room price<br>"
+                + "     + After 18h00 : Surcharge 100% room price<br>"
+        );
+        // Init stringbuilder     
         string_Total_Bill = new StringBuilder();
 
         //Init textfield
         txt_Check_In_ID.setText(checkInRoom.getCheckID());
-        txt_Check_Out_ID.setText("CO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")).toString());
+        txt_Check_Out_ID.setText("CO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
         txt_Customer_ID.setText(checkInRoom.getCusID());
         txt_Total_Guests.setText(checkInRoom.getNumberOfCustomer().toString());
         txt_Full_Name.setText(mainOverViewPaneController.service_Customer_Full_Name);
@@ -211,26 +230,56 @@ public class FXMLCheckOutController implements Initializable {
         //table_ServiceType.getItems().clear();
         tableView_Service_Order.setItems(list_Service_Order_Details);
         for (ServiceOrderDetail list_Service_Order_Detail : list_Service_Order_Details) {
-            total_Service = total_Service.add(list_Service_Order_Detail.getServicePriceTotal()
-                    .multiply(BigDecimal.ONE.subtract(list_Service_Order_Detail.getServiceDiscount())));
+            total_Service = total_Service + list_Service_Order_Detail.getServicePriceTotal().doubleValue();
+            total_Service_Discount = total_Service_Discount + list_Service_Order_Detail.getServicePriceTotal().doubleValue()
+                    * list_Service_Order_Detail.getServiceDiscount().doubleValue();
             System.out.println("Total service = " + total_Service);
         }
+        //Calculate room charge
+        int check_In_Hour = roomCheckOut.getCheckInDate().getHour();
+        int check_Out_Hour = LocalDateTime.now().getHour();
+        //Check checkin time
+        if (check_In_Hour >= 5 && check_In_Hour < 9) {
+            charge_Room_1st_Day = charge_Room_1st_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.5;
+        } else if (check_In_Hour >= 9 && check_In_Hour < 14) {
+            charge_Room_1st_Day = charge_Room_1st_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.3;
+        } else {
+            charge_Room_1st_Day = charge_Room_1st_Day + roomCheckOut.getRoomPrice().doubleValue();
+        }
+        //Check checkout time
+        if (check_Out_Hour >= 12 && check_Out_Hour < 15) {
+            charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.3;
+        } else if (check_Out_Hour >= 15 && check_Out_Hour < 18) {
+            charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.5;
+        } else {
+            charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue();
+        }
+        //Charge left days
         Long hours_Stay = ChronoUnit.HOURS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
-        Long days_Stay = (long) ((float) (hours_Stay / 24));
-        Long total_Day_Bill = days_Stay * roomCheckOut.getRoomPrice().longValue();
-        Long total_Discount = total_Day_Bill * (1 - roomCheckOut.getRoomDiscount().longValue());
-        total_Room = total_Room.add(BigDecimal.valueOf(total_Discount));
-        Double total = total_Room.doubleValue() + total_Service.doubleValue();
+        if (hours_Stay >= 24) {
+            Long days_Stay = ChronoUnit.DAYS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now()) - 1;
+            total_Room = days_Stay * roomCheckOut.getRoomPrice().doubleValue() + charge_Room_1st_Day + charge_Room_Last_Day;
+            total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
+        } else {
+            total_Room = charge_Room_1st_Day + charge_Room_Last_Day;
+            total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
+        }
+
+        Double total = total_Room + total_Service - total_Room_Discount - total_Service_Discount;
+        Double total_VAT = total * 0.1;
+        
         //IMPORTANT NOTE: To display string.format, setting TextArea with: -fx-font-family: monospace
         string_Total_Bill.append(String.format("-----------------------------------------------%n"));
-        string_Total_Bill.append(String.format("| %-25s | %15s |%n", "Services charge", total_Service.toString()));
-        string_Total_Bill.append(String.format("| %-25s | %15s |%n", "Room charge", total_Room.toString()));
-        string_Total_Bill.append(String.format("| %-25s | %15s |%n", "(+) VAT", "10%"));        
-        string_Total_Bill.append(String.format("| %-25s | %15s |%n", "(-) Room discount", "0"));
-        string_Total_Bill.append(String.format("| %-25s | %15s |%n", "(-) Services discount", "0"));
+        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Services charge", total_Service));
+        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Room charge 1st day", charge_Room_1st_Day));
+        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Room charge", total_Room));
+        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Room charge last day", charge_Room_Last_Day));
+        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "(+) VAT (10%)", total_VAT));
+        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "(-) Room discount", total_Room_Discount));
+        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "(-) Services discount", total_Service_Discount));
         string_Total_Bill.append(String.format("| %-25s | %15s |%n", "(-) Customer discount", "0"));
         string_Total_Bill.append(String.format("-----------------------------------------------%n"));
-        string_Total_Bill.append(String.format("| %-25s | %15s |%n", "Payable amount", total.toString()));
+        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Payable amount", total));
         string_Total_Bill.append(String.format("-----------------------------------------------%n"));
         //string_Total_Bill.append("Total service amount = ").append(total_Service.toString()).append("\n");
         //string_Total_Bill.append("Total room price = ").append(total_Room.toString()).append("\n");
