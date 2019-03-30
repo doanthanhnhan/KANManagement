@@ -119,6 +119,7 @@ public class FXMLInfoCustomerController implements Initializable {
     public static String CustomerIdConect;
     private FXMLListCustomerController fXMLListCustomerController;
     private FXMLMainFormController fXMLMainFormController;
+
     /**
      * Initializes the controller class.
      *
@@ -424,11 +425,7 @@ public class FXMLInfoCustomerController implements Initializable {
     }
 
     public void formSubmitAction() {
-        if (CustomerID.getText() == null || CustomerID.getText().equals("")) {
-            Platform.runLater(() -> {
-                notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID MUST NOT EMPTY !!!");
-            });
-        } else if (birthday.getValue() == null) {
+        if (birthday.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -446,7 +443,7 @@ public class FXMLInfoCustomerController implements Initializable {
                 HboxContent.getChildren().add(label);
                 birthday.requestFocus();
             });
-        } else if (((PhoneNumber.getText() == null || PhoneNumber.getText().equals(""))) && (FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready || FXMLCheckIdCardCustomerController.checkIdCardCustomer)) {
+        } else if (((PhoneNumber.getText() == null || PhoneNumber.getText().equals(""))) && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready && !FXMLCheckIdCardCustomerController.checkIdCardCustomer) {
             System.out.println("FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready= " + FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready);
             System.out.println("FXMLCheckIdCardCustomerController.checkIdCardCustomer= " + FXMLCheckIdCardCustomerController.checkIdCardCustomer);
             Platform.runLater(() -> {
@@ -468,7 +465,7 @@ public class FXMLInfoCustomerController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID IS INCORRECT !!!");
             });
-        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText()) && (FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready || FXMLCheckIdCardCustomerController.checkIdCardCustomer)) {
+        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText())) {
             Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
             });

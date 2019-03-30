@@ -115,17 +115,12 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_List_Service_Type;
     @FXML
     private MenuItem menuItem_List_Service_Orders;
-    @FXML
     private MenuItem menuItem_List_Users;
-    @FXML
-    private MenuItem menuItem_List_User_Role;
     @FXML
     private Menu menu_Add;
     @FXML
     private MenuItem menuItem_Add_Booking;
-    @FXML
     private MenuItem menuItem_Add_Check_In;
-    @FXML
     private MenuItem menuItem_Add_Check_out;
     @FXML
     private MenuItem menuItem_Add_Customer;
@@ -137,32 +132,19 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_Add_Service_Type;
     @FXML
     private MenuItem menuItem_Add_Service_Order;
-    @FXML
     private MenuItem menuItem_Add_User;
     @FXML
-    private MenuItem menuItem_Add_User_Role;
-    @FXML
     private Menu menu_Edit;
-    @FXML
     private MenuItem menuItem_Edit_Booking;
-    @FXML
     private MenuItem menuItem_Edit_Check_In;
-    @FXML
     private MenuItem menuItem_Edit_Check_Out;
-    @FXML
     private MenuItem menuItem_Edit_Customer;
     @FXML
     private MenuItem menuItem_Edit_Employee;
-    @FXML
     private MenuItem menuItem_Edit_Room;
-    @FXML
     private MenuItem menuItem_Edit_Service_Type;
-    @FXML
     private MenuItem menuItem_Edit_Service_Order;
-    @FXML
     private MenuItem menuItem_Edit_User;
-    @FXML
-    private MenuItem menuItem_Edit_User_Role;
     @FXML
     private Menu About;
     @FXML
@@ -173,19 +155,15 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_List_Department;
     @FXML
     private MenuItem menuItem_Add_Department;
-    @FXML
     private MenuItem menuItem_Edit_Department;
     @FXML
     private MenuItem menuItem_List_Role;
-    @FXML
     private MenuItem menuItem_Add_Role;
-    @FXML
     private MenuItem menuItem_Edit_Role;
     @FXML
     private MenuItem menuItem_List_Service_Orders_Details;
     @FXML
     private MenuItem menuItem_Add_Service_Order_Details;
-    @FXML
     private MenuItem menuItem_Edit_Service_Order_Details;
     @FXML
     private MenuItem menuItem_List_Users_Log;
@@ -529,14 +507,12 @@ public class FXMLMainFormController implements Initializable {
         formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New Employee");
     }
 
-    @FXML
     private void handle_MenuItem_CheckIn_Action(ActionEvent event) {
         checkRegis = true;
         System.out.println("Add new User menu item clicked!");
         formLoader("/fxml/FXMLCheckInOrders.fxml", "/images/KAN Logo.png", "Add CheckInOrder");
     }
 
-    @FXML
     private void handle_MenuItem_Add_User_Action(ActionEvent event) {
         checkRegis = true;
         System.out.println("Add new User menu item clicked!");
@@ -573,7 +549,6 @@ public class FXMLMainFormController implements Initializable {
         formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
-    @FXML
     private void handle_MenuItem_Edit_User_Action(ActionEvent event) {
         checkRegis = true;
         FXMLListEmployeeController.check_form_list = false;
@@ -581,7 +556,6 @@ public class FXMLMainFormController implements Initializable {
         formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit User Informations");
     }
 
-    @FXML
     private void handle_MenuItem_Edit_Customer_Action(ActionEvent event) {
         checkRegis = true;
 //        FXMLListEmployeeController.check_form_list = false;
