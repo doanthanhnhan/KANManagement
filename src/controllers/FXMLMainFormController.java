@@ -580,7 +580,7 @@ public class FXMLMainFormController implements Initializable {
         checkRegis = true;
 //        FXMLListEmployeeController.check_form_list = false;
         System.out.println("Edit User Informations menu item clicked!");
-        formLoader("/fxml/FXMLCustomerInfo.fxml", "/images/KAN Logo.png", "Edit Customer Informations");
+        formLoader("/fxml/FXMLEditCustomer.fxml", "/images/KAN Logo.png", "Edit Customer Informations");
     }
     // ############### END VIEW ACTIONS ###############
 

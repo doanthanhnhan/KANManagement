@@ -126,7 +126,8 @@ public class FXMLInfoCustomerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+//        set when click edit customer in mainform
+        System.out.println("FXMLMainFormController.checkRegis"+FXMLMainFormController.checkRegis);
         System.out.println(FXMLCheckIdCardCustomerController.checkIdCardCustomer);
         if (!FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
             //Set datepicker :
