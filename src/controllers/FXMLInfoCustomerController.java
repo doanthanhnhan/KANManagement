@@ -117,7 +117,8 @@ public class FXMLInfoCustomerController implements Initializable {
     public static boolean checkInfoCustomer = false;
     public static boolean checkInfoCustomerAlready = false;
     public static String CustomerIdConect;
-
+    private FXMLListCustomerController fXMLListCustomerController;
+    private FXMLMainFormController fXMLMainFormController;
     /**
      * Initializes the controller class.
      *
@@ -127,7 +128,7 @@ public class FXMLInfoCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 //        set when click edit customer in mainform
-        System.out.println("FXMLMainFormController.checkRegis"+FXMLMainFormController.checkRegis);
+        System.out.println("FXMLMainFormController.checkRegis" + FXMLMainFormController.checkRegis);
         System.out.println(FXMLCheckIdCardCustomerController.checkIdCardCustomer);
         if (!FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
             //Set datepicker :
@@ -445,9 +446,9 @@ public class FXMLInfoCustomerController implements Initializable {
                 HboxContent.getChildren().add(label);
                 birthday.requestFocus();
             });
-        } else if (((PhoneNumber.getText() == null || PhoneNumber.getText().equals(""))) && (FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready||FXMLCheckIdCardCustomerController.checkIdCardCustomer)) {
-            System.out.println("FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready= "+FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready);
-            System.out.println("FXMLCheckIdCardCustomerController.checkIdCardCustomer= "+FXMLCheckIdCardCustomerController.checkIdCardCustomer);
+        } else if (((PhoneNumber.getText() == null || PhoneNumber.getText().equals(""))) && (FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready || FXMLCheckIdCardCustomerController.checkIdCardCustomer)) {
+            System.out.println("FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready= " + FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready);
+            System.out.println("FXMLCheckIdCardCustomerController.checkIdCardCustomer= " + FXMLCheckIdCardCustomerController.checkIdCardCustomer);
             Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
             });
@@ -467,7 +468,7 @@ public class FXMLInfoCustomerController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID IS INCORRECT !!!");
             });
-        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText()) && (FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready||FXMLCheckIdCardCustomerController.checkIdCardCustomer)) {
+        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText()) && (FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready || FXMLCheckIdCardCustomerController.checkIdCardCustomer)) {
             Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
             });
@@ -546,6 +547,10 @@ public class FXMLInfoCustomerController implements Initializable {
                     HboxContent.getChildren().add(icon);
                     HboxContent.getChildren().add(label);
                     CustomerID.setText("");
+                }
+                if (FXMLListCustomerController.check_Edit_Action) {
+                    fXMLListCustomerController = ConnectControllers.getfXMLListCustomerController();
+                    fXMLListCustomerController.showUsersData();
                 }
 // kiem tra chay theo click check in tu main form
                 if (FXMLCheckIdCardCustomerController.checkIdCardCustomer || FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {

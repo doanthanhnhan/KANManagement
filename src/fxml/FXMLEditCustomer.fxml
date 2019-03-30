@@ -82,7 +82,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="35.0" prefWidth="400.0" spacing="10.0">
                                  <children>
-                                    <JFXComboBox fx:id="CustomerID" editable="true" prefHeight="35.0" prefWidth="400.0" promptText="Select Id Customer">
+                                    <JFXComboBox fx:id="CustomerID" prefHeight="35.0" prefWidth="400.0" promptText="Select Id Customer">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>

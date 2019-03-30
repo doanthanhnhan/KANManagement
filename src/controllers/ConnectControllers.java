@@ -26,6 +26,15 @@ public class ConnectControllers {
     public static FXMLInfoEmployeeController fXMLInfoEmployeeController;
     public static FXMLSplashScreenController fXMLSplashScreenController;
     public static FXMLDecentralizationController fXMLDecentralizationController;
+    public static FXMLListCustomerController fXMLListCustomerController;
+
+    public static FXMLListCustomerController getfXMLListCustomerController() {
+        return fXMLListCustomerController;
+    }
+
+    public static void setfXMLListCustomerController(FXMLListCustomerController fXMLListCustomerController) {
+        ConnectControllers.fXMLListCustomerController = fXMLListCustomerController;
+    }
 
     public static FXMLDecentralizationController getfXMLDecentralizationController() {
         return fXMLDecentralizationController;

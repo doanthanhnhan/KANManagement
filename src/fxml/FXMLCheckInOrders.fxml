@@ -97,7 +97,7 @@
                                     </FontAwesomeIconView>
                                  </children>
                                  <HBox.margin>
-                                    <Insets left="80.0" right="80.0" top="20.0" />
+                                    <Insets left="80.0" right="80.0" top="30.0" />
                                  </HBox.margin>
                               </HBox>
                            </children>

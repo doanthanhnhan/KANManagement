@@ -503,6 +503,12 @@ public class FXMLMainFormController implements Initializable {
     }
 
     @FXML
+    private void handle_MenuItem_List_Customer_Action(ActionEvent event) {
+        System.out.println("List Customer menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListCustomer.fxml", "listCustomers_Tab", "Customers");
+    }
+
+    @FXML
     private void handle_MenuItem_List_Rooms_Action(ActionEvent event) {
         System.out.println("List rooms menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListRooms.fxml", "listRooms_Tab", "Rooms");

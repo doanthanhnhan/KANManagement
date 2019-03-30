@@ -26,6 +26,43 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    delete customer
+     public static void deleteCustomer(String id) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE Customers SET Active = 0 WHERE CustomerID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+//    get all customer for listCustomer
+
+    public static ObservableList<Customer> getAllCustomer() throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<Customer> list_Customer = FXCollections.observableArrayList();
+        String sql = "select * from Customers where Active = 1";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            Customer cm = new Customer();
+            cm.setCusID(rs.getString("CustomerID"));
+            cm.setUser(rs.getString("Username"));
+            cm.setPassport(rs.getString("CustomerPassport"));
+            cm.setFName(rs.getString("CustomerFirstName"));
+            cm.setMName(rs.getString("CustomerMidName"));
+            cm.setLName(rs.getString("CustomerLastName"));
+            cm.setDate(rs.getString("CustomerBirthday"));
+            cm.setPhone(rs.getString("CustomerPhoneNumber"));
+            cm.setEmail(rs.getString("CustomerEmail"));
+            cm.setDiscount(rs.getFloat("Discount"));
+            cm.setCompany(rs.getString("Company"));
+            cm.setSex(rs.getBoolean("Sex"));
+            list_Customer.add(cm);
+        }
+        return list_Customer;
+    }
 //    Update Customer
 
     public static void UpdateInfoCustomer(Customer ctm) throws ClassNotFoundException, SQLException {
@@ -40,9 +77,9 @@ public class DAOCustomerBookingCheckIn {
         pt.setString(5, ctm.getDate());
         pt.setString(6, ctm.getPhone());
         pt.setString(7, ctm.getEmail());
-        pt.setFloat(8,ctm.getDiscount());
+        pt.setFloat(8, ctm.getDiscount());
         pt.setString(9, ctm.getCompany());
-        pt.setBoolean(10,ctm.getSex());
+        pt.setBoolean(10, ctm.getSex());
         pt.setString(11, ctm.getCusID());
         pt.execute();
         pt.close();
@@ -211,7 +248,7 @@ public class DAOCustomerBookingCheckIn {
         Connection connection = connectDB.connectSQLServer();
         // Tạo đối tượng Statement.
         Statement statement = connection.createStatement();
-        String sql = "select CustomerID from Customers";
+        String sql = "select CustomerID from Customers where Active = 1";
 
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = statement.executeQuery(sql);
