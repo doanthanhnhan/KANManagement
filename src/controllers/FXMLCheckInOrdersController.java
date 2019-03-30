@@ -115,7 +115,7 @@ public class FXMLCheckInOrdersController implements Initializable {
     private FontAwesomeIconView iconRefresh;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     private RoomDAOImpl roomDAOImpl;
-    
+
     private FXMLMainOverViewPaneController mainOverViewPaneController;
 
     /**
@@ -128,22 +128,30 @@ public class FXMLCheckInOrdersController implements Initializable {
             refreshIdUser();
         });
         //        set box booking id 
-        refreshIdUser();       
+        refreshIdUser();
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
         roomDAOImpl = new RoomDAOImpl();
         LeaveDate.setDisable(true);
         if (FXMLInfoBookingController.checkInfoBooking) {
-            System.out.println("check info booking "+FXMLInfoBookingController.checkInfoBooking);
-            System.out.println("booking info conect "+FXMLInfoBookingController.bookingIdConect);
+            System.out.println("check info booking " + FXMLInfoBookingController.checkInfoBooking);
+            System.out.println("booking info conect " + FXMLInfoBookingController.bookingIdConect);
             CustomerID.setText(FXMLInfoBookingController.customerIdConect);
             boxBookingID.setDisable(true);
             boxBookingID.setValue(FXMLInfoBookingController.bookingIdConect);
-            System.out.println("booking info conect "+boxBookingID.getValue());
-            System.out.println("booking info conect "+FXMLInfoBookingController.bookingIdConect);
+            System.out.println("booking info conect " + boxBookingID.getValue());
+            System.out.println("booking info conect " + FXMLInfoBookingController.bookingIdConect);
             RoomID.setText(FXMLInfoBookingController.roomIdConect);
             CheckInID.setText("CI-" + FXMLInfoBookingController.bookingIdConect);
             NumberOfCustomer.setDisable(true);
             LeaveDate.setDisable(false);
+            LeaveDate.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate today = LocalDate.now();
+                    setDisable(empty || date.compareTo(today) < 0);
+                }
+            });
             CheckInDate.setValue(LocalDate.now());
             HboxBoxId.getChildren().remove(iconRefresh);
             String pattern = "dd-MM-yyyy";
@@ -402,7 +410,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 }
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Check In for booking id = " + boxBookingID.getValue(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                
+
                 //Getting Room infomations to update room Status after checking in - Nhan edit here
                 Room room = new Room();
                 room.setRoomID(RoomID.getText());
@@ -410,15 +418,15 @@ public class FXMLCheckInOrdersController implements Initializable {
                 room.setUserName(Username.getText());
                 room.setRoomStatus("Occupied");
                 room.setCheckInDate(LocalDateTime.now());
-                room.setLeaveDate(LocalDateTime.of(LeaveDate.getValue(), LocalTime.now()));                
-                room.setDayRemaining((int)ChronoUnit.DAYS.between(room.getCheckInDate(),room.getLeaveDate()));                
+                room.setLeaveDate(LocalDateTime.of(LeaveDate.getValue(), LocalTime.now()));
+                room.setDayRemaining((int) ChronoUnit.DAYS.between(room.getCheckInDate(), room.getLeaveDate()));
                 roomDAOImpl.editCheckInRoom(room, true);
                 mainOverViewPaneController.refreshForm();
-                
+
                 if (FXMLInfoBookingController.checkInfoBooking) {
                     Stage stage = (Stage) anchorPaneCheckInOrders.getScene().getWindow();
                     stage.close();
-                    FXMLInfoBookingController.checkInfoBooking=false;  
+                    FXMLInfoBookingController.checkInfoBooking = false;
                 } else {
                     CheckInID.setText("");
                     boxBookingID.setValue(null);

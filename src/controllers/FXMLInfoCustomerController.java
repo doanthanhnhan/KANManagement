@@ -128,7 +128,7 @@ public class FXMLInfoCustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         System.out.println(FXMLCheckIdCardCustomerController.checkIdCardCustomer);
-        if (!FXMLCheckIdCardCustomerController.checkIdCardCustomer && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
+        if (!FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
             //Set datepicker :
             birthday.setDayCellFactory(picker -> new DateCell() {
                 @Override
@@ -444,7 +444,9 @@ public class FXMLInfoCustomerController implements Initializable {
                 HboxContent.getChildren().add(label);
                 birthday.requestFocus();
             });
-        } else if (((PhoneNumber.getText() == null || PhoneNumber.getText().equals(""))) && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
+        } else if (((PhoneNumber.getText() == null || PhoneNumber.getText().equals(""))) && (FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready||FXMLCheckIdCardCustomerController.checkIdCardCustomer)) {
+            System.out.println("FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready= "+FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready);
+            System.out.println("FXMLCheckIdCardCustomerController.checkIdCardCustomer= "+FXMLCheckIdCardCustomerController.checkIdCardCustomer);
             Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER MUST NOT EMPTY !!!");
             });
