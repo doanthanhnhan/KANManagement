@@ -251,6 +251,9 @@ public class FXMLCheckOutController implements Initializable {
         //Calculate room charge
         int check_In_Hour = roomCheckOut.getCheckInDate().getHour();
         int check_Out_Hour = LocalDateTime.now().getHour();
+        Long hours_Stay = ChronoUnit.HOURS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
+        Long days_Stay = ChronoUnit.DAYS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
+        Double total_Room_Normal = 0.0;
         //Check checkin time
         if (check_In_Hour >= 5 && check_In_Hour < 9) {
             charge_Room_1st_Day = charge_Room_1st_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.5;
@@ -260,23 +263,31 @@ public class FXMLCheckOutController implements Initializable {
             charge_Room_1st_Day = charge_Room_1st_Day + roomCheckOut.getRoomPrice().doubleValue();
         }
         //Check checkout time
-        if (check_Out_Hour >= 12 && check_Out_Hour < 15) {
+        if (check_Out_Hour >= 12 && check_Out_Hour < 15 && !roomCheckOut.getCheckInDate().toLocalDate().equals(LocalDate.now())) {
             charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.3;
-        } else if (check_Out_Hour >= 15 && check_Out_Hour < 18) {
+        } else if (check_Out_Hour >= 15 && check_Out_Hour < 18 && !roomCheckOut.getCheckInDate().toLocalDate().equals(LocalDate.now())) {
             charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.5;
-        } else {
+        } else if (check_Out_Hour >= 18 && !roomCheckOut.getCheckInDate().toLocalDate().equals(LocalDate.now())) {
             charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue();
+        } else {
+            charge_Room_Last_Day = 0.0;
         }
         //Charge left days
-        Long hours_Stay = ChronoUnit.HOURS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
-        Long days_Stay = ChronoUnit.DAYS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
-        Double total_Room_Normal = 0.0;
+        int day_Stay_Print = 0;
         if (hours_Stay >= 24) {
             total_Room_Normal = days_Stay * roomCheckOut.getRoomPrice().doubleValue();
+            day_Stay_Print = days_Stay.intValue() + 2;
             total_Room = total_Room_Normal + charge_Room_1st_Day + charge_Room_Last_Day;
             total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
-        } else {
+        } else if (charge_Room_Last_Day != 0) {
+            day_Stay_Print = 2;
+            days_Stay = Long.valueOf(0);
             total_Room = charge_Room_1st_Day + charge_Room_Last_Day;
+            total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
+        } else {
+            day_Stay_Print = 1;
+            days_Stay = Long.valueOf(0);
+            total_Room = charge_Room_1st_Day;
             total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
         }
 
@@ -291,16 +302,16 @@ public class FXMLCheckOutController implements Initializable {
                 .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
         string_Total_Bill.append(String.format("| %-25s | %19s |%n", "Check out time", LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
-        string_Total_Bill.append(String.format("| %-25s | %19d |%n", "No. Of Days", days_Stay.intValue()+2));
+        string_Total_Bill.append(String.format("| %-25s | %19d |%n", "No. Of Days", day_Stay_Print));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Rent per day", roomCheckOut.getRoomPrice()));
-        string_Total_Bill.append(String.format("---------------------------------------------------%n"));        
+        string_Total_Bill.append(String.format("---------------------------------------------------%n"));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Room charge 1st day", charge_Room_1st_Day));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Room charge x " + days_Stay + " f.days", total_Room_Normal));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Room charge last day", charge_Room_Last_Day));
-        string_Total_Bill.append(String.format("---------------------------------------------------%n")); 
+        string_Total_Bill.append(String.format("---------------------------------------------------%n"));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Total Room charge", total_Room));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Services charge", total_Service));
-        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(-) Room discount", total_Room_Discount));        
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(-) Room discount", total_Room_Discount));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(-) Services discount", total_Service_Discount));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(-) Customer discount", total_With_Customer_Discount));
         string_Total_Bill.append(String.format("---------------------------------------------------%n"));
