@@ -574,6 +574,14 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("Edit User Informations menu item clicked!");
         formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit User Informations");
     }
+
+    @FXML
+    private void handle_MenuItem_Edit_Customer_Action(ActionEvent event) {
+        checkRegis = true;
+//        FXMLListEmployeeController.check_form_list = false;
+        System.out.println("Edit User Informations menu item clicked!");
+        formLoader("/fxml/FXMLCustomerInfo.fxml", "/images/KAN Logo.png", "Edit Customer Informations");
+    }
     // ############### END VIEW ACTIONS ###############
 
     // =============== PUBLIC METHODS ===============
