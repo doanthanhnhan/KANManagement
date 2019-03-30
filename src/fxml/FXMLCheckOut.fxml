@@ -123,12 +123,12 @@
                         <FontAwesomeIconView glyphName="VIDEO_CAMERA" size="20" styleClass="glyph-icon-checkout" />
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="btn_Save" prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="Save">
+                  <JFXButton fx:id="btn_Save" onAction="#handle_Save_Button_Action" prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="Save">
                      <graphic>
                         <FontAwesomeIconView glyphName="SAVE" size="20" styleClass="glyph-icon-checkout" />
                      </graphic>
                   </JFXButton>
-                  <JFXButton fx:id="btn_Cancel" layoutX="593.0" layoutY="20.0" prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="Cancel">
+                  <JFXButton fx:id="btn_Cancel" layoutX="593.0" layoutY="20.0" onAction="#handle_Cancel_Button_Action" prefHeight="50.0" prefWidth="200.0" styleClass="button-checkout" text="Cancel">
                      <graphic>
                         <FontAwesomeIconView glyphName="CLOSE" size="20" styleClass="glyph-icon-checkout" />
                      </graphic>

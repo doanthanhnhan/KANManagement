@@ -33,7 +33,7 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public Room getRoom(String roomID) {
-        String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName',\n"
+        String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName', C.Discount AS 'CusDicount',\n"
                 + "DATEDIFF(HOUR,GETDATE(),R.LeaveDate)/24 AS 'Day_Leave',\n"
                 + "DATEDIFF(HOUR,R.BookingDate,GETDATE())/24 AS 'Day_Booking', \n"
                 + "RT.Price, RT.Discount\n"
@@ -65,6 +65,7 @@ public class RoomDAOImpl implements RoomDAO {
                     room.setDayBooking(rs.getInt("Day_Booking"));
                     room.setRoomPrice(rs.getBigDecimal("Price"));
                     room.setRoomDiscount(rs.getBigDecimal("Discount"));
+                    room.setCusDiscount(rs.getBigDecimal("CusDicount"));
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {

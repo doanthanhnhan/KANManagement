@@ -19,16 +19,21 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableListValue;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.CheckIn;
 import models.CheckOutDAOImpl;
@@ -91,7 +96,7 @@ public class FXMLCheckOutController implements Initializable {
     @FXML
     private JFXDatePicker datePicker_Check_Out;
     @FXML
-    private JFXComboBox<?> comboBox_Payment_Method;
+    private JFXComboBox<String> comboBox_Payment_Method;
     @FXML
     private JFXTextField txt_Discount;
     @FXML
@@ -134,6 +139,12 @@ public class FXMLCheckOutController implements Initializable {
                 + "     + From 15h00 - 18h00: Surcharge 50% room price<br>"
                 + "     + After 18h00 : Surcharge 100% room price<br>"
         );
+
+        //Init combobox
+        ObservableList<String> listPayments = FXCollections.observableArrayList();
+        listPayments.addAll("Cash", "Credit and Debit card", "Direct debit", "EFTPOS",
+                "Online Payment", "Cheque", "Gift cards and vouchers", "Bitcoin and digital currencies");
+        comboBox_Payment_Method.getItems().addAll(listPayments);
         // Init stringbuilder     
         string_Total_Bill = new StringBuilder();
 
@@ -143,6 +154,7 @@ public class FXMLCheckOutController implements Initializable {
         txt_Customer_ID.setText(checkInRoom.getCusID());
         txt_Total_Guests.setText(checkInRoom.getNumberOfCustomer().toString());
         txt_Full_Name.setText(mainOverViewPaneController.service_Customer_Full_Name);
+        //txt_Discount.setText();
 
         txt_Check_In_ID.setDisable(true);
         txt_Check_Out_ID.setDisable(true);
@@ -162,6 +174,7 @@ public class FXMLCheckOutController implements Initializable {
         if (mainOverViewPaneController.check_Check_Out_Button_Clicked) {
             roomCheckOut = roomDAOImpl.getRoom(mainOverViewPaneController.service_Room_ID);
             txt_Room_ID.setText(mainOverViewPaneController.service_Room_ID);
+            txt_Room_ID.setDisable(true);
             datePicker_Check_In.setValue(roomCheckOut.getCheckInDate().toLocalDate());
             datePicker_Check_Out.setValue(LocalDate.now());
             datePicker_Check_In.setDisable(true);
@@ -256,33 +269,46 @@ public class FXMLCheckOutController implements Initializable {
         }
         //Charge left days
         Long hours_Stay = ChronoUnit.HOURS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
+        Long days_Stay = ChronoUnit.DAYS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
+        Double total_Room_Normal = 0.0;
         if (hours_Stay >= 24) {
-            Long days_Stay = ChronoUnit.DAYS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now()) - 1;
-            total_Room = days_Stay * roomCheckOut.getRoomPrice().doubleValue() + charge_Room_1st_Day + charge_Room_Last_Day;
+            total_Room_Normal = days_Stay * roomCheckOut.getRoomPrice().doubleValue();
+            total_Room = total_Room_Normal + charge_Room_1st_Day + charge_Room_Last_Day;
             total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
         } else {
             total_Room = charge_Room_1st_Day + charge_Room_Last_Day;
             total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
         }
 
-        Double total = total_Room + total_Service - total_Room_Discount - total_Service_Discount;
+        Double total_Without_CusDiscount = total_Room + total_Service;
+        Double total_With_Customer_Discount = total_Without_CusDiscount * roomCheckOut.getCusDiscount().doubleValue();
+        Double total = total_Without_CusDiscount - total_With_Customer_Discount - total_Room_Discount - total_Service_Discount;
         Double total_VAT = total * 0.1;
-        
+
         //IMPORTANT NOTE: To display string.format, setting TextArea with: -fx-font-family: monospace
-        string_Total_Bill.append(String.format("-----------------------------------------------%n"));
-        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Services charge", total_Service));
-        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Room charge 1st day", charge_Room_1st_Day));
-        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Room charge", total_Room));
-        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Room charge last day", charge_Room_Last_Day));
-        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "(+) VAT (10%)", total_VAT));
-        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "(-) Room discount", total_Room_Discount));
-        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "(-) Services discount", total_Service_Discount));
-        string_Total_Bill.append(String.format("| %-25s | %15s |%n", "(-) Customer discount", "0"));
-        string_Total_Bill.append(String.format("-----------------------------------------------%n"));
-        string_Total_Bill.append(String.format("| %-25s | %15.3f |%n", "Payable amount", total));
-        string_Total_Bill.append(String.format("-----------------------------------------------%n"));
-        //string_Total_Bill.append("Total service amount = ").append(total_Service.toString()).append("\n");
-        //string_Total_Bill.append("Total room price = ").append(total_Room.toString()).append("\n");
+        string_Total_Bill.append(String.format("---------------------------------------------------%n"));
+        string_Total_Bill.append(String.format("| %-25s | %19s |%n", "Check in time", roomCheckOut.getCheckInDate()
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
+        string_Total_Bill.append(String.format("| %-25s | %19s |%n", "Check out time", LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
+        string_Total_Bill.append(String.format("| %-25s | %19d |%n", "No. Of Days", days_Stay.intValue()+2));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Rent per day", roomCheckOut.getRoomPrice()));
+        string_Total_Bill.append(String.format("---------------------------------------------------%n"));        
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Room charge 1st day", charge_Room_1st_Day));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Room charge x " + days_Stay + " f.days", total_Room_Normal));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Room charge last day", charge_Room_Last_Day));
+        string_Total_Bill.append(String.format("---------------------------------------------------%n")); 
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Total Room charge", total_Room));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Services charge", total_Service));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(-) Room discount", total_Room_Discount));        
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(-) Services discount", total_Service_Discount));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(-) Customer discount", total_With_Customer_Discount));
+        string_Total_Bill.append(String.format("---------------------------------------------------%n"));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Total bill amount", total));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(+) VAT (10%)", total_VAT));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Payable amount", total + total_VAT));
+        string_Total_Bill.append(String.format("---------------------------------------------------%n"));
+
         System.out.println(string_Total_Bill);
         txt_Area_Total_Bill.setText(string_Total_Bill.toString());
     }
@@ -295,6 +321,24 @@ public class FXMLCheckOutController implements Initializable {
                 txt_Check_In_ID.setText(newValue);
             }
         });
+    }
+
+    @FXML
+    private void handle_Save_Button_Action(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Message");
+        alert.setHeaderText("Check out confirmation");
+        alert.setContentText("Do you want to check out room: " + txt_Room_ID.getText() + " ?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+
+        }
+    }
+
+    @FXML
+    private void handle_Cancel_Button_Action(ActionEvent event) {
+        Stage stage = (Stage) btn_Cancel.getScene().getWindow();
+        stage.close();
     }
 
 }

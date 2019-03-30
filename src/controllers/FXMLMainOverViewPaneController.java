@@ -222,7 +222,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
         //Set filterData and Pagination
         filteredRoom = new FilteredList<>(listRooms, list -> true);
-        FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
+        mainFormController = ConnectControllers.getfXMLMainFormController();
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Searching...");
             filteredRoom.setPredicate(

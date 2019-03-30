@@ -43,6 +43,7 @@ public class Room {
     private LocalDateTime leaveDate;
     private BigDecimal roomPrice;
     private BigDecimal roomDiscount;
+    private BigDecimal cusDiscount;
 
     public Room() {
         this.roomID = new SimpleStringProperty();
@@ -63,6 +64,7 @@ public class Room {
         this.Active = new SimpleBooleanProperty();
         this.roomPrice = BigDecimal.ZERO;
         this.roomDiscount = BigDecimal.ZERO;
+        this.cusDiscount = BigDecimal.ZERO;
     }
 
     public final String getRoomID() {
@@ -295,6 +297,14 @@ public class Room {
 
     public IntegerProperty dayBookingProperty() {
         return dayBooking;
+    }
+
+    public BigDecimal getCusDiscount() {
+        return cusDiscount;
+    }
+
+    public void setCusDiscount(BigDecimal cusDiscount) {
+        this.cusDiscount = cusDiscount;
     }
 
     @Override
