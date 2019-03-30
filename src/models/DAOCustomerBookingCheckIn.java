@@ -26,6 +26,28 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    Update Customer
+
+    public static void UpdateInfoCustomer(Customer ctm) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE Customers SET UserName = ?, CustomerFirstName = ? ,CustomerMidName = ?,CustomerLastName = ?,CustomerBirthday=?,CustomerPhoneNumber=?,"
+                + "CustomerEmail=?,Discount=?,Company=?,Sex=? WHERE CustomerID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, ctm.getUser());
+        pt.setString(2, ctm.getFName());
+        pt.setString(3, ctm.getMName());
+        pt.setString(4, ctm.getLName());
+        pt.setString(5, ctm.getDate());
+        pt.setString(6, ctm.getPhone());
+        pt.setString(7, ctm.getEmail());
+        pt.setFloat(8,ctm.getDiscount());
+        pt.setString(9, ctm.getCompany());
+        pt.setBoolean(10,ctm.getSex());
+        pt.setString(11, ctm.getCusID());
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
 //    check da booking hay chua
 
     public static ObservableList<BookingInfo> check_BookingIdCustomer(String ID) {
@@ -100,6 +122,7 @@ public class DAOCustomerBookingCheckIn {
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
         while (rs.next()) {
+            cm.setPassport(rs.getString("CustomerPassport"));
             cm.setFName(rs.getString("CustomerFirstName"));
             cm.setMName(rs.getString("CustomerMidName"));
             cm.setLName(rs.getString("CustomerLastName"));
