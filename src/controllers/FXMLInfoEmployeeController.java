@@ -176,7 +176,6 @@ public class FXMLInfoEmployeeController implements Initializable {
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
         validateInfoEmployee = false;
-        check_delete = false;
         System.out.println("kiem tra validate Init" + validateInfoEmployee);
         System.out.println("mainform check regis: " + FXMLMainFormController.checkRegis);
         if (FXMLMainFormController.checkRegis) {
@@ -184,7 +183,6 @@ public class FXMLInfoEmployeeController implements Initializable {
                 System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
                 HboxBoxId.getChildren().remove(iconRefresh);
                 Hboxbtn.getChildren().remove(btnCancel);
-                check_delete = true;
                 Emp = DAO.getInfoEmployee(userLogin);
                 hBox_Info_Parent.getChildren().remove(vBox_Info_Right);
                 HboxHeader.getChildren().remove(HboxImage);
@@ -734,7 +732,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                             Comm.setText("0");
                             Bonus.setText("0");
                             Male.setSelected(true);
-                            check_delete = false;
+                            check_delete = true;
                             validateInfoEmployee = true;
                             FXMLListEmployeeController.check_form_list = false;
                             fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
@@ -755,7 +753,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                             }
                             DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update " + boxId.getValue(),
                                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                            check_delete = false;
+                            check_delete = true;
                             validateInfoEmployee = true;
                             System.out.println("Vào chỗ submit user");
                             FXMLMainFormController.checkRegis = false;
