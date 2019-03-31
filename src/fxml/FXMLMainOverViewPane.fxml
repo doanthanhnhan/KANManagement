@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="anchorPane_Main" prefHeight="700.0" prefWidth="1366.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLMainOverViewPaneController">
     <children>
@@ -27,42 +28,48 @@
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                     <children>
-                                                        <Label text="STATUS" />
+                                                        <Label text="STATUS" textFill="#6747cd">
+                                             <font>
+                                                <Font name="System Bold Italic" size="15.0" />
+                                             </font></Label>
                                                     </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" spacing="30.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Reserved" prefWidth="120.0" text="Reserved" />
-                                                        <Label fx:id="label_Reserved_Rooms" alignment="CENTER_RIGHT" prefWidth="20.0" text="10" />
+                                                        <Label fx:id="label_Reserved_Rooms" alignment="CENTER_RIGHT" prefWidth="20.0" text="0" />
                                                     </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" spacing="30.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Occupied" prefWidth="120.0" text="Occupied" />
-                                                        <Label fx:id="label_Occupied_Rooms" alignment="CENTER_RIGHT" prefWidth="20.0" text="4" textAlignment="CENTER" />
+                                                        <Label fx:id="label_Occupied_Rooms" alignment="CENTER_RIGHT" prefWidth="20.0" text="0" textAlignment="CENTER" />
                                                     </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="103.0" spacing="30.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Available" prefWidth="120.0" text="Available" />
-                                                        <Label fx:id="label_Available_Rooms" alignment="CENTER_RIGHT" prefWidth="20.0" text="10" />
+                                                        <Label fx:id="label_Available_Rooms" alignment="CENTER_RIGHT" prefWidth="20.0" text="0" />
                                                     </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="134.0" spacing="30.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Checkout" prefWidth="120.0" text="Checked out" />
-                                                        <Label fx:id="label_Checkout_Rooms" alignment="CENTER_RIGHT" prefWidth="20.0" text="10" />
+                                                        <Label fx:id="label_Checkout_Rooms" alignment="CENTER_RIGHT" prefWidth="20.0" text="0" />
                                                     </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
                                                     <children>
-                                                        <Label text="TYPE" />
+                                                        <Label text="TYPE" textFill="#6747cd">
+                                             <font>
+                                                <Font name="System Bold Italic" size="15.0" />
+                                             </font></Label>
                                                     </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="41.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Single" prefWidth="120.0" text="Single" />
-                                                        <Label fx:id="label_Single_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                                        <Label fx:id="label_Single_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="USER_ALT" size="20" />
                                              </graphic></Label>
@@ -71,7 +78,7 @@
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="72.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Double" prefWidth="120.0" text="Double" />
-                                          <Label fx:id="label_Double_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_Double_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="USER" size="20" />
                                              </graphic>
@@ -81,7 +88,7 @@
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="103.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Triple" prefWidth="120.0" text="Triple" />
-                                          <Label fx:id="label_Triple_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_Triple_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="USERS" size="20" />
                                              </graphic>
@@ -91,7 +98,7 @@
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="134.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Family" prefWidth="120.0" text="Family" />
-                                          <Label fx:id="label_Family_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_Family_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="USER_PLUS" size="20" />
                                              </graphic>
@@ -101,7 +108,7 @@
                                     <HBox alignment="CENTER_LEFT">
                                        <children>
                                           <JFXCheckBox fx:id="checkBox_Deluxe" prefWidth="120.0" text="Deluxe" />
-                                          <Label fx:id="label_Deluxe_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_Deluxe_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="DIAMOND" size="20" />
                                              </graphic>
@@ -110,13 +117,16 @@
                                     </HBox>
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="165.0" spacing="10.0">
                                                     <children>
-                                                        <Label text="HOUSE KEEPING" />
+                                                        <Label text="HOUSE KEEPING" textFill="#6747cd">
+                                             <font>
+                                                <Font name="System Bold Italic" size="15.0" />
+                                             </font></Label>
                                                     </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="196.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Clean" prefWidth="120.0" text="Clean" />
-                                          <Label fx:id="label_Clean_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_Clean_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="CHECK" size="20" />
                                              </graphic>
@@ -126,7 +136,7 @@
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="227.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_NotClean" prefWidth="120.0" text="Not clean" />
-                                          <Label fx:id="label_NotClean_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_NotClean_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="CLOSE" size="20" />
                                              </graphic>
@@ -136,7 +146,7 @@
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="258.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_InProgress" prefWidth="120.0" text="In progress" />
-                                          <Label fx:id="label_InProgress_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_InProgress_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="CLOCK_ALT" size="20" />
                                              </graphic>
@@ -146,7 +156,7 @@
                                     <HBox alignment="CENTER_LEFT">
                                        <children>
                                           <JFXCheckBox fx:id="checkBox_Remaining_Days" prefWidth="120.0" text="R.Days" />
-                                          <Label fx:id="label_Remaining_Days" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_Remaining_Days" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="CALENDAR_CHECK_ALT" size="20" />
                                              </graphic>
@@ -156,7 +166,7 @@
                                                 <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="289.0">
                                                     <children>
                                                         <JFXCheckBox fx:id="checkBox_Repair" prefWidth="120.0" text="Repaired" />
-                                          <Label fx:id="label_Repair_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_Repair_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="WRENCH" size="20" />
                                              </graphic>
@@ -166,7 +176,7 @@
                                     <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="475.0">
                                        <children>
                                           <JFXCheckBox fx:id="checkBox_Not_Repair" prefWidth="120.0" text="N.Repair" />
-                                          <Label fx:id="label_Not_Repair_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="10">
+                                          <Label fx:id="label_Not_Repair_Rooms" alignment="CENTER_RIGHT" prefWidth="50.0" text="0">
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="WARNING" size="20" />
                                              </graphic>
@@ -175,7 +185,10 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="10.0">
                                        <children>
-                                          <Label text="FLOORS" />
+                                          <Label text="FLOORS" textFill="#6747cd">
+                                             <font>
+                                                <Font name="System Bold Italic" size="15.0" />
+                                             </font></Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="10.0">

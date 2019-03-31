@@ -11,15 +11,14 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableListValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,12 +35,15 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.CheckIn;
+import models.CheckOut;
 import models.CheckOutDAOImpl;
+import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.Room;
 import models.RoomDAOImpl;
 import models.ServiceOrderDetail;
 import models.ServiceOrderDetailDAOImpl;
+import utils.FormatName;
 import utils.QRWebCam;
 import utils.formatCalender;
 
@@ -69,6 +71,7 @@ public class FXMLCheckOutController implements Initializable {
     public Double total_Room_Discount = 0.0;
     public Double charge_Room_1st_Day = 0.0;
     public Double charge_Room_Last_Day = 0.0;
+    public Double total_Bill = 0.0;
 
     FXMLMainFormController mainFormController;
     FXMLMainOverViewPaneController mainOverViewPaneController;
@@ -124,6 +127,7 @@ public class FXMLCheckOutController implements Initializable {
 
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
         roomDAOImpl = new RoomDAOImpl();
+        checkOutDAOImpl = new CheckOutDAOImpl();
         checkInRoom = DAOCustomerBookingCheckIn.getCheckInRoom(mainOverViewPaneController.service_Room_ID);
 
         //Init tooltip display
@@ -295,6 +299,7 @@ public class FXMLCheckOutController implements Initializable {
         Double total_With_Customer_Discount = total_Without_CusDiscount * roomCheckOut.getCusDiscount().doubleValue();
         Double total = total_Without_CusDiscount - total_With_Customer_Discount - total_Room_Discount - total_Service_Discount;
         Double total_VAT = total * 0.1;
+        total_Bill = total + total_VAT;
 
         //IMPORTANT NOTE: To display string.format, setting TextArea with: -fx-font-family: monospace
         string_Total_Bill.append(String.format("---------------------------------------------------%n"));
@@ -317,11 +322,61 @@ public class FXMLCheckOutController implements Initializable {
         string_Total_Bill.append(String.format("---------------------------------------------------%n"));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Total bill amount", total));
         string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "(+) VAT (10%)", total_VAT));
-        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Payable amount", total + total_VAT));
+        string_Total_Bill.append(String.format("| %-25s | %19.3f |%n", "Payable amount", total_Bill));
         string_Total_Bill.append(String.format("---------------------------------------------------%n"));
 
         System.out.println(string_Total_Bill);
         txt_Area_Total_Bill.setText(string_Total_Bill.toString());
+        txt_Total_Bill.setText(total_Bill.toString());
+        txt_Total_Bill.setDisable(true);
+        txt_Tax.setText("0.1");
+        txt_Tax.setDisable(true);
+        txt_Discount.setText(roomCheckOut.getCusDiscount().toString());
+        txt_Discount.setDisable(true);
+    }
+
+    private CheckOut get_Check_Out_Data() {
+        CheckOut checkOut = new CheckOut();
+        checkOut.setCheckInDate(LocalDateTime.of(datePicker_Check_In.getValue(), LocalTime.now()));
+        checkOut.setCheckInID(txt_Check_In_ID.getText());
+        checkOut.setCheckOutDate(LocalDateTime.now());
+        checkOut.setCheckOutID(txt_Check_Out_ID.getText());
+        checkOut.setCustomerBill(BigDecimal.valueOf(total_Bill));
+        checkOut.setCustomerID(txt_Customer_ID.getText());
+        checkOut.setCustomerPayment(comboBox_Payment_Method.getValue());
+        checkOut.setDiscount(BigDecimal.valueOf(Double.valueOf(txt_Discount.getText())));
+        checkOut.setRoomID(txt_Room_ID.getText());
+        checkOut.setTax(BigDecimal.valueOf(Double.valueOf(txt_Tax.getText())));
+        checkOut.setUserName(mainFormController.userRole.getEmployee_ID());
+        return checkOut;
+    }
+
+    private void submit_Check_Out() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Message");
+        alert.setHeaderText("Check out confirmation");
+        alert.setContentText("Do you want to check out room: " + txt_Room_ID.getText() + " ?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            CheckOut checkOut = get_Check_Out_Data();
+            checkOutDAOImpl.addCheckOut(checkOut);
+            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new CheckOutID: "
+                    + FormatName.format(checkOut.getCheckOutID()),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+
+            //Getting Room infomations to update room Status after checking in - Nhan edit here
+            Room room = new Room();
+            room.setRoomID(txt_Room_ID.getText());
+            room.setCustomerID("CTM-000000000");
+            room.setUserName(mainFormController.getUserRole().getEmployee_ID());
+            room.setRoomStatus("Out");
+            room.setLeaveDate(LocalDateTime.now());
+            room.setDayRemaining(0);
+            roomDAOImpl.editCheckOutRoom(room, true);
+            mainOverViewPaneController.refreshForm();
+            Stage stage = (Stage)btn_Save.getScene().getWindow();
+            stage.close();
+        }
     }
 
     @FXML
@@ -336,14 +391,7 @@ public class FXMLCheckOutController implements Initializable {
 
     @FXML
     private void handle_Save_Button_Action(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Message");
-        alert.setHeaderText("Check out confirmation");
-        alert.setContentText("Do you want to check out room: " + txt_Room_ID.getText() + " ?");
-        alert.showAndWait();
-        if (alert.getResult() == ButtonType.OK) {
-
-        }
+        submit_Check_Out();
     }
 
     @FXML

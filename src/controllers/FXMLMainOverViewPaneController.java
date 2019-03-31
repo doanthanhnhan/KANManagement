@@ -299,58 +299,133 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
     public void init_Label_Room_Property() {
         listRoomProperties = roomDAOImpl.getAllRoomProperties();
-        for (RoomProperty roomProperty : listRoomProperties) {
+        boolean check_Label_Available = false;
+        boolean check_Label_Reserved = false;
+        boolean check_Label_Occupied = false;
+        boolean check_Label_Out = false;
+        boolean check_Label_Single = false;
+        boolean check_Label_Double = false;
+        boolean check_Label_Triple = false;
+        boolean check_Label_Family = false;
+        boolean check_Label_Deluxe = false;
+        boolean check_Label_Clean = false;
+        boolean check_Label_Not_Clean = false;
+        boolean check_Label_Repaired = false;
+        boolean check_Label_Not_Repaired = false;
+        boolean check_Label_In_Progress = false;
+        boolean check_Label_Not_In_Progress = false;
 
+        for (RoomProperty roomProperty : listRoomProperties) {
             switch (roomProperty.getRoomPropertyName()) {
                 case "Available":
                     label_Available_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Available = true;
                     break;
                 case "Reserved":
                     label_Reserved_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Reserved = true;
                     break;
                 case "Occupied":
                     label_Occupied_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Occupied = true;
                     break;
                 case "Out":
                     label_Checkout_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Out = true;
                     break;
                 case "Single":
                     label_Single_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Single = true;
                     break;
                 case "Double":
                     label_Double_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Double = true;
                     break;
                 case "Triple":
                     label_Triple_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Triple = true;
                     break;
                 case "Family":
                     label_Family_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Family = true;
                     break;
                 case "Deluxe":
                     label_Deluxe_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Deluxe = true;
                     break;
                 case "Clean":
                     label_Clean_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Clean = true;
                     break;
                 case "Not Clean":
                     label_NotClean_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Not_Clean = true;
                     break;
                 case "Repaired":
                     label_Repair_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Repaired = true;
                     break;
                 case "Not Repaired":
                     label_Not_Repair_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Not_Repaired = true;
                     break;
                 case "Checking":
                     label_InProgress_Rooms.setText(roomProperty.getRoomCount().toString());
+                    check_Label_In_Progress = true;
                     break;
                 case "Not Checking":
                     label_Remaining_Days.setText(roomProperty.getRoomCount().toString());
+                    check_Label_Not_In_Progress = true;
                     break;
 
                 default:
                     throw new AssertionError();
             }
+        }
+        if(!check_Label_Available){
+            label_Available_Rooms.setText("0");
+        }
+        if(!check_Label_Reserved){
+            label_Reserved_Rooms.setText("0");
+        }
+        if(!check_Label_Occupied){
+            label_Occupied_Rooms.setText("0");
+        }
+        if(!check_Label_Out){
+            label_Checkout_Rooms.setText("0");
+        }
+        if(!check_Label_Single){
+            label_Single_Rooms.setText("0");
+        }
+        if(!check_Label_Double){
+            label_Double_Rooms.setText("0");
+        }
+        if(!check_Label_Triple){
+            label_Triple_Rooms.setText("0");
+        }
+        if(!check_Label_Family){
+            label_Family_Rooms.setText("0");
+        }
+        if(!check_Label_Deluxe){
+            label_Deluxe_Rooms.setText("0");
+        }
+        if(!check_Label_Clean){
+            label_Clean_Rooms.setText("0");
+        }
+        if(!check_Label_Not_Clean){
+            label_NotClean_Rooms.setText("0");
+        }
+        if(!check_Label_Repaired){
+            label_Repair_Rooms.setText("0");
+        }
+        if(!check_Label_Not_Repaired){
+            label_Not_Repair_Rooms.setText("0");
+        }
+        if(!check_Label_In_Progress){
+            label_InProgress_Rooms.setText("0");
+        }
+        if(!check_Label_Not_In_Progress){
+            label_Remaining_Days.setText("0");
         }
     }
 
@@ -389,16 +464,6 @@ public class FXMLMainOverViewPaneController implements Initializable {
                             "Check Id Card Customer: " + label_Room_Number.getText());
                 });
                 JFXButton btn_CheckOut = (JFXButton) pane.lookup("#btn_CheckOut");
-                btn_CheckOut.setOnAction((event) -> {
-                    System.out.println("Room " + label_Room_Number.getText() + " check out!");
-                    check_Check_Out_Button_Clicked = true;
-                    service_Room_ID = label_Room_Number.getText();
-                    service_Customer_ID = listRoom.getCustomerID();
-                    service_Customer_Full_Name = listRoom.getCustomerName();
-                    room_Check_In_Date = listRoom.getCheckInDate();
-                    mainFormController.formLoader("/fxml/FXMLCheckOut.fxml", "/images/KAN Logo.png",
-                            "Check out order for Room: " + label_Room_Number.getText());
-                });
                 JFXButton btn_Services = (JFXButton) pane.lookup("#btn_Services");
                 btn_Services.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " services!");
@@ -409,13 +474,13 @@ public class FXMLMainOverViewPaneController implements Initializable {
                             "Add new Service Order for Room: " + label_Room_Number.getText());
                 });
                 label_Room_Number.setText(listRoom.getRoomID());
-                if (listRoom.getRoomStatus().equals("Reserved")){
-                    label_Room_Status.setText(listRoom.getRoomStatus()+" "+listRoom.getBookingDate().toLocalDate()
+                if (listRoom.getRoomStatus().equals("Reserved")) {
+                    label_Room_Status.setText(listRoom.getRoomStatus() + " " + listRoom.getBookingDate().toLocalDate()
                             .format(DateTimeFormatter.ofPattern("dd-MM-yy")).toString());
-                } else{
+                } else {
                     label_Room_Status.setText(listRoom.getRoomStatus());
                 }
-                
+
                 label_Customer_Name.setText(listRoom.getCustomerName());
                 if (listRoom.getRoomStatus().equalsIgnoreCase("Available") || listRoom.getRoomStatus().equalsIgnoreCase("Reserved")) {
                     btn_CheckOut.setDisable(true);
@@ -425,21 +490,47 @@ public class FXMLMainOverViewPaneController implements Initializable {
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomAvailable-room-status");
                     } else {
-                        label_Date_Remaining.setText(listRoom.getDayBooking()+ " days");
+                        label_Date_Remaining.setText(listRoom.getDayBooking() + " days");
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomReserved-room-status");
                     }
                 }
                 if (listRoom.getRoomStatus().equalsIgnoreCase("Out") || listRoom.getRoomStatus().equalsIgnoreCase("Occupied")) {
-
                     if (listRoom.getRoomStatus().equalsIgnoreCase("Out")) {
+                        btn_CheckOut.setText("Finish");
+                        btn_CheckOut.setOnAction((event) -> {
+                            System.out.println("Room " + label_Room_Number.getText() + " finish!");
+                            check_Check_Out_Button_Clicked = true;
+                            service_Room_ID = label_Room_Number.getText();
+                            service_Customer_ID = listRoom.getCustomerID();
+                            service_Customer_Full_Name = listRoom.getCustomerName();
+                            room_Check_In_Date = listRoom.getCheckInDate();
+
+                            Room room = new Room();
+                            room.setRoomID(label_Room_Number.getText());
+                            room.setUserName(mainFormController.getUserRole().getEmployee_ID());
+                            room.setRoomStatus("Available");
+                            roomDAOImpl.editAfterCheckingRoom(room, true);
+                            refreshForm();
+                        });
                         label_Date_Remaining.setText("0 day");
                         btn_CheckIn.setDisable(true);
-                        hBox_Buttons.getChildren().remove(btn_Services);                        
+                        hBox_Buttons.getChildren().remove(btn_Services);
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomCheckOut-room-status");
                     } else {
-                        label_Date_Remaining.setText(listRoom.getDayLeave()+ " days");
+                        btn_CheckOut.setText("Check Out");
+                        btn_CheckOut.setOnAction((event) -> {
+                            System.out.println("Room " + label_Room_Number.getText() + " check out!");
+                            check_Check_Out_Button_Clicked = true;
+                            service_Room_ID = label_Room_Number.getText();
+                            service_Customer_ID = listRoom.getCustomerID();
+                            service_Customer_Full_Name = listRoom.getCustomerName();
+                            room_Check_In_Date = listRoom.getCheckInDate();
+                            mainFormController.formLoader("/fxml/FXMLCheckOut.fxml", "/images/KAN Logo.png",
+                                    "Check out order for Room: " + label_Room_Number.getText());
+                        });
+                        label_Date_Remaining.setText(listRoom.getDayLeave() + " days");
                         hBox_Buttons.getChildren().remove(btn_CheckIn);
                         label_Room_Status.getStyleClass().removeAll();
                         label_Room_Status.getStyleClass().add("label-roomOccupied-room-status");

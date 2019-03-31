@@ -10,6 +10,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -93,11 +94,13 @@ public class FXMLListServiceTypeController implements Initializable {
         if (serviceTypeDAOImpl.getAllServiceType().size() != 0) {
             showUsersData();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+                alert.show();
+            });
         }
 
         // Check item when click on table

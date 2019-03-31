@@ -89,7 +89,7 @@ public class CheckOutDAOImpl implements CheckOutDAO {
     public void addCheckOut(CheckOut checkOut) {
         String sql = "INSERT INTO CheckOutOrders (CheckOutID, CheckInID, CustomerID, RoomID, UserName, CheckInDate, "
                 + "CheckOutDate, CustomerPayment, CustomerBill, Discount, Tax) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, checkOut.getCheckOutID());

@@ -464,6 +464,58 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
+    public void editCheckOutRoom(Room room, Boolean active) {
+        String sql = "UPDATE Rooms SET CustomerID=?, UserName=?, RoomStatus=?, "
+                + "DayRemaining=?, LeaveDate=?, Clean=?, InProgress=? "
+                + "WHERE RoomID=?";
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, room.getCustomerID());
+                stmt.setString(2, room.getUserName());
+                stmt.setString(3, room.getRoomStatus());
+                stmt.setInt(4, room.getDayRemaining());
+                stmt.setTimestamp(5, Timestamp.valueOf(room.getLeaveDate()));
+                stmt.setBoolean(6, false);
+                stmt.setBoolean(7, true);
+                stmt.setString(8, room.getRoomID());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error Querry");
+            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+            alert.show();
+        }
+    }
+
+    @Override
+    public void editAfterCheckingRoom(Room room, Boolean active) {
+        String sql = "UPDATE Rooms SET UserName=?, RoomStatus=?, "
+                + "Clean=?, InProgress=?, Repaired=? "
+                + "WHERE RoomID=?";
+        try {
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {                
+                stmt.setString(1, room.getUserName());
+                stmt.setString(2, room.getRoomStatus());                
+                stmt.setBoolean(3, true);
+                stmt.setBoolean(4, false);
+                stmt.setBoolean(5, true);
+                stmt.setString(6, room.getRoomID());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error Querry");
+            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+            alert.show();
+        }
+    }
+
+    @Override
     public void editBookingRoom(Room room, Boolean active) {
         String sql = "UPDATE Rooms SET CustomerID=?, UserName=?, RoomStatus=?, "
                 + "DayRemaining=?, BookingDate=?, LeaveDate=? "
