@@ -10,18 +10,26 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,10 +38,15 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
+import models.Bill;
+import models.BillDAOImpl;
 import models.CheckIn;
 import models.CheckOut;
 import models.CheckOutDAOImpl;
@@ -44,6 +57,7 @@ import models.RoomDAOImpl;
 import models.ServiceOrderDetail;
 import models.ServiceOrderDetailDAOImpl;
 import utils.FormatName;
+import utils.QRCreate;
 import utils.QRWebCam;
 import utils.formatCalender;
 
@@ -60,6 +74,7 @@ public class FXMLCheckOutController implements Initializable {
 
     private CheckOutDAOImpl checkOutDAOImpl;
     private RoomDAOImpl roomDAOImpl;
+    private BillDAOImpl billDAOImpl;
     private ServiceOrderDetailDAOImpl serviceOrderDetailDAOImpl;
     private StringBuilder string_Total_Bill;
     private Room roomCheckOut;
@@ -72,6 +87,11 @@ public class FXMLCheckOutController implements Initializable {
     public Double charge_Room_1st_Day = 0.0;
     public Double charge_Room_Last_Day = 0.0;
     public Double total_Bill = 0.0;
+    public Double total_Without_CusDiscount = 0.0;
+    public Double total_With_Customer_Discount = 0.0;
+    public Double total = 0.0;
+    public Double total_VAT = 0.0;
+    public int day_Stay_Print = 0;
 
     FXMLMainFormController mainFormController;
     FXMLMainOverViewPaneController mainOverViewPaneController;
@@ -128,6 +148,7 @@ public class FXMLCheckOutController implements Initializable {
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
         roomDAOImpl = new RoomDAOImpl();
         checkOutDAOImpl = new CheckOutDAOImpl();
+        billDAOImpl = new BillDAOImpl();
         checkInRoom = DAOCustomerBookingCheckIn.getCheckInRoom(mainOverViewPaneController.service_Room_ID);
 
         //Init tooltip display
@@ -277,7 +298,7 @@ public class FXMLCheckOutController implements Initializable {
             charge_Room_Last_Day = 0.0;
         }
         //Charge left days
-        int day_Stay_Print = 0;
+        day_Stay_Print = 0;
         if (hours_Stay >= 24) {
             total_Room_Normal = days_Stay * roomCheckOut.getRoomPrice().doubleValue();
             day_Stay_Print = days_Stay.intValue() + 2;
@@ -295,10 +316,10 @@ public class FXMLCheckOutController implements Initializable {
             total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
         }
 
-        Double total_Without_CusDiscount = total_Room + total_Service;
-        Double total_With_Customer_Discount = total_Without_CusDiscount * roomCheckOut.getCusDiscount().doubleValue();
-        Double total = total_Without_CusDiscount - total_With_Customer_Discount - total_Room_Discount - total_Service_Discount;
-        Double total_VAT = total * 0.1;
+        total_Without_CusDiscount = total_Room + total_Service;
+        total_With_Customer_Discount = total_Without_CusDiscount * roomCheckOut.getCusDiscount().doubleValue();
+        total = total_Without_CusDiscount - total_With_Customer_Discount - total_Room_Discount - total_Service_Discount;
+        total_VAT = total * 0.1;
         total_Bill = total + total_VAT;
 
         //IMPORTANT NOTE: To display string.format, setting TextArea with: -fx-font-family: monospace
@@ -351,6 +372,45 @@ public class FXMLCheckOutController implements Initializable {
         return checkOut;
     }
 
+    private Bill get_Bill_Data() {
+        Bill bill = new Bill();
+
+        //Setting bill QRCode
+        String qrCodeData = txt_Check_Out_ID.getText() + " ; " + txt_Customer_ID.getText();
+        Image imageQRCode = QRCreate.creatQRCode(qrCodeData);
+        BufferedImage bImage = SwingFXUtils.fromFXImage(imageQRCode, null);
+        byte[] res;
+        try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
+            ImageIO.write(bImage, "png", s);
+            res = s.toByteArray();
+            Blob blob = new SerialBlob(res);
+            bill.setBillQRCode(blob);
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        bill.setCheckInDate(LocalDateTime.of(datePicker_Check_In.getValue(), LocalTime.now()));
+        bill.setCheckInID(txt_Check_In_ID.getText());
+        bill.setCheckOutDate(LocalDateTime.now());
+        bill.setCheckOutID(txt_Check_Out_ID.getText());
+        bill.setCustomerChange(BigDecimal.valueOf(Double.valueOf("0")));
+        bill.setCustomerDiscount(BigDecimal.valueOf(total_With_Customer_Discount));
+        bill.setCustomerGive(BigDecimal.valueOf(Double.valueOf("0")));
+        bill.setCustomerID(txt_Customer_ID.getText());
+        bill.setNoOfDay(day_Stay_Print);
+        bill.setPayableAmount(BigDecimal.valueOf(total_Bill));
+        bill.setRoomCharge(BigDecimal.valueOf(total_Room));
+        bill.setRoomDiscount(BigDecimal.valueOf(total_Room_Discount));
+        bill.setRoomID(txt_Room_ID.getText());
+        bill.setRoomPrice(roomCheckOut.getRoomPrice());
+        bill.setServiceCharge(BigDecimal.valueOf(total_Service));
+        bill.setServiceDiscount(BigDecimal.valueOf(total_Service_Discount));
+        bill.setTotalBillAmount(BigDecimal.valueOf(total));
+        bill.setUserName(mainFormController.userRole.getEmployee_ID());
+        bill.setVATAmount(BigDecimal.valueOf(total_VAT));
+        return bill;
+    }
+
     private void submit_Check_Out() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Message");
@@ -374,7 +434,11 @@ public class FXMLCheckOutController implements Initializable {
             room.setDayRemaining(0);
             roomDAOImpl.editCheckOutRoom(room, true);
             mainOverViewPaneController.refreshForm();
-            Stage stage = (Stage)btn_Save.getScene().getWindow();
+            //Writing Bill to DB
+            Bill bill = get_Bill_Data();
+            billDAOImpl.addBill(bill);
+            
+            Stage stage = (Stage) btn_Save.getScene().getWindow();
             stage.close();
         }
     }

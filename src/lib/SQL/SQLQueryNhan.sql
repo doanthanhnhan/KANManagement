@@ -286,6 +286,34 @@ CREATE TABLE [Role](
 	CONSTRAINT uc_EmployeeID_Role UNIQUE (EmployeeID)
 )
 
+CREATE TABLE Bill (
+	-- Create columns
+	ID int IDENTITY(1,1),	
+	RoomID varchar(100) NOT NULL,
+	CustomerID varchar(100) NOT NULL,
+	UserName varchar(100) NOT NULL,	
+	CheckInID varchar(100) NOT NULL,
+	CheckOutID varchar(100) NOT NULL,	
+	CheckInDate datetime NOT NULL,
+	CheckOutDate datetime NOT NULL,
+	NoOfDay int NOT NULL,
+	RoomPrice decimal(18,3) NOT NULL,
+	RoomCharge decimal(18,3) NOT NULL,
+	ServiceCharge decimal(18,3) NOT NULL,
+	RoomDiscount decimal(18,3) NOT NULL,
+	ServiceDiscount decimal(18,3) NOT NULL,
+	CustomerDiscount decimal (18,3) NOT NULL,
+	TotalBillAmount decimal(18,3) NOT NULL,
+	VATAmount decimal(18,3) NOT NULL,
+	PayableAmount decimal(18,3) NOT NULL,
+	CustomerGive decimal(18,3) NOT NULL,
+	CustomerChange decimal(18,3) NOT NULL,
+	QRCode varbinary(MAX),
+	Active bit DEFAULT 1
+	-- Create constraint
+	CONSTRAINT pk_ID_Bill PRIMARY KEY (ID)
+)
+
 -- CREATE CONSTRAINT FOR TABLES --
 ALTER TABLE Users
 ADD CONSTRAINT fk_EmployeeID_Users FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID);
@@ -327,6 +355,13 @@ ALTER TABLE ServicesOrderDetails
 ADD CONSTRAINT fk_OrderID_ServicesOrderDetails FOREIGN KEY (OrderID) REFERENCES ServicesOrders(OrderID),
 	CONSTRAINT fk_ServiceID_ServicesOrderDetails FOREIGN KEY (ServiceID) REFERENCES ServiceType(ServiceID),
 	CONSTRAINT fk_UserName_ServicesOrderDetails FOREIGN KEY (UserName) REFERENCES Users(UserName);
+
+ALTER TABLE Bill
+ADD CONSTRAINT fk_CustomerID_Bill FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+	CONSTRAINT fk_CheckInID_Bill FOREIGN KEY (CheckInID) REFERENCES CheckInOrders(CheckInID),
+	CONSTRAINT fk_CheckOutID_Bill FOREIGN KEY (CheckOutID) REFERENCES CheckOutOrders(CheckOutID),
+	CONSTRAINT fk_RoomID_Bill FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
+	CONSTRAINT fk_UserName_Bills FOREIGN KEY (UserName) REFERENCES Users(UserName); 
 
 -- CREATE VIEW --
 DROP VIEW view_UserRole
@@ -552,3 +587,6 @@ DELETE FROM BookingInfo
 DELETE FROM Rooms
 ALTER TABLE Rooms
 ALTER COLUMN DayRemaining int DEFAULT 0;
+
+SELECT * FROM CheckOutOrders
+DELETE FROM CheckOutOrders

@@ -15,7 +15,18 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -23,13 +34,37 @@ import java.io.IOException;
  */
 public class QRCreate {
 
+    public static Image creatQRCode(String qrCodeData) {
+
+        String charset = "UTF-8"; // or "ISO-8859-1"
+
+        Map< EncodeHintType, ErrorCorrectionLevel> hintMap = new HashMap<>();
+        hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        BitMatrix matrix = null;
+        try {
+            matrix = new MultiFormatWriter().encode(
+                    new String(qrCodeData.getBytes(charset), charset),
+                    BarcodeFormat.QR_CODE, 200, 200, hintMap);
+        } catch (WriterException | UnsupportedEncodingException ex) {
+            Logger.getLogger(QRCreate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // GENERATE QR CODE
+        BufferedImage img = MatrixToImageWriter.toBufferedImage(matrix);
+        Image image = SwingFXUtils.toFXImage(img, null);
+
+        System.out.println("QR Code image created successfully!");
+        return image;
+
+    }
+
     public static void main(String[] args) {
         try {
             String qrCodeData = "Doan Thanh Nhan is the best!";
             String filePath = "/src/test/doanthanhnhan.png";
             String charset = "UTF-8"; // or "ISO-8859-1"
             File file = new File("");
-            Map< EncodeHintType, ErrorCorrectionLevel> hintMap = new HashMap< >();
+            Map< EncodeHintType, ErrorCorrectionLevel> hintMap = new HashMap<>();
             hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             BitMatrix matrix = new MultiFormatWriter().encode(
                     new String(qrCodeData.getBytes(charset), charset),
