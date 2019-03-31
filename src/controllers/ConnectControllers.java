@@ -27,6 +27,15 @@ public class ConnectControllers {
     public static FXMLSplashScreenController fXMLSplashScreenController;
     public static FXMLDecentralizationController fXMLDecentralizationController;
     public static FXMLListCustomerController fXMLListCustomerController;
+    public static FXMLEditCustomerController editCustomerController;
+
+    public static FXMLEditCustomerController geteditCustomerController() {
+        return editCustomerController;
+    }
+
+    public static void seteditCustomerController(FXMLEditCustomerController editCustomerController) {
+        ConnectControllers.editCustomerController = editCustomerController;
+    }
 
     public static FXMLListCustomerController getfXMLListCustomerController() {
         return fXMLListCustomerController;

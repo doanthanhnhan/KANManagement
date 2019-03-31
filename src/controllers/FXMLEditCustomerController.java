@@ -63,6 +63,7 @@ import utils.showFXMLLogin;
  */
 public class FXMLEditCustomerController implements Initializable {
 
+    private FXMLListCustomerController fXMLListCustomerController;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     @FXML
     private AnchorPane anchorPaneInfoCustomer;
@@ -79,7 +80,7 @@ public class FXMLEditCustomerController implements Initializable {
     @FXML
     private JFXTextField Username;
     @FXML
-    private JFXComboBox<String> CustomerID;
+    private JFXTextField CustomerID;
     @FXML
     private JFXDatePicker birthday;
     @FXML
@@ -114,15 +115,14 @@ public class FXMLEditCustomerController implements Initializable {
     private JFXButton btnInfo;
     @FXML
     private JFXButton btnCancel;
-    @FXML
-    private FontAwesomeIconView iconRefresh;
-    private ObservableList<String> list_Id_Customer = FXCollections.observableArrayList();
+    private Customer ctm;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        fXMLListCustomerController = ConnectControllers.getfXMLListCustomerController();
         btnInfo.setOnAction((event) -> {
             try {
                 btnSubmitEdit();
@@ -130,9 +130,24 @@ public class FXMLEditCustomerController implements Initializable {
                 Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-//        get all id of customer set combobox idcustomer   
-        refreshIdCustomer();
-        CustomerID.setItems(list_Id_Customer);
+        ctm = FXMLListCustomerController.ctm;
+        birthday.setValue(LocalDate.parse(ctm.getDate()));
+        String patternt = "dd-MM-yyyy";
+        formatCalender.format(patternt, birthday);
+        CustomerID.setText(ctm.getCusID());
+        PhoneNumber.setText(ctm.getPhone());
+        Passport.setText(ctm.getPassport());
+        FirstName.setText(ctm.getFName());
+        LastName.setText(ctm.getLName());
+        MidName.setText(ctm.getMName());
+        Email.setText(ctm.getEmail());
+        Company.setText(ctm.getCompany());
+        Discount.setText(String.valueOf(ctm.getDiscount()));
+        if (ctm.getSex()) {
+            Male.setSelected(true);
+        } else {
+            Female.setSelected(true);
+        }
         birthday.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -154,34 +169,6 @@ public class FXMLEditCustomerController implements Initializable {
                     btnSubmitEdit();
                 } catch (ClassNotFoundException | SQLException | IOException ex) {
                     Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        CustomerID.valueProperty().addListener((obs, oldItem, newItem) -> {
-            if (newItem != null && !newItem.equals("")) {
-                HboxContent.getChildren().clear();
-                CustomerID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-                Customer ctm = new Customer();
-                try {
-                    ctm = DAOCustomerBookingCheckIn.getAllCustomerInfo(newItem);
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(FXMLEditCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                birthday.setValue(LocalDate.parse(ctm.getDate()));
-                String patternt = "dd-MM-yyyy";
-                formatCalender.format(patternt, birthday);
-                PhoneNumber.setText(ctm.getPhone());
-                Passport.setText(ctm.getPassport());
-                FirstName.setText(ctm.getFName());
-                LastName.setText(ctm.getLName());
-                MidName.setText(ctm.getMName());
-                Email.setText(ctm.getEmail());
-                Company.setText(ctm.getCompany());
-                Discount.setText(String.valueOf(ctm.getDiscount()));
-                if (ctm.getSex()) {
-                    Male.setSelected(true);
-                } else {
-                    Female.setSelected(true);
                 }
             }
         });
@@ -342,26 +329,7 @@ public class FXMLEditCustomerController implements Initializable {
     }
 
     public void formSubmitAction() {
-        if (CustomerID.getValue() == null || CustomerID.getValue().equals("")) {
-            Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(350, 35);
-                label.setText("ID CUSTOMER MUST NOT EMPTY !!!");
-                label.setAlignment(Pos.CENTER_LEFT);
-                CustomerID.getStyleClass().removeAll();
-                CustomerID.getStyleClass().add("jfx-combo-box-fault");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER_LEFT);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                CustomerID.requestFocus();
-            });
-        } else if (birthday.getValue() == null) {
+        if (birthday.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -411,30 +379,11 @@ public class FXMLEditCustomerController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(Email, HboxContent, "EMAIL INVALID !!!");
             });
-        } else if (DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getValue())) {
-            Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(350, 35);
-                label.setText("ID CUSTOMER DOES NOT EXIST!!!");
-                label.setAlignment(Pos.CENTER_LEFT);
-                CustomerID.getStyleClass().removeAll();
-                CustomerID.getStyleClass().add("jfx-combo-box-fault");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER_LEFT);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                CustomerID.requestFocus();
-            });
         } else {
             Platform.runLater(() -> {
                 Customer ctm = new Customer();
                 String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                ctm.setCusID(CustomerID.getValue());
+                ctm.setCusID(CustomerID.getText());
                 ctm.setUser(Username.getText());
                 ctm.setDate(date);
                 ctm.setSex(Male.isSelected());
@@ -450,18 +399,12 @@ public class FXMLEditCustomerController implements Initializable {
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(FXMLEditCustomerController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update customer " + CustomerID.getValue(),
+                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update customer " + CustomerID.getText(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                FirstName.setText("");
-                MidName.setText("");
-                LastName.setText("");
-                Email.setText("");
-                PhoneNumber.setText("");
-                Passport.setText("");
-                Discount.setText("0");
-                Company.setText("");
-                birthday.setValue(null);
-                CustomerID.setValue(null);
+                fXMLListCustomerController = ConnectControllers.getfXMLListCustomerController();
+                fXMLListCustomerController.showUsersData();
+                Stage stage = (Stage) anchorPaneInfoCustomer.getScene().getWindow();
+                stage.close();
             });
         }
     }
@@ -480,13 +423,4 @@ public class FXMLEditCustomerController implements Initializable {
         // do what you have to do
         stage.close();
     }
-
-    public void refreshIdCustomer() {
-        try {
-            list_Id_Customer = DAOCustomerBookingCheckIn.getAllIdCustomer();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(FXMLEditCustomerController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
 }
