@@ -513,12 +513,6 @@ public class FXMLMainFormController implements Initializable {
         formLoader("/fxml/FXMLCheckInOrders.fxml", "/images/KAN Logo.png", "Add CheckInOrder");
     }
 
-    private void handle_MenuItem_Add_User_Action(ActionEvent event) {
-        checkRegis = true;
-        System.out.println("Add new User menu item clicked!");
-        formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New User");
-    }
-
     @FXML
     private void handle_MenuItem_Add_Customer_Action(ActionEvent event) {
         checkRegis = true;
@@ -549,19 +543,8 @@ public class FXMLMainFormController implements Initializable {
         formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
-    private void handle_MenuItem_Edit_User_Action(ActionEvent event) {
-        checkRegis = true;
-        FXMLListEmployeeController.check_form_list = false;
-        System.out.println("Edit User Informations menu item clicked!");
-        formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit User Informations");
-    }
 
-    private void handle_MenuItem_Edit_Customer_Action(ActionEvent event) {
-        checkRegis = true;
-//        FXMLListEmployeeController.check_form_list = false;
-        System.out.println("Edit User Informations menu item clicked!");
-        formLoader("/fxml/FXMLEditCustomer.fxml", "/images/KAN Logo.png", "Edit Customer Informations");
-    }
+
     // ############### END VIEW ACTIONS ###############
 
     // =============== PUBLIC METHODS ===============

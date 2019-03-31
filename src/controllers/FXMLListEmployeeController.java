@@ -87,7 +87,6 @@ public class FXMLListEmployeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        FXMLMainFormController.checkRegis = true;
         check_Edit_Action = true;
         setColumns();
         showUsersData();

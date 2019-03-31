@@ -323,6 +323,8 @@ public class FXMLInfoBookingController implements Initializable {
 
     @FXML
     private void Cancel(ActionEvent event) {
+        FXMLInfoCustomerController.checkInfoCustomer = false;
+        FXMLInfoCustomerController.checkInfoCustomerAlready = false;
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         // do what you have to do
         stage.close();
