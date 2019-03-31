@@ -539,8 +539,9 @@ public class FXMLMainFormController implements Initializable {
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
         checkRegis = true;
         FXMLListEmployeeController.check_form_list = false;
+        FXMLInfoEmployeeController.check_delete = true;
         System.out.println("Edit Employee Informations menu item clicked!");
-        formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
+        formLoader_With_Close_Action("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
 
@@ -590,6 +591,74 @@ public class FXMLMainFormController implements Initializable {
                             stage.setTitle(title);
                             stage.setScene(scene);
                             stage.initModality(Modality.APPLICATION_MODAL);
+                            stage.show();
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+                    //Stop timer
+                    myTimer.stop_Timer(label_Task_Status);
+                    return null;
+                }
+            };
+            //Binding progress bar with task
+            progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
+
+            loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    System.out.println("Finished");
+                    Platform.runLater(() -> {
+                        label_Task_Status.setText("Finished");
+                        //Hide progressBar
+                        progressBar_MainTask.progressProperty().unbind();
+                        progressBar_MainTask.setProgress(0);
+                        progressBar_MainTask.setVisible(false);
+                        hbox_Bottom.getChildren().remove(label_Task_Status);
+                    });
+                }
+            });
+
+            new Thread(loadOverview).start();
+        });
+    }
+    /**
+     *
+     * @param fxmlPath
+     * @param iconPath
+     * @param title
+     */
+    public void formLoader_With_Close_Action(String fxmlPath, String iconPath, String title) {
+        Platform.runLater(() -> {
+            Label label_Task_Status = new Label();
+            //Set timer and start
+            MyTimer myTimer = new MyTimer();
+            myTimer.create_myTimer(label_Task_Status);
+
+            //Add label to bottom
+            hbox_Bottom.getChildren().add(0, label_Task_Status);
+            //Setting progressBar
+            progressBar_MainTask.setVisible(true);
+            progressBar_MainTask.progressProperty().unbind();
+            //Create new task
+            Task loadOverview = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    System.out.println("Loading stage...");
+                    Platform.runLater(() -> {
+                        //Call new stage
+                        try {
+                            Stage stage = new Stage();
+                            stage.resizableProperty().setValue(Boolean.FALSE);
+                            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+                            stage.getIcons().add(new Image(iconPath));
+                            Scene scene = new Scene(root);
+                            stage.setTitle(title);
+                            stage.setScene(scene);
+                            stage.initModality(Modality.APPLICATION_MODAL);
+                            stage.setOnCloseRequest((event) -> {
+                                FXMLMainFormController.checkRegis=false;
+                            });
                             stage.show();
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);

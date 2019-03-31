@@ -277,6 +277,7 @@ public class FXMLListEmployeeController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
+        FXMLInfoEmployeeController.check_delete=false;
         check_form_list = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");

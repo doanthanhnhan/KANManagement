@@ -279,7 +279,11 @@ CREATE TABLE [Role](
 	UserLog_View bit DEFAULT 0,
 	UserLog_Add bit DEFAULT 0,
 	UserLog_Edit bit DEFAULT 0,
-	UserLog_Delete bit DEFAULT 0
+	UserLog_Delete bit DEFAULT 0,
+	ReActive_View bit DEFAULT 0,
+	ReActive_Add bit DEFAULT 0,
+	ReActive_Edit bit DEFAULT 0,
+	ReActive_Delete bit DEFAULT 0
 	-- Create constraint
 	CONSTRAINT pk_RoleID_Role PRIMARY KEY (RoleID),
 	CONSTRAINT uc_RoleID_Role UNIQUE (RoleID),
