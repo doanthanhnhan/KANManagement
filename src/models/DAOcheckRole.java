@@ -30,9 +30,9 @@ import utils.connectDB;
  */
 public class DAOcheckRole {
 
-    public static Boolean checkRoleDecentralization(String User,String name_Role) throws ClassNotFoundException, SQLException {
+    public static Boolean checkRoleDecentralization(String User, String name_Role) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp = "select "+name_Role+" from Role where EmployeeID = ?";
+        String exp = "select " + name_Role + " from Role where EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, User);
         ResultSet rs;
@@ -317,6 +317,34 @@ public class DAOcheckRole {
             Emp.setUser_Delete(cb_User_Delete);
             Emp.setUser_Edit(cb_User_Edit);
             Emp.setUser_View(cb_User_View);
+//            set action for Combobox when selected view selected edit and disable edit
+// set for Employee 1
+            cb_Employee_Edit.setOnAction((event) -> {
+                if (cb_Employee_Edit.isSelected()) {
+                    cb_Employee_View.setSelected(true);
+                    cb_Employee_View.setDisable(true);
+                } else {
+                    cb_Employee_View.setDisable(false);
+                }
+            });
+            // set for User 2
+            cb_User_Edit.setOnAction((event) -> {
+                if (cb_User_Edit.isSelected()) {
+                    cb_User_View.setSelected(true);
+                    cb_User_View.setDisable(true);
+                } else {
+                    cb_User_View.setDisable(false);
+                }
+            });
+            // set for Customer 3
+            cb_Customer_Edit.setOnAction((event) -> {
+                if (cb_Customer_Edit.isSelected()) {
+                    cb_Customer_View.setSelected(true);
+                    cb_Customer_View.setDisable(true);
+                } else {
+                    cb_Customer_View.setDisable(false);
+                }
+            });
 //            set JFXButton
 
             HBox Action = new HBox();

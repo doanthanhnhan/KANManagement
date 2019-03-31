@@ -369,10 +369,13 @@ public class FXMLInfoCustomerController implements Initializable {
         formatCalender.format(pattern, birthday);
         birthday.setPromptText("Date Of Birth");
         birthday.getStyleClass().remove("jfx-date-picker-fix");
+
     }
 
     @FXML
     private void Cancel(ActionEvent event) {
+        checkInfoCustomer = false;
+        checkInfoCustomerAlready = false;
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         // do what you have to do
         stage.close();
