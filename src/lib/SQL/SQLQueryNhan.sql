@@ -590,3 +590,5 @@ ALTER COLUMN DayRemaining int DEFAULT 0;
 
 SELECT * FROM CheckOutOrders
 DELETE FROM CheckOutOrders
+
+SELECT * FROM Bill
