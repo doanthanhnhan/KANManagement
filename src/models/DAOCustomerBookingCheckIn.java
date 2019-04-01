@@ -26,8 +26,23 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    check role_view can not disable checkbox when only one
+
+    public static Integer check_Role_View_Disable() throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String sql = "select Count(*) as 'count' from Role where Role_View = 1";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        int count=0;
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            count = rs.getInt("Count");
+        }
+        return count;
+    }
 //    delete customer
-     public static void deleteCustomer(String id) throws ClassNotFoundException, SQLException {
+
+    public static void deleteCustomer(String id) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "UPDATE Customers SET Active = 0 WHERE CustomerID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
