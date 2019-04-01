@@ -596,3 +596,9 @@ SELECT * FROM CheckOutOrders
 DELETE FROM CheckOutOrders
 
 SELECT * FROM Bill
+
+SELECT B.*, 
+CASE C.CustomerMidName != "" WHEN C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName'
+THEN C.CustomerFirstName+' '+ ' ' +C.CustomerLastName AS 'CustomerFullName
+FROM Bill B, Customers C
+WHERE B.CustomerID = C.CustomerID 

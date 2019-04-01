@@ -40,6 +40,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.swing.ImageIcon;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
 import utils.FormatName;
@@ -792,7 +793,7 @@ public class FXMLMainFormController implements Initializable {
     private void handle_Chart_Button_Action(ActionEvent event) {
         System.out.println("Chart button clicked!");
         PrintReport viewReport = new PrintReport();
-        viewReport.showReport("\\src\\reports\\Bill.jrxml");
+        viewReport.showReport("/src/reports/Bill.jrxml"); 
     }
 
 }

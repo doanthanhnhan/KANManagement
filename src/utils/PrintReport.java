@@ -5,10 +5,13 @@
  */
 package utils;
 
+import java.awt.Image;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+
 import javax.swing.JFrame;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -22,24 +25,28 @@ import net.sf.jasperreports.swing.JRViewer;
  * @author Doan Thanh Nhan
  */
 public class PrintReport extends JFrame {
-    
+
     public PrintReport() {
     }
 
     public void showReport(String reportPath) {
         File file = new File("");
-        
+
         try {
-            //JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath() + reportPath);
-            JasperReport jasperReport = JasperCompileManager.compileReport("E:\\Nhan\\02.Aptech\\02.SEM2\\06.EProject\\KANManagement\\src\\reports\\Bill.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath() + reportPath);
+            //JasperReport jasperReport = JasperCompileManager.compileReport("E:\\Nhan\\02.Aptech\\02.SEM2\\06.EProject\\KANManagement\\src\\reports\\Bill.jrxml");
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, connectDB.connectSQLServer());
-            
+
             JRViewer jrViewer = new JRViewer(jasperPrint);
             jrViewer.setOpaque(true);
             jrViewer.setVisible(true);
-            
+
             this.add(jrViewer);
             this.setSize(1366, 760);
+            this.setTitle("Jasper Report Viewer");
+            ImageIcon img = new ImageIcon(file.getAbsolutePath() + "/src/images/KAN Logo.png");
+            this.setIconImage(img.getImage());
+            this.setLocationRelativeTo(null);
             this.setVisible(true);
         } catch (JRException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(PrintReport.class.getName()).log(Level.SEVERE, null, ex);
