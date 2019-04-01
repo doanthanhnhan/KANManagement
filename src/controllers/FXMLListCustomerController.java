@@ -11,6 +11,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -45,6 +47,7 @@ import models.InfoEmployee;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
 import utils.AlertLoginAgain;
+import utils.GetInetAddress;
 import utils.StageLoader;
 import utils.showFXMLLogin;
 
@@ -220,7 +223,7 @@ public class FXMLListCustomerController implements Initializable {
                     || ctm.getFName().toLowerCase().contains(newValue.toLowerCase())
                     || ctm.getLName().toLowerCase().contains(newValue.toLowerCase())
                     || ctm.getSex().equals(male_Female(newValue))
-//                    || ctm.getPassport().toLowerCase().contains(newValue.toLowerCase())
+                    //                    || ctm.getPassport().toLowerCase().contains(newValue.toLowerCase())
                     || ctm.getUser().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
@@ -270,17 +273,14 @@ public class FXMLListCustomerController implements Initializable {
             System.out.println("Kien");
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Comfirm");
-            alert.setContentText("Do you want to delete " + ctm.getCusID()+ "?");
+            alert.setContentText("Do you want to delete " + ctm.getCusID() + "?");
             alert.showAndWait();
             System.out.println(alert.getResult());
             if (alert.getResult() == ButtonType.OK) {
                 try {
                     DAOCustomerBookingCheckIn.deleteCustomer(ctm.getCusID());
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                    Calendar cal = Calendar.getInstance();
-                    String logtime;
-                    logtime = dateFormat.format(cal.getTime());
-                    DAO.setUserLogs(FXMLLoginController.User_Login, "Delete Customer " + ctm.getCusID(), logtime);
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + ctm.getCusID(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                     System.out.println("Delete successful");
                     showUsersData();
                 } catch (ClassNotFoundException | SQLException ex) {

@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import static controllers.FXMLListCustomerController.ctm;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -38,6 +41,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
 import models.notificationFunction;
+import utils.GetInetAddress;
 import utils.PatternValided;
 import utils.MD5Encrypt;
 
@@ -183,7 +187,7 @@ public class FXMLAccountController implements Initializable {
 
         } else if (newConfirmPassword.getText().equals("")) {
             notificationFunction.notificationPassword(newConfirmPassword, HboxContent, "CONFIRM PASSWORD MUST NOT EMPTY !!!");
-            
+
         } else if (newSerectQuestion.getSelectionModel().isEmpty()) {
             FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
             icon.setSize("16");
@@ -202,32 +206,28 @@ public class FXMLAccountController implements Initializable {
             newSerectQuestion.requestFocus();
         } else if (newSerectAnswer.getText().equals("")) {
             notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "SERECT ANSWER MUST NOT EMPTY !!!");
-          
+
         } else if (ConfirmAnswer.getText().equals("")) {
             notificationFunction.notificationPassword(ConfirmAnswer, HboxContent, "CONFIRM SERECT ANSWER MUST NOT EMPTY !!!");
-           
+
         } else if (!PatternValided.PatternPassword(newPassword.getText())) {
             notificationFunction.notificationPassword(newPassword, HboxContent, "PASSWORD INCORRECT (EXAM:Abc12345,...(6-20 CHARACTERS) !!!");
-           
+
         } else if (!newPassword.getText().equals(newConfirmPassword.getText())) {
             notificationFunction.notificationPassword(newPassword, HboxContent, "PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
-           
+
         } else if (!PatternValided.PatternAnswer(newSerectAnswer.getText())) {
             notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "ANSWER INCORRECT (ANSWER MUST HAVE 4-20 CHARACTER) !!!");
-            
+
         } else if (!newSerectAnswer.getText().equals(ConfirmAnswer.getText())) {
             notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "ANSWER AND ANSWER CONFIRM DID NOT MATCH !!!");
-          
+
         } else {
             MD5Encrypt m;
             m = new MD5Encrypt();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            String logtime;
-            logtime = dateFormat.format(cal.getTime());
             DAO.SetPass(txtUsername.getText(), m.hashPass(newPassword.getText()), m.hashPass((String) newSerectQuestion.getValue()), m.hashPass((String) newSerectAnswer.getText()));
-            String Content = "Set Password";
-            DAO.setUserLogs(txtUsername.getText(), Content, logtime);
+            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Set pass" + txtUsername.getText(),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
             Stage stage = (Stage) btnRegister.getScene().getWindow();
             // do what you have to do
             stage.close();

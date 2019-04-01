@@ -6,29 +6,37 @@
 package models;
 
 import com.jfoenix.controls.JFXButton;
-import controllers.FXMLDecentralizationController;
+import controllers.ConnectControllers;
+import static controllers.ConnectControllers.fXMLMainFormController;
 import controllers.FXMLLoginController;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import utils.AlertLoginAgain;
+import utils.GetInetAddress;
 import utils.connectDB;
+import utils.showFXMLLogin;
 
 /**
  *
  * @author Admin
  */
 public class DAOcheckRole {
+
+    public static showFXMLLogin showFormLogin = new showFXMLLogin();
 
     public static Boolean checkRoleDecentralization(String User, String name_Role) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
@@ -318,13 +326,30 @@ public class DAOcheckRole {
             Emp.setUser_Edit(cb_User_Edit);
             Emp.setUser_View(cb_User_View);
 //            set action for Combobox when selected view selected edit and disable edit
-// set for Employee 1
+            // set for Employee 1
+            boolean check_Employee = false;
             cb_Employee_Edit.setOnAction((event) -> {
                 if (cb_Employee_Edit.isSelected()) {
                     cb_Employee_View.setSelected(true);
                     cb_Employee_View.setDisable(true);
                 } else {
-                    cb_Employee_View.setDisable(false);
+                    if (!cb_Employee_Delete.isSelected()) {
+                        cb_Employee_View.setDisable(false);
+                    } else {
+                        cb_Employee_View.setDisable(true);
+                    }
+                }
+            });
+            cb_Employee_Delete.setOnAction((event) -> {
+                if (cb_Employee_Delete.isSelected()) {
+                    cb_Employee_View.setSelected(true);
+                    cb_Employee_View.setDisable(true);
+                } else {
+                    if (!cb_Employee_Edit.isSelected()) {
+                        cb_Employee_View.setDisable(false);
+                    } else {
+                        cb_Employee_View.setDisable(true);
+                    }
                 }
             });
             // set for User 2
@@ -333,7 +358,23 @@ public class DAOcheckRole {
                     cb_User_View.setSelected(true);
                     cb_User_View.setDisable(true);
                 } else {
-                    cb_User_View.setDisable(false);
+                    if (!cb_User_Delete.isSelected()) {
+                        cb_User_View.setDisable(false);
+                    } else {
+                        cb_User_View.setDisable(true);
+                    }
+                }
+            });
+            cb_User_Delete.setOnAction((event) -> {
+                if (cb_User_Delete.isSelected()) {
+                    cb_User_View.setSelected(true);
+                    cb_User_View.setDisable(true);
+                } else {
+                    if (!cb_User_Edit.isSelected()) {
+                        cb_User_View.setDisable(false);
+                    } else {
+                        cb_User_View.setDisable(true);
+                    }
                 }
             });
             // set for Customer 3
@@ -342,7 +383,227 @@ public class DAOcheckRole {
                     cb_Customer_View.setSelected(true);
                     cb_Customer_View.setDisable(true);
                 } else {
-                    cb_Customer_View.setDisable(false);
+                    if (!cb_Customer_Delete.isSelected()) {
+                        cb_Customer_View.setDisable(false);
+                    } else {
+                        cb_Customer_View.setDisable(true);
+                    }
+                }
+            });
+            cb_Customer_Delete.setOnAction((event) -> {
+                if (cb_Customer_Delete.isSelected()) {
+                    cb_Customer_View.setSelected(true);
+                    cb_Customer_View.setDisable(true);
+                } else {
+                    if (!cb_Customer_Edit.isSelected()) {
+                        cb_Customer_View.setDisable(false);
+                    } else {
+                        cb_Customer_View.setDisable(true);
+                    }
+                }
+            });
+            // set for Role 4
+            cb_UserLog_Add.setDisable(true);
+            cb_UserLog_Edit.setDisable(true);
+            cb_UserLog_Delete.setDisable(true);
+            // set for checkin 5
+            cb_CheckIn_Edit.setOnAction((event) -> {
+                if (cb_CheckIn_Edit.isSelected()) {
+                    cb_CheckIn_View.setSelected(true);
+                    cb_CheckIn_View.setDisable(true);
+                } else {
+                    if (!cb_CheckIn_Delete.isSelected()) {
+                        cb_CheckIn_View.setDisable(false);
+                    } else {
+                        cb_CheckIn_View.setDisable(true);
+                    }
+                }
+            });
+            cb_CheckIn_Delete.setOnAction((event) -> {
+                if (cb_CheckIn_Delete.isSelected()) {
+                    cb_CheckIn_View.setSelected(true);
+                    cb_CheckIn_View.setDisable(true);
+                } else {
+                    if (!cb_CheckIn_Edit.isSelected()) {
+                        cb_CheckIn_View.setDisable(false);
+                    } else {
+                        cb_CheckIn_View.setDisable(true);
+                    }
+                }
+            });
+//            set for checkout 6
+            cb_CheckOut_Edit.setOnAction((event) -> {
+                if (cb_CheckOut_Edit.isSelected()) {
+                    cb_CheckOut_View.setSelected(true);
+                    cb_CheckOut_View.setDisable(true);
+                } else {
+                    if (!cb_CheckOut_Delete.isSelected()) {
+                        cb_CheckOut_View.setDisable(false);
+                    } else {
+                        cb_CheckOut_View.setDisable(true);
+                    }
+                }
+            });
+            cb_CheckOut_Delete.setOnAction((event) -> {
+                if (cb_CheckOut_Delete.isSelected()) {
+                    cb_CheckOut_View.setSelected(true);
+                    cb_CheckOut_View.setDisable(true);
+                } else {
+                    if (!cb_CheckOut_Edit.isSelected()) {
+                        cb_CheckOut_View.setDisable(false);
+                    } else {
+                        cb_CheckOut_View.setDisable(true);
+                    }
+                }
+            });
+//            set for room 7
+            cb_Room_Edit.setOnAction((event) -> {
+                if (cb_Room_Edit.isSelected()) {
+                    cb_Room_View.setSelected(true);
+                    cb_Room_View.setDisable(true);
+                } else {
+                    if (!cb_Room_Delete.isSelected()) {
+                        cb_Room_View.setDisable(false);
+                    } else {
+                        cb_Room_View.setDisable(true);
+                    }
+                }
+            });
+            cb_Room_Delete.setOnAction((event) -> {
+                if (cb_Room_Delete.isSelected()) {
+                    cb_Room_View.setSelected(true);
+                    cb_Room_View.setDisable(true);
+                } else {
+                    if (!cb_Room_Edit.isSelected()) {
+                        cb_Room_View.setDisable(false);
+                    } else {
+                        cb_Room_View.setDisable(true);
+                    }
+                }
+            });
+//            set for Booking 8
+            cb_Booking_Edit.setOnAction((event) -> {
+                if (cb_Booking_Edit.isSelected()) {
+                    cb_Booking_View.setSelected(true);
+                    cb_Booking_View.setDisable(true);
+                } else {
+                    if (!cb_Booking_Delete.isSelected()) {
+                        cb_Booking_View.setDisable(false);
+                    } else {
+                        cb_Booking_View.setDisable(true);
+                    }
+                }
+            });
+            cb_Booking_Delete.setOnAction((event) -> {
+                if (cb_Booking_Delete.isSelected()) {
+                    cb_Booking_View.setSelected(true);
+                    cb_Booking_View.setDisable(true);
+                } else {
+                    if (!cb_Booking_Edit.isSelected()) {
+                        cb_Booking_View.setDisable(false);
+                    } else {
+                        cb_Booking_View.setDisable(true);
+                    }
+                }
+            });
+//            set Oder 9
+            cb_SODer_Edit.setOnAction((event) -> {
+                if (cb_SODer_Edit.isSelected()) {
+                    cb_SODer_View.setSelected(true);
+                    cb_SODer_View.setDisable(true);
+                } else {
+                    if (!cb_SODer_Delete.isSelected()) {
+                        cb_SODer_View.setDisable(false);
+                    } else {
+                        cb_SODer_View.setDisable(true);
+                    }
+                }
+            });
+            cb_SODer_Delete.setOnAction((event) -> {
+                if (cb_SODer_Delete.isSelected()) {
+                    cb_SODer_View.setSelected(true);
+                    cb_SODer_View.setDisable(true);
+                } else {
+                    if (!cb_SODer_Edit.isSelected()) {
+                        cb_SODer_View.setDisable(false);
+                    } else {
+                        cb_SODer_View.setDisable(true);
+                    }
+                }
+            });
+            //            set Oderdetail 10
+            cb_SODetail_Edit.setOnAction((event) -> {
+                if (cb_SODetail_Edit.isSelected()) {
+                    cb_SODetail_View.setSelected(true);
+                    cb_SODetail_View.setDisable(true);
+                } else {
+                    if (!cb_SODetail_Delete.isSelected()) {
+                        cb_SODetail_View.setDisable(false);
+                    } else {
+                        cb_SODetail_View.setDisable(true);
+                    }
+                }
+            });
+            cb_SODetail_Delete.setOnAction((event) -> {
+                if (cb_SODetail_Delete.isSelected()) {
+                    cb_SODetail_View.setSelected(true);
+                    cb_SODetail_View.setDisable(true);
+                } else {
+                    if (!cb_SODetail_Edit.isSelected()) {
+                        cb_SODetail_View.setDisable(false);
+                    } else {
+                        cb_SODetail_View.setDisable(true);
+                    }
+                }
+            });
+            //            set Stype 11
+            cb_SType_Edit.setOnAction((event) -> {
+                if (cb_SType_Edit.isSelected()) {
+                    cb_SType_View.setSelected(true);
+                    cb_SType_View.setDisable(true);
+                } else {
+                    if (!cb_SType_Delete.isSelected()) {
+                        cb_SType_View.setDisable(false);
+                    } else {
+                        cb_SType_View.setDisable(true);
+                    }
+                }
+            });
+            cb_SType_Delete.setOnAction((event) -> {
+                if (cb_SType_Delete.isSelected()) {
+                    cb_SType_View.setSelected(true);
+                    cb_SType_View.setDisable(true);
+                } else {
+                    if (!cb_SType_Edit.isSelected()) {
+                        cb_SType_View.setDisable(false);
+                    } else {
+                        cb_SType_View.setDisable(true);
+                    }
+                }
+            });
+//            set for department 12
+            cb_Department_Edit.setOnAction((event) -> {
+                if (cb_Department_Edit.isSelected()) {
+                    cb_Department_View.setSelected(true);
+                    cb_Department_View.setDisable(true);
+                } else {
+                    if (!cb_Department_Delete.isSelected()) {
+                        cb_Department_View.setDisable(false);
+                    } else {
+                        cb_Department_View.setDisable(true);
+                    }
+                }
+            });
+            cb_Department_Delete.setOnAction((event) -> {
+                if (cb_Department_Delete.isSelected()) {
+                    cb_Department_View.setSelected(true);
+                    cb_Department_View.setDisable(true);
+                } else {
+                    if (!cb_Department_Edit.isSelected()) {
+                        cb_Department_View.setDisable(false);
+                    } else {
+                        cb_Department_View.setDisable(true);
+                    }
                 }
             });
 //            set JFXButton
@@ -362,144 +623,179 @@ public class DAOcheckRole {
                 cb_CheckIn_Add.setDisable(false);
                 cb_CheckIn_Delete.setDisable(false);
                 cb_CheckIn_Edit.setDisable(false);
-                cb_CheckIn_View.setDisable(false);
+                if (!cb_CheckIn_Delete.isSelected() && !cb_CheckIn_Edit.isSelected()) {
+                    cb_CheckIn_View.setDisable(false);
+                }
                 cb_CheckOut_Add.setDisable(false);
                 cb_CheckOut_Delete.setDisable(false);
                 cb_CheckOut_Edit.setDisable(false);
-                cb_CheckOut_View.setDisable(false);
+                if (!cb_CheckOut_Delete.isSelected() && !cb_CheckOut_Edit.isSelected()) {
+                    cb_CheckOut_View.setDisable(false);
+                }
                 cb_Department_Edit.setDisable(false);
-                cb_Department_View.setDisable(false);
+                if (!cb_Department_Delete.isSelected() && !cb_Department_Edit.isSelected()) {
+                    cb_Department_View.setDisable(false);
+                }
                 cb_Department_Add.setDisable(false);
                 cb_Department_Delete.setDisable(false);
                 cb_Customer_Add.setDisable(false);
                 cb_Customer_Delete.setDisable(false);
                 cb_Customer_Edit.setDisable(false);
-                cb_Customer_View.setDisable(false);
+                if (!cb_Customer_Delete.isSelected() && !cb_Customer_Edit.isSelected()) {
+                    cb_Customer_View.setDisable(false);
+                }
                 cb_Booking_Edit.setDisable(false);
-                cb_Booking_View.setDisable(false);
+                if (!cb_Booking_Delete.isSelected() && !cb_Booking_Edit.isSelected()) {
+                    cb_Booking_View.setDisable(false);
+                }
                 cb_Booking_Add.setDisable(false);
                 cb_Booking_Delete.setDisable(false);
 //                SODer SODetail Room Role
                 cb_SODer_Add.setDisable(false);
                 cb_SODer_Delete.setDisable(false);
                 cb_SODer_Edit.setDisable(false);
-                cb_SODer_View.setDisable(false);
+                if (!cb_SODer_Delete.isSelected() && !cb_SODer_Edit.isSelected()) {
+                    cb_SODer_View.setDisable(false);
+                }
                 cb_SODetail_Edit.setDisable(false);
-                cb_SODetail_View.setDisable(false);
+                if (!cb_SODetail_Delete.isSelected() && !cb_SODetail_Edit.isSelected()) {
+                    cb_SODetail_View.setDisable(false);
+                }
                 cb_SODetail_Add.setDisable(false);
                 cb_SODetail_Delete.setDisable(false);
                 cb_Room_Add.setDisable(false);
                 cb_Room_Delete.setDisable(false);
                 cb_Room_Edit.setDisable(false);
-                cb_Room_View.setDisable(false);
-                cb_Role_Edit.setDisable(false);
+                if (!cb_Room_Delete.isSelected() && !cb_Room_Edit.isSelected()) {
+                    cb_Room_View.setDisable(false);
+                }
                 cb_Role_View.setDisable(false);
-                cb_Role_Add.setDisable(false);
-                cb_Role_Delete.setDisable(false);
 //                set Enable userlog stype employee user
                 cb_UserLog_Add.setDisable(false);
                 cb_UserLog_Delete.setDisable(false);
                 cb_UserLog_Edit.setDisable(false);
                 cb_UserLog_View.setDisable(false);
                 cb_SType_Edit.setDisable(false);
-                cb_SType_View.setDisable(false);
+                if (!cb_SType_Delete.isSelected() && !cb_SType_Edit.isSelected()) {
+                    cb_SType_View.setDisable(false);
+                }
                 cb_SType_Add.setDisable(false);
                 cb_SType_Delete.setDisable(false);
                 cb_User_Add.setDisable(false);
                 cb_User_Delete.setDisable(false);
                 cb_User_Edit.setDisable(false);
-                cb_User_View.setDisable(false);
+                if (!cb_User_Delete.isSelected() && !cb_User_Edit.isSelected()) {
+                    cb_User_View.setDisable(false);
+                }
                 cb_Employee_Edit.setDisable(false);
-                cb_Employee_View.setDisable(false);
+                if (!cb_Employee_Delete.isSelected() && !cb_Employee_Edit.isSelected()) {
+                    cb_Employee_View.setDisable(false);
+                }
                 cb_Employee_Add.setDisable(false);
                 cb_Employee_Delete.setDisable(false);
                 btn_Update.setDisable(false);
                 btn_Edit.setDisable(true);
             });
+            cb_Role_View.setOnAction((event) -> {
+                if (!cb_Role_View.isSelected()) {
+                    try {
+                        if (DAOCustomerBookingCheckIn.check_Role_View_Disable().equals(1)) {
+                            cb_Role_View.setSelected(true);
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("You have no right to do this !!!");
+                            alert.setContentText("Because you are the only one who has the right to view the rights list !!!");
+                            alert.showAndWait();
+                        }
 
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
 //            action Update
             btn_Update.setOnAction((event) -> {
+                try {
+                    if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Role_View")) {
+                        AlertLoginAgain.alertLogin();
+                        fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+                        Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+                        stageMainForm.close();
+                        showFormLogin.showFormLogin();
+                    } else {
 //                CheckIn CheckOut Department Customer Booking
-                cb_CheckIn_Add.setDisable(true);
-                cb_CheckIn_Delete.setDisable(true);
-                cb_CheckIn_Edit.setDisable(true);
-                cb_CheckIn_View.setDisable(true);
-                cb_CheckOut_Add.setDisable(true);
-                cb_CheckOut_Delete.setDisable(true);
-                cb_CheckOut_Edit.setDisable(true);
-                cb_CheckOut_View.setDisable(true);
-                cb_Department_Edit.setDisable(true);
-                cb_Department_View.setDisable(true);
-                cb_Department_Add.setDisable(true);
-                cb_Department_Delete.setDisable(true);
-                cb_Customer_Add.setDisable(true);
-                cb_Customer_Delete.setDisable(true);
-                cb_Customer_Edit.setDisable(true);
-                cb_Customer_View.setDisable(true);
-                cb_Booking_Edit.setDisable(true);
-                cb_Booking_View.setDisable(true);
-                cb_Booking_Add.setDisable(true);
-                cb_Booking_Delete.setDisable(true);
+                        cb_CheckIn_Add.setDisable(true);
+                        cb_CheckIn_Delete.setDisable(true);
+                        cb_CheckIn_Edit.setDisable(true);
+                        cb_CheckIn_View.setDisable(true);
+                        cb_CheckOut_Add.setDisable(true);
+                        cb_CheckOut_Delete.setDisable(true);
+                        cb_CheckOut_Edit.setDisable(true);
+                        cb_CheckOut_View.setDisable(true);
+                        cb_Department_Edit.setDisable(true);
+                        cb_Department_View.setDisable(true);
+                        cb_Department_Add.setDisable(true);
+                        cb_Department_Delete.setDisable(true);
+                        cb_Customer_Add.setDisable(true);
+                        cb_Customer_Delete.setDisable(true);
+                        cb_Customer_Edit.setDisable(true);
+                        cb_Customer_View.setDisable(true);
+                        cb_Booking_Edit.setDisable(true);
+                        cb_Booking_View.setDisable(true);
+                        cb_Booking_Add.setDisable(true);
+                        cb_Booking_Delete.setDisable(true);
 
 //                SODer SODetail Room Role
-                cb_SODer_Add.setDisable(true);
-                cb_SODer_Delete.setDisable(true);
-                cb_SODer_Edit.setDisable(true);
-                cb_SODer_View.setDisable(true);
-                cb_SODetail_Edit.setDisable(true);
-                cb_SODetail_View.setDisable(true);
-                cb_SODetail_Add.setDisable(true);
-                cb_SODetail_Delete.setDisable(true);
-                cb_Room_Add.setDisable(true);
-                cb_Room_Delete.setDisable(true);
-                cb_Room_Edit.setDisable(true);
-                cb_Room_View.setDisable(true);
-                cb_Role_Edit.setDisable(true);
-                cb_Role_View.setDisable(true);
-                cb_Role_Add.setDisable(true);
-                cb_Role_Delete.setDisable(true);
+                        cb_SODer_Add.setDisable(true);
+                        cb_SODer_Delete.setDisable(true);
+                        cb_SODer_Edit.setDisable(true);
+                        cb_SODer_View.setDisable(true);
+                        cb_SODetail_Edit.setDisable(true);
+                        cb_SODetail_View.setDisable(true);
+                        cb_SODetail_Add.setDisable(true);
+                        cb_SODetail_Delete.setDisable(true);
+                        cb_Room_Add.setDisable(true);
+                        cb_Room_Delete.setDisable(true);
+                        cb_Room_Edit.setDisable(true);
+                        cb_Room_View.setDisable(true);
+                        cb_Role_Edit.setDisable(true);
+                        cb_Role_View.setDisable(true);
+                        cb_Role_Add.setDisable(true);
+                        cb_Role_Delete.setDisable(true);
 //                set Enable userlog stype employee user
-                cb_UserLog_Add.setDisable(true);
-                cb_UserLog_Delete.setDisable(true);
-                cb_UserLog_Edit.setDisable(true);
-                cb_UserLog_View.setDisable(true);
-                cb_SType_Edit.setDisable(true);
-                cb_SType_View.setDisable(true);
-                cb_SType_Add.setDisable(true);
-                cb_SType_Delete.setDisable(true);
-                cb_User_Add.setDisable(true);
-                cb_User_Delete.setDisable(true);
-                cb_User_Edit.setDisable(true);
-                cb_User_View.setDisable(true);
-                cb_Employee_Edit.setDisable(true);
-                cb_Employee_View.setDisable(true);
-                cb_Employee_Add.setDisable(true);
-                cb_Employee_Delete.setDisable(true);
-                btn_Update.setDisable(true);
-
-                try {
-                    update_EmployeeDecentralization(
-                            Emp.getEmployee_ID(), cb_Employee_View.isSelected(), cb_Employee_Add.isSelected(), cb_Employee_Edit.isSelected(), cb_Employee_Delete.isSelected(),
-                            cb_User_View.isSelected(), cb_User_Add.isSelected(), cb_User_Edit.isSelected(), cb_User_Delete.isSelected(), cb_Booking_View.isSelected(), cb_Booking_Add.isSelected(), cb_Booking_Edit.isSelected(), cb_Booking_Delete.isSelected(),
-                            cb_CheckIn_View.isSelected(), cb_CheckIn_Add.isSelected(), cb_CheckIn_Edit.isSelected(), cb_CheckIn_Delete.isSelected(), cb_CheckOut_View.isSelected(), cb_CheckOut_Add.isSelected(), cb_CheckOut_Edit.isSelected(), cb_CheckOut_Delete.isSelected(),
-                            cb_Customer_View.isSelected(), cb_Customer_Add.isSelected(), cb_Customer_Edit.isSelected(), cb_Customer_Delete.isSelected(), cb_Department_View.isSelected(), cb_Department_Add.isSelected(), cb_Department_Edit.isSelected(), cb_Department_Delete.isSelected(),
-                            cb_Role_View.isSelected(), cb_Role_Add.isSelected(), cb_Role_Edit.isSelected(), cb_Role_Delete.isSelected(), cb_Room_View.isSelected(), cb_Room_Add.isSelected(), cb_Room_Edit.isSelected(), cb_Room_Delete.isSelected(),
-                            cb_SODetail_View.isSelected(), cb_SODetail_Add.isSelected(), cb_SODetail_Edit.isSelected(), cb_SODetail_Delete.isSelected(), cb_SODer_View.isSelected(), cb_SODer_Add.isSelected(), cb_SODer_Edit.isSelected(), cb_SODer_Delete.isSelected(),
-                            cb_SType_View.isSelected(), cb_SType_Add.isSelected(), cb_SType_Edit.isSelected(), cb_SType_Delete.isSelected(), cb_UserLog_View.isSelected(), cb_UserLog_Add.isSelected(), cb_UserLog_Edit.isSelected(), cb_UserLog_Delete.isSelected()
-                    );
-                } catch (ClassNotFoundException | SQLException ex) {
+                        cb_UserLog_Add.setDisable(true);
+                        cb_UserLog_Delete.setDisable(true);
+                        cb_UserLog_Edit.setDisable(true);
+                        cb_UserLog_View.setDisable(true);
+                        cb_SType_Edit.setDisable(true);
+                        cb_SType_View.setDisable(true);
+                        cb_SType_Add.setDisable(true);
+                        cb_SType_Delete.setDisable(true);
+                        cb_User_Add.setDisable(true);
+                        cb_User_Delete.setDisable(true);
+                        cb_User_Edit.setDisable(true);
+                        cb_User_View.setDisable(true);
+                        cb_Employee_Edit.setDisable(true);
+                        cb_Employee_View.setDisable(true);
+                        cb_Employee_Add.setDisable(true);
+                        cb_Employee_Delete.setDisable(true);
+                        btn_Update.setDisable(true);
+                        update_EmployeeDecentralization(
+                                Emp.getEmployee_ID(), cb_Employee_View.isSelected(), cb_Employee_Add.isSelected(), cb_Employee_Edit.isSelected(), cb_Employee_Delete.isSelected(),
+                                cb_User_View.isSelected(), cb_User_Add.isSelected(), cb_User_Edit.isSelected(), cb_User_Delete.isSelected(), cb_Booking_View.isSelected(), cb_Booking_Add.isSelected(), cb_Booking_Edit.isSelected(), cb_Booking_Delete.isSelected(),
+                                cb_CheckIn_View.isSelected(), cb_CheckIn_Add.isSelected(), cb_CheckIn_Edit.isSelected(), cb_CheckIn_Delete.isSelected(), cb_CheckOut_View.isSelected(), cb_CheckOut_Add.isSelected(), cb_CheckOut_Edit.isSelected(), cb_CheckOut_Delete.isSelected(),
+                                cb_Customer_View.isSelected(), cb_Customer_Add.isSelected(), cb_Customer_Edit.isSelected(), cb_Customer_Delete.isSelected(), cb_Department_View.isSelected(), cb_Department_Add.isSelected(), cb_Department_Edit.isSelected(), cb_Department_Delete.isSelected(),
+                                cb_Role_View.isSelected(), cb_Role_Add.isSelected(), cb_Role_Edit.isSelected(), cb_Role_Delete.isSelected(), cb_Room_View.isSelected(), cb_Room_Add.isSelected(), cb_Room_Edit.isSelected(), cb_Room_Delete.isSelected(),
+                                cb_SODetail_View.isSelected(), cb_SODetail_Add.isSelected(), cb_SODetail_Edit.isSelected(), cb_SODetail_Delete.isSelected(), cb_SODer_View.isSelected(), cb_SODer_Add.isSelected(), cb_SODer_Edit.isSelected(), cb_SODer_Delete.isSelected(),
+                                cb_SType_View.isSelected(), cb_SType_Add.isSelected(), cb_SType_Edit.isSelected(), cb_SType_Delete.isSelected(), cb_UserLog_View.isSelected(), cb_UserLog_Add.isSelected(), cb_UserLog_Edit.isSelected(), cb_UserLog_Delete.isSelected()
+                        );
+                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update Decentralization for " + Emp.getEmployee_ID(),
+                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                        btn_Edit.setDisable(false);
+                    }
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
                     Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Calendar cal = Calendar.getInstance();
-                String logtime;
-                logtime = dateFormat.format(cal.getTime());
-                try {
-                    DAO.setUserLogs(FXMLLoginController.User_Login, "Update Decentralization for " + Emp.getEmployee_ID(), logtime);
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                btn_Edit.setDisable(false);
             });
             Emp.setDecentralizationAction(Action);
             list.add(Emp);
