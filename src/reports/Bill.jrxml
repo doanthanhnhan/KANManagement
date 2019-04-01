@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="52b88ae2-7505-48e9-b022-3debb285cec2">
 	<property name="ireport.zoom" value="1.6500000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="86"/>
 	<queryString>
 		<![CDATA[SELECT B.*, 
 CASE WHEN C.CustomerMidName <> '' THEN C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName
@@ -89,7 +89,7 @@ WHERE B.CustomerID = C.CustomerID]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="13" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Bill ID :]]></text>
+				<text><![CDATA[Bill number :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="274" y="20" width="135" height="20" uuid="fad1b23f-8e1d-4523-9764-04fe693167b4"/>
@@ -115,7 +115,7 @@ WHERE B.CustomerID = C.CustomerID]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="13" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Room ID :]]></text>
+				<text><![CDATA[Room :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="274" y="40" width="135" height="20" uuid="f96189a2-c15b-4e8d-994e-baa548fd6823"/>
