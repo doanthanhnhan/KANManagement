@@ -62,7 +62,7 @@ public class CheckOutDAOImpl implements CheckOutDAO {
     }
 
     @Override
-    public List<String> getAllCheckOutID() {
+    public ObservableList<String> getAllCheckOutID() {
         String sql = "SELECT CheckOutID FROM CheckOutOrders";
         ObservableList<String> listCheckOuts = FXCollections.observableArrayList();
         try {

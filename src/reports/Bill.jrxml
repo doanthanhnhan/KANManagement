@@ -2,13 +2,19 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="52b88ae2-7505-48e9-b022-3debb285cec2">
 	<property name="ireport.zoom" value="1.6500000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="86"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="checkOutID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="realPath" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT B.*, 
 CASE WHEN C.CustomerMidName <> '' THEN C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName
 ELSE C.CustomerFirstName+' ' +C.CustomerLastName END AS 'CustomerFullName'
 FROM Bill B, Customers C
-WHERE B.CustomerID = C.CustomerID]]>
+WHERE B.CustomerID = C.CustomerID AND B.CheckOutID = $P{checkOutID}]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer"/>
 	<field name="RoomID" class="java.lang.String"/>
@@ -303,7 +309,7 @@ WHERE B.CustomerID = C.CustomerID]]>
 				</staticText>
 				<image>
 					<reportElement x="78" y="4" width="100" height="100" uuid="9c32911b-72e1-4dce-8022-7d9e2b99d3aa"/>
-					<imageExpression><![CDATA["E:\\Nhan\\02.Aptech\\02.SEM2\\06.EProject\\KANManagement\\src\\images\\KAN Logo.png"]]></imageExpression>
+					<imageExpression><![CDATA[$P{realPath}+"\\src\\images\\KAN Logo.png"]]></imageExpression>
 				</image>
 				<staticText>
 					<reportElement x="7" y="100" width="260" height="20" uuid="5c76b697-24f4-4752-be92-5e4683678c17"/>
