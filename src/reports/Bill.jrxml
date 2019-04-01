@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="52b88ae2-7505-48e9-b022-3debb285cec2">
+	<property name="ireport.zoom" value="1.6500000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="86"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT * FROM Bill]]>
+	</queryString>
+	<field name="ID" class="java.lang.Integer"/>
+	<field name="RoomID" class="java.lang.String"/>
+	<field name="CustomerID" class="java.lang.String"/>
+	<field name="UserName" class="java.lang.String"/>
+	<field name="CheckInID" class="java.lang.String"/>
+	<field name="CheckOutID" class="java.lang.String"/>
+	<field name="CheckInDate" class="java.sql.Timestamp"/>
+	<field name="CheckOutDate" class="java.sql.Timestamp"/>
+	<field name="NoOfDay" class="java.lang.Integer"/>
+	<field name="RoomPrice" class="java.math.BigDecimal"/>
+	<field name="RoomCharge" class="java.math.BigDecimal"/>
+	<field name="ServiceCharge" class="java.math.BigDecimal"/>
+	<field name="RoomDiscount" class="java.math.BigDecimal"/>
+	<field name="ServiceDiscount" class="java.math.BigDecimal"/>
+	<field name="CustomerDiscount" class="java.math.BigDecimal"/>
+	<field name="TotalBillAmount" class="java.math.BigDecimal"/>
+	<field name="VATAmount" class="java.math.BigDecimal"/>
+	<field name="PayableAmount" class="java.math.BigDecimal"/>
+	<field name="CustomerGive" class="java.math.BigDecimal"/>
+	<field name="CustomerChange" class="java.math.BigDecimal"/>
+	<field name="Active" class="java.lang.Boolean"/>
+	<field name="QRCode" class="java.io.InputStream"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="499" splitType="Stretch">
+			<staticText>
+				<reportElement x="274" y="198" width="135" height="20" uuid="2428a9b3-546d-4e18-9262-3ceed73b3cad"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Room charge :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="218" width="135" height="20" uuid="f61a9d18-0ef9-42c4-b01c-60fbdfaac4ee"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Services charge :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="409" y="218" width="135" height="20" uuid="8a9a7927-6bd8-416f-a06d-96bedfccb771"/>
+				<box leftPadding="5" rightPadding="5">
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ServiceCharge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="198" width="135" height="20" uuid="b56f04fe-930e-4790-b3bd-6afbb4ac23e1"/>
+				<box leftPadding="5" rightPadding="5">
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RoomCharge}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="274" y="0" width="135" height="20" uuid="446d19d4-fdbb-4282-9d36-cdd917697a4c"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Bill ID :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="20" width="135" height="20" uuid="fad1b23f-8e1d-4523-9764-04fe693167b4"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Bill date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="60" width="135" height="20" uuid="6095ed93-ac62-4a5b-aeca-a2a6d5707fd0"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Room ID :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="40" width="135" height="20" uuid="f96189a2-c15b-4e8d-994e-baa548fd6823"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Customer ID :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="100" width="135" height="20" uuid="c7148670-116f-4285-b340-39534280f977"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[No. of day:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="80" width="135" height="20" uuid="61e6336c-0ad7-443a-8b17-8a10ac385a6b"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Rent per day :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="409" y="0" width="135" height="20" uuid="46e9b526-0327-451d-a47b-dfa656b5a362"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CheckOutID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="20" width="135" height="20" uuid="54dffb9b-a8ed-4f8b-9ba5-025ec6e6158e"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CheckOutDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="40" width="135" height="20" uuid="d7d93f3d-13ac-4894-9213-b3cb8e9d314e"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CustomerID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="60" width="135" height="20" uuid="96ca1340-6535-48a2-8552-b989dda1cf40"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{RoomID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="80" width="135" height="20" uuid="8abd0123-0f69-41c4-b412-97ab3170916e"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RoomPrice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="100" width="135" height="20" uuid="0f5e4582-f289-4380-af53-99f8d1a43f95"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NoOfDay}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="274" y="120" width="135" height="20" uuid="f3a29bf2-b129-4f32-9cb3-5e5ded8a3f89"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Check in date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="409" y="120" width="135" height="20" uuid="53d9affa-7b89-4561-a794-73e788cafa0f"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Check out date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="409" y="140" width="135" height="20" uuid="f8190a5d-8518-41e5-8fad-e2cb2db937e8"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CheckOutDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="274" y="140" width="135" height="20" uuid="0d4b0f17-85b7-48ca-8dd4-7cb6103deafd"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CheckInDate}]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<staticText>
+					<reportElement x="7" y="140" width="260" height="20" uuid="e4f2ec66-ede5-40d7-a0ea-74c62ff6187d"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="13" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Email: kanmanagement.ap146@gmail.com]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="120" width="260" height="20" uuid="0c4351fe-2a5b-4a30-becb-265aef940f77"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="13" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Phone: +84-0236-3456789 - HP: 0909.000000]]></text>
+				</staticText>
+				<image>
+					<reportElement x="78" y="4" width="100" height="100" uuid="9c32911b-72e1-4dce-8022-7d9e2b99d3aa"/>
+					<imageExpression><![CDATA["E:\\Nhan\\02.Aptech\\02.SEM2\\06.EProject\\KANManagement\\src\\images\\KAN Logo.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="7" y="100" width="260" height="20" uuid="5c76b697-24f4-4752-be92-5e4683678c17"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="13" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Address: 38 Yen Bai - Hai Chau - Da Nang]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="61" y="80" width="131" height="20" uuid="630cb7a0-4c90-4756-8a0c-d65b09da6f2e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="13" isBold="true"/>
+					</textElement>
+					<text><![CDATA[KAN HOTEL]]></text>
+				</staticText>
+			</elementGroup>
+			<staticText>
+				<reportElement x="274" y="178" width="270" height="20" uuid="a69184e4-c0ae-4485-bb62-2e766a9d066e"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Charge details]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="238" width="135" height="20" uuid="831c8a89-6005-4594-b157-638051842cf2"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[(-) Room discount :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="258" width="135" height="20" uuid="1e43f2b7-b3ff-43f4-ab81-ad01b6169594"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[(-) Services discount :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="298" width="135" height="20" uuid="ade7ae38-ab9a-48db-ad44-d12197fcae82"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Total amount :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="278" width="135" height="20" uuid="0e479062-dec8-4339-a4bd-5263132fed64"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[(-) Customer discount :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="409" y="238" width="135" height="20" uuid="8627bb4d-2efd-4f48-ae29-38eacf00bfd1"/>
+				<box leftPadding="5" rightPadding="5">
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RoomDiscount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="258" width="135" height="20" uuid="96258c6a-bd2c-4e01-8929-65b08a71e0a7"/>
+				<box leftPadding="5" rightPadding="5">
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ServiceDiscount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="278" width="135" height="20" uuid="01be706d-84cb-4f5a-8755-ed4299ac4a40"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CustomerDiscount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="298" width="135" height="20" uuid="92c15589-0519-473d-92a9-5dcba08d0333"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalBillAmount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="274" y="318" width="135" height="20" uuid="a1921b1d-12f3-44e6-b484-53ecda9601d0"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[VAT amount :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="338" width="135" height="20" uuid="b0a11526-0d03-4013-be70-f5d78125f10e"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Payable amount :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="409" y="318" width="135" height="20" uuid="a7d366ad-a77a-459e-b181-fc91c9775b9d"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VATAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="338" width="135" height="20" uuid="baf922ae-a7c4-411c-be97-44ad1f23b358"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PayableAmount}]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Blank">
+				<reportElement x="61" y="203" width="150" height="150" uuid="221e6211-a1f6-413b-92fa-81cc4f6e509e"/>
+				<imageExpression><![CDATA[$F{QRCode}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="4" y="178" width="270" height="20" uuid="8bb0ee7c-5e64-47d1-b889-2cd20b893e9b"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Scan this QRcode for more detail informations:]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="4" y="198" width="270" height="160" uuid="e8a8f71c-a3d8-417f-a863-8cb51dec6dc8"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+			</frame>
+			<staticText>
+				<reportElement x="66" y="384" width="135" height="20" uuid="c41db823-a08d-4dc8-82b4-7b5b64d85998"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Billing instructions]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="66" y="454" width="135" height="20" uuid="850d22f5-7900-49dc-9ffb-34321d685ac2"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cashier's Signature ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="454" width="135" height="20" uuid="e7062966-1932-4d65-8710-6bf3b3cfc7e2"/>
+				<box leftPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Customer's Signature ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yy">
+				<reportElement x="333" y="384" width="160" height="20" uuid="82bde459-5f2f-48c4-9b74-763966c9d33b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

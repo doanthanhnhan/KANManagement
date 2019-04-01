@@ -46,6 +46,7 @@ import utils.FormatName;
 import utils.GetInetAddress;
 
 import utils.MyTimer;
+import utils.PrintReport;
 import utils.showFXMLLogin;
 
 /**
@@ -785,6 +786,13 @@ public class FXMLMainFormController implements Initializable {
     private void handle_Toolbar_CheckIn_Action(ActionEvent event) {
         System.out.println("List service orders details item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
+    }
+
+    @FXML
+    private void handle_Chart_Button_Action(ActionEvent event) {
+        System.out.println("Chart button clicked!");
+        PrintReport viewReport = new PrintReport();
+        viewReport.showReport("\\src\\reports\\Bill.jrxml");
     }
 
 }

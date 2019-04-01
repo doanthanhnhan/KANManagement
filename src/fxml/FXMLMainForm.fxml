@@ -152,7 +152,7 @@
                               <Tooltip contentDisplay="TOP" text="Employees" textAlignment="CENTER" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="btn_Toolbar_Charts" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                        <Button fx:id="btn_Toolbar_Charts" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Chart_Button_Action">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
