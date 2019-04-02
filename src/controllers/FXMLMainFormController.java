@@ -164,7 +164,6 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_Edit_Role;
     @FXML
     private MenuItem menuItem_List_Service_Orders_Details;
-    @FXML
     private MenuItem menuItem_Add_Service_Order_Details;
     private MenuItem menuItem_Edit_Service_Order_Details;
     @FXML
@@ -797,6 +796,12 @@ public class FXMLMainFormController implements Initializable {
     private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
         System.out.println("List check out item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
+    }
+
+    @FXML
+    private void handle_MenuItem_Add_Room_Action(ActionEvent event) {
+        System.out.println("Add new room menu item clicked!");
+        formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Add new room");
     }
 
 }

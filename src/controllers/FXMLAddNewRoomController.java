@@ -94,8 +94,8 @@ public class FXMLAddNewRoomController implements Initializable {
         if (listRoomsController.check_Edit_Action) {
             //Setting values for new form
             txt_Room_ID.setDisable(true);
-            label_Title.setText("EDITING SERVICE TYPE");
-            label_Description.setText("Filling the infomations for editting service type");
+            label_Title.setText("EDITING ROOM");
+            label_Description.setText("Filling the infomations for editting room infomations");
             Room room = FXMLListRoomsController.roomEXItem;
             txt_Room_ID.setText(room.getRoomID());
             txt_Room_Area.setText(String.valueOf(room.getRoomArea()));
@@ -103,7 +103,9 @@ public class FXMLAddNewRoomController implements Initializable {
             txt_Room_On_Floor.setText(String.valueOf(room.getRoomOnFloor()));
             txt_Room_Phone_Number.setText(room.getRoomPhoneNumber());
             comboBox_Room_Customer_ID.setValue(room.getCustomerID());
+            //comboBox_Room_Customer_ID.setDisable(true);
             comboBox_Room_Status.setValue(room.getRoomStatus());
+            //comboBox_Room_Status.setDisable(true);
             comboBox_Room_Type.setValue(room.getRoomType());
             checkBox_Room_Clean.setSelected(room.isRoomClean());
             checkBox_Room_In_Progress.setSelected(room.isRoomInProgress());
@@ -166,8 +168,7 @@ public class FXMLAddNewRoomController implements Initializable {
         ObservableList<String> list_Type = FXCollections.observableArrayList();
         ObservableList<String> list_CustomerID = FXCollections.observableArrayList();
         list_Status.addAll("Available", "Reserved", "Occupied", "Out");
-        list_Type.addAll("Single", "Double", "Triple", "Family", "Deluxe");
-        //list_CustomerID.addAll("KANCUS001", "KANCUS002", "KANCUS003", "KANCUS004");
+        list_Type.addAll("Single", "Double", "Triple", "Family", "Deluxe");        
         listRoomsController.listRoomEXs.forEach((roomEX) -> {
             list_CustomerID.add(roomEX.getCustomerID());
         });

@@ -372,8 +372,10 @@ public class FXMLInfoCustomerController implements Initializable {
 
     @FXML
     private void Cancel(ActionEvent event) {
-        checkInfoCustomer = false;
-        checkInfoCustomerAlready = false;
+        FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready = false;
+        FXMLCheckIdCardCustomerController.checkIdCardCustomer = false;
+        checkInfoCustomer=false;
+        checkInfoCustomerAlready=false;
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         // do what you have to do
         stage.close();
@@ -552,7 +554,8 @@ public class FXMLInfoCustomerController implements Initializable {
                 }
 // kiem tra chay theo click check in tu main form
                 if (FXMLCheckIdCardCustomerController.checkIdCardCustomer || FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
-
+                    checkInfoCustomer = true;
+                    checkInfoCustomerAlready=true;
                     Stage stageEdit = new Stage();
                     stageEdit.resizableProperty().setValue(Boolean.FALSE);
                     Parent root = null;

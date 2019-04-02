@@ -205,7 +205,7 @@ public class FXMLListRoomsController implements Initializable {
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
         check_Edit_Action = true;
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Edit Room Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Edit Room Informations");
 
     }
 
@@ -213,7 +213,7 @@ public class FXMLListRoomsController implements Initializable {
     private void handle_MenuItem_Add_Action(ActionEvent event) {
         check_Edit_Action = false;
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Edit Room Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Add new Room Informations");
     }
 
     @FXML
