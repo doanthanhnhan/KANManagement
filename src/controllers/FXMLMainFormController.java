@@ -790,9 +790,13 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_Chart_Button_Action(ActionEvent event) {
         System.out.println("Chart button clicked!");
-//        PrintReport viewReport = new PrintReport();
-//        viewReport.showReport("/src/reports/Bill.jrxml"); 
         formLoader("/fxml/FXMLBillReport.fxml", "/images/KAN Logo.png", "Bill report");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
+        System.out.println("List check out item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
     }
 
 }
