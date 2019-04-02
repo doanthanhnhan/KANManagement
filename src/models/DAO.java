@@ -57,6 +57,7 @@ public class DAO {
         connection.close();
     }
 //    check sự tồn tại của địa chỉ Mac trong Database
+
     public static Integer check_Active_MacAddress(String MACAddress) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String sql = "select Active from CheckBlockMacAddress where MACAddress=?";
@@ -521,7 +522,7 @@ public class DAO {
     public static void AddNewEmployee(InfoEmployee Emp) throws MalformedURLException, SQLException, ClassNotFoundException {
         try {
             Connection connection = connectDB.connectSQLServer();
-            String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,Image) values(?,?,?,?,?,?,?)";
+            String exm = "Insert into Employees(EmployeeID,EmployeeFirstName,EmployeeMidName,EmployeeLastName,Sex,Email,Image,DepartmentID) values(?,?,?,?,?,?,?,?)";
             PreparedStatement pt = connection.prepareStatement(exm);
             pt.setString(1, Emp.getId_number());
             pt.setString(2, Emp.getFirst_Name());
@@ -529,6 +530,7 @@ public class DAO {
             pt.setString(4, Emp.getLast_Name());
             pt.setBoolean(5, Emp.getSex());
             pt.setString(6, Emp.getGmail());
+
             String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
             File file = new File(currentPath + "/src/images/imagequestion.png");
             BufferedImage bImage;
@@ -548,6 +550,7 @@ public class DAO {
                 Logger.getLogger(FXMLInfoEmployeeController.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
+            pt.setString(8, Emp.getWork_Dept());
             pt.execute();
             pt.close();
             connection.close();

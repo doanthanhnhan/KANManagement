@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -11,9 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPaneAddEmployee" prefHeight="735.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewEmloyeeController">
+<AnchorPane id="AnchorPane" fx:id="anchorPaneAddEmployee" prefHeight="750.0" prefWidth="649.0" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLAddNewEmloyeeController">
    <children>
-      <VBox layoutY="-1.0" prefHeight="735.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutY="-1.0" prefHeight="750.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox prefHeight="129.0" prefWidth="649.0">
                <children>
@@ -126,7 +127,16 @@
                   </JFXTextField>
                </children>
             </HBox>
-            <HBox fx:id="HboxContent" alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="643.0">
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="459.0" prefHeight="80.0" prefWidth="643.0">
+               <children>
+                  <JFXComboBox fx:id="boxDepartment" prefHeight="35.0" prefWidth="582.0" promptText="Select Department">
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" top="20.0" />
+                     </HBox.margin>
+                  </JFXComboBox>
+               </children>
+            </HBox>
+            <HBox fx:id="HboxContent" alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="643.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

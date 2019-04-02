@@ -6,6 +6,7 @@
 package controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
@@ -30,10 +31,13 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import models.DAODepartMentReActive;
 import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.notificationFunction;
@@ -77,6 +81,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
     private AnchorPane anchorPaneAddEmployee;
     @FXML
     private ToggleGroup newSexEmployee;
+    @FXML
+    private JFXComboBox<String> boxDepartment;
 
     /**
      * Initializes the controller class.
@@ -86,7 +92,11 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        try {
+            boxDepartment.setItems(DAODepartMentReActive.get_All_DepartmentName());
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             if (DAO.checkFirstLogin().equals(0)) {
                 newId.setDisable(true);
@@ -95,6 +105,23 @@ public class FXMLAddNewEmloyeeController implements Initializable {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
+//        set entersubmit
+        boxDepartment.setOnKeyPressed((KeyEvent event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                System.out.println("Enter pressed");
+                try {
+                    btnSubmitAddNewEmployee();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        boxDepartment.valueProperty().addListener((obs, oldItem, newItem) -> {
+            if (newItem != null && !newItem.equals("")) {
+                HboxContent.getChildren().clear();
+                boxDepartment.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
+            }
+        });
         newId.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -248,6 +275,25 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 notificationFunction.notification(newLastname, HboxContent, "LAST NAME MUST NOT EMPTY !!!");
             });
 
+        } else if (boxDepartment.getValue() == null) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setText("DEPARTMENT MUST NOT EMPTY !!!");
+                label.setAlignment(Pos.CENTER_LEFT);
+                boxDepartment.getStyleClass().removeAll();
+                boxDepartment.getStyleClass().add("jfx-combo-box-fault");
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                boxDepartment.requestFocus();
+            });
         } else if (!PatternValided.PatternID(newId.getText())) {
             Platform.runLater(() -> {
                 notificationFunction.notification(newId, HboxContent, "ID MUST 4-12 CHARACTER, NOT BEGIN NUMBER AND CHARACTER SPECIAL !!!");
@@ -297,6 +343,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             Emp.setLast_Name(FormatName.format(newLastname.getText()));
                             Emp.setGmail(newGmail.getText());
                             Emp.setSex(Sex);
+                            Emp.setWork_Dept(boxDepartment.getValue());
                             DAO.AddNewEmployee(Emp);
                             String Username = newId.getText();
                             MD5Encrypt m;
@@ -313,8 +360,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                                     "KAN@123456", "Default username and password", content);
 
                             if (!DAO.checkFirstLogin().equals(1)) {
-                                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create "+ newId.getText(),
-                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
+                                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create " + newId.getText(),
+                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                             }
                             newFirstname.setText("");
                             newMidname.setText("");
@@ -322,6 +369,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             newGmail.setText("");
                             newId.setText("");
                             newId.requestFocus();
+                            boxDepartment.setValue(null);
                             if (FXMLListEmployeeController.check_Edit_Action) {
                                 fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
                                 fXMLListEmployeeController.showUsersData();

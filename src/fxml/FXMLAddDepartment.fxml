@@ -85,7 +85,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="DepartmentName" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Department Name" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="DepartmentName" focusColor="#6447cd" labelFloat="true" onKeyReleased="#actionSetDepartID" prefHeight="35.0" prefWidth="400.0" promptText="Department Name" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>

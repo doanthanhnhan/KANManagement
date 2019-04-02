@@ -86,7 +86,6 @@ public class FXMLAddDepartmentController implements Initializable {
             }
         });
         Username.setText(FXMLLoginController.User_Login);
-        DepartmentID.setText("DPM-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSSSS")));
         DepartmentName.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -164,10 +163,15 @@ public class FXMLAddDepartmentController implements Initializable {
             } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(FXMLAddDepartmentController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Department Id "+ DepartmentID.getText(),
-                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
-            DepartmentID.setText("DPM-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSSSS")));
+            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Department Id " + DepartmentID.getText(),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+            DepartmentID.setText("");
             DepartmentName.setText("");
         }
+    }
+
+    @FXML
+    private void actionSetDepartID() {
+        DepartmentID.setText("DPM-" + DepartmentName.getText());
     }
 }
