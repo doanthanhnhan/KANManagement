@@ -613,7 +613,7 @@ public class DAOcheckRole {
                 if (cb_UserLog_Delete.isSelected()) {
                     cb_UserLog_View.setSelected(true);
                     cb_UserLog_View.setDisable(true);
-                }else {
+                } else {
                     cb_Department_View.setDisable(false);
                 }
             });
@@ -717,8 +717,15 @@ public class DAOcheckRole {
                             alert.setHeaderText("You have no right to do this !!!");
                             alert.setContentText("Because you are the only one who has the right to view the rights list !!!");
                             alert.showAndWait();
+                        } else {
+                            DAOCustomerBookingCheckIn.Update_RoleView(Emp.getEmployee_ID(), false);
                         }
-
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    try {
+                        DAOCustomerBookingCheckIn.Update_RoleView(Emp.getEmployee_ID(), true);
                     } catch (ClassNotFoundException | SQLException ex) {
                         Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
                     }

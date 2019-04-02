@@ -27,6 +27,18 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+    //    update role_view
+    
+    public static void Update_RoleView(String id,Boolean check) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE Role SET Role_View = ? WHERE EmployeeID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setBoolean(1, check);
+        pt.setString(2, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
 //    delete Userlogs
 
     public static void Delete_UserLogs(Integer id) throws ClassNotFoundException, SQLException {
