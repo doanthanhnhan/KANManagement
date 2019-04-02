@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -52,7 +53,7 @@ public class DAOCustomerBookingCheckIn {
             Ul.setUserName(rs.getString("Username"));
             Ul.setMacAddress(rs.getString("MACAddress"));
             Ul.setLogContent(rs.getString("LogContent"));
-            Ul.setLogTime(rs.getString("LogTime"));
+            Ul.setLogTime(rs.getTimestamp("LogTime").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
             list_UserLogs.add(Ul);
         }
         return list_UserLogs;

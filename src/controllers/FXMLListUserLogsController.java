@@ -117,7 +117,7 @@ public class FXMLListUserLogsController implements Initializable {
         int minIndex = Math.min(toIndex, filteredData.size());
 
         SortedList<UserLogs> sortedData = new SortedList<>(
-                FXCollections.observableArrayList(listUL.subList(Math.min(fromIndex, minIndex), minIndex)));
+                FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
 
         sortedData.comparatorProperty().bind(table_ListUserLogs.comparatorProperty());
 
@@ -175,6 +175,7 @@ public class FXMLListUserLogsController implements Initializable {
         filteredData = new FilteredList<>(listUL, list -> true);
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Searching: " + newValue);
             filteredData.setPredicate(
                     UL -> newValue == null || newValue.isEmpty()
                     || UL.getUserName().toLowerCase().contains(newValue.toLowerCase())
