@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.icons525.Icons525View?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane id="AnchorPane" fx:id="main_AnchorPane" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLListUserLogsController">
+   <children>
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <TableView fx:id="table_ListUserLogs" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <columns>
+                  <TableColumn prefWidth="75.0" text="C1" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+               </columns>
+               <contextMenu>
+                  <ContextMenu fx:id="contextMenu_Main">
+                     <items>
+                        <MenuItem fx:id="menuItem_Delete" mnemonicParsing="false" onAction="#handle_MenuItem_Delete_Action" text="Delete">
+                           <graphic>
+                              <Icons525View glyphName="REMOVE" size="15" styleClass="glyph-525icons-remove" />
+                           </graphic>
+                        </MenuItem>
+                        <MenuItem fx:id="menuItem_Refresh" mnemonicParsing="false" onAction="#handle_MenuItem_Refresh_Action" text="Refresh">
+                           <graphic>
+                              <Icons525View glyphName="REFRESH" size="15" styleClass="glyph-525icons-refresh" />
+                           </graphic>
+                        </MenuItem>
+                     </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+         </center>
+         <bottom>
+            <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+                  <Pagination fx:id="pagination" pageCount="10" />
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

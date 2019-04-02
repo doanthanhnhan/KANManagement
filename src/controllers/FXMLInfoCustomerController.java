@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
@@ -374,6 +375,8 @@ public class FXMLInfoCustomerController implements Initializable {
     private void Cancel(ActionEvent event) {
         checkInfoCustomer = false;
         checkInfoCustomerAlready = false;
+        FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready = false;
+        FXMLCheckIdCardCustomerController.checkIdCardCustomer = false;
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         // do what you have to do
         stage.close();
@@ -466,7 +469,7 @@ public class FXMLInfoCustomerController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID IS INCORRECT !!!");
             });
-        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText())) {
+        } else if (!PatternValided.PatternPhoneNumber(PhoneNumber.getText()) && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready && !FXMLCheckIdCardCustomerController.checkIdCardCustomer) {
             Platform.runLater(() -> {
                 notificationFunction.notification(PhoneNumber, HboxContent, "PHONE NUMBER IS INCORRECT !!!");
             });
@@ -492,7 +495,15 @@ public class FXMLInfoCustomerController implements Initializable {
             });
         } else if (!DAOCustomerBookingCheckIn.check_IDCustomer(CustomerID.getText()) && !FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
             Platform.runLater(() -> {
-                notificationFunction.notification(CustomerID, HboxContent, "CUSTOMER ID ALREADY EXIST !!!");
+                if (DAOCustomerBookingCheckIn.check_Active_Customer(CustomerID.getText())) {
+                    notificationFunction.notification(Passport, HboxContent, "CUSTOMER ID ALREADY EXIST !!!");
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("You have no right to do this !!!");
+                    alert.setContentText("Customer Id Already Exist, You Must ReActive To Continue Using!!!");
+                    alert.showAndWait();
+                }
             });
         } else {
             Platform.runLater(() -> {
@@ -529,7 +540,12 @@ public class FXMLInfoCustomerController implements Initializable {
                     Passport.setText("");
                     Discount.setText("0");
                     Company.setText("");
-                    birthday.setValue(null);
+                    birthday.setValue(LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear()));
+                    String pattern = "dd-MM-yyyy";
+                    formatCalender.format(pattern, birthday);
+                    birthday.getEditor().setText("Date Of Birth");
+                    birthday.setPromptText(null);
+                    birthday.getStyleClass().add("jfx-date-picker-fix");
 
 //            messenge when add complete
                     FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
@@ -552,7 +568,14 @@ public class FXMLInfoCustomerController implements Initializable {
                 }
 // kiem tra chay theo click check in tu main form
                 if (FXMLCheckIdCardCustomerController.checkIdCardCustomer || FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
-
+//                    neu customer da ton tai ma active = 0 thi update active = 1
+                    if(!DAOCustomerBookingCheckIn.check_Active_Customer(CustomerID.getText())&&FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready){
+                        try {
+                            DAOCustomerBookingCheckIn.ReActive_Customer(CustomerID.getText());
+                        } catch (ClassNotFoundException | SQLException ex) {
+                            Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     Stage stageEdit = new Stage();
                     stageEdit.resizableProperty().setValue(Boolean.FALSE);
                     Parent root = null;

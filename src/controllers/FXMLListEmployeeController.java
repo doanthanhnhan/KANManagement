@@ -9,9 +9,8 @@ import static controllers.ConnectControllers.fXMLMainFormController;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +44,7 @@ import models.InfoEmployee;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
 import utils.AlertLoginAgain;
+import utils.GetInetAddress;
 import utils.StageLoader;
 import utils.showFXMLLogin;
 
@@ -277,7 +277,7 @@ public class FXMLListEmployeeController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
-        FXMLInfoEmployeeController.check_delete=false;
+        FXMLInfoEmployeeController.check_delete = false;
         check_form_list = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Service Type Informations");
@@ -310,11 +310,8 @@ public class FXMLListEmployeeController implements Initializable {
             if (alert.getResult() == ButtonType.OK) {
                 try {
                     DAO.delete_Employee(Emp.getEmployee_ID());
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                    Calendar cal = Calendar.getInstance();
-                    String logtime;
-                    logtime = dateFormat.format(cal.getTime());
-                    DAO.setUserLogs(FXMLLoginController.User_Login, "Delete " + Emp.getEmployee_ID(), logtime);
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + Emp.getEmployee_ID(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                     System.out.println("Delete successful");
                     showUsersData();
                 } catch (ClassNotFoundException | SQLException ex) {

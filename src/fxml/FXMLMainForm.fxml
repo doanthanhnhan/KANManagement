@@ -51,7 +51,7 @@
                               <MenuItem fx:id="menuItem_List_Service_Orders" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Orders_Action" text="List Service Orders" />
                               <MenuItem fx:id="menuItem_List_Service_Orders_Details" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Orders_Details_Action" text="List Service Orders Details" />
                               <MenuItem fx:id="menuItem_List_Service_Type" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Type_Action" text="List Service Type" />
-                              <MenuItem fx:id="menuItem_List_Users_Log" mnemonicParsing="false" text="List Users Log" />
+                              <MenuItem fx:id="menuItem_List_Users_Log" mnemonicParsing="false" onAction="#handle_MenuItem_List_UserLogs_Action" text="List Users Log" />
                            </items>
                         </Menu>
                         <Menu fx:id="menu_Add" mnemonicParsing="false" text="Add">

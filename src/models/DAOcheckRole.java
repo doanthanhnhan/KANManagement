@@ -403,9 +403,9 @@ public class DAOcheckRole {
                 }
             });
             // set for Role 4
-            cb_UserLog_Add.setDisable(true);
-            cb_UserLog_Edit.setDisable(true);
-            cb_UserLog_Delete.setDisable(true);
+            cb_Role_Add.setDisable(true);
+            cb_Role_Edit.setDisable(true);
+            cb_Role_Delete.setDisable(true);
             // set for checkin 5
             cb_CheckIn_Edit.setOnAction((event) -> {
                 if (cb_CheckIn_Edit.isSelected()) {
@@ -606,6 +606,17 @@ public class DAOcheckRole {
                     }
                 }
             });
+//            set cb userlog 13
+            cb_UserLog_Add.setDisable(true);
+            cb_UserLog_Edit.setDisable(true);
+            cb_UserLog_Delete.setOnAction((event) -> {
+                if (cb_UserLog_Delete.isSelected()) {
+                    cb_UserLog_View.setSelected(true);
+                    cb_UserLog_View.setDisable(true);
+                }else {
+                    cb_Department_View.setDisable(false);
+                }
+            });
 //            set JFXButton
 
             HBox Action = new HBox();
@@ -671,10 +682,10 @@ public class DAOcheckRole {
                 }
                 cb_Role_View.setDisable(false);
 //                set Enable userlog stype employee user
-                cb_UserLog_Add.setDisable(false);
                 cb_UserLog_Delete.setDisable(false);
-                cb_UserLog_Edit.setDisable(false);
-                cb_UserLog_View.setDisable(false);
+                if (!cb_UserLog_Delete.isSelected()) {
+                    cb_Room_View.setDisable(false);
+                }
                 cb_SType_Edit.setDisable(false);
                 if (!cb_SType_Delete.isSelected() && !cb_SType_Edit.isSelected()) {
                     cb_SType_View.setDisable(false);
