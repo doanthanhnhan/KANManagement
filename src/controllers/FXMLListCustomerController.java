@@ -277,14 +277,23 @@ public class FXMLListCustomerController implements Initializable {
             alert.showAndWait();
             System.out.println(alert.getResult());
             if (alert.getResult() == ButtonType.OK) {
-                try {
-                    DAOCustomerBookingCheckIn.deleteCustomer(ctm.getCusID());
-                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + ctm.getCusID(),
-                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                    System.out.println("Delete successful");
-                    showUsersData();
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(DAOCustomerBookingCheckIn.check_Remove_Customer(ctm.getCusID()));
+                if (!DAOCustomerBookingCheckIn.check_Remove_Customer(ctm.getCusID())) {
+                    try {
+                        DAOCustomerBookingCheckIn.deleteCustomer(ctm.getCusID());
+                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + ctm.getCusID(),
+                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                        System.out.println("Delete successful");
+                        showUsersData();
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                    alert1.setTitle("Error");
+                    alert1.setHeaderText("You have no right to do this !!!");
+                    alert1.setContentText("Because This customer is booking or staying in the hotel !!!");
+                    alert1.showAndWait();
                 }
             }
         }

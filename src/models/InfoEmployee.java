@@ -125,7 +125,7 @@ public class InfoEmployee {
         this.First_Name = new SimpleStringProperty(First_Name);
     }
 
-    public String getMid_Name() {
+        public String getMid_Name() {
         return Mid_Name.get();
     }
 

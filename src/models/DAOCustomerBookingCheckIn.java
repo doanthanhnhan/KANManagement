@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -26,6 +27,108 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    delete Userlogs
+
+    public static void Delete_UserLogs(Integer id) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE UserLogs SET Active = 0 WHERE ID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setInt(1, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+//    get all info UserLogs
+
+    public static ObservableList<UserLogs> getAllUserLogs() throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<UserLogs> list_UserLogs = FXCollections.observableArrayList();
+        String sql = "select * from UserLogs where Active = 1";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            UserLogs Ul = new UserLogs();
+            Ul.setID(rs.getInt("ID"));
+            Ul.setUserName(rs.getString("Username"));
+            Ul.setMacAddress(rs.getString("MACAddress"));
+            Ul.setLogContent(rs.getString("LogContent"));
+            Ul.setLogTime(rs.getTimestamp("LogTime").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+            list_UserLogs.add(Ul);
+        }
+        return list_UserLogs;
+    }
+//    ReActive Customer
+
+    public static void ReActive_Customer(String id) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE Customers SET Active = 1 WHERE CustomerID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+//    Check Active of customer
+
+    public static boolean check_Active_Customer(String ID) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "Select Active from Customers where CustomerID=?";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                if (rs.getBoolean("Active")) {
+                    pt.close();
+                    connection.close();
+                    rs.close();
+                    return true;
+                }
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+//    check remove customer
+
+    public static boolean check_Remove_Customer(String ID) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "select CustomerID from Customers where CustomerID = ? AND\n"
+                    + "(\n"
+                    + "	Customers.CustomerID IN (select CustomerID from BookingInfo where  DATEDIFF(DAY,DateBook,GETDATE()) <= 0)\n"
+                    + "	OR Customers.CustomerID IN (Select Bill.CustomerID from Bill)\n"
+                    + "	)";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            if (rs.next()) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 //    check role_view can not disable checkbox when only one
 
     public static Integer check_Role_View_Disable() throws ClassNotFoundException, SQLException {
@@ -33,7 +136,7 @@ public class DAOCustomerBookingCheckIn {
         String sql = "select Count(*) as 'count' from Role where Role_View = 1";
         PreparedStatement pt = connection.prepareStatement(sql);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
-        int count=0;
+        int count = 0;
         ResultSet rs = pt.executeQuery();
         while (rs.next()) {
             count = rs.getInt("Count");
