@@ -498,7 +498,7 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List Role menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLDecentralization.fxml", "Users role", "Edit Employee Informations");
     }
-    
+
     @FXML
     private void handle_MenuItem_List_UserLogs_Action(ActionEvent event) {
         System.out.println("List UserLogs menu item clicked!");
@@ -537,7 +537,13 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_Add_Service_Type_Action(ActionEvent event) {
         System.out.println("Add new Service Type menu item clicked!");
-        formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Edit User Informations");
+        formLoader("/fxml/FXMLAddNewServiceType.fxml", "/images/KAN Logo.png", "Add new Service Type Informations");
+    }
+
+    @FXML
+    private void handle_MenuItem_Add_Department_Action(ActionEvent event) {
+        System.out.println("Add new Department menu item clicked!");
+        formLoader("/fxml/FXMLAddDepartment.fxml", "/images/KAN Logo.png", "Add Department Informations");
     }
     // ############### END ADD ACTIONS ###############
 

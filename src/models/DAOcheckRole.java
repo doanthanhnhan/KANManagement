@@ -719,6 +719,8 @@ public class DAOcheckRole {
                             alert.showAndWait();
                         } else {
                             DAOCustomerBookingCheckIn.Update_RoleView(Emp.getEmployee_ID(), false);
+                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update Role_View = false for " + Emp.getEmployee_ID(),
+                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                         }
                     } catch (ClassNotFoundException | SQLException ex) {
                         Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
@@ -726,6 +728,8 @@ public class DAOcheckRole {
                 } else {
                     try {
                         DAOCustomerBookingCheckIn.Update_RoleView(Emp.getEmployee_ID(), true);
+                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update Role_View = true for " + Emp.getEmployee_ID(),
+                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                     } catch (ClassNotFoundException | SQLException ex) {
                         Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
                     }

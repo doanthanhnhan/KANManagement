@@ -355,7 +355,6 @@ public class FXMLInfoBookingController implements Initializable {
                         HboxContent.getChildren().clear();
                         BookingSubmitAction();
                     });
-
                     return null;
                 }
             };

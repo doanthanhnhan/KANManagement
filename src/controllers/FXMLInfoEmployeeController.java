@@ -684,7 +684,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                         Platform.runLater(() -> {
                             notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
                         });
-                    } else if (DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !FXMLLoginController.checkLoginRegis) {
+                    } else if (!FXMLMainFormController.checkRegis && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !FXMLLoginController.checkLoginRegis) {
                         System.out.println("vao khu vuc submit admin 1");
                         Platform.runLater(() -> {
                             System.out.println("vao khu vuc submit admin 2");
