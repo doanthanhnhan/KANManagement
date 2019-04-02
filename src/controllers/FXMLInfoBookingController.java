@@ -9,11 +9,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
-import static controllers.ConnectControllers.fXMLMainFormController;
-import static controllers.FXMLInfoCustomerController.checkInfoCustomer;
-import static controllers.FXMLInfoCustomerController.checkInfoCustomerAlready;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,6 +43,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javax.mail.MessagingException;
 import models.BookingInfo;
 import models.DAO;
 import models.DAOCustomerBookingCheckIn;
@@ -53,8 +52,10 @@ import models.RoomDAOImpl;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
+import utils.Email;
 import utils.GetInetAddress;
 import utils.PatternValided;
+import utils.QRCreate;
 import utils.StageLoader;
 import utils.showFXMLLogin;
 
@@ -460,6 +461,21 @@ public class FXMLInfoBookingController implements Initializable {
 //                set Userlogs
                     DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Booking for " + boxIdCustomer.getValue(),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                    //CREATE QR CODE FILE AND SEND EMAIL
+                    String customerEmail = DAOCustomerBookingCheckIn.getCustomerEmail(boxIdCustomer.getValue());
+                    if (!customerEmail.isEmpty()) {
+                        String content = "BookingID : " + BookingID.getValue() + ". Use the attached QRCode for checking in faster.";
+                        QRCreate.create_Booking_QRCode(BookingID.getValue());
+                        File file = new File("");
+                        String filePath = file.getAbsolutePath() + "/src/images/BookingQRCode.png";
+                        try {
+                            Email.sendEmail_With_Attach("smtp.gmail.com", customerEmail, "KANManagement.AP146@gmail.com",
+                                    "KAN@123456", "Default username and password", content, filePath);
+                        } catch (MessagingException ex) {
+                            Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    //ENDING SENDING BOOKING QRCODE
                 }
                 if (FXMLInfoCustomerController.checkInfoCustomer || FXMLInfoCustomerController.checkInfoCustomerAlready) {
                     bookingIdConect = BookingID.getValue();
