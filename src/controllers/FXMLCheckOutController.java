@@ -57,6 +57,7 @@ import models.RoomDAOImpl;
 import models.ServiceOrderDetail;
 import models.ServiceOrderDetailDAOImpl;
 import utils.FormatName;
+import utils.PrintReport;
 import utils.QRCreate;
 import utils.QRWebCam;
 import utils.formatCalender;
@@ -376,7 +377,7 @@ public class FXMLCheckOutController implements Initializable {
         Bill bill = new Bill();
 
         //Setting bill QRCode
-        String qrCodeData = txt_Check_Out_ID.getText() + " ; " + txt_Customer_ID.getText();
+        String qrCodeData = txt_Check_Out_ID.getText() + ";" + txt_Customer_ID.getText();
         Image imageQRCode = QRCreate.creatQRCode(qrCodeData);
         BufferedImage bImage = SwingFXUtils.fromFXImage(imageQRCode, null);
         byte[] res;
@@ -438,8 +439,13 @@ public class FXMLCheckOutController implements Initializable {
             Bill bill = get_Bill_Data();
             billDAOImpl.addBill(bill);
             
+            //Calling bill report
+            PrintReport viewReport = new PrintReport();
+            viewReport.showReport_Customer_Bill("/src/reports/Bill.jrxml", txt_Check_Out_ID.getText());
+            
             Stage stage = (Stage) btn_Save.getScene().getWindow();
             stage.close();
+
         }
     }
 

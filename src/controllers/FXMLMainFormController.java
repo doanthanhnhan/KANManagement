@@ -552,10 +552,7 @@ public class FXMLMainFormController implements Initializable {
         formLoader_With_Close_Action("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
-
-
     // ############### END VIEW ACTIONS ###############
-
     // =============== PUBLIC METHODS ===============
     public TextField getTxt_Search() {
         return txt_Search;
@@ -630,6 +627,7 @@ public class FXMLMainFormController implements Initializable {
             new Thread(loadOverview).start();
         });
     }
+
     /**
      *
      * @param fxmlPath
@@ -665,7 +663,7 @@ public class FXMLMainFormController implements Initializable {
                             stage.setScene(scene);
                             stage.initModality(Modality.APPLICATION_MODAL);
                             stage.setOnCloseRequest((event) -> {
-                                FXMLMainFormController.checkRegis=false;
+                                FXMLMainFormController.checkRegis = false;
                             });
                             stage.show();
                         } catch (IOException ex) {
@@ -798,8 +796,13 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_Chart_Button_Action(ActionEvent event) {
         System.out.println("Chart button clicked!");
-        PrintReport viewReport = new PrintReport();
-        viewReport.showReport("/src/reports/Bill.jrxml"); 
+        formLoader("/fxml/FXMLBillReport.fxml", "/images/KAN Logo.png", "Bill report");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
+        System.out.println("List check out item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
     }
 
 }

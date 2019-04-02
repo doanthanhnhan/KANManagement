@@ -18,6 +18,7 @@ public class ConnectControllers {
     public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController;
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
     public static FXMLAddNewServiceOrderController fXMLAddNewServiceOrderController;
+    public static FXMLListCheckOutController fXMLListCheckOutController;
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
     public static FXMLListServiceOrderController fXMLListServiceOrderController;
     public static FXMLListServiceOrderDetailController fXMLListServiceOrderDetailController;
@@ -165,6 +166,22 @@ public class ConnectControllers {
 
     public static void setfXMLMainOverViewPaneController(FXMLMainOverViewPaneController fXMLMainOverViewPaneController) {
         ConnectControllers.fXMLMainOverViewPaneController = fXMLMainOverViewPaneController;
+    }
+
+    public static FXMLListCheckOutController getfXMLListCheckOutController() {
+        return fXMLListCheckOutController;
+    }
+
+    public static void setfXMLListCheckOutController(FXMLListCheckOutController fXMLListCheckOutController) {
+        ConnectControllers.fXMLListCheckOutController = fXMLListCheckOutController;
+    }
+
+    public static FXMLEditCustomerController getEditCustomerController() {
+        return editCustomerController;
+    }
+
+    public static void setEditCustomerController(FXMLEditCustomerController editCustomerController) {
+        ConnectControllers.editCustomerController = editCustomerController;
     }
 
 }

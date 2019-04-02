@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" styleClass="mainFxmlClass" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLBillReportController">
+   <children>
+      <VBox fx:id="vBox_BillReport_Info">
+         <children>
+            <HBox fx:id="hboxHeader">
+               <children>
+                  <HBox prefHeight="129.0" prefWidth="560.0">
+                     <children>
+                        <VBox prefHeight="129.0">
+                           <children>
+                              <HBox prefHeight="53.0" prefWidth="400.0">
+                                 <children>
+                                    <Label prefHeight="53.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="BILL REPORT">
+                                       <font>
+                                          <Font name="System Bold" size="27.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="60.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label prefHeight="27.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill bill report infomation">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox fx:id="hBox_Info_Parent">
+               <children>
+                  <VBox fx:id="vBox_Info_Left">
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <HBox fx:id="HboxBoxId" alignment="CENTER" prefHeight="35.0" prefWidth="400.0" spacing="10.0">
+                                 <children>
+                                    <JFXComboBox fx:id="comboBox_Check_Out_ID" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Checkout ID">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXComboBox>
+                                    <FontAwesomeIconView fx:id="iconRefresh" glyphName="REFRESH" onMouseClicked="#refreshRoomType" size="20" styleClass="jfx-glyhp-icon-refresh">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </FontAwesomeIconView>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="20.0" />
+                                 </HBox.margin>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER" />
+                        <HBox alignment="CENTER" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox fx:id="hBoxContent" alignment="CENTER_LEFT">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="20.0" left="80.0" top="20.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="hBoxBtn" alignment="CENTER" prefWidth="560.0" spacing="20.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets left="80.0" right="80.0" />
+               </padding>
+               <children>
+                  <JFXButton fx:id="btn_QR_Code_Scanner" onAction="#handle_QRScanner_Action" prefHeight="50.0" prefWidth="200.0" styleClass="btn-green-color" text="QR Code">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="VIDEO_CAMERA" size="20" styleClass="glyph-icon-white" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btn_Print" onAction="#handle_Save_Button_Action" prefHeight="50.0" prefWidth="200.0" styleClass="btn-blue-color" text="Print">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="PRINT" size="20" styleClass="glyph-icon-white" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btn_Cancel" onAction="#handle_Cancel_Button_Action" prefHeight="50.0" prefWidth="200.0" styleClass="btn-red-color" text="Cancel">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" size="20" styleClass="glyph-icon-white" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="50.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

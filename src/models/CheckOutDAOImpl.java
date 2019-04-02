@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -37,32 +38,34 @@ public class CheckOutDAOImpl implements CheckOutDAO {
                     CheckOut checkOut = new CheckOut();
                     checkOut.setCheckOutID(rs.getString("CheckOutID"));
                     checkOut.setCheckInID(rs.getString("CheckInID"));
-                    checkOut.setCustomerID(rs.getString("CheckOutFirstName"));
-                    checkOut.setRoomID(rs.getString("CheckOutMidName"));
-                    checkOut.setUserName(rs.getString("CheckOutLastName"));
-                    checkOut.setCheckInDate(rs.getTimestamp("CheckOutBirthday").toLocalDateTime());
-                    checkOut.setCheckOutDate(rs.getTimestamp("CheckOutBirthday").toLocalDateTime());
-                    checkOut.setCustomerPayment(rs.getString("CheckOutLastName"));
-                    checkOut.setCustomerBill(rs.getBigDecimal("CheckOutPassport"));
-                    checkOut.setDiscount(rs.getBigDecimal("CheckOutPassport"));
-                    checkOut.setTax(rs.getBigDecimal("CheckOutPassport"));
+                    checkOut.setCustomerID(rs.getString("CustomerID"));
+                    checkOut.setRoomID(rs.getString("RoomID"));
+                    checkOut.setUserName(rs.getString("UserName"));
+                    checkOut.setCheckInDate(rs.getTimestamp("CheckInDate").toLocalDateTime());
+                    checkOut.setCheckOutDate(rs.getTimestamp("CheckOutDate").toLocalDateTime());
+                    checkOut.setCustomerPayment(rs.getString("CustomerPayment"));
+                    checkOut.setCustomerBill(rs.getBigDecimal("CustomerBill"));
+                    checkOut.setDiscount(rs.getBigDecimal("Discount"));
+                    checkOut.setTax(rs.getBigDecimal("Tax"));
 
                     listCheckOuts.add(checkOut);
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Don't have any checkOut in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Don't have any checkOut in Database or Can't connect to Database");
+                alert.show();
+            });
             Logger.getLogger(CheckOutDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listCheckOuts;
     }
 
     @Override
-    public List<String> getAllCheckOutID() {
+    public ObservableList<String> getAllCheckOutID() {
         String sql = "SELECT CheckOutID FROM CheckOutOrders";
         ObservableList<String> listCheckOuts = FXCollections.observableArrayList();
         try {
@@ -75,11 +78,13 @@ public class CheckOutDAOImpl implements CheckOutDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Don't have any checkOut in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Don't have any checkOut in Database or Can't connect to Database");
+                alert.show();
+            });
             Logger.getLogger(CheckOutDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listCheckOuts;
@@ -107,12 +112,14 @@ public class CheckOutDAOImpl implements CheckOutDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated CheckOut in Database or Can't connect to Database");
+                alert.show();
+            });
             Logger.getLogger(CheckOutDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Duplicated CheckOut in Database or Can't connect to Database");
-            alert.show();
         }
     }
 
@@ -139,11 +146,13 @@ public class CheckOutDAOImpl implements CheckOutDAO {
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(CheckOutDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Duplicated CheckOut in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated CheckOut in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -158,11 +167,13 @@ public class CheckOutDAOImpl implements CheckOutDAO {
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(CheckOutDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Can't connect to Database");
+                alert.show();
+            });
         }
     }
 }
