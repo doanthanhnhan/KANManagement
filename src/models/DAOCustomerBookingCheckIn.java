@@ -181,6 +181,30 @@ public class DAOCustomerBookingCheckIn {
         }
         return list_Customer;
     }
+//    get customer email for sending QRcode - Nhan edit
+
+    public static String getCustomerEmail(String customerID) {
+        String customerEmail = "";
+        try {
+            Connection connection = connectDB.connectSQLServer();
+
+            String sql = "SELECT CustomerEmail FROM Customers WHERE CustomerID = '" + customerID + "'";
+            PreparedStatement pt = connection.prepareStatement(sql);
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("CustomerEmail") != null) {
+                    customerEmail = rs.getString("CustomerEmail");
+                }
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return customerEmail;
+    }
 //    Update Customer
 
     public static void UpdateInfoCustomer(Customer ctm) throws ClassNotFoundException, SQLException {
