@@ -28,6 +28,8 @@ import models.DAO;
 import utils.Email;
 import utils.MD5Encrypt;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -38,7 +40,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import models.DAODepartMentReActive;
+import models.DAODepartmentDecentralization;
 import models.DAOcheckRole;
+import models.DepartMentDecentralization;
 import models.InfoEmployee;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
@@ -102,6 +106,9 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                 newId.setDisable(true);
                 newId.setText("admin");
                 boxDepartment.setDisable(true);
+                ObservableList<String> list = FXCollections.observableArrayList();
+                list.add("DPM-Admin");
+                boxDepartment.setItems(list);
                 boxDepartment.setValue("DPM-Admin");
             }
         } catch (ClassNotFoundException | SQLException ex) {
@@ -336,6 +343,11 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                     @Override
                     public void run() {
                         try {
+                            if (DAO.checkFirstLogin().equals(0)) {
+                                DAODepartMentReActive.Add_New_Department("DPM-Admin", "Admin", "admin");
+                                DAODepartmentDecentralization.update_DepartmentDecentralization("DPM-Admin", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,
+                                        true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
+                            }
                             Boolean Sex;
                             Sex = sexMale.selectedProperty().getValue();
                             InfoEmployee Emp = new InfoEmployee();
@@ -352,11 +364,11 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             m = new MD5Encrypt();
                             String Password = m.hashPass("123456");
                             DAO.AddUser(newId.getText(), Username, Password, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+                            DAO.setRoleUser(newId.getText());
                             DAO.Set_Role_Employee(Emp.getWork_Dept(), newId.getText());
                             String content = "Username: " + newId.getText() + ", Password: 123456";
                             Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                                     "KAN@123456", "Default username and password", content);
-
                             if (!DAO.checkFirstLogin().equals(1)) {
                                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create " + newId.getText(),
                                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());

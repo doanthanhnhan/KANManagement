@@ -179,7 +179,7 @@ public class FXMLLoginController implements Initializable {
                         @Override
                         public void run() {
                             try {
-                                DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
+                                DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                             } catch (SQLException | ClassNotFoundException ex) {
                                 Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -201,7 +201,7 @@ public class FXMLLoginController implements Initializable {
                             @Override
                             public void run() {
                                 try {
-                                    DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),GetInetAddress.getMacAddress());
+                                    DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     Calendar cal = Calendar.getInstance();
                                     String logtime;
@@ -243,7 +243,8 @@ public class FXMLLoginController implements Initializable {
                                         Calendar cal = Calendar.getInstance();
                                         String logtime;
                                         logtime = dateFormat.format(cal.getTime());
-                                        DAO.setUserLogs(txtUserName.getText(), "Login", logtime);
+                                        DAO.setUserLogs_With_MAC(txtUserName.getText(), "Login successful",
+                                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                         DAO.reset_CheckLogin(txtUserName.getText(), logtime);
                                         checkLoginRegis = true;
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLInfoEmployee.fxml"));
@@ -285,7 +286,7 @@ public class FXMLLoginController implements Initializable {
             notificationFunction.notification(txtUserName, hboxContent, "USER MUST NOT EMPTY !!!");
         } else {
             Emp = DAO.getListCheckLogin(txtUserName.getText());
-            if (!DAO.checkSetPass(txtUserName.getText())&& Emp != null) {
+            if (!DAO.checkSetPass(txtUserName.getText()) && Emp != null) {
                 notificationFunction.notification(txtUserName, hboxContent, "USER DOESN'T HAVE SECRET QUESTIONS!!!");
             } else {
                 User_Login = txtUserName.getText();

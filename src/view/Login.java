@@ -40,9 +40,7 @@ public class Login extends Application {
             alert.setContentText("Please contact the administrator for reuse !!!");
             alert.showAndWait();
         } else{
-            if (DAO.checkFirstLogin() == 0) {
-                DAODepartMentReActive.Add_New_Department("DPM-Admin", "Admin", "Admin");
-                DAO.setRoleDepartmentAdmin();
+            if (DAO.checkFirstLogin() == 0) {          
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
                 stage.setTitle("Add New Employee");
                 Scene scene = new Scene(root);

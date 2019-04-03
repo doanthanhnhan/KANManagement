@@ -47,7 +47,6 @@ public class DAO {
 //    set Role for employee when add new employee with department
 
     public static void Set_Role_Employee(String Department, String EmployeeID) throws ClassNotFoundException, SQLException {
-        setRoleUser(EmployeeID);
         Connection connection = connectDB.connectSQLServer();
         DecentralizationModel Emp = new DecentralizationModel();
         String sql = "select * from Departments where DepartmentID=?";
@@ -56,9 +55,9 @@ public class DAO {
         ResultSet rs = pt.executeQuery();
         while (rs.next()) {
             update_EmployeeDecentralization(
-                    EmployeeID, 
-                    rs.getBoolean("Employee_View"),rs.getBoolean("Employee_Add"), rs.getBoolean("Employee_Edit"), rs.getBoolean("Employee_Delete"),
-                    rs.getBoolean("User_View"), rs.getBoolean("User_Add"), rs.getBoolean("User_Edit"), rs.getBoolean("User_Delete"), 
+                    EmployeeID,
+                    rs.getBoolean("Employee_View"), rs.getBoolean("Employee_Add"), rs.getBoolean("Employee_Edit"), rs.getBoolean("Employee_Delete"),
+                    rs.getBoolean("User_View"), rs.getBoolean("User_Add"), rs.getBoolean("User_Edit"), rs.getBoolean("User_Delete"),
                     rs.getBoolean("Booking_View"), rs.getBoolean("Booking_Add"), rs.getBoolean("Booking_Edit"), rs.getBoolean("Booking_Delete"),
                     rs.getBoolean("CheckIn_View"), rs.getBoolean("CheckIn_Add"), rs.getBoolean("CheckIn_Edit"), rs.getBoolean("CheckIn_Delete"),
                     rs.getBoolean("CheckOut_View"), rs.getBoolean("CheckOut_Add"), rs.getBoolean("CheckOut_Edit"), rs.getBoolean("CheckOut_Delete"),
@@ -816,67 +815,68 @@ public class DAO {
         pts.close();
         connection.close();
     }
+
 // set Role for admin
 
-    public static void setRoleAdmin(String User) throws ClassNotFoundException, SQLException {
-        Connection connection = connectDB.connectSQLServer();
-        String ex = "Insert Into Role Values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement pts = connection.prepareStatement(ex);
-        pts.setString(1, User);
-        pts.setBoolean(2, true);
-        pts.setBoolean(3, true);
-        pts.setBoolean(4, true);
-        pts.setBoolean(5, true);
-        pts.setBoolean(6, true);
-        pts.setBoolean(7, true);
-        pts.setBoolean(8, true);
-        pts.setBoolean(9, true);
-        pts.setBoolean(10, true);
-        pts.setBoolean(11, true);
-        pts.setBoolean(12, true);
-        pts.setBoolean(13, true);
-        pts.setBoolean(14, true);
-        pts.setBoolean(15, true);
-        pts.setBoolean(16, true);
-        pts.setBoolean(17, true);
-        pts.setBoolean(18, true);
-        pts.setBoolean(19, true);
-        pts.setBoolean(20, true);
-        pts.setBoolean(21, true);
-        pts.setBoolean(22, true);
-        pts.setBoolean(23, true);
-        pts.setBoolean(24, true);
-        pts.setBoolean(25, true);
-        pts.setBoolean(26, true);
-        pts.setBoolean(27, true);
-        pts.setBoolean(28, true);
-        pts.setBoolean(29, true);
-        pts.setBoolean(30, true);
-        pts.setBoolean(31, true);
-        pts.setBoolean(32, true);
-        pts.setBoolean(33, true);
-        pts.setBoolean(34, true);
-        pts.setBoolean(35, true);
-        pts.setBoolean(36, true);
-        pts.setBoolean(37, true);
-        pts.setBoolean(38, true);
-        pts.setBoolean(39, true);
-        pts.setBoolean(40, true);
-        pts.setBoolean(41, true);
-        pts.setBoolean(42, true);
-        pts.setBoolean(43, true);
-        pts.setBoolean(44, true);
-        pts.setBoolean(45, true);
-        pts.setBoolean(46, true);
-        pts.setBoolean(47, true);
-        pts.setBoolean(48, true);
-        pts.setBoolean(49, true);
-        pts.setBoolean(50, true);
-        pts.setBoolean(51, true);
-        pts.setBoolean(52, true);
-        pts.setBoolean(53, true);
-        pts.execute();
-        pts.close();
-        connection.close();
-    }
+//    public static void setRoleAdmin(String User) throws ClassNotFoundException, SQLException {
+//        Connection connection = connectDB.connectSQLServer();
+//        String ex = "Insert Into Role Values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+//        PreparedStatement pts = connection.prepareStatement(ex);
+//        pts.setString(1, User);
+//        pts.setBoolean(2, true);
+//        pts.setBoolean(3, true);
+//        pts.setBoolean(4, true);
+//        pts.setBoolean(5, true);
+//        pts.setBoolean(6, true);
+//        pts.setBoolean(7, true);
+//        pts.setBoolean(8, true);
+//        pts.setBoolean(9, true);
+//        pts.setBoolean(10, true);
+//        pts.setBoolean(11, true);
+//        pts.setBoolean(12, true);
+//        pts.setBoolean(13, true);
+//        pts.setBoolean(14, true);
+//        pts.setBoolean(15, true);
+//        pts.setBoolean(16, true);
+//        pts.setBoolean(17, true);
+//        pts.setBoolean(18, true);
+//        pts.setBoolean(19, true);
+//        pts.setBoolean(20, true);
+//        pts.setBoolean(21, true);
+//        pts.setBoolean(22, true);
+//        pts.setBoolean(23, true);
+//        pts.setBoolean(24, true);
+//        pts.setBoolean(25, true);
+//        pts.setBoolean(26, true);
+//        pts.setBoolean(27, true);
+//        pts.setBoolean(28, true);
+//        pts.setBoolean(29, true);
+//        pts.setBoolean(30, true);
+//        pts.setBoolean(31, true);
+//        pts.setBoolean(32, true);
+//        pts.setBoolean(33, true);
+//        pts.setBoolean(34, true);
+//        pts.setBoolean(35, true);
+//        pts.setBoolean(36, true);
+//        pts.setBoolean(37, true);
+//        pts.setBoolean(38, true);
+//        pts.setBoolean(39, true);
+//        pts.setBoolean(40, true);
+//        pts.setBoolean(41, true);
+//        pts.setBoolean(42, true);
+//        pts.setBoolean(43, true);
+//        pts.setBoolean(44, true);
+//        pts.setBoolean(45, true);
+//        pts.setBoolean(46, true);
+//        pts.setBoolean(47, true);
+//        pts.setBoolean(48, true);
+//        pts.setBoolean(49, true);
+//        pts.setBoolean(50, true);
+//        pts.setBoolean(51, true);
+//        pts.setBoolean(52, true);
+//        pts.setBoolean(53, true);
+//        pts.execute();
+//        pts.close();
+//        connection.close();
+//    }
 }

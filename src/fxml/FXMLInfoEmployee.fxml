@@ -221,14 +221,11 @@
                                           <Insets top="30.0" />
                                        </HBox.margin>
                                     </JFXTextField>
-                                    <JFXTextField fx:id="DepartmentId" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="190.0" promptText="Department Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
+                                    <JFXComboBox fx:id="DepartmentId" prefHeight="35.0" prefWidth="190.0" promptText="Department Id">
                                        <HBox.margin>
                                           <Insets top="30.0" />
                                        </HBox.margin>
-                                    </JFXTextField>
+                                    </JFXComboBox>
                                  </children>
                               </HBox>
                            </children>
