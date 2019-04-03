@@ -101,6 +101,8 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             if (DAO.checkFirstLogin().equals(0)) {
                 newId.setDisable(true);
                 newId.setText("admin");
+                boxDepartment.setDisable(true);
+                boxDepartment.setValue("DPM-Admin");
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLAddNewEmloyeeController.class.getName()).log(Level.SEVERE, null, ex);
@@ -350,11 +352,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             m = new MD5Encrypt();
                             String Password = m.hashPass("123456");
                             DAO.AddUser(newId.getText(), Username, Password, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
-                            if (DAO.checkFirstLogin().equals(1)) {
-                                DAO.setRoleAdmin(newId.getText());
-                            } else {
-                                DAO.setRoleUser(newId.getText());
-                            }
+                            DAO.Set_Role_Employee(Emp.getWork_Dept(), newId.getText());
                             String content = "Username: " + newId.getText() + ", Password: 123456";
                             Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
                                     "KAN@123456", "Default username and password", content);

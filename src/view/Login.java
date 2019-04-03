@@ -18,6 +18,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.DAO;
+import models.DAODepartMentReActive;
+import utils.FormatName;
 import utils.GetInetAddress;
 
 /**
@@ -39,6 +41,8 @@ public class Login extends Application {
             alert.showAndWait();
         } else{
             if (DAO.checkFirstLogin() == 0) {
+                DAODepartMentReActive.Add_New_Department("DPM-Admin", "Admin", "Admin");
+                DAO.setRoleDepartmentAdmin();
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
                 stage.setTitle("Add New Employee");
                 Scene scene = new Scene(root);

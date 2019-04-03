@@ -85,6 +85,7 @@ public class FXMLListDepartmentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        CheckListDepart = true;
         ConnectControllers.setfXMLListDepartmentController(this);
         roleDAOImpl = new RoleDAOImpl();
         FXMLMainFormController.checkRegis = true;
@@ -321,7 +322,6 @@ public class FXMLListDepartmentController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
-        CheckListDepart = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddDepartment.fxml", "/images/KAN Logo.png", "Add Department Informations");
     }

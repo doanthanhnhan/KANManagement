@@ -7,7 +7,6 @@ package models;
 
 import controllers.FXMLAddNewServiceTypeController;
 import controllers.FXMLInfoEmployeeController;
-import controllers.FXMLLoginController;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -38,12 +37,45 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import static models.DAOcheckRole.update_EmployeeDecentralization;
 
 /**
  *
  * @author Admin
  */
 public class DAO {
+//    set Role for employee when add new employee with department
+
+    public static void Set_Role_Employee(String Department, String EmployeeID) throws ClassNotFoundException, SQLException {
+        setRoleUser(EmployeeID);
+        Connection connection = connectDB.connectSQLServer();
+        DecentralizationModel Emp = new DecentralizationModel();
+        String sql = "select * from Departments where DepartmentID=?";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        pt.setString(1, Department);
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            update_EmployeeDecentralization(
+                    EmployeeID, 
+                    rs.getBoolean("Employee_View"),rs.getBoolean("Employee_Add"), rs.getBoolean("Employee_Edit"), rs.getBoolean("Employee_Delete"),
+                    rs.getBoolean("User_View"), rs.getBoolean("User_Add"), rs.getBoolean("User_Edit"), rs.getBoolean("User_Delete"), 
+                    rs.getBoolean("Booking_View"), rs.getBoolean("Booking_Add"), rs.getBoolean("Booking_Edit"), rs.getBoolean("Booking_Delete"),
+                    rs.getBoolean("CheckIn_View"), rs.getBoolean("CheckIn_Add"), rs.getBoolean("CheckIn_Edit"), rs.getBoolean("CheckIn_Delete"),
+                    rs.getBoolean("CheckOut_View"), rs.getBoolean("CheckOut_Add"), rs.getBoolean("CheckOut_Edit"), rs.getBoolean("CheckOut_Delete"),
+                    rs.getBoolean("Customer_View"), rs.getBoolean("Customer_Add"), rs.getBoolean("Customer_Edit"), rs.getBoolean("Customer_Delete"),
+                    rs.getBoolean("Department_View"), rs.getBoolean("Department_Add"), rs.getBoolean("Department_Edit"), rs.getBoolean("Department_Delete"),
+                    rs.getBoolean("Role_View"), rs.getBoolean("Role_Add"), rs.getBoolean("Role_Edit"), rs.getBoolean("Role_Delete"),
+                    rs.getBoolean("Room_View"), rs.getBoolean("Room_Add"), rs.getBoolean("Room_Edit"), rs.getBoolean("Room_Delete"),
+                    rs.getBoolean("SODetail_View"), rs.getBoolean("SODetail_Add"), rs.getBoolean("SODetail_Edit"), rs.getBoolean("SODetail_Delete"),
+                    rs.getBoolean("SODer_View"), rs.getBoolean("SODer_Add"), rs.getBoolean("SODer_Edit"), rs.getBoolean("SODer_Delete"),
+                    rs.getBoolean("SType_View"), rs.getBoolean("SType_Add"), rs.getBoolean("SType_Edit"), rs.getBoolean("SType_Delete"),
+                    rs.getBoolean("UserLog_View"), rs.getBoolean("UserLog_Add"), rs.getBoolean("UserLog_Edit"), rs.getBoolean("UserLog_Delete")
+            );
+        }
+        rs.close();
+        pt.close();
+        connection.close();
+    }
 // reset lại số lần gõ sai theo dia chi Mac
 
     public static void reset_CheckMac(String MACAddress) throws ClassNotFoundException, SQLException {
