@@ -226,7 +226,7 @@ public class FXMLAccountController implements Initializable {
             MD5Encrypt m;
             m = new MD5Encrypt();
             DAO.SetPass(txtUsername.getText(), m.hashPass(newPassword.getText()), m.hashPass((String) newSerectQuestion.getValue()), m.hashPass((String) newSerectAnswer.getText()));
-            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Set pass" + txtUsername.getText(),
+            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Set pass " + txtUsername.getText(),
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
             Stage stage = (Stage) btnRegister.getScene().getWindow();
             // do what you have to do

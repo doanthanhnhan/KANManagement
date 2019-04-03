@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
@@ -150,7 +152,7 @@ public class FXMLInfoEmployeeController implements Initializable {
     private FontAwesomeIconView iconRefresh;
     @FXML
     private AnchorPane anchorPaneInfoEmployee;
-
+    private FXMLDecentralizationController fXMLDecentralizationController;
     @FXML
     private HBox HboxBoxId;
     private FXMLListEmployeeController fXMLListEmployeeController;
@@ -164,6 +166,7 @@ public class FXMLInfoEmployeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         try {
             DepartmentId.setItems(DAODepartMentReActive.get_All_DepartmentName());
         } catch (ClassNotFoundException | SQLException ex) {
@@ -688,76 +691,51 @@ public class FXMLInfoEmployeeController implements Initializable {
                         Platform.runLater(() -> {
                             notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
                         });
-                    } else if (!FXMLMainFormController.checkRegis && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !FXMLLoginController.checkLoginRegis) {
+                    } else if (FXMLListEmployeeController.check_form_list && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !FXMLLoginController.checkLoginRegis) {
                         System.out.println("vao khu vuc submit admin 1");
-                        Platform.runLater(() -> {
-                            if (!Department.equals(DepartmentId.getValue())) {
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+                        if (!Department.equals(DepartmentId.getValue())) {
+                            Platform.runLater(() -> {
+                                Alert alert = new Alert(AlertType.CONFIRMATION);
                                 alert.setTitle("Warning!!!");
-                                alert.setContentText("This will change this person's rights according to the " + DepartmentId.getValue() + "! Are you sure ???");
-                                alert.showAndWait();
+                                alert.setContentText("Choose change permissions for " + DepartmentId.getValue() + "!\n\n"
+                                        + "-Default permissions: Delete all rights and recreate rights under the work department\n\n"
+                                        + "-More permissions: Keep the rights and add rights under the working department\n\n"
+                                        + "-Change department only: Keep the rights and only change the working department\n\n\n"
+                                );
+                                ButtonType Default = new ButtonType("Default permissions");
+                                ButtonType More = new ButtonType("More permissions");
+                                ButtonType Only = new ButtonType("Change department only");
+                                ButtonType cancel = new ButtonType("Cancel");
+
+                                // Loại bỏ các ButtonType mặc định
+                                alert.getButtonTypes().clear();
+                                alert.getButtonTypes().addAll(Default, More, Only, cancel);
+
+                                // option != null.
+                                Optional<ButtonType> option = alert.showAndWait();
                                 System.out.println(alert.getResult());
-                                if (alert.getResult() == ButtonType.OK) {
+                                if (option.get() == Default) {
                                     try {
                                         DAO.Set_Role_Employee(DepartmentId.getValue(), boxId.getValue());
                                     } catch (ClassNotFoundException | SQLException ex) {
                                         Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
-                                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update " + boxId.getValue() + " Department old = " + Department + " to Department new = " + DepartmentId.getValue(),
-                                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                                    FXMLMainFormController.checkRegis = false;
-                                    String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                                    String date_hire = null;
-                                    if (Hiredate.getValue() != null) {
-                                        date_hire = Hiredate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                    if (FXMLDecentralizationController.check_form_list) {
+                                        fXMLDecentralizationController = ConnectControllers.getfXMLDecentralizationController();
+                                        fXMLDecentralizationController.showUsersData();
                                     }
-                                    Boolean Sex;
-                                    Sex = Male.selectedProperty().getValue();
-                                    BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
-                                    byte[] res;
-                                    try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
-                                        ImageIO.write(bImage, "png", s);
-                                        res = s.toByteArray();
-                                        Blob blob = new SerialBlob(res);
-                                        DAO.UpdateAllInfoEmployee(
-                                                boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
-                                                FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
-                                                Email.getText(), DepartmentId.getValue(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
-                                                Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Sex, blob
-                                        );
-                                    } catch (SQLException ex) {
-                                        Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
-                                    } catch (IOException | ClassNotFoundException ex) {
+                                } else if (option.get() == More) {
+                                    try {
+                                        DAO.Set_Role_More_Employee(DepartmentId.getValue(), boxId.getValue());
+                                    } catch (ClassNotFoundException | SQLException ex) {
                                         Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
-                                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update " + boxId.getValue(),
-                                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                                    newPhone.setText("");
-                                    boxId.setValue(null);
-                                    birthday.setValue(null);
-                                    Hiredate.setValue(null);
-                                    FirstName.setText("");
-                                    MidName.setText("");
-                                    LastName.setText("");
-                                    Email.setText("");
-                                    IdNumber.setText("");
-                                    address.setText("");
-                                    Job.setText("");
-                                    EducatedLevel.setText("");
-                                    Salary.setText("0");
-                                    Comm.setText("0");
-                                    Bonus.setText("0");
-                                    Male.setSelected(true);
-                                    check_delete = true;
-                                    validateInfoEmployee = true;
-                                    FXMLListEmployeeController.check_form_list = false;
-                                    fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
-                                    fXMLListEmployeeController.showUsersData();
-                                    System.out.println("Vào chỗ submit admin");
-                                    Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
-                                    stage.close();
+                                    if (FXMLDecentralizationController.check_form_list) {
+                                        fXMLDecentralizationController = ConnectControllers.getfXMLDecentralizationController();
+                                        fXMLDecentralizationController.showUsersData();
+                                    }
                                 }
-                            } else {
                                 System.out.println("vao khu vuc submit admin 2");
                                 FXMLMainFormController.checkRegis = false;
                                 String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -810,8 +788,8 @@ public class FXMLInfoEmployeeController implements Initializable {
                                 System.out.println("Vào chỗ submit admin");
                                 Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
                                 stage.close();
-                            }
-                        });
+                            });
+                        }
                     } else {
                         Platform.runLater(() -> {
                             Boolean Sex;
@@ -844,7 +822,8 @@ public class FXMLInfoEmployeeController implements Initializable {
             handleInfoAction();
 
         } catch (SQLException | ClassNotFoundException | IOException ex) {
-            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLInfoEmployeeController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 

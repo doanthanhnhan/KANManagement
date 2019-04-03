@@ -44,8 +44,203 @@ import static models.DAOcheckRole.update_EmployeeDecentralization;
  * @author Admin
  */
 public class DAO {
-//    set Role for employee when add new employee with department
+//    set Role more
 
+    public static void Update_Role_More(String EmployeeID, String name) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String ex = "UPDATE Role set "+name+" = 1 where EmployeeID=?";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setString(1, EmployeeID);
+        pts.execute();
+        pts.close();
+        connection.close();
+    }
+//    set Role More Departmen and Employee
+
+    public static void Set_Role_More_Employee(String Department, String EmployeeID) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String sql = "select * from Departments where DepartmentID=?";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        pt.setString(1, Department);
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+//            set Employee
+            if (rs.getBoolean("Employee_View")) {
+                Update_Role_More(EmployeeID,"Employee_View");
+            }
+            if (rs.getBoolean("Employee_Add")) {
+                Update_Role_More(EmployeeID, "Employee_Add");
+            }
+            if (rs.getBoolean("Employee_Edit")) {
+                Update_Role_More(EmployeeID, "Employee_Edit");
+            }
+            if (rs.getBoolean("Employee_Delete")) {
+                Update_Role_More(EmployeeID, "Employee_Delete");
+            }
+//            set User
+            if (rs.getBoolean("User_View")) {
+                Update_Role_More(EmployeeID, "User_View");
+            }
+            if (rs.getBoolean("User_Add")) {
+                Update_Role_More(EmployeeID, "User_Add");
+            }
+            if (rs.getBoolean("User_Edit")) {
+                Update_Role_More(EmployeeID, "User_Edit");
+            }
+            if (rs.getBoolean("User_Delete")) {
+                Update_Role_More(EmployeeID, "User_Delete");
+            }
+//            set booking
+            if (rs.getBoolean("Booking_View")) {
+                Update_Role_More(EmployeeID, "Booking_View");
+            }
+            if (rs.getBoolean("Booking_Add")) {
+                Update_Role_More(EmployeeID, "Booking_Add");
+            }
+            if (rs.getBoolean("Booking_Edit")) {
+                Update_Role_More(EmployeeID, "Booking_Edit");
+            }
+            if (rs.getBoolean("Booking_Delete")) {
+                Update_Role_More(EmployeeID, "Booking_Delete");
+            }
+//            set checkin
+            if (rs.getBoolean("CheckIn_View")) {
+                Update_Role_More(EmployeeID, "CheckIn_View");
+            }
+            if (rs.getBoolean("CheckIn_Add")) {
+                Update_Role_More(EmployeeID, "CheckIn_Add");
+            }
+            if (rs.getBoolean("CheckIn_Edit")) {
+                Update_Role_More(EmployeeID, "CheckIn_Edit");
+            }
+            if (rs.getBoolean("CheckIn_Delete")) {
+                Update_Role_More(EmployeeID, "CheckIn_Delete");
+            }
+//set checkout
+            if (rs.getBoolean("CheckOut_View")) {
+                Update_Role_More(EmployeeID, "CheckOut_View");
+            }
+            if (rs.getBoolean("CheckOut_Add")) {
+                Update_Role_More(EmployeeID, "CheckOut_Add");
+            }
+            if (rs.getBoolean("CheckOut_Edit")) {
+                Update_Role_More(EmployeeID, "CheckOut_Edit");
+            }
+            if (rs.getBoolean("CheckOut_Delete")) {
+                Update_Role_More(EmployeeID, "CheckOut_Delete");
+            }
+//set customer
+            if (rs.getBoolean("Customer_View")) {
+                Update_Role_More(EmployeeID, "Customer_View");
+            }
+            if (rs.getBoolean("Customer_Add")) {
+                Update_Role_More(EmployeeID, "Customer_Add");
+            }
+            if (rs.getBoolean("Customer_Edit")) {
+                Update_Role_More(EmployeeID, "Customer_Edit");
+            }
+            if (rs.getBoolean("Customer_Delete")) {
+                Update_Role_More(EmployeeID, "Customer_Delete");
+            }
+//set Department
+            if (rs.getBoolean("Department_View")) {
+                Update_Role_More(EmployeeID, "Department_View");
+            }
+            if (rs.getBoolean("Department_Add")) {
+                Update_Role_More(EmployeeID, "Department_Add");
+            }
+            if (rs.getBoolean("Department_Edit")) {
+                Update_Role_More(EmployeeID, "Department_Edit");
+            }
+            if (rs.getBoolean("Department_Delete")) {
+                Update_Role_More(EmployeeID, "Department_Delete");
+            }
+//            set Role
+            if (rs.getBoolean("Role_View")) {
+                Update_Role_More(EmployeeID, "Role_View");
+            }
+            if (rs.getBoolean("Role_Add")) {
+                Update_Role_More(EmployeeID, "Role_Add");
+            }
+            if (rs.getBoolean("Role_Edit")) {
+                Update_Role_More(EmployeeID, "Role_Edit");
+            }
+            if (rs.getBoolean("Role_Delete")) {
+                Update_Role_More(EmployeeID, "Role_Delete");
+            }
+//            set Room
+            if (rs.getBoolean("Room_View")) {
+                Update_Role_More(EmployeeID, "Room_View");
+            }
+            if (rs.getBoolean("Room_Add")) {
+                Update_Role_More(EmployeeID, "Room_Add");
+            }
+            if (rs.getBoolean("Room_Edit")) {
+                Update_Role_More(EmployeeID, "Room_Edit");
+            }
+            if (rs.getBoolean("Room_Delete")) {
+                Update_Role_More(EmployeeID, "Room_Delete");
+            }
+
+//   set SODetail
+            if (rs.getBoolean("SODetail_View")) {
+                Update_Role_More(EmployeeID, "SODetail_View");
+            }
+            if (rs.getBoolean("SODetail_Add")) {
+                Update_Role_More(EmployeeID, "SODetail_Add");
+            }
+            if (rs.getBoolean("SODetail_Edit")) {
+                Update_Role_More(EmployeeID, "SODetail_Edit");
+            }
+            if (rs.getBoolean("SODetail_Delete")) {
+                Update_Role_More(EmployeeID, "SODetail_Delete");
+            }
+//  set SOder
+            if (rs.getBoolean("SODer_View")) {
+                Update_Role_More(EmployeeID, "SODer_View");
+            }
+            if (rs.getBoolean("SODer_Add")) {
+                Update_Role_More(EmployeeID, "SODer_Add");
+            }
+            if (rs.getBoolean("SODer_Edit")) {
+                Update_Role_More(EmployeeID, "SODer_Edit");
+            }
+            if (rs.getBoolean("SODer_Delete")) {
+                Update_Role_More(EmployeeID, "SODer_Delete");
+            }
+//  set Stype
+            if (rs.getBoolean("SType_View")) {
+                Update_Role_More(EmployeeID, "SType_View");
+            }
+            if (rs.getBoolean("SType_Add")) {
+                Update_Role_More(EmployeeID, "SType_Add");
+            }
+            if (rs.getBoolean("SType_Edit")) {
+                Update_Role_More(EmployeeID, "SType_Edit");
+            }
+            if (rs.getBoolean("SType_Delete")) {
+                Update_Role_More(EmployeeID, "SType_Delete");
+            }
+//  set Userlog
+            if (rs.getBoolean("UserLog_View")) {
+                Update_Role_More(EmployeeID, "UserLog_View");
+            }
+            if (rs.getBoolean("UserLog_Add")) {
+                Update_Role_More(EmployeeID, "UserLog_Add");
+            }
+            if (rs.getBoolean("UserLog_Edit")) {
+                Update_Role_More(EmployeeID, "UserLog_Edit");
+            }
+            if (rs.getBoolean("UserLog_Delete")) {
+                Update_Role_More(EmployeeID, "UserLog_Delete");
+            }
+        }
+        rs.close();
+        pt.close();
+        connection.close();
+    }
+
+//    set Role for employee when add new employee with department
     public static void Set_Role_Employee(String Department, String EmployeeID) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         DecentralizationModel Emp = new DecentralizationModel();
@@ -817,7 +1012,6 @@ public class DAO {
     }
 
 // set Role for admin
-
 //    public static void setRoleAdmin(String User) throws ClassNotFoundException, SQLException {
 //        Connection connection = connectDB.connectSQLServer();
 //        String ex = "Insert Into Role Values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

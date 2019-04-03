@@ -78,8 +78,9 @@ public class FXMLDecentralizationController implements Initializable {
     private String delete;
     private String view;
     private String edit;
-        @FXML
+    @FXML
     private ContextMenu contextMenu_Main;
+
     /**
      * Initializes the controller class.
      *
@@ -92,11 +93,7 @@ public class FXMLDecentralizationController implements Initializable {
         contextMenu_Main.getItems().remove(menuItem_Delete);
         contextMenu_Main.getItems().remove(menuItem_Edit);
         ConnectControllers.setfXMLDecentralizationController(this);
-        try {
-            listEmp = DAOcheckRole.getAllDecentralization();
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
         FXMLMainFormController.checkRegis = true;
         check_form_list = true;
         showUsersData();
@@ -279,6 +276,11 @@ public class FXMLDecentralizationController implements Initializable {
     }
 
     public void showUsersData() {
+        try {
+            listEmp = DAOcheckRole.getAllDecentralization();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //table_ServiceType.getItems().clear();
         tableDecentralization.setItems(listEmp);
 

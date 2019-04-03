@@ -30,7 +30,6 @@ public class ConnectControllers {
     public static FXMLListDepartmentController fXMLListDepartmentController;
     public static FXMLListCustomerController fXMLListCustomerController;
     public static FXMLEditCustomerController editCustomerController;
-
     public static FXMLListDepartmentController getfXMLListDepartmentController() {
         return fXMLListDepartmentController;
     }
