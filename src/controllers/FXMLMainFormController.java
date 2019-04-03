@@ -504,6 +504,11 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List UserLogs menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLUserLogs.fxml", "UserLogs", "UserLogs Informations");
     }
+        @FXML
+    private void handle_MenuItem_List_Department_Action(ActionEvent event) {
+        System.out.println("List Department menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListDepartment.fxml", "List Department", "Department Informations");
+    }
     // ############### END VIEW ACTIONS ###############
 
     // =============== START ADD ACTIONS ===============

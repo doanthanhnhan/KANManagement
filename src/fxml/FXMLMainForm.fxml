@@ -44,7 +44,7 @@
                               <MenuItem fx:id="menuItem_List_Check_In" mnemonicParsing="false" text="List Check in" />
                               <MenuItem fx:id="menuItem_List_Check_Out" mnemonicParsing="false" onAction="#handle_MenuItem_List_CheckOut_Action" text="List Check out" />
                               <MenuItem fx:id="menuItem_List_Customers" mnemonicParsing="false" onAction="#handle_MenuItem_List_Customer_Action" text="List Customers" />
-                              <MenuItem fx:id="menuItem_List_Department" mnemonicParsing="false" text="List Departments" />
+                              <MenuItem fx:id="menuItem_List_Department" mnemonicParsing="false" onAction="#handle_MenuItem_List_Department_Action" text="List Departments" />
                               <MenuItem fx:id="menuItem_List_Employees" mnemonicParsing="false" onAction="#handle_MenuItem_List_Employee_Action" text="List Employees" />
                               <MenuItem fx:id="menuItem_List_Role" mnemonicParsing="false" onAction="#handle_MenuItem_List_Role_Action" text="List Role" />
                               <MenuItem fx:id="menuItem_List_Rooms" mnemonicParsing="false" onAction="#handle_MenuItem_List_Rooms_Action" text="List Rooms" />
@@ -62,7 +62,7 @@
                               <MenuItem fx:id="menuItem_Add_Room" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Room_Action" text="Add new Room" />
                               <MenuItem fx:id="menuItem_Add_Service_Order" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Service_Order_Action" text="Add new Service Order" />
                               <MenuItem fx:id="menuItem_Add_Service_Type" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Service_Type_Action" text="Add new Service Type" />
-                              <MenuItem fx:id="menuItem_Add_Department" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Department_Action" text="Add new Department" />
+                              <MenuItem fx:id="menuItem_Add_Department" mnemonicParsing="false" onAction="#handle_MenuItem_Add_Department_Action" text="Add new Booking" />
                            </items>
                         </Menu>
                         <Menu fx:id="menu_Edit" mnemonicParsing="false" text="Edit">

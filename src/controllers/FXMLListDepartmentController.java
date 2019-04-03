@@ -9,9 +9,6 @@ import com.jfoenix.controls.JFXComboBox;
 import java.awt.Checkbox;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,41 +21,42 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import models.ButtonDecentralization;
-import models.DAO;
-import models.DAOcheckRole;
+import models.DAODepartmentDecentralization;
 import models.DecentralizationModel;
+import models.DepartMentDecentralization;
 import utils.StageLoader;
 
 /**
  * FXML Controller class
  *
- * @author Doan Thanh Nhan
+ * @author Admin
  */
-public class FXMLDecentralizationController implements Initializable {
+public class FXMLListDepartmentController implements Initializable {
 
-    ObservableList<DecentralizationModel> listEmp = FXCollections.observableArrayList();
+    ObservableList<DepartMentDecentralization> listDPM = FXCollections.observableArrayList();
     public Boolean check_Edit_Action = false;
-    public static DecentralizationModel Emp;
-    public static Boolean check_form_list = false;
+    public static DepartMentDecentralization DPM;
+    public static Boolean CheckListDepart = false;
     private static final int ROWS_PER_PAGE = 5;
-    private FilteredList<DecentralizationModel> filteredData;
-
+    private FilteredList<DepartMentDecentralization> filteredData;
     @FXML
-    public TableView<DecentralizationModel> tableDecentralization;
-
+    private AnchorPane main_AnchorPaneDepartment;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private TableView<DepartMentDecentralization> tableDepartment;
+    @FXML
+    private ContextMenu contextMenu_Main;
     @FXML
     private MenuItem menuItem_Edit;
     @FXML
@@ -66,11 +64,7 @@ public class FXMLDecentralizationController implements Initializable {
     @FXML
     private MenuItem menuItem_Delete;
     @FXML
-    private AnchorPane main_AnchorPane;
-    @FXML
     private MenuItem menuItem_Refresh;
-    @FXML
-    private Pagination pagination;
     @FXML
     private JFXComboBox<String> BoxMenu;
     public static String BoxValue;
@@ -78,27 +72,22 @@ public class FXMLDecentralizationController implements Initializable {
     private String delete;
     private String view;
     private String edit;
-        @FXML
-    private ContextMenu contextMenu_Main;
+
     /**
      * Initializes the controller class.
-     *
-     * @param url
-     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         contextMenu_Main.getItems().remove(menuItem_Add);
         contextMenu_Main.getItems().remove(menuItem_Delete);
         contextMenu_Main.getItems().remove(menuItem_Edit);
-        ConnectControllers.setfXMLDecentralizationController(this);
+        ConnectControllers.setfXMLListDepartmentController(this);
         try {
-            listEmp = DAOcheckRole.getAllDecentralization();
+            listDPM = DAODepartmentDecentralization.getAllDecentralization();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
         FXMLMainFormController.checkRegis = true;
-        check_form_list = true;
         showUsersData();
         ObservableList list_menu = FXCollections.observableArrayList();
         list_menu.add("Employees Decentralization");
@@ -206,73 +195,66 @@ public class FXMLDecentralizationController implements Initializable {
                 setColumns();
             }
         });
-        // Check item when click on table
     }
 
     private void changeTableView(int index, int limit) {
-
         int fromIndex = index * limit;
-        int toIndex = Math.min(fromIndex + limit, listEmp.size());
+        int toIndex = Math.min(fromIndex + limit, listDPM.size());
 
         int minIndex = Math.min(toIndex, filteredData.size());
 
-        SortedList<DecentralizationModel> sortedData = new SortedList<>(
+        SortedList<DepartMentDecentralization> sortedData = new SortedList<>(
                 FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
 
-        sortedData.comparatorProperty().bind(tableDecentralization.comparatorProperty());
+        sortedData.comparatorProperty().bind(tableDepartment.comparatorProperty());
 
-        tableDecentralization.setItems(sortedData);
-
+        tableDepartment.setItems(sortedData);
     }
 
     private void setColumns() {
-        TableColumn<DecentralizationModel, String> empIDCol = new TableColumn<>("Emp ID");
-        TableColumn<DecentralizationModel, String> empFNameCol = new TableColumn<>("Emp FirstName");
-        TableColumn<DecentralizationModel, String> empMNameCol = new TableColumn<>("Emp MidName");
-        TableColumn<DecentralizationModel, String> empLNameCol = new TableColumn<>("Emp LastName");
-        TableColumn<DecentralizationModel, CheckBox> empCreateCol = new TableColumn<>("Create");
-        TableColumn<DecentralizationModel, Checkbox> empUpdateCol = new TableColumn<>("Update");
-        TableColumn<DecentralizationModel, Checkbox> empReadCol = new TableColumn<>("Read");
-        TableColumn<DecentralizationModel, Checkbox> empDeleteCol = new TableColumn<>("Delete");
-
-        TableColumn<DecentralizationModel, ButtonDecentralization> btn_Action_Col = new TableColumn<>("Action");
+        TableColumn<DepartMentDecentralization, String> dpmIDCol = new TableColumn<>("Department ID");
+        TableColumn<DepartMentDecentralization, String> dpmNameCol = new TableColumn<>("Department Name");
+        TableColumn<DepartMentDecentralization, String> dpmUserNameCol = new TableColumn<>("UserName");
+        TableColumn<DepartMentDecentralization, CheckBox> dpmCreateCol = new TableColumn<>("Create");
+        TableColumn<DepartMentDecentralization, Checkbox> dpmUpdateCol = new TableColumn<>("Update");
+        TableColumn<DepartMentDecentralization, Checkbox> dpmReadCol = new TableColumn<>("Read");
+        TableColumn<DepartMentDecentralization, Checkbox> dpmDeleteCol = new TableColumn<>("Delete");
+        TableColumn<DepartMentDecentralization, ButtonDecentralization> btn_Action_Col = new TableColumn<>("Action");
         TableColumn numberCol = new TableColumn("#");
-        numberCol.setCellValueFactory(new Callback<CellDataFeatures<DecentralizationModel, String>, ObservableValue<String>>() {
+        numberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DecentralizationModel, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(CellDataFeatures<DecentralizationModel, String> p) {
-                return new ReadOnlyObjectWrapper((tableDecentralization.getItems().indexOf(p.getValue()) + 1) + "");
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<DecentralizationModel, String> p) {
+                return new ReadOnlyObjectWrapper((tableDepartment.getItems().indexOf(p.getValue()) + 1) + "");
             }
         });
         numberCol.setSortable(false);
 
-        empCreateCol.setCellValueFactory(new PropertyValueFactory<>(add));
-        empUpdateCol.setCellValueFactory(new PropertyValueFactory<>(edit));
-        empReadCol.setCellValueFactory(new PropertyValueFactory<>(view));
-        empDeleteCol.setCellValueFactory(new PropertyValueFactory<>(delete));
+        dpmCreateCol.setCellValueFactory(new PropertyValueFactory<>(add));
+        dpmUpdateCol.setCellValueFactory(new PropertyValueFactory<>(edit));
+        dpmReadCol.setCellValueFactory(new PropertyValueFactory<>(view));
+        dpmDeleteCol.setCellValueFactory(new PropertyValueFactory<>(delete));
 // else {
 //            empCreateCol.setCellValueFactory(new PropertyValueFactory<>("User_Add"));
 //            empUpdateCol.setCellValueFactory(new PropertyValueFactory<>("User_Edit"));
 //            empReadCol.setCellValueFactory(new PropertyValueFactory<>("User_View"));
 //            empDeleteCol.setCellValueFactory(new PropertyValueFactory<>("User_Delete"));
 //        }
-        empIDCol.setCellValueFactory(new PropertyValueFactory<>("Employee_ID"));
-        empFNameCol.setCellValueFactory(new PropertyValueFactory<>("First_Name"));
-        empMNameCol.setCellValueFactory(new PropertyValueFactory<>("Mid_Name"));
-        empLNameCol.setCellValueFactory(new PropertyValueFactory<>("Last_Name"));
+        dpmIDCol.setCellValueFactory(new PropertyValueFactory<>("DepartmentID"));
+        dpmNameCol.setCellValueFactory(new PropertyValueFactory<>("DepartmentName"));
+        dpmUserNameCol.setCellValueFactory(new PropertyValueFactory<>("Username"));
         btn_Action_Col.setCellValueFactory(new PropertyValueFactory<>("DecentralizationAction"));
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empFNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empMNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empLNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empCreateCol.setStyle("-fx-alignment: CENTER;");
-        empUpdateCol.setStyle("-fx-alignment: CENTER;");
-        empReadCol.setStyle("-fx-alignment: CENTER;");
-        empDeleteCol.setStyle("-fx-alignment: CENTER");
+        dpmIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        dpmNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        dpmUserNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        dpmCreateCol.setStyle("-fx-alignment: CENTER;");
+        dpmUpdateCol.setStyle("-fx-alignment: CENTER;");
+        dpmReadCol.setStyle("-fx-alignment: CENTER;");
+        dpmDeleteCol.setStyle("-fx-alignment: CENTER");
 
         // Thêm cột vào bảng
-        tableDecentralization.getColumns().clear();
-        tableDecentralization.getColumns().addAll(numberCol, empIDCol, empFNameCol, empMNameCol, empLNameCol, empCreateCol, empUpdateCol, empReadCol, empDeleteCol, btn_Action_Col);
+        tableDepartment.getColumns().clear();
+        tableDepartment.getColumns().addAll(numberCol, dpmIDCol, dpmNameCol, dpmUserNameCol, dpmCreateCol, dpmUpdateCol, dpmReadCol, dpmDeleteCol, btn_Action_Col);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -280,23 +262,22 @@ public class FXMLDecentralizationController implements Initializable {
 
     public void showUsersData() {
         //table_ServiceType.getItems().clear();
-        tableDecentralization.setItems(listEmp);
+        tableDepartment.setItems(listDPM);
 
         //Set filterData and Pagination
-        filteredData = new FilteredList<>(listEmp, list -> true);
+        filteredData = new FilteredList<>(listDPM, list -> true);
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(
-                    Emp -> newValue == null || newValue.isEmpty()
-                    || Emp.getEmployee_ID().toLowerCase().contains(newValue.toLowerCase())
-                    || Emp.getFirst_Name().toLowerCase().contains(newValue.toLowerCase())
-                    || Emp.getMid_Name().toLowerCase().contains(newValue.toLowerCase())
-                    || Emp.getLast_Name().toLowerCase().contains(newValue.toLowerCase()));
+                    DPM -> newValue == null || newValue.isEmpty()
+                    || DPM.getDepartmentID().toLowerCase().contains(newValue.toLowerCase())
+                    || DPM.getDepartmentName().toLowerCase().contains(newValue.toLowerCase())
+                    || DPM.getUsername().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
         });
 
-        int totalPage = (int) (Math.ceil(listEmp.size() * 1.0 / ROWS_PER_PAGE));
+        int totalPage = (int) (Math.ceil(listDPM.size() * 1.0 / ROWS_PER_PAGE));
         pagination.setPageCount(totalPage);
         pagination.setCurrentPageIndex(0);
         changeTableView(0, ROWS_PER_PAGE);
@@ -304,52 +285,19 @@ public class FXMLDecentralizationController implements Initializable {
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
     }
 
-    public Boolean male_Female(String str) {
-        if (str.matches("^[m]{1,1}[a]{0,1}[l]{0,1}[e]{0,1}.*$")) {
-            return true;
-        }
-        if (str.matches("^[f]{1,1}[e]{0,1}[m]{0,1}[a]{0,1}[l]{0,1}[e]{0,1}.*$")) {
-            return false;
-        }
-        return null;
-    }
-
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
-        check_Edit_Action = true;
-        StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Informations");
     }
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
-        check_Edit_Action = false;
+        CheckListDepart=true;
         StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add Department Type Informations");
+        stageLoader.formLoader("/fxml/FXMLAddDepartment.fxml", "/images/KAN Logo.png", "Add Department Informations");
     }
 
     @FXML
     private void handle_MenuItem_Delete_Action(ActionEvent event) {
-        System.out.println("Kien");
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Comfirm");
-        alert.setContentText("Do you want to delete " + Emp.getEmployee_ID() + "?");
-        alert.showAndWait();
-        System.out.println(alert.getResult());
-        if (alert.getResult() == ButtonType.OK) {
-            try {
-                DAO.delete_Employee(Emp.getEmployee_ID());
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                Calendar cal = Calendar.getInstance();
-                String logtime;
-                logtime = dateFormat.format(cal.getTime());
-                DAO.setUserLogs(FXMLLoginController.User_Login, "Delete " + Emp.getEmployee_ID(), logtime);
-                System.out.println("Delete successful");
-                showUsersData();
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 
     @FXML

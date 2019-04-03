@@ -27,8 +27,17 @@ public class ConnectControllers {
     public static FXMLInfoEmployeeController fXMLInfoEmployeeController;
     public static FXMLSplashScreenController fXMLSplashScreenController;
     public static FXMLDecentralizationController fXMLDecentralizationController;
+    public static FXMLListDepartmentController fXMLListDepartmentController;
     public static FXMLListCustomerController fXMLListCustomerController;
     public static FXMLEditCustomerController editCustomerController;
+
+    public static FXMLListDepartmentController getfXMLListDepartmentController() {
+        return fXMLListDepartmentController;
+    }
+
+    public static void setfXMLListDepartmentController(FXMLListDepartmentController fXMLListDepartmentController) {
+        ConnectControllers.fXMLListDepartmentController = fXMLListDepartmentController;
+    }
 
     public static FXMLEditCustomerController geteditCustomerController() {
         return editCustomerController;

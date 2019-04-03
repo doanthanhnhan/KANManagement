@@ -39,6 +39,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.DAO;
+import models.DAOCustomerBookingCheckIn;
 import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.RoleDAOImpl;
@@ -308,14 +309,22 @@ public class FXMLListEmployeeController implements Initializable {
             alert.showAndWait();
             System.out.println(alert.getResult());
             if (alert.getResult() == ButtonType.OK) {
-                try {
-                    DAO.delete_Employee(Emp.getEmployee_ID());
-                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + Emp.getEmployee_ID(),
-                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                    System.out.println("Delete successful");
-                    showUsersData();
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                if (DAOCustomerBookingCheckIn.check_Role_View_Disable().equals(1) && DAOCustomerBookingCheckIn.check_Delete_Employee(Emp.getEmployee_ID())) {
+                    Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                    alert1.setTitle("Error");
+                    alert1.setHeaderText("You have no right to do this !!!");
+                    alert1.setContentText("Because you are the only one who has the right to view the rights list !!!");
+                    alert1.showAndWait();
+                } else {
+                    try {
+                        DAO.delete_Employee(Emp.getEmployee_ID());
+                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + Emp.getEmployee_ID(),
+                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                        System.out.println("Delete successful");
+                        showUsersData();
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }

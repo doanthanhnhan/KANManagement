@@ -27,9 +27,36 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    DAO check Role_view delete Employee 
+
+    public static boolean check_Delete_Employee(String ID) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "select EmployeeID from Role where EmployeeID = ? And Role.Role_View = 1";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
     //    update role_view
-    
-    public static void Update_RoleView(String id,Boolean check) throws ClassNotFoundException, SQLException {
+
+    public static void Update_RoleView(String id, Boolean check) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "UPDATE Role SET Role_View = ? WHERE EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
@@ -145,7 +172,7 @@ public class DAOCustomerBookingCheckIn {
 
     public static Integer check_Role_View_Disable() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String sql = "select Count(*) as 'count' from Role where Role_View = 1";
+        String sql = "select Count(*) as 'count' from Role where Role_View = 1 and EmployeeID IN (select EmployeeID from Employees where active = 1)";
         PreparedStatement pt = connection.prepareStatement(sql);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         int count = 0;

@@ -49,6 +49,7 @@ import utils.showFXMLLogin;
  */
 public class FXMLAddDepartmentController implements Initializable {
 
+    private FXMLListDepartmentController fXMLListDepartmentController;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     @FXML
     private AnchorPane anchorPaneAddDepartment;
@@ -165,6 +166,10 @@ public class FXMLAddDepartmentController implements Initializable {
             }
             DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Department Id " + DepartmentID.getText(),
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+            if (FXMLListDepartmentController.CheckListDepart) {
+                fXMLListDepartmentController = ConnectControllers.getfXMLListDepartmentController();
+                fXMLListDepartmentController.showUsersData();
+            }
             DepartmentID.setText("");
             DepartmentName.setText("");
         }
