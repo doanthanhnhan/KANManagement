@@ -6,6 +6,7 @@
 package controllers;
 
 import com.jfoenix.controls.JFXComboBox;
+import static controllers.FXMLListEmployeeController.Emp;
 import java.awt.Checkbox;
 import java.net.URL;
 import java.sql.SQLException;
@@ -28,12 +29,16 @@ import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import models.ButtonDecentralization;
 import models.DAODepartmentDecentralization;
 import models.DecentralizationModel;
 import models.DepartMentDecentralization;
+import models.RoleDAOImpl;
+import models.boolDecentralizationModel;
 import utils.StageLoader;
 
 /**
@@ -72,21 +77,16 @@ public class FXMLListDepartmentController implements Initializable {
     private String delete;
     private String view;
     private String edit;
+    public boolDecentralizationModel userRole;
+    RoleDAOImpl roleDAOImpl;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        contextMenu_Main.getItems().remove(menuItem_Add);
-        contextMenu_Main.getItems().remove(menuItem_Delete);
-        contextMenu_Main.getItems().remove(menuItem_Edit);
         ConnectControllers.setfXMLListDepartmentController(this);
-        try {
-            listDPM = DAODepartmentDecentralization.getAllDecentralization();
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        roleDAOImpl = new RoleDAOImpl();
         FXMLMainFormController.checkRegis = true;
         showUsersData();
         ObservableList list_menu = FXCollections.observableArrayList();
@@ -195,6 +195,31 @@ public class FXMLListDepartmentController implements Initializable {
                 setColumns();
             }
         });
+        tableDepartment.setOnMouseClicked((MouseEvent event) -> {
+            if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
+                    && tableDepartment.getSelectionModel().getSelectedItem() != null) {
+                menuItem_Edit.setDisable(false);
+                menuItem_Delete.setDisable(false);
+                DPM = tableDepartment.getSelectionModel().getSelectedItem();
+            } else {
+                menuItem_Edit.setDisable(true);
+                menuItem_Delete.setDisable(true);
+            }
+        });
+        //Get user role from Mainform
+        FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
+        //userRole = mainFormController.getUserRole();
+        userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
+        //11.SERVICE TYPE CRUD
+        if (!userRole.ischeckEmployee_Add()) {
+            contextMenu_Main.getItems().remove(menuItem_Add);
+        }
+        if (!userRole.ischeckEmployee_Delete()) {
+            contextMenu_Main.getItems().remove(menuItem_Delete);
+        }
+        if (!userRole.ischeckEmployee_Edit()) {
+            contextMenu_Main.getItems().remove(menuItem_Edit);
+        }
     }
 
     private void changeTableView(int index, int limit) {
@@ -261,7 +286,12 @@ public class FXMLListDepartmentController implements Initializable {
     }
 
     public void showUsersData() {
-        //table_ServiceType.getItems().clear();
+        try {
+            //table_ServiceType.getItems().clear();
+            listDPM = DAODepartmentDecentralization.getAllDecentralization();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(FXMLListDepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         tableDepartment.setItems(listDPM);
 
         //Set filterData and Pagination
@@ -291,7 +321,7 @@ public class FXMLListDepartmentController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
-        CheckListDepart=true;
+        CheckListDepart = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddDepartment.fxml", "/images/KAN Logo.png", "Add Department Informations");
     }

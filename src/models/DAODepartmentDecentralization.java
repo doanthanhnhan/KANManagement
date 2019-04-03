@@ -776,7 +776,7 @@ public class DAODepartmentDecentralization {
             Boolean SODer_View, Boolean SODer_Add, Boolean SODer_Edit, Boolean SODer_Delete, Boolean SType_View, Boolean SType_Add, Boolean SType_Edit, Boolean SType_Delete,
             Boolean UserLog_View, Boolean UserLog_Add, Boolean UserLog_Edit, Boolean UserLog_Delete) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String ex = "Update Role Set Employee_View=?,Employee_Add=?,Employee_Edit=?,Employee_Delete=?,User_View=?,User_Add=?,User_Edit=?,User_Delete=?,"
+        String ex = "Update Departments Set Employee_View=?,Employee_Add=?,Employee_Edit=?,Employee_Delete=?,User_View=?,User_Add=?,User_Edit=?,User_Delete=?,"
                 + "Booking_View=?,Booking_Add=?,Booking_Edit=?,Booking_Delete=?,CheckIn_View=?,CheckIn_Add=?,CheckIn_Edit=?,CheckIn_Delete=?,"
                 + "CheckOut_View=?,CheckOut_Add=?,CheckOut_Edit=?,CheckOut_Delete=?,Customer_View=?,Customer_Add=?,Customer_Edit=?,Customer_Delete=?,"
                 + "Department_View=?,Department_Add=?,Department_Edit=?,Department_Delete=?,Role_View=?,Role_Add=?,Role_Edit=?,Role_Delete=?,"
