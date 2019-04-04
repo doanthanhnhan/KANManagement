@@ -107,7 +107,6 @@ public class FXMLListDepartmentController implements Initializable {
         showUsersData();
         ObservableList list_menu = FXCollections.observableArrayList();
         list_menu.add("Employees Decentralization");
-        list_menu.add("Users Decentralization");
         list_menu.add("Booking Decentralization");
         list_menu.add("CheckIn Decentralization");
         list_menu.add("CheckOut Decentralization");
@@ -136,12 +135,6 @@ public class FXMLListDepartmentController implements Initializable {
                 delete = "Employee_Delete";
                 view = "Employee_View";
                 edit = "Employee_Edit";
-                setColumns();
-            } else if (newItem.equals("Users Decentralization")) {
-                add = "User_Add";
-                delete = "User_Delete";
-                view = "User_View";
-                edit = "User_Edit";
                 setColumns();
             } else if (newItem.equals("Booking Decentralization")) {
                 add = "Booking_Add";

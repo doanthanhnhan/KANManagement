@@ -834,7 +834,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                 res = s.toByteArray();
                 Blob blob = new SerialBlob(res);
                 DAO.UpdateAllInfoEmployee(
-                        boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
+                        boxId.getValue(), newPhone.getText(), date, FormatName.format(address.getText()), IdNumber.getText(), FormatName.format(FirstName.getText()),
                         FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
                         Email.getText(), DepartmentId.getValue(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
                         Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Sex, blob

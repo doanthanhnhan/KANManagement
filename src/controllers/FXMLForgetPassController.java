@@ -180,9 +180,9 @@ public class FXMLForgetPassController implements Initializable {
         } else if (textSerectAnswer.getText().equals("")) {
             notificationFunction.notificationPassword(textSerectAnswer, HboxContent, "SERECT ANSWER MUST NOT EMPTY !!!");
         } else if (!PatternValided.PatternPassword(txtForgetPassword.getText())) {
-            notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "PASSWORD INVALID (EXAM:Abc12345 (6-20 CHARACTERS) !!!");
+            notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "PASSWORD INVALID(EXAM:Abc123 (6-20 CHARACTERS)!!!");
         } else if (!txtForgetPassword.getText().equals(txtForgetConfirmPassword.getText())) {
-            notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
+            notificationFunction.notificationPassword(txtForgetPassword, HboxContent, "PASSWORD CONFIRM DID NOT MATCH !!!");
         } else {
             Emp = DAO.getInfoForgetPassEmployee(UserForget);
             MD5Encrypt m = new MD5Encrypt();

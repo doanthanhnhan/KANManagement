@@ -48,7 +48,7 @@ public class DAO {
 
     public static void Update_Role_More(String EmployeeID, String name) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String ex = "UPDATE Role set "+name+" = 1 where EmployeeID=?";
+        String ex = "UPDATE Role set " + name + " = 1 where EmployeeID=?";
         PreparedStatement pts = connection.prepareStatement(ex);
         pts.setString(1, EmployeeID);
         pts.execute();
@@ -66,7 +66,7 @@ public class DAO {
         while (rs.next()) {
 //            set Employee
             if (rs.getBoolean("Employee_View")) {
-                Update_Role_More(EmployeeID,"Employee_View");
+                Update_Role_More(EmployeeID, "Employee_View");
             }
             if (rs.getBoolean("Employee_Add")) {
                 Update_Role_More(EmployeeID, "Employee_Add");
@@ -464,21 +464,16 @@ public class DAO {
         PreparedStatement pt = connection.prepareStatement(sql);
         pt.setString(1, User);
         ResultSet rs = pt.executeQuery();
-        if (!rs.next()) {
-            pt.close();
-            rs.close();
-            connection.close();
-            return null;
-        }
         while (rs.next()) {
             Emp.setActive(rs.getBoolean("Active"));
-            Emp.setSerect_Question(rs.getString("Serect_Question"));
-            Emp.setSerect_Answer(rs.getString("Serect_Answer"));
+            Emp.setSerect_Question(rs.getString("Secret_Question"));
+            Emp.setSerect_Answer(rs.getString("Secret_Answer"));
+            return Emp;
         }
         pt.close();
         rs.close();
         connection.close();
-        return Emp;
+        return null;
     }
 // Kiểm tra ID đã tồn tại trong bảng hay chưa
 

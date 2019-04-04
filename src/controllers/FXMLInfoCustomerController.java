@@ -51,6 +51,7 @@ import models.DAOcheckRole;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
+import utils.FormatName;
 import utils.GetInetAddress;
 import utils.PatternValided;
 import utils.StageLoader;
@@ -502,12 +503,41 @@ public class FXMLInfoCustomerController implements Initializable {
                 } else {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Comfirm");
-                    alert.setContentText("Customer Id = "+CustomerID.getText()+" Already Exist, You Must ReActive To Continue Using!!!");
+                    alert.setContentText("Customer Id = " + CustomerID.getText() + " Already Exist, You Must ReActive To Continue Using!!!");
                     alert.showAndWait();
                     System.out.println(alert.getResult());
                     if (alert.getResult() == ButtonType.OK) {
                         try {
                             DAOCustomerBookingCheckIn.ReActive_Customer(CustomerID.getText());
+                            FirstName.setText("");
+                            MidName.setText("");
+                            LastName.setText("");
+                            Email.setText("");
+                            PhoneNumber.setText("");
+                            Passport.setText("");
+                            Discount.setText("0");
+                            Company.setText("");
+                            birthday.setValue(LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear()));
+                            String pattern = "dd-MM-yyyy";
+                            formatCalender.format(pattern, birthday);
+                            birthday.getEditor().setText("Date Of Birth");
+                            birthday.setPromptText(null);
+                            birthday.getStyleClass().add("jfx-date-picker-fix");
+
+//            messenge when add complete
+                            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CHECK);
+                            icon.setSize("16");
+                            icon.setStyleClass("jfx-glyhp-icon-finish");
+                            Label label = new Label();
+                            label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
+                            label.setPrefSize(300, 35);
+                            label.setText("REACTIVE FOR " + CustomerID.getText() + " COMPLETE!!!");
+                            HboxContent.setAlignment(Pos.CENTER_LEFT);
+                            HboxContent.setSpacing(10);
+                            HboxContent.getChildren().clear();
+                            HboxContent.getChildren().add(icon);
+                            HboxContent.getChildren().add(label);
+                            CustomerID.setText("");
                         } catch (ClassNotFoundException | SQLException ex) {
                             Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -524,13 +554,13 @@ public class FXMLInfoCustomerController implements Initializable {
                     ctm.setDate(date);
                     ctm.setActive(true);
                     ctm.setSex(Male.isSelected());
-                    ctm.setCompany(Company.getText());
+                    ctm.setCompany(FormatName.format(Company.getText()));
                     ctm.setDiscount(Float.valueOf(Discount.getText()));
                     ctm.setEmail(Email.getText());
                     ctm.setPassport(Passport.getText());
-                    ctm.setFName(FirstName.getText());
-                    ctm.setMName(MidName.getText());
-                    ctm.setLName(LastName.getText());
+                    ctm.setFName(FormatName.format(FirstName.getText()));
+                    ctm.setMName(FormatName.format(MidName.getText()));
+                    ctm.setLName(FormatName.format(LastName.getText()));
                     ctm.setPhone(PhoneNumber.getText());
                     try {
                         DAOCustomerBookingCheckIn.AddNewCustomer(ctm);
@@ -563,7 +593,7 @@ public class FXMLInfoCustomerController implements Initializable {
                     Label label = new Label();
                     label.setStyle("-fx-text-fill: #6447cd; -fx-font-size : 11px;-fx-font-weight: bold;");
                     label.setPrefSize(300, 35);
-                    label.setText("Create  COMPLETE!!!");
+                    label.setText("CREATE " + CustomerID.getText() + " COMPLETE!!!");
                     HboxContent.setAlignment(Pos.CENTER_LEFT);
                     HboxContent.setSpacing(10);
                     HboxContent.getChildren().clear();
