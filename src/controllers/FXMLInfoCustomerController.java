@@ -33,6 +33,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
@@ -499,11 +500,18 @@ public class FXMLInfoCustomerController implements Initializable {
                 if (DAOCustomerBookingCheckIn.check_Active_Customer(CustomerID.getText())) {
                     notificationFunction.notification(Passport, HboxContent, "CUSTOMER ID ALREADY EXIST !!!");
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("You have no right to do this !!!");
-                    alert.setContentText("Customer Id Already Exist, You Must ReActive To Continue Using!!!");
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Comfirm");
+                    alert.setContentText("Customer Id = "+CustomerID.getText()+" Already Exist, You Must ReActive To Continue Using!!!");
                     alert.showAndWait();
+                    System.out.println(alert.getResult());
+                    if (alert.getResult() == ButtonType.OK) {
+                        try {
+                            DAOCustomerBookingCheckIn.ReActive_Customer(CustomerID.getText());
+                        } catch (ClassNotFoundException | SQLException ex) {
+                            Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
             });
         } else {
@@ -571,10 +579,10 @@ public class FXMLInfoCustomerController implements Initializable {
                 if (FXMLCheckIdCardCustomerController.checkIdCardCustomer || FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
 
                     checkInfoCustomer = true;
-                    checkInfoCustomerAlready=true;
+                    checkInfoCustomerAlready = true;
 
 //                    neu customer da ton tai ma active = 0 thi update active = 1
-                    if(!DAOCustomerBookingCheckIn.check_Active_Customer(CustomerID.getText())&&FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready){
+                    if (!DAOCustomerBookingCheckIn.check_Active_Customer(CustomerID.getText()) && FXMLCheckIdCardCustomerController.checkIdCardCustomerAlready) {
                         try {
                             DAOCustomerBookingCheckIn.ReActive_Customer(CustomerID.getText());
                         } catch (ClassNotFoundException | SQLException ex) {

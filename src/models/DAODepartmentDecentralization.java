@@ -36,6 +36,7 @@ import utils.showFXMLLogin;
 public class DAODepartmentDecentralization {
 
     public static showFXMLLogin showFormLogin = new showFXMLLogin();
+
     public static ObservableList<DepartMentDecentralization> getAllDecentralization() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<DepartMentDecentralization> list = FXCollections.observableArrayList();
@@ -553,28 +554,13 @@ public class DAODepartmentDecentralization {
                 }
             });
 //            set for department 12
-            cb_Department_Edit.setOnAction((event) -> {
-                if (cb_Department_Edit.isSelected()) {
-                    cb_Department_View.setSelected(true);
-                    cb_Department_View.setDisable(true);
-                } else {
-                    if (!cb_Department_Delete.isSelected()) {
-                        cb_Department_View.setDisable(false);
-                    } else {
-                        cb_Department_View.setDisable(true);
-                    }
-                }
-            });
+            cb_Department_Edit.setDisable(true);
             cb_Department_Delete.setOnAction((event) -> {
                 if (cb_Department_Delete.isSelected()) {
                     cb_Department_View.setSelected(true);
                     cb_Department_View.setDisable(true);
                 } else {
-                    if (!cb_Department_Edit.isSelected()) {
-                        cb_Department_View.setDisable(false);
-                    } else {
-                        cb_Department_View.setDisable(true);
-                    }
+                    cb_Department_View.setDisable(false);
                 }
             });
 //            set cb userlog 13
@@ -614,8 +600,8 @@ public class DAODepartmentDecentralization {
                 if (!cb_CheckOut_Delete.isSelected() && !cb_CheckOut_Edit.isSelected()) {
                     cb_CheckOut_View.setDisable(false);
                 }
-                cb_Department_Edit.setDisable(false);
-                if (!cb_Department_Delete.isSelected() && !cb_Department_Edit.isSelected()) {
+                cb_Department_Edit.setDisable(true);
+                if (!cb_Department_Delete.isSelected()) {
                     cb_Department_View.setDisable(false);
                 }
                 cb_Department_Add.setDisable(false);
@@ -681,7 +667,7 @@ public class DAODepartmentDecentralization {
 //            action Update
             btn_Update.setOnAction((event) -> {
                 try {
-                    if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Department_Edit")) {
+                    if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Department_View")) {
                         AlertLoginAgain.alertLogin();
                         fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
                         Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();

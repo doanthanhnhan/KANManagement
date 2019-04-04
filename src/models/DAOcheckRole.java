@@ -582,28 +582,13 @@ public class DAOcheckRole {
                 }
             });
 //            set for department 12
-            cb_Department_Edit.setOnAction((event) -> {
-                if (cb_Department_Edit.isSelected()) {
-                    cb_Department_View.setSelected(true);
-                    cb_Department_View.setDisable(true);
-                } else {
-                    if (!cb_Department_Delete.isSelected()) {
-                        cb_Department_View.setDisable(false);
-                    } else {
-                        cb_Department_View.setDisable(true);
-                    }
-                }
-            });
+            cb_Department_Edit.setDisable(true);
             cb_Department_Delete.setOnAction((event) -> {
                 if (cb_Department_Delete.isSelected()) {
                     cb_Department_View.setSelected(true);
                     cb_Department_View.setDisable(true);
                 } else {
-                    if (!cb_Department_Edit.isSelected()) {
-                        cb_Department_View.setDisable(false);
-                    } else {
-                        cb_Department_View.setDisable(true);
-                    }
+                    cb_Department_View.setDisable(false);
                 }
             });
 //            set cb userlog 13
@@ -643,12 +628,13 @@ public class DAOcheckRole {
                 if (!cb_CheckOut_Delete.isSelected() && !cb_CheckOut_Edit.isSelected()) {
                     cb_CheckOut_View.setDisable(false);
                 }
-                cb_Department_Edit.setDisable(false);
-                if (!cb_Department_Delete.isSelected() && !cb_Department_Edit.isSelected()) {
+                cb_Department_Edit.setDisable(true);
+                if (!cb_Department_Delete.isSelected()) {
                     cb_Department_View.setDisable(false);
                 }
                 cb_Department_Add.setDisable(false);
                 cb_Department_Delete.setDisable(false);
+
                 cb_Customer_Add.setDisable(false);
                 cb_Customer_Delete.setDisable(false);
                 cb_Customer_Edit.setDisable(false);

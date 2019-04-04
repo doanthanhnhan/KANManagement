@@ -27,6 +27,73 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    delete department
+
+    public static void Delete_Department(String id) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "Delete from Departments where DepartmentID=?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+//    check delete department
+
+    public static boolean check_delete_Department(String ID) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "select DepartmentID from Departments where DepartmentID = ? and DepartmentID IN (Select DepartmentID from Employees)";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+//    check roleview true or false of department
+
+    public static boolean check_RoleView_Department(String ID) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "select Role_View from Departments where DepartmentID = ?";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                if (rs.getBoolean("Role_View")) {
+                    pt.close();
+                    connection.close();
+                    rs.close();
+                    return true;
+                }
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 //    DAO check Role_view delete Employee 
 
     public static boolean check_Delete_Employee(String ID) {

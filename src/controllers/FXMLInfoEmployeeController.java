@@ -12,6 +12,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
 import static controllers.FXMLListCustomerController.ctm;
+import static controllers.FXMLListEmployeeController.Emp;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.awt.image.BufferedImage;
@@ -59,6 +60,7 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import models.DAO;
+import models.DAOCustomerBookingCheckIn;
 import models.DAODepartMentReActive;
 import models.DAOcheckRole;
 import models.InfoEmployee;
@@ -693,13 +695,14 @@ public class FXMLInfoEmployeeController implements Initializable {
                         });
                     } else if (FXMLListEmployeeController.check_form_list && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !FXMLLoginController.checkLoginRegis) {
                         System.out.println("vao khu vuc submit admin 1");
+                        Platform.runLater(() -> {
+                            if (!Department.equals(DepartmentId.getValue())) {
 
-                        if (!Department.equals(DepartmentId.getValue())) {
-                            Platform.runLater(() -> {
                                 Alert alert = new Alert(AlertType.CONFIRMATION);
-                                alert.setTitle("Warning!!!");
-                                alert.setContentText("Choose change permissions for " + DepartmentId.getValue() + "!\n\n"
-                                        + "-Default permissions: Delete all rights and recreate rights under the work department\n\n"
+                                alert.setTitle("Confirm");
+                                alert.setHeaderText("Choose change permissions for " + DepartmentId.getValue() + ":\n");
+                                alert.setContentText(
+                                          "-Default permissions: Delete all rights and recreate rights under the work department\n\n"
                                         + "-More permissions: Keep the rights and add rights under the working department\n\n"
                                         + "-Change department only: Keep the rights and only change the working department\n\n\n"
                                 );
@@ -717,7 +720,21 @@ public class FXMLInfoEmployeeController implements Initializable {
                                 System.out.println(alert.getResult());
                                 if (option.get() == Default) {
                                     try {
-                                        DAO.Set_Role_Employee(DepartmentId.getValue(), boxId.getValue());
+                                        if (DAOCustomerBookingCheckIn.check_Role_View_Disable().equals(1) && DAOCustomerBookingCheckIn.check_Delete_Employee(Emp.getEmployee_ID())
+                                                && !DAOCustomerBookingCheckIn.check_RoleView_Department(DepartmentId.getValue())) {
+                                            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                                            alert1.setTitle("Error");
+                                            alert1.setHeaderText("You have no right to do this !!!");
+                                            alert1.setContentText("Because you are the only one who has the right to view the rights list !!!");
+                                            alert1.showAndWait();
+                                        } else {
+                                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login,
+                                                    "Update Department for " + boxId.getValue() + " Department old = " + Department + " to Department new = "
+                                                    + DepartmentId.getValue() + " by Default permissions",
+                                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                                            DAO.Set_Role_Employee(DepartmentId.getValue(), boxId.getValue());
+                                            update_info();
+                                        }
                                     } catch (ClassNotFoundException | SQLException ex) {
                                         Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -727,7 +744,12 @@ public class FXMLInfoEmployeeController implements Initializable {
                                     }
                                 } else if (option.get() == More) {
                                     try {
+                                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login,
+                                                "Update Department for " + boxId.getValue() + " Department old = " + Department + " to Department new = "
+                                                + DepartmentId.getValue() + " by More permissions",
+                                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                         DAO.Set_Role_More_Employee(DepartmentId.getValue(), boxId.getValue());
+                                        update_info();
                                     } catch (ClassNotFoundException | SQLException ex) {
                                         Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -735,61 +757,17 @@ public class FXMLInfoEmployeeController implements Initializable {
                                         fXMLDecentralizationController = ConnectControllers.getfXMLDecentralizationController();
                                         fXMLDecentralizationController.showUsersData();
                                     }
+                                } else if (option.get() == Only) {
+                                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login,
+                                            "Update Department for " + boxId.getValue() + " Department old = " + Department + " to Department new = "
+                                            + DepartmentId.getValue() + " by Only department",
+                                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                                    update_info();
                                 }
-                                System.out.println("vao khu vuc submit admin 2");
-                                FXMLMainFormController.checkRegis = false;
-                                String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                                String date_hire = null;
-                                if (Hiredate.getValue() != null) {
-                                    date_hire = Hiredate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                                }
-                                Boolean Sex;
-                                Sex = Male.selectedProperty().getValue();
-                                BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
-                                byte[] res;
-                                try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
-                                    ImageIO.write(bImage, "png", s);
-                                    res = s.toByteArray();
-                                    Blob blob = new SerialBlob(res);
-                                    DAO.UpdateAllInfoEmployee(
-                                            boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
-                                            FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
-                                            Email.getText(), DepartmentId.getValue(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
-                                            Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Sex, blob
-                                    );
-                                } catch (SQLException ex) {
-                                    Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (IOException | ClassNotFoundException ex) {
-                                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update " + boxId.getValue(),
-                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                                newPhone.setText("");
-                                boxId.setValue(null);
-                                birthday.setValue(null);
-                                Hiredate.setValue(null);
-                                FirstName.setText("");
-                                MidName.setText("");
-                                LastName.setText("");
-                                Email.setText("");
-                                IdNumber.setText("");
-                                address.setText("");
-                                Job.setText("");
-                                EducatedLevel.setText("");
-                                Salary.setText("0");
-                                Comm.setText("0");
-                                Bonus.setText("0");
-                                Male.setSelected(true);
-                                check_delete = true;
-                                validateInfoEmployee = true;
-                                FXMLListEmployeeController.check_form_list = false;
-                                fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
-                                fXMLListEmployeeController.showUsersData();
-                                System.out.println("Vào chỗ submit admin");
-                                Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
-                                stage.close();
-                            });
-                        }
+                            } else {
+                                update_info();
+                            }
+                        });
                     } else {
                         Platform.runLater(() -> {
                             Boolean Sex;
@@ -836,5 +814,62 @@ public class FXMLInfoEmployeeController implements Initializable {
             Image image = new Image(file.toURI().toString());
             imgService.setImage(image);
         }
+    }
+
+    public void update_info() {
+        Platform.runLater(() -> {
+            System.out.println("vao khu vuc submit admin 2");
+            FXMLMainFormController.checkRegis = false;
+            String date = birthday.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String date_hire = null;
+            if (Hiredate.getValue() != null) {
+                date_hire = Hiredate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
+            Boolean Sex;
+            Sex = Male.selectedProperty().getValue();
+            BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
+            byte[] res;
+            try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
+                ImageIO.write(bImage, "png", s);
+                res = s.toByteArray();
+                Blob blob = new SerialBlob(res);
+                DAO.UpdateAllInfoEmployee(
+                        boxId.getValue(), newPhone.getText(), date, address.getText(), IdNumber.getText(), FormatName.format(FirstName.getText()),
+                        FormatName.format(MidName.getText()), FormatName.format(LastName.getText()),
+                        Email.getText(), DepartmentId.getValue(), date_hire, FormatName.format(Job.getText()), EducatedLevel.getText(),
+                        Double.valueOf(Salary.getText()), Double.valueOf(Bonus.getText()), Double.valueOf(Comm.getText()), Sex, blob
+                );
+            } catch (SQLException ex) {
+                Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update " + boxId.getValue(),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+            newPhone.setText("");
+            boxId.setValue(null);
+            birthday.setValue(null);
+            Hiredate.setValue(null);
+            FirstName.setText("");
+            MidName.setText("");
+            LastName.setText("");
+            Email.setText("");
+            IdNumber.setText("");
+            address.setText("");
+            Job.setText("");
+            EducatedLevel.setText("");
+            Salary.setText("0");
+            Comm.setText("0");
+            Bonus.setText("0");
+            Male.setSelected(true);
+            check_delete = true;
+            validateInfoEmployee = true;
+            FXMLListEmployeeController.check_form_list = false;
+            fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+            fXMLListEmployeeController.showUsersData();
+            System.out.println("Vào chỗ submit admin");
+            Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
+            stage.close();
+        });
     }
 }

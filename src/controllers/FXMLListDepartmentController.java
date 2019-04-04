@@ -6,10 +6,14 @@
 package controllers;
 
 import com.jfoenix.controls.JFXComboBox;
+import static controllers.ConnectControllers.fXMLMainFormController;
 import static controllers.FXMLListEmployeeController.Emp;
 import java.awt.Checkbox;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +26,8 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -32,14 +38,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.ButtonDecentralization;
+import models.DAO;
+import models.DAOCustomerBookingCheckIn;
 import models.DAODepartmentDecentralization;
+import models.DAOcheckRole;
 import models.DecentralizationModel;
 import models.DepartMentDecentralization;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
+import utils.AlertLoginAgain;
+import utils.GetInetAddress;
 import utils.StageLoader;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -48,6 +61,7 @@ import utils.StageLoader;
  */
 public class FXMLListDepartmentController implements Initializable {
 
+    private showFXMLLogin showFormLogin = new showFXMLLogin();
     ObservableList<DepartMentDecentralization> listDPM = FXCollections.observableArrayList();
     public Boolean check_Edit_Action = false;
     public static DepartMentDecentralization DPM;
@@ -85,6 +99,7 @@ public class FXMLListDepartmentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        contextMenu_Main.getItems().remove(menuItem_Edit);
         CheckListDepart = true;
         ConnectControllers.setfXMLListDepartmentController(this);
         roleDAOImpl = new RoleDAOImpl();
@@ -199,11 +214,9 @@ public class FXMLListDepartmentController implements Initializable {
         tableDepartment.setOnMouseClicked((MouseEvent event) -> {
             if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
                     && tableDepartment.getSelectionModel().getSelectedItem() != null) {
-                menuItem_Edit.setDisable(false);
                 menuItem_Delete.setDisable(false);
                 DPM = tableDepartment.getSelectionModel().getSelectedItem();
             } else {
-                menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
             }
         });
@@ -212,14 +225,11 @@ public class FXMLListDepartmentController implements Initializable {
         //userRole = mainFormController.getUserRole();
         userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
         //11.SERVICE TYPE CRUD
-        if (!userRole.ischeckEmployee_Add()) {
+        if (!userRole.ischeckDepartment_Add()) {
             contextMenu_Main.getItems().remove(menuItem_Add);
         }
-        if (!userRole.ischeckEmployee_Delete()) {
+        if (!userRole.ischeckDepartment_Delete()) {
             contextMenu_Main.getItems().remove(menuItem_Delete);
-        }
-        if (!userRole.ischeckEmployee_Edit()) {
-            contextMenu_Main.getItems().remove(menuItem_Edit);
         }
     }
 
@@ -327,7 +337,40 @@ public class FXMLListDepartmentController implements Initializable {
     }
 
     @FXML
-    private void handle_MenuItem_Delete_Action(ActionEvent event) {
+    private void handle_MenuItem_Delete_Action(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
+        if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Department_Delete")) {
+            AlertLoginAgain.alertLogin();
+            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            stageMainForm.close();
+            showFormLogin.showFormLogin();
+        } else {
+            System.out.println("Kien");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Comfirm");
+            alert.setContentText("Do you want to delete " + DPM.getDepartmentID() + "?");
+            alert.showAndWait();
+            System.out.println(alert.getResult());
+            if (alert.getResult() == ButtonType.OK) {
+                if (DAOCustomerBookingCheckIn.check_delete_Department(DPM.getDepartmentID())) {
+                    Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                    alert1.setTitle("Error");
+                    alert1.setHeaderText("You have no right to do this !!!");
+                    alert1.setContentText("Because Department ID being used by employees !!!");
+                    alert1.showAndWait();
+                } else {
+                    try {
+                        DAOCustomerBookingCheckIn.Delete_Department(DPM.getDepartmentID());
+                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + DPM.getDepartmentID(),
+                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                        System.out.println("Delete successful");
+                        showUsersData();
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
     }
 
     @FXML
