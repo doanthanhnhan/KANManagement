@@ -29,6 +29,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
+import models.DAOCustomerBookingCheckIn;
 import models.RoomDAOImpl;
 import models.Room;
 import utils.FormatName;
@@ -39,7 +40,6 @@ import utils.StageLoader;
  *
  * @author Doan Thanh Nhan
  */
-
 public class FXMLAddNewRoomController implements Initializable {
 
     public static ObservableList<Room> listRooms;
@@ -91,49 +91,20 @@ public class FXMLAddNewRoomController implements Initializable {
         listRoomsController = ConnectControllers.getfXMLListRoomsController();
         init_ComboBox_Value();
         //Check form was call from List Room Form
-        if (listRoomsController.check_Edit_Action) {
-            //Setting values for new form
-            txt_Room_ID.setDisable(true);
-            label_Title.setText("EDITING ROOM");
-            label_Description.setText("Filling the infomations for editting room infomations");
-            Room room = FXMLListRoomsController.roomEXItem;
-            txt_Room_ID.setText(room.getRoomID());
-            txt_Room_Area.setText(String.valueOf(room.getRoomArea()));
-            txt_Room_Day_Remaining.setText(String.valueOf(room.getDayRemaining()));
-            txt_Room_On_Floor.setText(String.valueOf(room.getRoomOnFloor()));
-            txt_Room_Phone_Number.setText(room.getRoomPhoneNumber());
-            comboBox_Room_Customer_ID.setValue(room.getCustomerID());
-            //comboBox_Room_Customer_ID.setDisable(true);
-            comboBox_Room_Status.setValue(room.getRoomStatus());
-            //comboBox_Room_Status.setDisable(true);
-            comboBox_Room_Type.setValue(room.getRoomType());
-            checkBox_Room_Clean.setSelected(room.isRoomClean());
-            checkBox_Room_In_Progress.setSelected(room.isRoomInProgress());
-            checkBox_Room_Repaired.setSelected(room.isRoomRepaired());
-
-            btnAddNew.setText("Update");
-
-            //Setting Update button function
-            btnAddNew.setOnAction((event) -> {
-                submit_Update_Room();
-            });
-
-            // Setting keypress ENTER for updating function
-            txt_Room_Area.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                txt_Room_Area.getStyleClass().remove("text-field-fault");
-                hBoxContent.getChildren().clear();
-                if (event.getCode() == KeyCode.ENTER) {
-                    submit_Update_Room();
-                }
-            });
-            txt_Room_Day_Remaining.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                txt_Room_Day_Remaining.getStyleClass().remove("text-field-fault");
-                hBoxContent.getChildren().clear();
-                if (event.getCode() == KeyCode.ENTER) {
-                    submit_Update_Room();
-                }
-            });
-        } else {
+        if (mainFormController.checkAddNewRoom) {
+            mainFormController.checkAddNewRoom = false;
+            comboBox_Room_Status.setValue("Available");
+            comboBox_Room_Customer_ID.setValue("CTM-000000000");
+            comboBox_Room_Status.setDisable(true);
+            comboBox_Room_Customer_ID.setDisable(true);
+            checkBox_Room_Clean.setSelected(true);
+            checkBox_Room_In_Progress.setSelected(true);
+            checkBox_Room_Repaired.setSelected(true);
+            checkBox_Room_Clean.setDisable(true);
+            checkBox_Room_In_Progress.setDisable(true);
+            checkBox_Room_Repaired.setDisable(true);
+            txt_Room_Day_Remaining.setText("0");
+            txt_Room_Day_Remaining.setDisable(true);
             // Setting keypress ENTER for adding function
             txt_Room_Area.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 txt_Room_Area.getStyleClass().remove("text-field-fault");
@@ -149,6 +120,142 @@ public class FXMLAddNewRoomController implements Initializable {
                     submit_Add_New_Room();
                 }
             });
+            txt_Room_ID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                txt_Room_ID.getStyleClass().remove("text-field-fault");
+                hBoxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    submit_Add_New_Room();
+                }
+            });
+            txt_Room_On_Floor.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                txt_Room_On_Floor.getStyleClass().remove("text-field-fault");
+                hBoxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    submit_Add_New_Room();
+                }
+            });
+            txt_Room_Phone_Number.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                txt_Room_Phone_Number.getStyleClass().remove("text-field-fault");
+                hBoxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    submit_Add_New_Room();
+                }
+            });
+        } else if (listRoomsController != null) {
+            if (listRoomsController.check_Edit_Action) {
+                //Setting values for new form
+                txt_Room_ID.setDisable(true);
+                label_Title.setText("EDITING ROOM");
+                label_Description.setText("Filling the infomations for editting room infomations");
+                Room room = FXMLListRoomsController.roomEXItem;
+                txt_Room_ID.setText(room.getRoomID());
+                txt_Room_Area.setText(String.valueOf(room.getRoomArea()));
+                txt_Room_Day_Remaining.setText(String.valueOf(room.getDayRemaining()));
+                txt_Room_On_Floor.setText(String.valueOf(room.getRoomOnFloor()));
+                txt_Room_Phone_Number.setText(room.getRoomPhoneNumber());
+                comboBox_Room_Customer_ID.setValue(room.getCustomerID());
+                //comboBox_Room_Customer_ID.setDisable(true);
+                comboBox_Room_Status.setValue(room.getRoomStatus());
+                //comboBox_Room_Status.setDisable(true);
+                comboBox_Room_Type.setValue(room.getRoomType());
+                checkBox_Room_Clean.setSelected(room.isRoomClean());
+                checkBox_Room_In_Progress.setSelected(room.isRoomInProgress());
+                checkBox_Room_Repaired.setSelected(room.isRoomRepaired());
+
+                btnAddNew.setText("Update");
+
+                //Setting Update button function
+                btnAddNew.setOnAction((event) -> {
+                    submit_Update_Room();
+                });
+
+                // Setting keypress ENTER for updating function
+                txt_Room_Area.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_Area.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Room();
+                    }
+                });
+                txt_Room_Day_Remaining.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_Day_Remaining.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Room();
+                    }
+                });
+                txt_Room_ID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_ID.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Room();
+                    }
+                });
+                txt_Room_On_Floor.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_On_Floor.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Room();
+                    }
+                });
+                txt_Room_Phone_Number.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_Phone_Number.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Room();
+                    }
+                });
+            } else {
+                mainFormController.checkAddNewRoom = false;
+                comboBox_Room_Status.setValue("Available");
+                comboBox_Room_Customer_ID.setValue("CTM-000000000");
+                comboBox_Room_Status.setDisable(true);
+                comboBox_Room_Customer_ID.setDisable(true);
+                checkBox_Room_Clean.setSelected(true);
+                checkBox_Room_In_Progress.setSelected(true);
+                checkBox_Room_Repaired.setSelected(true);
+                checkBox_Room_Clean.setDisable(true);
+                checkBox_Room_In_Progress.setDisable(true);
+                checkBox_Room_Repaired.setDisable(true);
+                txt_Room_Day_Remaining.setText("0");
+                txt_Room_Day_Remaining.setDisable(true);
+                // Setting keypress ENTER for adding function
+                txt_Room_Area.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_Area.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Add_New_Room();
+                    }
+                });
+                txt_Room_Day_Remaining.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_Day_Remaining.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Add_New_Room();
+                    }
+                });
+                txt_Room_ID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_ID.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Add_New_Room();
+                    }
+                });
+                txt_Room_On_Floor.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_On_Floor.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Add_New_Room();
+                    }
+                });
+                txt_Room_Phone_Number.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    txt_Room_Phone_Number.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Add_New_Room();
+                    }
+                });
+            }
         }
     }
 
@@ -168,10 +275,18 @@ public class FXMLAddNewRoomController implements Initializable {
         ObservableList<String> list_Type = FXCollections.observableArrayList();
         ObservableList<String> list_CustomerID = FXCollections.observableArrayList();
         list_Status.addAll("Available", "Reserved", "Occupied", "Out");
-        list_Type.addAll("Single", "Double", "Triple", "Family", "Deluxe");        
-        listRoomsController.listRoomEXs.forEach((roomEX) -> {
-            list_CustomerID.add(roomEX.getCustomerID());
-        });
+        list_Type.addAll("Single", "Double", "Triple", "Family", "Deluxe");
+        DAOCustomerBookingCheckIn.addCTMFree();
+        if (listRoomsController != null) {
+            if (listRoomsController.check_Edit_Action) {
+                listRoomsController.listRoomEXs.forEach((roomEX) -> {
+                    list_CustomerID.add(roomEX.getCustomerID());
+                });
+            }
+        } else {
+            list_CustomerID.add("CTM-000000000");
+        }
+
         comboBox_Room_Status.setItems(list_Status);
         comboBox_Room_Type.setItems(list_Type);
         comboBox_Room_Customer_ID.setItems(list_CustomerID);
@@ -194,10 +309,10 @@ public class FXMLAddNewRoomController implements Initializable {
                     }
                 });
                 validateForm();
-                if (check_Validate) {
-                    addNewRoom();
-                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new room: " 
-                            + FormatName.format(txt_Room_ID.getText()), 
+                if (check_Validate) {                    
+                    addNewRoom();                    
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new room: "
+                            + FormatName.format(txt_Room_ID.getText()),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Add successful!");
                 }
@@ -241,8 +356,8 @@ public class FXMLAddNewRoomController implements Initializable {
                     Room updateRoom = getDataFromForm();
                     //Updating to DB
                     roomDAOImpl.editRoom(updateRoom, true);
-                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Update room: " 
-                            + FormatName.format(txt_Room_ID.getText()), 
+                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Update room: "
+                            + FormatName.format(txt_Room_ID.getText()),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Updating successful!");
                 }
@@ -267,15 +382,15 @@ public class FXMLAddNewRoomController implements Initializable {
         new Thread(loadOverview).start();
     }
 
-    public void addNewRoom() {        
-        Room room = getDataFromForm();        
-        roomDAOImpl.addRoom(room);        
+    public void addNewRoom() {
+        Room room = getDataFromForm();
+        roomDAOImpl.addRoom(room);
     }
 
     public Room getDataFromForm() {
         Room room = new Room();
         room.setRoomID(FormatName.format(txt_Room_ID.getText()));
-        room.setCustomerID(FormatName.format(comboBox_Room_Customer_ID.getValue()));        
+        room.setCustomerID(FormatName.format(comboBox_Room_Customer_ID.getValue()));
         room.setRoomType(FormatName.format(comboBox_Room_Type.getValue()));
         room.setRoomPhoneNumber(FormatName.format(txt_Room_Phone_Number.getText()));
         room.setDayRemaining(Integer.parseInt(FormatName.format(txt_Room_Day_Remaining.getText())));
