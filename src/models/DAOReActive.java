@@ -8,7 +8,9 @@ package models;
 import com.jfoenix.controls.JFXButton;
 import controllers.ConnectControllers;
 import static controllers.ConnectControllers.fXMLMainFormController;
+import controllers.FXMLListEmployeeController;
 import controllers.FXMLLoginController;
+import controllers.FXMLReActiveController;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,12 +23,10 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import static models.DAOcheckRole.showFormLogin;
-import static models.DAOcheckRole.update_EmployeeDecentralization;
 import utils.AlertLoginAgain;
 import utils.GetInetAddress;
 import utils.connectDB;
@@ -37,10 +37,13 @@ import utils.connectDB;
  */
 public class DAOReActive {
 
+    private static FXMLListEmployeeController fXMLListEmployeeController;
+    private static FXMLReActiveController reActiveController;
+
     public static ObservableList<ReActive> getAllDecentralization() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<ReActive> list = FXCollections.observableArrayList();
-        String sql = "select Employees.EmployeeID,Employees.EmployeeFirstName,Employees.EmployeeLastName,Employees.EmployeeMidName where Active = 0";
+        String sql = "select Employees.EmployeeID,Employees.EmployeeFirstName,Employees.EmployeeLastName,Employees.EmployeeMidName, Employees.Active  from Employees where Active = 0";
         PreparedStatement pt = connection.prepareStatement(sql);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
@@ -59,7 +62,7 @@ public class DAOReActive {
             CheckBox cb_Active_Employee = new CheckBox("");
 
             cb_Active_Employee.setSelected(false);
-
+            cb_Active_Employee.setDisable(true);
             Emp.setEmployee_ReActive(cb_Active_Employee);
 
 //            set JFXButton
@@ -76,6 +79,8 @@ public class DAOReActive {
             btn_Edit.setOnAction((event) -> {
 //                CheckIn CheckOut Department Customer Booking
                 cb_Active_Employee.setDisable(false);
+                btn_Update.setDisable(false);
+                btn_Edit.setDisable(true);
             });
 //            action Update
             btn_Update.setOnAction((event) -> {
@@ -91,25 +96,31 @@ public class DAOReActive {
                         cb_Active_Employee.setDisable(true);
                         btn_Update.setDisable(true);
                         update_Active(
-                                Emp.getEmployee_ID(),cb_Active_Employee.isSelected()
+                                Emp.getEmployee_ID(), cb_Active_Employee.isSelected()
                         );
-                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update Active = "+cb_Active_Employee.isSelected()+" for " + Emp.getEmployee_ID(),
+                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update Active = " + cb_Active_Employee.isSelected() + " for " + Emp.getEmployee_ID(),
                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                         btn_Edit.setDisable(false);
+                        if (FXMLListEmployeeController.check_Edit_Action) {
+                            fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+                            fXMLListEmployeeController.showUsersData();
+                        }
+                        reActiveController = ConnectControllers.getfXMLReActiveController();
+                        reActiveController.showUsersData();
                     }
                 } catch (ClassNotFoundException | SQLException | IOException ex) {
                     Logger.getLogger(DAOcheckRole.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-            Emp.setReActive(Action);
+            Emp.setHboxReActive(Action);
             list.add(Emp);
         }
         return list;
     }
 
-    public static void update_Active(String User,Boolean Active) throws ClassNotFoundException, SQLException {
+    public static void update_Active(String User, Boolean Active) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String ex = "Update Role Set Active=? where EmployeeID=?";
+        String ex = "Update Employees Set Active=? where EmployeeID=?";
         PreparedStatement pts = connection.prepareStatement(ex);
         pts.setBoolean(1, Active);
         pts.setString(2, User);

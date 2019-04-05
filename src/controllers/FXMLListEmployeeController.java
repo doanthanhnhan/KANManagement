@@ -65,7 +65,7 @@ public class FXMLListEmployeeController implements Initializable {
     public static Boolean check_form_list = false;
     private static final int ROWS_PER_PAGE = 10;
     private FilteredList<InfoEmployee> filteredData;
-
+    private static FXMLReActiveController reActiveController;
     @FXML
     public TableView<InfoEmployee> table_ListEmployee;
     @FXML
@@ -323,6 +323,10 @@ public class FXMLListEmployeeController implements Initializable {
                         showUsersData();
                     } catch (ClassNotFoundException | SQLException ex) {
                         Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if (FXMLReActiveController.check_Edit_Action) {
+                        reActiveController = ConnectControllers.getfXMLReActiveController();
+                        reActiveController.showUsersData();
                     }
                 }
             }

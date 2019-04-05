@@ -531,11 +531,10 @@ public class FXMLMainFormController implements Initializable {
     }
 
     @FXML
-<<<<<<< HEAD
     private void handle_MenuItem_List_ReActive_Action(ActionEvent event) {
         System.out.println("List Department menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLReActive.fxml", "List ReActive", "ReActive Informations");
-=======
+    }
     private void handle_MenuItem_List_Service_Orders_Action(ActionEvent event) {
         System.out.println("List service orders item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listServiceOrders_Tab", "Service Orders");
@@ -551,7 +550,6 @@ public class FXMLMainFormController implements Initializable {
     private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
         System.out.println("List check out item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
->>>>>>> ddc278ba47e0ca16bf8724fe10e1b219d7355418
     }
     // ############### END VIEW ACTIONS ###############
 

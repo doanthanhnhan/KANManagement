@@ -9,6 +9,7 @@ import static controllers.FXMLDecentralizationController.BoxValue;
 import static controllers.FXMLDecentralizationController.check_form_list;
 import models.ReActive;
 import com.jfoenix.controls.JFXComboBox;
+import static controllers.FXMLListEmployeeController.check_Edit_Action;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -32,7 +33,9 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import models.ButtonDecentralization;
 import models.DAOReActive;
 import models.DAOcheckRole;
 
@@ -66,6 +69,7 @@ public class FXMLReActiveController implements Initializable {
     private String add;
     private FilteredList<ReActive> filteredData;
     private static final int ROWS_PER_PAGE = 10;
+    public static Boolean check_Edit_Action = false;
 
     /**
      * Initializes the controller class.
@@ -76,9 +80,7 @@ public class FXMLReActiveController implements Initializable {
         contextMenu_Main.getItems().remove(menuItem_Delete);
         contextMenu_Main.getItems().remove(menuItem_Edit);
         ConnectControllers.setfXMLReActiveController(this);
-
-        FXMLMainFormController.checkRegis = true;
-        check_form_list = true;
+        check_Edit_Action = true;
         showUsersData();
         ObservableList list_menu = FXCollections.observableArrayList();
         list_menu.add("ReActive Employee");
@@ -125,8 +127,7 @@ public class FXMLReActiveController implements Initializable {
         TableColumn<ReActive, String> empMNameCol = new TableColumn<>("Emp MidName");
         TableColumn<ReActive, String> empLNameCol = new TableColumn<>("Emp LastName");
         TableColumn<ReActive, CheckBox> empCreateCol = new TableColumn<>("Active");
-
-        TableColumn<ReActive, ReActive> btn_Action_Col = new TableColumn<>("Action");
+        TableColumn<ReActive, ButtonDecentralization> btn_Action_Col = new TableColumn<>("Action");
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<CellDataFeatures<ReActive, String>, ObservableValue<String>>() {
             @Override
@@ -147,13 +148,16 @@ public class FXMLReActiveController implements Initializable {
         empFNameCol.setCellValueFactory(new PropertyValueFactory<>("First_Name"));
         empMNameCol.setCellValueFactory(new PropertyValueFactory<>("Mid_Name"));
         empLNameCol.setCellValueFactory(new PropertyValueFactory<>("Last_Name"));
-        btn_Action_Col.setCellValueFactory(new PropertyValueFactory<>("Active"));
+        empCreateCol.setCellValueFactory(new PropertyValueFactory<>("Employee_ReActive"));
+        btn_Action_Col.setCellValueFactory(new PropertyValueFactory<>("HboxReActive"));
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empFNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empMNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empLNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         empCreateCol.setStyle("-fx-alignment: CENTER;");
+        btn_Action_Col.setStyle("-fx-alignment: CENTER;");
+        btn_Action_Col.setPrefWidth(120);
 
         // Thêm cột vào bảng
         table_Reactive.getColumns().clear();

@@ -5,6 +5,8 @@
  */
 package controllers;
 
+import models.DAOReActive;
+
 /**
  *
  * @author Admin
@@ -31,6 +33,15 @@ public class ConnectControllers {
     public static FXMLListCustomerController fXMLListCustomerController;
     public static FXMLEditCustomerController editCustomerController;
     public static FXMLReActiveController fXMLReActiveController;
+    public static DAOReActive reActive;
+
+    public static DAOReActive getreActive() {
+        return reActive;
+    }
+
+    public static void setreActive(DAOReActive reActive) {
+        ConnectControllers.reActive = reActive;
+    }
 
     public static FXMLReActiveController getfXMLReActiveController() {
         return fXMLReActiveController;

@@ -14,7 +14,7 @@ import javafx.scene.layout.HBox;
  */
 public class ReActive extends ReActiveModel {
 
-    private HBox ReActive;
+    private HBox HboxReActive;
     private CheckBox Employee_ReActive;
 
     public CheckBox getEmployee_ReActive() {
@@ -25,11 +25,11 @@ public class ReActive extends ReActiveModel {
         this.Employee_ReActive = Employee_ReActive;
     }
 
-    public HBox getReActive() {
-        return ReActive;
+    public HBox getHboxReActive() {
+        return HboxReActive;
     }
 
-    public void setReActive(HBox ReActive) {
-        this.ReActive = ReActive;
+    public void setHboxReActive(HBox HboxReActive) {
+        this.HboxReActive = HboxReActive;
     }
 }
