@@ -603,3 +603,5 @@ ELSE C.CustomerFirstName+' ' +C.CustomerLastName END AS 'CustomerFullName'
 FROM Bill B, Customers C
 WHERE B.CustomerID = C.CustomerID
 SELECT C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName FROM Customers C
+
+SELECT * FROM Customers

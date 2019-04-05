@@ -29,6 +29,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
@@ -382,49 +383,49 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     throw new AssertionError();
             }
         }
-        if(!check_Label_Available){
+        if (!check_Label_Available) {
             label_Available_Rooms.setText("0");
         }
-        if(!check_Label_Reserved){
+        if (!check_Label_Reserved) {
             label_Reserved_Rooms.setText("0");
         }
-        if(!check_Label_Occupied){
+        if (!check_Label_Occupied) {
             label_Occupied_Rooms.setText("0");
         }
-        if(!check_Label_Out){
+        if (!check_Label_Out) {
             label_Checkout_Rooms.setText("0");
         }
-        if(!check_Label_Single){
+        if (!check_Label_Single) {
             label_Single_Rooms.setText("0");
         }
-        if(!check_Label_Double){
+        if (!check_Label_Double) {
             label_Double_Rooms.setText("0");
         }
-        if(!check_Label_Triple){
+        if (!check_Label_Triple) {
             label_Triple_Rooms.setText("0");
         }
-        if(!check_Label_Family){
+        if (!check_Label_Family) {
             label_Family_Rooms.setText("0");
         }
-        if(!check_Label_Deluxe){
+        if (!check_Label_Deluxe) {
             label_Deluxe_Rooms.setText("0");
         }
-        if(!check_Label_Clean){
+        if (!check_Label_Clean) {
             label_Clean_Rooms.setText("0");
         }
-        if(!check_Label_Not_Clean){
+        if (!check_Label_Not_Clean) {
             label_NotClean_Rooms.setText("0");
         }
-        if(!check_Label_Repaired){
+        if (!check_Label_Repaired) {
             label_Repair_Rooms.setText("0");
         }
-        if(!check_Label_Not_Repaired){
+        if (!check_Label_Not_Repaired) {
             label_Not_Repair_Rooms.setText("0");
         }
-        if(!check_Label_In_Progress){
+        if (!check_Label_In_Progress) {
             label_InProgress_Rooms.setText("0");
         }
-        if(!check_Label_Not_In_Progress){
+        if (!check_Label_Not_In_Progress) {
             label_Remaining_Days.setText("0");
         }
     }
@@ -460,8 +461,22 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     service_Room_ID = label_Room_Number.getText();
                     service_Customer_ID = listRoom.getCustomerID();
                     service_Customer_Full_Name = listRoom.getCustomerName();
-                    mainFormController.formLoader("/fxml/FXMLCheckIdCardCustomer.fxml", "/images/KAN Logo.png",
-                            "Check Id Card Customer: " + label_Room_Number.getText());
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Comfirmation");
+                    alert.setHeaderText("Booking Comfirmation");
+                    alert.setContentText("Do you have booking ID or QRCode?");
+                    alert.getButtonTypes().removeAll(ButtonType.OK, ButtonType.CANCEL);
+                    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.NO) {
+                        mainFormController.formLoader("/fxml/FXMLCheckIdCardCustomer.fxml", "/images/KAN Logo.png",
+                                "Check Id Card Customer: " + label_Room_Number.getText());
+                    } else if (alert.getResult() == ButtonType.YES) {
+//                        mainFormController.formLoader("/fxml/FXMLCheckInOrdersQRCode.fxml", "/images/KAN Logo.png",
+//                                "Check In Form");
+                    }
+
                 });
                 JFXButton btn_CheckOut = (JFXButton) pane.lookup("#btn_CheckOut");
                 JFXButton btn_Services = (JFXButton) pane.lookup("#btn_Services");

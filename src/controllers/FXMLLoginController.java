@@ -26,6 +26,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -142,9 +143,9 @@ public class FXMLLoginController implements Initializable {
                 return null;
             }
         };
-        loadOverview.setOnSucceeded(new EventHandler<Event>() {
+        loadOverview.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
-            public void handle(Event event) {
+            public void handle(WorkerStateEvent event) {
                 System.out.println("Finished");
                 Platform.runLater(() -> {
                     btnLogin.setDisable(false);
