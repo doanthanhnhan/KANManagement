@@ -12,7 +12,7 @@ import javafx.scene.layout.HBox;
  *
  * @author Admin
  */
-public class DepartMentDecentralization extends boolDecentrailizationDepartment{
+public class DepartMentDecentralization extends boolDecentrailizationDepartment {
     // Nhom Employee va User
 
     private CheckBox Employee_View;
@@ -74,6 +74,42 @@ public class DepartMentDecentralization extends boolDecentrailizationDepartment{
     private CheckBox UserLog_Add;
     private CheckBox UserLog_Edit;
     private CheckBox UserLog_Delete;
+    private CheckBox ReActive_View;
+    private CheckBox ReActive_Add;
+    private CheckBox ReActive_Edit;
+    private CheckBox ReActive_Delete;
+
+    public CheckBox getReActive_View() {
+        return ReActive_View;
+    }
+
+    public void setReActive_View(CheckBox ReActive_View) {
+        this.ReActive_View = ReActive_View;
+    }
+
+    public CheckBox getReActive_Add() {
+        return ReActive_Add;
+    }
+
+    public void setReActive_Add(CheckBox ReActive_Add) {
+        this.ReActive_Add = ReActive_Add;
+    }
+
+    public CheckBox getReActive_Edit() {
+        return ReActive_Edit;
+    }
+
+    public void setReActive_Edit(CheckBox ReActive_Edit) {
+        this.ReActive_Edit = ReActive_Edit;
+    }
+
+    public CheckBox getReActive_Delete() {
+        return ReActive_Delete;
+    }
+
+    public void setReActive_Delete(CheckBox ReActive_Delete) {
+        this.ReActive_Delete = ReActive_Delete;
+    }
 // Nhom Check Out
 
     public CheckBox getUserLog_View() {

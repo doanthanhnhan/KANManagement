@@ -168,6 +168,8 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_Edit_Service_Order_Details;
     @FXML
     private MenuItem menuItem_List_Users_Log;
+    @FXML
+    private MenuItem menuItem_List_ReActive;
 
     /**
      * Initializes the controller class.
@@ -368,6 +370,9 @@ public class FXMLMainFormController implements Initializable {
         if (!userRole.ischeckUser_View()) {
             menu_View.getItems().remove(menuItem_List_Users);
         }
+        if (!userRole.ischeckReActive_View()) {
+            menu_View.getItems().remove(menuItem_List_ReActive);
+        }
         //ENDING SETTING ROLE TO FORM
 
         //Setting logout button
@@ -504,10 +509,17 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List UserLogs menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLUserLogs.fxml", "UserLogs", "UserLogs Informations");
     }
-        @FXML
+
+    @FXML
     private void handle_MenuItem_List_Department_Action(ActionEvent event) {
         System.out.println("List Department menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListDepartment.fxml", "List Department", "Department Informations");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_ReActive_Action(ActionEvent event) {
+        System.out.println("List Department menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLReActive.fxml", "List ReActive", "ReActive Informations");
     }
     // ############### END VIEW ACTIONS ###############
 

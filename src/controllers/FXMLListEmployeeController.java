@@ -63,7 +63,7 @@ public class FXMLListEmployeeController implements Initializable {
     public static Boolean check_Edit_Action = false;
     public static InfoEmployee Emp;
     public static Boolean check_form_list = false;
-    private static final int ROWS_PER_PAGE = 4;
+    private static final int ROWS_PER_PAGE = 10;
     private FilteredList<InfoEmployee> filteredData;
 
     @FXML
@@ -257,8 +257,6 @@ public class FXMLListEmployeeController implements Initializable {
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
         });
-        table_ListEmployee.getFocusModel().focus(1);
-        table_ListEmployee.requestFocus();
         int totalPage = (int) (Math.ceil(listEmp.size() * 1.0 / ROWS_PER_PAGE));
         pagination.setPageCount(totalPage);
         pagination.setCurrentPageIndex(0);

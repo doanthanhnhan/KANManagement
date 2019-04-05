@@ -95,6 +95,11 @@ public class RoleDAOImpl implements RoleDAO {
                 userRole.setcheckUser_Delete(rs.getBoolean("User_Delete"));
                 userRole.setcheckUser_Edit(rs.getBoolean("User_Edit"));
                 userRole.setcheckUser_View(rs.getBoolean("User_View"));
+//                ReActive
+                userRole.setcheckReActive_Add(rs.getBoolean("ReActive_Add"));
+                userRole.setcheckReActive_Delete(rs.getBoolean("ReActive_Delete"));
+                userRole.setcheckReActive_Edit(rs.getBoolean("ReActive_Edit"));
+                userRole.setcheckReActive_View(rs.getBoolean("ReActive_View"));
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);

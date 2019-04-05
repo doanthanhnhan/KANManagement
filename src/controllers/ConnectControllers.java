@@ -30,6 +30,16 @@ public class ConnectControllers {
     public static FXMLListDepartmentController fXMLListDepartmentController;
     public static FXMLListCustomerController fXMLListCustomerController;
     public static FXMLEditCustomerController editCustomerController;
+    public static FXMLReActiveController fXMLReActiveController;
+
+    public static FXMLReActiveController getfXMLReActiveController() {
+        return fXMLReActiveController;
+    }
+
+    public static void setfXMLReActiveController(FXMLReActiveController fXMLReActiveController) {
+        ConnectControllers.fXMLReActiveController = fXMLReActiveController;
+    }
+
     public static FXMLListDepartmentController getfXMLListDepartmentController() {
         return fXMLListDepartmentController;
     }

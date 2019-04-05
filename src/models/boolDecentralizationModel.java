@@ -79,6 +79,59 @@ public class boolDecentralizationModel {
     private BooleanProperty checkUserLog_Edit;
     private BooleanProperty checkUserLog_Delete;
 
+    private BooleanProperty checkReActive_View;
+    private BooleanProperty checkReActive_Add;
+    private BooleanProperty checkReActive_Edit;
+    private BooleanProperty checkReActive_Delete;
+
+    public boolean ischeckReActive_Delete() {
+        return checkReActive_Delete.get();
+    }
+
+    public BooleanProperty checkReActive_Delete() {
+        return checkReActive_Delete;
+    }
+
+    public void setcheckReActive_Delete(boolean checkReActive_Delete) {
+        this.checkReActive_Delete = new SimpleBooleanProperty(checkReActive_Delete);
+    }
+
+    public boolean ischeckReActive_Edit() {
+        return checkReActive_Edit.get();
+    }
+
+    public void setcheckReActive_Edit(boolean checkReActive_Edit) {
+        this.checkReActive_Edit = new SimpleBooleanProperty(checkReActive_Edit);
+    }
+
+    public BooleanProperty checkReActive_Edit() {
+        return checkReActive_Edit;
+    }
+
+    public boolean ischeckReActive_Add() {
+        return checkReActive_Add.get();
+    }
+
+    public BooleanProperty checkReActive_Add() {
+        return checkReActive_Add;
+    }
+
+    public void setcheckReActive_Add(boolean checkReActive_Add) {
+        this.checkReActive_Add = new SimpleBooleanProperty(checkReActive_Add);
+    }
+
+    public boolean ischeckReActive_View() {
+        return checkReActive_View.get();
+    }
+
+    public BooleanProperty checkReActive_View() {
+        return checkReActive_View;
+    }
+
+    public void setcheckReActive_View(boolean checkReActive_View) {
+        this.checkReActive_View = new SimpleBooleanProperty(checkReActive_View);
+    }
+
     //  Nhom Booking
     public boolean ischeckBooking_Delete() {
         return checkBooking_Delete.get();
@@ -766,5 +819,5 @@ public class boolDecentralizationModel {
         this.checkEmployee_Edit = new SimpleBooleanProperty(checkEmployee_Edit);
         this.checkEmployee_Delete = new SimpleBooleanProperty(checkEmployee_Delete);
     }
-    
+
 }

@@ -118,7 +118,7 @@ public class FXMLListDepartmentController implements Initializable {
         list_menu.add("SODer Decentralization");
         list_menu.add("SType Decentralization");
         list_menu.add("UserLog Decentralization");
-
+        list_menu.add("ReActive Decentralization");
         BoxMenu.setItems(list_menu);
         BoxMenu.setValue("Employees Decentralization");
         BoxValue = BoxMenu.getValue();
@@ -201,6 +201,12 @@ public class FXMLListDepartmentController implements Initializable {
                 delete = "UserLog_Delete";
                 view = "UserLog_View";
                 edit = "UserLog_Edit";
+                setColumns();
+            } else if (newItem.equals("ReActive Decentralization")) {
+                add = "ReActive_Add";
+                delete = "ReActive_Delete";
+                view = "ReActive_View";
+                edit = "ReActive_Edit";
                 setColumns();
             }
         });

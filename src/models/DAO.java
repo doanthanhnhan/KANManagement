@@ -263,7 +263,8 @@ public class DAO {
                     rs.getBoolean("SODetail_View"), rs.getBoolean("SODetail_Add"), rs.getBoolean("SODetail_Edit"), rs.getBoolean("SODetail_Delete"),
                     rs.getBoolean("SODer_View"), rs.getBoolean("SODer_Add"), rs.getBoolean("SODer_Edit"), rs.getBoolean("SODer_Delete"),
                     rs.getBoolean("SType_View"), rs.getBoolean("SType_Add"), rs.getBoolean("SType_Edit"), rs.getBoolean("SType_Delete"),
-                    rs.getBoolean("UserLog_View"), rs.getBoolean("UserLog_Add"), rs.getBoolean("UserLog_Edit"), rs.getBoolean("UserLog_Delete")
+                    rs.getBoolean("UserLog_View"), rs.getBoolean("UserLog_Add"), rs.getBoolean("UserLog_Edit"), rs.getBoolean("UserLog_Delete"),
+                    rs.getBoolean("ReActive_View"), rs.getBoolean("ReActive_Add"), rs.getBoolean("ReActive_Edit"), rs.getBoolean("ReActive_Delete")
             );
         }
         rs.close();

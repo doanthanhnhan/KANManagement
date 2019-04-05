@@ -85,7 +85,11 @@ public class DAOcheckRole {
             Emp.setcheckUser_Delete(rs.getBoolean("User_Delete"));
             Emp.setcheckUser_View(rs.getBoolean("User_View"));
             Emp.setcheckUser_Edit(rs.getBoolean("User_Edit"));
-
+// check box reactive
+            CheckBox cb_ReActive_Add = new CheckBox("");
+            CheckBox cb_ReActive_Delete = new CheckBox("");
+            CheckBox cb_ReActive_View = new CheckBox("");
+            CheckBox cb_ReActive_Edit = new CheckBox("");
 // create check box Emp va User
             CheckBox cb_Employee_Add = new CheckBox("");
             CheckBox cb_Employee_Delete = new CheckBox("");
@@ -267,7 +271,20 @@ public class DAOcheckRole {
             cb_Employee_View.setDisable(true);
             cb_Employee_Edit.setSelected(rs.getBoolean("Employee_Edit"));
             cb_Employee_Edit.setDisable(true);
-
+//            reactive
+            cb_ReActive_Add.setSelected(rs.getBoolean("ReActive_Add"));
+            cb_ReActive_Add.setDisable(true);
+            cb_ReActive_Delete.setSelected(rs.getBoolean("ReActive_Delete"));
+            cb_ReActive_Delete.setDisable(true);
+            cb_ReActive_View.setSelected(rs.getBoolean("ReActive_View"));
+            cb_ReActive_View.setDisable(true);
+            cb_ReActive_Edit.setSelected(rs.getBoolean("ReActive_Edit"));
+            cb_ReActive_Edit.setDisable(true);
+// Reactive
+            Emp.setReActive_Add(cb_ReActive_Add);
+            Emp.setReActive_Delete(cb_ReActive_Delete);
+            Emp.setReActive_Edit(cb_ReActive_Edit);
+            Emp.setReActive_View(cb_ReActive_View);
 //          Department va CheckOut CheckIn Customer Booking
             Emp.setDepartment_Add(cb_Department_Add);
             Emp.setDepartment_Delete(cb_Department_Delete);
@@ -402,6 +419,10 @@ public class DAOcheckRole {
                     }
                 }
             });
+//            set for reactive
+            cb_ReActive_Add.setDisable(true);
+            cb_ReActive_Edit.setDisable(true);
+            cb_ReActive_Delete.setDisable(true);
             // set for Role 4
             cb_Role_Add.setDisable(true);
             cb_Role_Edit.setDisable(true);
@@ -666,6 +687,7 @@ public class DAOcheckRole {
                 if (!cb_Room_Delete.isSelected() && !cb_Room_Edit.isSelected()) {
                     cb_Room_View.setDisable(false);
                 }
+                cb_ReActive_View.setDisable(false);
                 cb_Role_View.setDisable(false);
 //                set Enable userlog stype employee user
                 cb_UserLog_Delete.setDisable(false);
@@ -770,6 +792,10 @@ public class DAOcheckRole {
                         cb_Role_View.setDisable(true);
                         cb_Role_Add.setDisable(true);
                         cb_Role_Delete.setDisable(true);
+                        cb_ReActive_Edit.setDisable(true);
+                        cb_ReActive_View.setDisable(true);
+                        cb_ReActive_Add.setDisable(true);
+                        cb_ReActive_Delete.setDisable(true);
 //                set Enable userlog stype employee user
                         cb_UserLog_Add.setDisable(true);
                         cb_UserLog_Delete.setDisable(true);
@@ -795,7 +821,8 @@ public class DAOcheckRole {
                                 cb_Customer_View.isSelected(), cb_Customer_Add.isSelected(), cb_Customer_Edit.isSelected(), cb_Customer_Delete.isSelected(), cb_Department_View.isSelected(), cb_Department_Add.isSelected(), cb_Department_Edit.isSelected(), cb_Department_Delete.isSelected(),
                                 cb_Role_View.isSelected(), cb_Role_Add.isSelected(), cb_Role_Edit.isSelected(), cb_Role_Delete.isSelected(), cb_Room_View.isSelected(), cb_Room_Add.isSelected(), cb_Room_Edit.isSelected(), cb_Room_Delete.isSelected(),
                                 cb_SODetail_View.isSelected(), cb_SODetail_Add.isSelected(), cb_SODetail_Edit.isSelected(), cb_SODetail_Delete.isSelected(), cb_SODer_View.isSelected(), cb_SODer_Add.isSelected(), cb_SODer_Edit.isSelected(), cb_SODer_Delete.isSelected(),
-                                cb_SType_View.isSelected(), cb_SType_Add.isSelected(), cb_SType_Edit.isSelected(), cb_SType_Delete.isSelected(), cb_UserLog_View.isSelected(), cb_UserLog_Add.isSelected(), cb_UserLog_Edit.isSelected(), cb_UserLog_Delete.isSelected()
+                                cb_SType_View.isSelected(), cb_SType_Add.isSelected(), cb_SType_Edit.isSelected(), cb_SType_Delete.isSelected(), cb_UserLog_View.isSelected(), cb_UserLog_Add.isSelected(), cb_UserLog_Edit.isSelected(), cb_UserLog_Delete.isSelected(),
+                                cb_ReActive_View.isSelected(), cb_ReActive_Add.isSelected(), cb_ReActive_Edit.isSelected(), cb_ReActive_Delete.isSelected()
                         );
                         DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update Decentralization for " + Emp.getEmployee_ID(),
                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
@@ -818,7 +845,7 @@ public class DAOcheckRole {
             Boolean Department_View, Boolean Department_Add, Boolean Department_Edit, Boolean Department_Delete, Boolean Role_View, Boolean Role_Add, Boolean Role_Edit, Boolean Role_Delete,
             Boolean Room_View, Boolean Room_Add, Boolean Room_Edit, Boolean Room_Delete, Boolean SODetail_View, Boolean SODetail_Add, Boolean SODetail_Edit, Boolean SODetail_Delete,
             Boolean SODer_View, Boolean SODer_Add, Boolean SODer_Edit, Boolean SODer_Delete, Boolean SType_View, Boolean SType_Add, Boolean SType_Edit, Boolean SType_Delete,
-            Boolean UserLog_View, Boolean UserLog_Add, Boolean UserLog_Edit, Boolean UserLog_Delete) throws ClassNotFoundException, SQLException {
+            Boolean UserLog_View, Boolean UserLog_Add, Boolean UserLog_Edit, Boolean UserLog_Delete,Boolean ReActive_View, Boolean ReActive_Add, Boolean ReActive_Edit, Boolean ReActive_Delete) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String ex = "Update Role Set Employee_View=?,Employee_Add=?,Employee_Edit=?,Employee_Delete=?,User_View=?,User_Add=?,User_Edit=?,User_Delete=?,"
                 + "Booking_View=?,Booking_Add=?,Booking_Edit=?,Booking_Delete=?,CheckIn_View=?,CheckIn_Add=?,CheckIn_Edit=?,CheckIn_Delete=?,"
@@ -826,7 +853,7 @@ public class DAOcheckRole {
                 + "Department_View=?,Department_Add=?,Department_Edit=?,Department_Delete=?,Role_View=?,Role_Add=?,Role_Edit=?,Role_Delete=?,"
                 + "Room_View=?,Room_Add=?,Room_Edit=?,Room_Delete=?,SODetail_View=?,SODetail_Add=?,SODetail_Edit=?,SODetail_Delete=?,"
                 + "SODer_View=?,SODer_Add=?,SODer_Edit=?,SODer_Delete=?,SType_View=?,SType_Add=?,SType_Edit=?,SType_Delete=?,"
-                + "UserLog_View=?,UserLog_Add=?,UserLog_Edit=?,UserLog_Delete=? where EmployeeID=?";
+                + "UserLog_View=?,UserLog_Add=?,UserLog_Edit=?,UserLog_Delete=?,ReActive_View=?,ReActive_Add=?,ReActive_Edit=?,ReActive_Delete=? where EmployeeID=?";
         PreparedStatement pts = connection.prepareStatement(ex);
 //        nhom EMP
         pts.setBoolean(1, EmpView);
@@ -893,7 +920,12 @@ public class DAOcheckRole {
         pts.setBoolean(50, UserLog_Add);
         pts.setBoolean(51, UserLog_Edit);
         pts.setBoolean(52, UserLog_Delete);
-        pts.setString(53, User);
+//        Nhom ReActive
+        pts.setBoolean(53, ReActive_View);
+        pts.setBoolean(54, ReActive_Add);
+        pts.setBoolean(55, ReActive_Edit);
+        pts.setBoolean(56, ReActive_Delete);
+        pts.setString(57, User);
         pts.execute();
         pts.close();
         connection.close();

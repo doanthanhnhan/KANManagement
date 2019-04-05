@@ -346,7 +346,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             if (DAO.checkFirstLogin().equals(0)) {
                                 DAODepartMentReActive.Add_New_Department("DPM-Admin", "Admin", "admin");
                                 DAODepartmentDecentralization.update_DepartmentDecentralization("DPM-Admin", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,
-                                        true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
+                                        true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true,true,true,true);
                             }
                             Boolean Sex;
                             Sex = sexMale.selectedProperty().getValue();
