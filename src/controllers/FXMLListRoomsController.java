@@ -50,6 +50,7 @@ public class FXMLListRoomsController implements Initializable {
     RoomDAOImpl roomEXDAOImpl = new RoomDAOImpl();
 
     public Boolean check_Edit_Action = false;
+    public boolean check_Add_Action = false;
     public static RoomEX roomEXItem;
 
     private static final int ROWS_PER_PAGE = 20;
@@ -204,6 +205,7 @@ public class FXMLListRoomsController implements Initializable {
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
         check_Edit_Action = true;
+        check_Add_Action = false;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Edit Room Informations");
 
@@ -212,6 +214,7 @@ public class FXMLListRoomsController implements Initializable {
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
         check_Edit_Action = false;
+        check_Add_Action = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Add new Room Informations");
     }

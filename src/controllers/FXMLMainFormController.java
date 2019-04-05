@@ -40,14 +40,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javax.swing.ImageIcon;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
 import utils.FormatName;
 import utils.GetInetAddress;
 
 import utils.MyTimer;
-import utils.PrintReport;
 import utils.showFXMLLogin;
 
 /**
@@ -58,6 +56,7 @@ import utils.showFXMLLogin;
 public class FXMLMainFormController implements Initializable {
 
     public static Boolean checkRegis = false;
+    public boolean checkAddNewRoom = false;
     private Map<String, Tab> openTabs = new HashMap<>();
     FXMLLoginController fxmlLoginController;
     RoleDAOImpl roleDAOImpl;
@@ -429,6 +428,8 @@ public class FXMLMainFormController implements Initializable {
             Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    // =============== START TOOLBAR ACTIONS ===============
 
     @FXML
     private void homeAction(ActionEvent event) {
@@ -468,6 +469,19 @@ public class FXMLMainFormController implements Initializable {
         System.exit(0);
     }
 
+    @FXML
+    private void handle_Toolbar_CheckIn_Action(ActionEvent event) {
+        System.out.println("List service orders details item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
+    }
+
+    @FXML
+    private void handle_Chart_Button_Action(ActionEvent event) {
+        System.out.println("Chart button clicked!");
+        formLoader("/fxml/FXMLBillReport.fxml", "/images/KAN Logo.png", "Bill report");
+    }
+    // =============== END TOOLBAR ACTIONS ===============
+    
     // =============== START VIEW ACTIONS ===============
     @FXML
     private void handle_MenuItem_List_Service_Type_Action(ActionEvent event) {
@@ -504,10 +518,29 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List UserLogs menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLUserLogs.fxml", "UserLogs", "UserLogs Informations");
     }
-        @FXML
+
+    @FXML
     private void handle_MenuItem_List_Department_Action(ActionEvent event) {
         System.out.println("List Department menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListDepartment.fxml", "List Department", "Department Informations");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_Service_Orders_Action(ActionEvent event) {
+        System.out.println("List service orders item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listServiceOrders_Tab", "Service Orders");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_Service_Orders_Details_Action(ActionEvent event) {
+        System.out.println("List service orders details item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
+    }
+
+    @FXML
+    private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
+        System.out.println("List check out item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
     }
     // ############### END VIEW ACTIONS ###############
 
@@ -550,8 +583,21 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("Add new Department menu item clicked!");
         formLoader("/fxml/FXMLAddDepartment.fxml", "/images/KAN Logo.png", "Add Department Informations");
     }
-    // ############### END ADD ACTIONS ###############
 
+    @FXML
+    private void handle_MenuItem_Add_Room_Action(ActionEvent event) {
+        System.out.println("Add new room menu item clicked!");
+        checkAddNewRoom = true; 
+        formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Add new room");
+    }
+
+    @FXML
+    private void handle_MenuItem_Add_Service_Order_Action(ActionEvent event) {
+        System.out.println("Add new Service Order menu item clicked!");
+        formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Add new Service Order");
+    }
+
+    // ############### END ADD ACTIONS ###############
     // =============== EDIT ACTIONS ===============
     @FXML
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
@@ -777,48 +823,6 @@ public class FXMLMainFormController implements Initializable {
 
             new Thread(loadOverview).start();
         });
-    }
-
-    @FXML
-    private void handle_MenuItem_Add_Service_Order_Action(ActionEvent event) {
-        System.out.println("Add new Service Order menu item clicked!");
-        formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Add new Service Order");
-    }
-
-    @FXML
-    private void handle_MenuItem_List_Service_Orders_Action(ActionEvent event) {
-        System.out.println("List service orders item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listServiceOrders_Tab", "Service Orders");
-    }
-
-    @FXML
-    private void handle_MenuItem_List_Service_Orders_Details_Action(ActionEvent event) {
-        System.out.println("List service orders details item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
-    }
-
-    @FXML
-    private void handle_Toolbar_CheckIn_Action(ActionEvent event) {
-        System.out.println("List service orders details item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
-    }
-
-    @FXML
-    private void handle_Chart_Button_Action(ActionEvent event) {
-        System.out.println("Chart button clicked!");
-        formLoader("/fxml/FXMLBillReport.fxml", "/images/KAN Logo.png", "Bill report");
-    }
-
-    @FXML
-    private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
-        System.out.println("List check out item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
-    }
-
-    @FXML
-    private void handle_MenuItem_Add_Room_Action(ActionEvent event) {
-        System.out.println("Add new room menu item clicked!");
-        formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Add new room");
     }
 
 }

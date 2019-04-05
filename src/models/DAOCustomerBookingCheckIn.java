@@ -304,12 +304,44 @@ public class DAOCustomerBookingCheckIn {
                 }
             }
 
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
         }
         return customerEmail;
+    }
+
+    // Insert CTM-000000000 customer for add new room - Nhan edit
+    public static void addCTMFree() {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+
+            String sql = "SELECT CustomerID FROM Customers WHERE CustomerID = 'CTM-000000000'";
+            PreparedStatement pt = connection.prepareStatement(sql);
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            ResultSet rs = pt.executeQuery();
+            if (!rs.next()) {
+                Customer customerFREE = new Customer();
+                customerFREE.setCusID("CTM-000000000");
+                customerFREE.setCompany("KAN");
+                customerFREE.setDate("1980-01-01");
+                customerFREE.setDiscount(0f);
+                customerFREE.setEmail("kanmanagment.ap146@gmail.com");
+                customerFREE.setFName("Free");
+                customerFREE.setMName("");
+                customerFREE.setLName("Room");
+                customerFREE.setPassport("000000000");
+                customerFREE.setPhone("000000000");
+                customerFREE.setSex(true);
+                customerFREE.setUser("admin");
+                customerFREE.setActive(true);
+
+                AddNewCustomer(customerFREE);
+
+            }
+        } catch (ClassNotFoundException | SQLException | MalformedURLException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 //    Update Customer
 
