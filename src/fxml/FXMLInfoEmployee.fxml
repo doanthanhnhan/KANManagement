@@ -56,14 +56,16 @@
                   </HBox>
                   <HBox fx:id="HboxImage" alignment="BOTTOM_RIGHT" prefWidth="560.0" spacing="20.0">
                      <children>
-                        <JFXButton fx:id="btnInsertImage" onAction="#handle_Button_Insert_Image_Action" styleClass="loginBtn" text="Insert image" />
-                        <Label contentDisplay="TOP" styleClass="label-text" stylesheets="@../css/dark-theme.css" text="Employee Image">
+                        <Label contentDisplay="TOP" onMouseClicked="#handle_Button_Insert_Image_Action" styleClass="label-text" stylesheets="@../css/dark-theme.css" text="Employee Image">
                            <graphic>
                               <ImageView fx:id="imgService" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Label>
                      </children>
                      <padding>
@@ -116,6 +118,9 @@
                                  <HBox.margin>
                                     <Insets top="30.0" />
                                  </HBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXDatePicker>
                            </children>
                         </HBox>
@@ -236,6 +241,9 @@
                                  <HBox.margin>
                                     <Insets left="80.0" right="80.0" top="30.0" />
                                  </HBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXDatePicker>
                            </children>
                         </HBox>
