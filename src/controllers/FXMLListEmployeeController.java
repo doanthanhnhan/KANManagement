@@ -257,7 +257,8 @@ public class FXMLListEmployeeController implements Initializable {
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
         });
-
+        table_ListEmployee.getFocusModel().focus(1);
+        table_ListEmployee.requestFocus();
         int totalPage = (int) (Math.ceil(listEmp.size() * 1.0 / ROWS_PER_PAGE));
         pagination.setPageCount(totalPage);
         pagination.setCurrentPageIndex(0);

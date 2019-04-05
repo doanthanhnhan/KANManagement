@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -52,6 +51,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -140,8 +140,6 @@ public class FXMLInfoEmployeeController implements Initializable {
     private JFXTextField EducatedLevel;
     @FXML
     private JFXTextField Comm;
-    @FXML
-    private JFXButton btnInsertImage;
     @FXML
     private ImageView imgService;
     @FXML
@@ -702,7 +700,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                                 alert.setTitle("Confirm");
                                 alert.setHeaderText("Choose change permissions for " + DepartmentId.getValue() + ":\n");
                                 alert.setContentText(
-                                          "-Default permissions: Delete all rights and recreate rights under the work department\n\n"
+                                        "-Default permissions: Delete all rights and recreate rights under the work department\n\n"
                                         + "-More permissions: Keep the rights and add rights under the working department\n\n"
                                         + "-Change department only: Keep the rights and only change the working department\n\n\n"
                                 );
@@ -743,20 +741,46 @@ public class FXMLInfoEmployeeController implements Initializable {
                                         fXMLDecentralizationController.showUsersData();
                                     }
                                 } else if (option.get() == More) {
-                                    try {
-                                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login,
-                                                "Update Department for " + boxId.getValue() + " Department old = " + Department + " to Department new = "
-                                                + DepartmentId.getValue() + " by More permissions",
-                                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                                        DAO.Set_Role_More_Employee(DepartmentId.getValue(), boxId.getValue());
-                                        update_info();
-                                    } catch (ClassNotFoundException | SQLException ex) {
-                                        Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                    if (FXMLDecentralizationController.check_form_list) {
-                                        fXMLDecentralizationController = ConnectControllers.getfXMLDecentralizationController();
-                                        fXMLDecentralizationController.showUsersData();
-                                    }
+                                    //====================================================================
+                                    StageLoader stageLoader = new StageLoader();
+                                    stageLoader.loadingIndicator("Loading");
+                                    Task loadOverview = new Task() {
+                                        @Override
+                                        protected Object call() throws Exception {
+                                            Platform.runLater(() -> {
+                                                DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login,
+                                                        "Update Department for " + boxId.getValue() + " Department old = " + Department + " to Department new = "
+                                                        + DepartmentId.getValue() + " by More permissions",
+                                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                                                try {
+                                                    DAO.Set_Role_More_Employee(DepartmentId.getValue(), boxId.getValue());
+                                                } catch (ClassNotFoundException | SQLException ex) {
+                                                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                                                }
+                                            });
+
+                                            System.out.println("click 2");
+                                            return null;
+                                        }
+                                    };
+                                    loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                                        @Override
+                                        public void handle(Event event) {
+                                            System.out.println("Finished");
+                                            Platform.runLater(() -> {
+                                                update_info();
+                                                if (FXMLDecentralizationController.check_form_list) {
+                                                    fXMLDecentralizationController = ConnectControllers.getfXMLDecentralizationController();
+                                                    fXMLDecentralizationController.showUsersData();
+                                                }
+                                                stageLoader.stopTimeline();
+                                                stageLoader.closeStage();
+                                            });
+                                        }
+                                    });
+                                    new Thread(loadOverview).start();
+                                    //====================================================================
+
                                 } else if (option.get() == Only) {
                                     DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login,
                                             "Update Department for " + boxId.getValue() + " Department old = " + Department + " to Department new = "
@@ -802,17 +826,6 @@ public class FXMLInfoEmployeeController implements Initializable {
         } catch (SQLException | ClassNotFoundException | IOException ex) {
             Logger.getLogger(FXMLInfoEmployeeController.class
                     .getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @FXML
-    private void handle_Button_Insert_Image_Action(ActionEvent event) {
-        File file = fileChooser.showOpenDialog(btnInsertImage.getScene().getWindow());
-        fileChooser.setTitle("Choose an image for service type");
-        if (file != null) {
-            System.out.println(file.toURI().toString());
-            Image image = new Image(file.toURI().toString());
-            imgService.setImage(image);
         }
     }
 
@@ -871,5 +884,16 @@ public class FXMLInfoEmployeeController implements Initializable {
             Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
             stage.close();
         });
+    }
+
+    @FXML
+    private void handle_Button_Insert_Image_Action(MouseEvent event) {
+        File file = fileChooser.showOpenDialog(HboxImage.getScene().getWindow());
+        fileChooser.setTitle("Choose an image for service type");
+        if (file != null) {
+            System.out.println(file.toURI().toString());
+            Image image = new Image(file.toURI().toString());
+            imgService.setImage(image);
+        }
     }
 }
