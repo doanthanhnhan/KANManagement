@@ -160,12 +160,14 @@ public class RoomDAOImpl implements RoomDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
         return listRooms;
     }
@@ -184,12 +186,14 @@ public class RoomDAOImpl implements RoomDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
         return listRooms;
     }
@@ -208,12 +212,14 @@ public class RoomDAOImpl implements RoomDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
         return listRooms;
     }
@@ -232,12 +238,14 @@ public class RoomDAOImpl implements RoomDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
         return listRooms;
     }
@@ -256,12 +264,14 @@ public class RoomDAOImpl implements RoomDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
         return listRooms;
     }
@@ -281,12 +291,14 @@ public class RoomDAOImpl implements RoomDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
         return listRooms;
     }
@@ -360,12 +372,14 @@ public class RoomDAOImpl implements RoomDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
         return listRooms;
     }
@@ -393,12 +407,14 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Duplicated RoomID in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Duplicated RoomID in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -428,12 +444,14 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -454,12 +472,14 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -481,12 +501,14 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -496,9 +518,9 @@ public class RoomDAOImpl implements RoomDAO {
                 + "Clean=?, InProgress=?, Repaired=? "
                 + "WHERE RoomID=?";
         try {
-            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {                
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, room.getUserName());
-                stmt.setString(2, room.getRoomStatus());                
+                stmt.setString(2, room.getRoomStatus());
                 stmt.setBoolean(3, true);
                 stmt.setBoolean(4, false);
                 stmt.setBoolean(5, true);
@@ -506,12 +528,14 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -532,12 +556,14 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Duplicated Room in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Duplicated Room in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -550,12 +576,14 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -569,12 +597,14 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -592,12 +622,14 @@ public class RoomDAOImpl implements RoomDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error Querry");
-            alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
-            alert.show();
-            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
         }
         return listRooms;
     }

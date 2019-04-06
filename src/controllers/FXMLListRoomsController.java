@@ -52,6 +52,8 @@ public class FXMLListRoomsController implements Initializable {
     public Boolean check_Edit_Action = false;
     public boolean check_Add_Action = false;
     public static RoomEX roomEXItem;
+    public int row_index;
+    public TableView<RoomEX> temp_Table_Rooms;
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<RoomEX> filteredData;
@@ -92,6 +94,7 @@ public class FXMLListRoomsController implements Initializable {
                 menuItem_Delete.setDisable(false);
                 System.out.println(table_Rooms.getSelectionModel().getSelectedItem().getRoomID());
                 roomEXItem = table_Rooms.getSelectionModel().getSelectedItem();
+                row_index = table_Rooms.getSelectionModel().getSelectedIndex();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -167,7 +170,7 @@ public class FXMLListRoomsController implements Initializable {
         // Thêm cột vào bảng
         table_Rooms.getColumns().clear();
         table_Rooms.getColumns().addAll(numberCol, roomIDCol, roomTypeCol, roomStatusCol, customerNameCol, remainingDaysCol,
-                roomPhoneNumberCol, roomOnFloorCol , roomCleanCol, roomRepairedCol, roomInProgressCol, roomActionCol);
+                roomPhoneNumberCol, roomOnFloorCol, roomCleanCol, roomRepairedCol, roomInProgressCol, roomActionCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -177,6 +180,16 @@ public class FXMLListRoomsController implements Initializable {
         listRoomEXs = roomEXDAOImpl.getAllRoomEX();
         //table_Rooms.getItems().clear();
         table_Rooms.setItems(listRoomEXs);
+        for (RoomEX listRoomEX : listRoomEXs) {
+            for (RoomEX temp_Table_Room : temp_Table_Rooms.getItems()) {
+                
+            }
+        }
+
+        //Forcus to the editing row
+        table_Rooms.requestFocus();
+        table_Rooms.getSelectionModel().select(row_index);
+        //table_Rooms.getFocusModel().focus(row_index);
 
         //Set filterData and Pagination
         filteredData = new FilteredList<>(listRoomEXs, list -> true);
@@ -228,9 +241,9 @@ public class FXMLListRoomsController implements Initializable {
         System.out.println(alert.getResult());
         if (alert.getResult() == ButtonType.OK) {
             roomEXDAOImpl.deleteRoomEX(roomEXItem);
-            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete Room ID: " 
-                            + FormatName.format(serviceTypeItem.getServiceID()), 
-                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete Room ID: "
+                    + FormatName.format(serviceTypeItem.getServiceID()),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
             System.out.println("Delete successful");
             showRoomsData();
         }

@@ -32,6 +32,7 @@ import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.RoomDAOImpl;
 import models.Room;
+import models.RoomEX;
 import utils.FormatName;
 import utils.PatternValided;
 import utils.StageLoader;
@@ -46,6 +47,7 @@ public class FXMLAddNewRoomController implements Initializable {
     RoomDAOImpl roomDAOImpl;
     private FXMLListRoomsController listRoomsController;
     private FXMLMainFormController mainFormController;
+    private FXMLMainOverViewPaneController mainOverViewPaneController;
     private Boolean check_Validate;
 
     @FXML
@@ -88,17 +90,17 @@ public class FXMLAddNewRoomController implements Initializable {
         System.out.println("Add new Room initialize...");
         roomDAOImpl = new RoomDAOImpl();
         mainFormController = ConnectControllers.getfXMLMainFormController();
+        mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
         listRoomsController = ConnectControllers.getfXMLListRoomsController();
         init_ComboBox_Value();
         //Check form was call from List Room Form
-        if (mainFormController.checkAddNewRoom) {
-            mainFormController.checkAddNewRoom = false;
+        if (mainFormController.checkAddNewRoom) {            
             comboBox_Room_Status.setValue("Available");
             comboBox_Room_Customer_ID.setValue("CTM-000000000");
             comboBox_Room_Status.setDisable(true);
             comboBox_Room_Customer_ID.setDisable(true);
             checkBox_Room_Clean.setSelected(true);
-            checkBox_Room_In_Progress.setSelected(true);
+            checkBox_Room_In_Progress.setSelected(false);
             checkBox_Room_Repaired.setSelected(true);
             checkBox_Room_Clean.setDisable(true);
             checkBox_Room_In_Progress.setDisable(true);
@@ -205,14 +207,13 @@ public class FXMLAddNewRoomController implements Initializable {
                         submit_Update_Room();
                     }
                 });
-            } else {
-                mainFormController.checkAddNewRoom = false;
+            } else {                
                 comboBox_Room_Status.setValue("Available");
                 comboBox_Room_Customer_ID.setValue("CTM-000000000");
                 comboBox_Room_Status.setDisable(true);
                 comboBox_Room_Customer_ID.setDisable(true);
                 checkBox_Room_Clean.setSelected(true);
-                checkBox_Room_In_Progress.setSelected(true);
+                checkBox_Room_In_Progress.setSelected(false);
                 checkBox_Room_Repaired.setSelected(true);
                 checkBox_Room_Clean.setDisable(true);
                 checkBox_Room_In_Progress.setDisable(true);
@@ -309,8 +310,8 @@ public class FXMLAddNewRoomController implements Initializable {
                     }
                 });
                 validateForm();
-                if (check_Validate) {                    
-                    addNewRoom();                    
+                if (check_Validate) {
+                    addNewRoom();
                     DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new room: "
                             + FormatName.format(txt_Room_ID.getText()),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
@@ -328,8 +329,20 @@ public class FXMLAddNewRoomController implements Initializable {
                     stageLoader.stopTimeline();
                     stageLoader.closeStage();
                     System.out.println("Form check validate: " + check_Validate);
-                    if (check_Validate) {
+                    if (listRoomsController != null) {
+                        listRoomsController.check_Add_Action = false;
+                        FXMLListRoomsController.roomEXItem = (RoomEX) getDataFromForm();
                         listRoomsController.showRoomsData();
+                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+                        stageUpdate.close();
+                    } else if (mainFormController.checkAddNewRoom) {
+                        mainFormController.checkAddNewRoom = false;
+                        mainOverViewPaneController.refreshForm();
+                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+                        stageUpdate.close();
+                    } else {
+                        listRoomsController.check_Add_Action = false;
+                        mainFormController.checkAddNewRoom = false;
                         Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
                         stageUpdate.close();
                     }
