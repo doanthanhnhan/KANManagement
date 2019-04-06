@@ -18,6 +18,7 @@ public class ConnectControllers {
     public static FXMLMainOverViewPaneController fXMLMainOverViewPaneController;
     public static FXMLForgetPassController fXMLForgetPassController;
     public static FXMLAddNewEmloyeeController fXMLAddNewEmloyeeController;
+    public static FXMLAddNewRoomController fXMLAddNewRoomController;
     public static FXMLAddNewServiceTypeController fXMLAddNewServiceTypeController;
     public static FXMLAddNewServiceOrderController fXMLAddNewServiceOrderController;
     public static FXMLListCheckOutController fXMLListCheckOutController;
@@ -211,6 +212,14 @@ public class ConnectControllers {
 
     public static void setEditCustomerController(FXMLEditCustomerController editCustomerController) {
         ConnectControllers.editCustomerController = editCustomerController;
+    }
+
+    public static FXMLAddNewRoomController getfXMLAddNewRoomController() {
+        return fXMLAddNewRoomController;
+    }
+
+    public static void setfXMLAddNewRoomController(FXMLAddNewRoomController fXMLAddNewRoomController) {
+        ConnectControllers.fXMLAddNewRoomController = fXMLAddNewRoomController;
     }
 
 }

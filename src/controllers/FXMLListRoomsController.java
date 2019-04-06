@@ -10,6 +10,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -51,13 +52,16 @@ public class FXMLListRoomsController implements Initializable {
 
     public Boolean check_Edit_Action = false;
     public boolean check_Add_Action = false;
+    public boolean check_Add_New = false;
     public static RoomEX roomEXItem;
     public int row_index;
-    public TableView<RoomEX> temp_Table_Rooms;
+    public int row_add_new_index;
+    public String new_Room_ID;
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<RoomEX> filteredData;
     private FXMLMainFormController mainFormController;
+    private FXMLAddNewRoomController addNewRoomController;
 
     @FXML
     private TableView<RoomEX> table_Rooms;
@@ -82,6 +86,8 @@ public class FXMLListRoomsController implements Initializable {
         System.out.println("List Rooms initialize...");
         ConnectControllers.setfXMLListRoomsController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
+        addNewRoomController = ConnectControllers.getfXMLAddNewRoomController();
+
         setColumns();
         showRoomsData();
         //ConnectControllers.setfXMLListRoomEXController(this);
@@ -180,16 +186,30 @@ public class FXMLListRoomsController implements Initializable {
         listRoomEXs = roomEXDAOImpl.getAllRoomEX();
         //table_Rooms.getItems().clear();
         table_Rooms.setItems(listRoomEXs);
-        for (RoomEX listRoomEX : listRoomEXs) {
-            for (RoomEX temp_Table_Room : temp_Table_Rooms.getItems()) {
-                
-            }
-        }
 
-        //Forcus to the editing row
-        table_Rooms.requestFocus();
-        table_Rooms.getSelectionModel().select(row_index);
-        //table_Rooms.getFocusModel().focus(row_index);
+        if (check_Add_New) {
+            //Setting new room index
+            for (RoomEX item : table_Rooms.getItems()) {
+                if (new_Room_ID.equals(item.getRoomID())) {
+                    row_add_new_index = table_Rooms.getItems().indexOf(item);
+                    break;
+                }
+            }
+            Platform.runLater(() -> {
+                table_Rooms.requestFocus();
+                table_Rooms.getSelectionModel().select(row_add_new_index);
+                table_Rooms.getFocusModel().focus(row_add_new_index);
+            });
+
+            check_Add_New = false;
+        } else {
+            //Forcus to the editing row
+            Platform.runLater(() -> {
+                table_Rooms.requestFocus();
+                table_Rooms.getSelectionModel().select(row_index);
+                table_Rooms.getFocusModel().focus(row_index);
+            });
+        }
 
         //Set filterData and Pagination
         filteredData = new FilteredList<>(listRoomEXs, list -> true);
@@ -242,7 +262,7 @@ public class FXMLListRoomsController implements Initializable {
         if (alert.getResult() == ButtonType.OK) {
             roomEXDAOImpl.deleteRoomEX(roomEXItem);
             DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete Room ID: "
-                    + FormatName.format(serviceTypeItem.getServiceID()),
+                    + roomEXItem.getRoomID(),
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
             System.out.println("Delete successful");
             showRoomsData();

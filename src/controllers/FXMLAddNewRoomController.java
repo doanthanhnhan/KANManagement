@@ -44,6 +44,7 @@ import utils.StageLoader;
 public class FXMLAddNewRoomController implements Initializable {
 
     public static ObservableList<Room> listRooms;
+    public String new_RoomID;
     RoomDAOImpl roomDAOImpl;
     private FXMLListRoomsController listRoomsController;
     private FXMLMainFormController mainFormController;
@@ -88,13 +89,14 @@ public class FXMLAddNewRoomController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("Add new Room initialize...");
+        ConnectControllers.setfXMLAddNewRoomController(this);
         roomDAOImpl = new RoomDAOImpl();
         mainFormController = ConnectControllers.getfXMLMainFormController();
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
         listRoomsController = ConnectControllers.getfXMLListRoomsController();
         init_ComboBox_Value();
         //Check form was call from List Room Form
-        if (mainFormController.checkAddNewRoom) {            
+        if (mainFormController.checkAddNewRoom) {
             comboBox_Room_Status.setValue("Available");
             comboBox_Room_Customer_ID.setValue("CTM-000000000");
             comboBox_Room_Status.setDisable(true);
@@ -207,7 +209,7 @@ public class FXMLAddNewRoomController implements Initializable {
                         submit_Update_Room();
                     }
                 });
-            } else {                
+            } else {
                 comboBox_Room_Status.setValue("Available");
                 comboBox_Room_Customer_ID.setValue("CTM-000000000");
                 comboBox_Room_Status.setDisable(true);
@@ -295,6 +297,8 @@ public class FXMLAddNewRoomController implements Initializable {
 
     public void submit_Add_New_Room() {
         btnAddNew.setDisable(true);
+        listRoomsController.check_Add_New = true;
+        listRoomsController.new_Room_ID = txt_Room_ID.getText();
         //Calling loading form and thread task
         StageLoader stageLoader = new StageLoader();
         stageLoader.loadingIndicator("Adding Room");
@@ -331,7 +335,6 @@ public class FXMLAddNewRoomController implements Initializable {
                     System.out.println("Form check validate: " + check_Validate);
                     if (listRoomsController != null) {
                         listRoomsController.check_Add_Action = false;
-                        FXMLListRoomsController.roomEXItem = (RoomEX) getDataFromForm();
                         listRoomsController.showRoomsData();
                         Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
                         stageUpdate.close();
