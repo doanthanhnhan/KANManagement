@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -82,7 +83,11 @@ public class FXMLListCustomerController implements Initializable {
     private FilteredList<Customer> filteredData;
     private static final int ROWS_PER_PAGE = 10;
     public static Boolean check_Edit_Action = false;
-
+    public String new_Cus_ID;
+    public int row_add_new_index;
+    public boolean check_Add_New = false;
+    public int pagination_index;
+    public int row_index;
     /**
      * Initializes the controller class.
      */
@@ -102,6 +107,8 @@ public class FXMLListCustomerController implements Initializable {
                 menuItem_Edit.setDisable(false);
                 menuItem_Delete.setDisable(false);
                 ctm = table_ListCustomer.getSelectionModel().getSelectedItem();
+                row_index = table_ListCustomer.getSelectionModel().getSelectedIndex();
+                pagination_index = pagination.getCurrentPageIndex();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -235,6 +242,38 @@ public class FXMLListCustomerController implements Initializable {
         changeTableView(0, ROWS_PER_PAGE);
         pagination.currentPageIndexProperty().addListener(
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+        if (check_Add_New) {
+            //Setting new room index
+            for (Customer item : list_Ctm) {
+                if (new_Cus_ID.equals(item.getCusID())) {
+                    row_add_new_index = list_Ctm.indexOf(item);
+                    break;
+                }
+            }
+            Platform.runLater(() -> {
+                int focusPage = (int) row_add_new_index / ROWS_PER_PAGE;
+                int new_index = row_add_new_index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(focusPage);
+                changeTableView(focusPage, ROWS_PER_PAGE);
+                table_ListCustomer.requestFocus();
+                table_ListCustomer.getSelectionModel().select(new_index);
+                table_ListCustomer.getFocusModel().focus(new_index);
+
+            });
+
+            check_Add_New = false;
+        } else {
+            //Forcus to the editing row
+            Platform.runLater(() -> {
+                //int focusPage = (int) row_index / ROWS_PER_PAGE;
+                //int new_index = row_index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(pagination_index);
+                changeTableView(pagination_index, ROWS_PER_PAGE);
+                table_ListCustomer.requestFocus();
+                table_ListCustomer.getSelectionModel().select(row_index);
+                table_ListCustomer.getFocusModel().focus(row_index);
+            });
+        }
     }
 
     public Boolean male_Female(String str) {

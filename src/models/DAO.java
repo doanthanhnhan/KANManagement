@@ -793,10 +793,11 @@ public class DAO {
         pts.execute();
         pts.close();
 
-        String exp = "UPDATE Employees SET Active = ? WHERE EmployeeID = ?";
+        String exp = "UPDATE Employees SET Active = ?,ReActive=? WHERE EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setInt(1, 0);
-        pt.setString(2, User);
+        pt.setInt(2, 0);
+        pt.setString(3, User);
         pt.execute();
         pt.close();
         connection.close();

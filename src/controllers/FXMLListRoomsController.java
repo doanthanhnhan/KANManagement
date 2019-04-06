@@ -228,9 +228,7 @@ public class FXMLListRoomsController implements Initializable {
                 table_Rooms.requestFocus();
                 table_Rooms.getSelectionModel().select(new_index);
                 table_Rooms.getFocusModel().focus(new_index);
-
             });
-
             check_Add_New = false;
         } else {
             //Forcus to the editing row

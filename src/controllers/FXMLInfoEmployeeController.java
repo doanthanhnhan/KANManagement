@@ -62,6 +62,9 @@ import javax.sql.rowset.serial.SerialBlob;
 import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.DAODepartMentReActive;
+import models.DAOReActive;
+import static models.DAOReActive.check_InfoEmployeeReactive;
+import static models.DAOReActive.update_Active;
 import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.formatCalender;
@@ -153,10 +156,12 @@ public class FXMLInfoEmployeeController implements Initializable {
     @FXML
     private AnchorPane anchorPaneInfoEmployee;
     private FXMLDecentralizationController fXMLDecentralizationController;
+    private FXMLReActiveController fXMLReActiveController;
     @FXML
     private HBox HboxBoxId;
     private FXMLListEmployeeController fXMLListEmployeeController;
     private String Department = null;
+    public static boolean InfoEmployeeReActive = false;
 
     /**
      * Initializes the controller class.
@@ -226,14 +231,24 @@ public class FXMLInfoEmployeeController implements Initializable {
             }
 
         }
-        if (FXMLListEmployeeController.check_form_list) {
+        if (FXMLListEmployeeController.check_form_list || DAOReActive.check_InfoEmployeeReactive) {
             System.out.println("Vao check_form_list = true");
             Job.setText("");
             Salary.setText("0");
             Bonus.setText("0");
             Comm.setText("0");
             check_delete = false;
-            Emp = FXMLListEmployeeController.Emp;
+            if (FXMLListEmployeeController.check_form_list && !DAOReActive.check_InfoEmployeeReactive) {
+                Emp = FXMLListEmployeeController.Emp;
+            }
+            if (DAOReActive.check_InfoEmployeeReactive) {
+                try {
+                    fXMLReActiveController = ConnectControllers.getfXMLReActiveController();
+                    Emp = DAOReActive.getInfoEmployeeReactive(FXMLReActiveController.Emp.getEmployee_ID());
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             HboxBoxId.getChildren().remove(iconRefresh);
             boxId.setDisable(true);
             boxId.setValue(Emp.getEmployee_ID());
@@ -691,7 +706,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                         Platform.runLater(() -> {
                             notificationFunction.notification(Email, HboxContent, "EMAIL ALREADY EXIST !!!");
                         });
-                    } else if (FXMLListEmployeeController.check_form_list && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !FXMLLoginController.checkLoginRegis) {
+                    } else if (DAOReActive.check_InfoEmployeeReactive || (FXMLListEmployeeController.check_form_list && DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !FXMLLoginController.checkLoginRegis)) {
                         System.out.println("vao khu vuc submit admin 1");
                         Platform.runLater(() -> {
                             if (!Department.equals(DepartmentId.getValue())) {
@@ -859,27 +874,39 @@ public class FXMLInfoEmployeeController implements Initializable {
             }
             DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update " + boxId.getValue(),
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-            newPhone.setText("");
-            boxId.setValue(null);
-            birthday.setValue(null);
-            Hiredate.setValue(null);
-            FirstName.setText("");
-            MidName.setText("");
-            LastName.setText("");
-            Email.setText("");
-            IdNumber.setText("");
-            address.setText("");
-            Job.setText("");
-            EducatedLevel.setText("");
-            Salary.setText("0");
-            Comm.setText("0");
-            Bonus.setText("0");
-            Male.setSelected(true);
+            System.out.println(DAOReActive.check_InfoEmployeeReactive);
+            if (DAOReActive.check_InfoEmployeeReactive) {
+                System.out.println("vao if");
+                InfoEmployeeReActive = true;
+                if (FXMLInfoEmployeeController.InfoEmployeeReActive) {
+                    System.out.println("vao update active");
+                    try {
+                        //                CheckIn CheckOut Department Customer Booking
+                        DAOReActive.update_Active(
+                                boxId.getValue()
+                        );
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Update Active = true for " + boxId.getValue(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                    if (FXMLListEmployeeController.check_Edit_Action) {
+                        fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+                        fXMLListEmployeeController.showUsersData();
+                    }
+                    fXMLReActiveController = ConnectControllers.getfXMLReActiveController();
+                    fXMLReActiveController.showUsersData();
+                    DAOReActive.check_InfoEmployeeReactive = false;
+                    InfoEmployeeReActive = false;
+                }
+            }
             check_delete = true;
             validateInfoEmployee = true;
-            FXMLListEmployeeController.check_form_list = false;
-            fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
-            fXMLListEmployeeController.showUsersData();
+            if (FXMLListEmployeeController.check_form_list) {
+                FXMLListEmployeeController.check_form_list = false;
+                fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+                fXMLListEmployeeController.showUsersData();
+            }
             System.out.println("Vào chỗ submit admin");
             Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
             stage.close();

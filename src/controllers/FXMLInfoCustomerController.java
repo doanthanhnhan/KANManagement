@@ -399,6 +399,9 @@ public class FXMLInfoCustomerController implements Initializable {
                 Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
+            fXMLListCustomerController = ConnectControllers.getfXMLListCustomerController();
+            fXMLListCustomerController.check_Add_New = true;
+            fXMLListCustomerController.new_Cus_ID = CustomerID.getText();
             btnInfo.setDisable(true);
             // Đoạn này làm loading (đang làm chạy vô tận)
 

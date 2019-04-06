@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -82,6 +83,11 @@ public class FXMLListEmployeeController implements Initializable {
     private Pagination pagination;
     @FXML
     private ContextMenu contextMenu_Main;
+    public String new_Emp_ID;
+    public int row_add_new_index;
+    public boolean check_Add_New = false;
+    public int pagination_index;
+    public int row_index;
 
     /**
      * Initializes the controller class.
@@ -100,6 +106,8 @@ public class FXMLListEmployeeController implements Initializable {
                 menuItem_Edit.setDisable(false);
                 menuItem_Delete.setDisable(false);
                 Emp = table_ListEmployee.getSelectionModel().getSelectedItem();
+                row_index = table_ListEmployee.getSelectionModel().getSelectedIndex();
+                pagination_index = pagination.getCurrentPageIndex();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -263,6 +271,38 @@ public class FXMLListEmployeeController implements Initializable {
         changeTableView(0, ROWS_PER_PAGE);
         pagination.currentPageIndexProperty().addListener(
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+        if (check_Add_New) {
+            //Setting new room index
+            for (InfoEmployee item : listEmp) {
+                if (new_Emp_ID.equals(item.getEmployee_ID())) {
+                    row_add_new_index = listEmp.indexOf(item);
+                    break;
+                }
+            }
+            Platform.runLater(() -> {
+                int focusPage = (int) row_add_new_index / ROWS_PER_PAGE;
+                int new_index = row_add_new_index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(focusPage);
+                changeTableView(focusPage, ROWS_PER_PAGE);
+                table_ListEmployee.requestFocus();
+                table_ListEmployee.getSelectionModel().select(new_index);
+                table_ListEmployee.getFocusModel().focus(new_index);
+
+            });
+
+            check_Add_New = false;
+        } else {
+            //Forcus to the editing row
+            Platform.runLater(() -> {
+                //int focusPage = (int) row_index / ROWS_PER_PAGE;
+                //int new_index = row_index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(pagination_index);
+                changeTableView(pagination_index, ROWS_PER_PAGE);
+                table_ListEmployee.requestFocus();
+                table_ListEmployee.getSelectionModel().select(row_index);
+                table_ListEmployee.getFocusModel().focus(row_index);
+            });
+        }
     }
 
     public Boolean male_Female(String str) {

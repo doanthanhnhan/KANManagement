@@ -95,6 +95,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         try {
             boxDepartment.setItems(DAODepartMentReActive.get_All_DepartmentName());
         } catch (ClassNotFoundException | SQLException ex) {
@@ -227,6 +228,9 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             stageMainForm.close();
             showFormLogin.showFormLogin();
         } else {
+            fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+            fXMLListEmployeeController.check_Add_New = true;
+            fXMLListEmployeeController.new_Emp_ID = newId.getText();
             btnAddNew.setDisable(true);
             // Đoạn này làm loading (đang làm chạy vô tận)
 
@@ -345,7 +349,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             if (DAO.checkFirstLogin().equals(0)) {
                                 DAODepartMentReActive.Add_New_Department("DPM-Admin", "Admin", "admin");
                                 DAODepartmentDecentralization.update_DepartmentDecentralization("DPM-Admin", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,
-                                        true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true,true,true,true);
+                                        true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
                             }
                             Boolean Sex;
                             Sex = sexMale.selectedProperty().getValue();

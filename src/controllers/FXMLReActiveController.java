@@ -32,6 +32,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
@@ -76,6 +78,17 @@ public class FXMLReActiveController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ConnectControllers.setfXMLReActiveController(this);
+        table_Reactive.setOnMouseClicked((MouseEvent event) -> {
+            if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
+                    && table_Reactive.getSelectionModel().getSelectedItem() != null) {
+                Emp = table_Reactive.getSelectionModel().getSelectedItem();
+                table_Reactive.getSelectionModel().getSelectedItem().getEmployee_ReActive().setDisable(true);
+                table_Reactive.getSelectionModel().getSelectedItem().getHboxReActive().getChildren().get(0).setDisable(false);
+                table_Reactive.getSelectionModel().getSelectedItem().getHboxReActive().getChildren().get(1).setDisable(true);
+                
+            }
+        });
         contextMenu_Main.getItems().remove(menuItem_Add);
         contextMenu_Main.getItems().remove(menuItem_Delete);
         contextMenu_Main.getItems().remove(menuItem_Edit);
@@ -84,7 +97,6 @@ public class FXMLReActiveController implements Initializable {
         showUsersData();
         ObservableList list_menu = FXCollections.observableArrayList();
         list_menu.add("ReActive Employee");
-        list_menu.add("ReActive Customer");
 
         BoxMenu.setItems(list_menu);
         BoxMenu.setValue("ReActive Employee");
@@ -97,14 +109,10 @@ public class FXMLReActiveController implements Initializable {
             if (newItem.equals("ReActive Employee")) {
                 add = "Active_Employee";
                 setColumns();
-            } else if (newItem.equals("ReActive Customer")) {
-                add = "Active_Customer";
-                setColumns();
             }
         });
         // Check item when click on table
     }
-
     private void changeTableView(int index, int limit) {
 
         int fromIndex = index * limit;
