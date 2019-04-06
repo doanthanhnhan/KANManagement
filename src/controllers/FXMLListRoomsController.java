@@ -56,6 +56,7 @@ public class FXMLListRoomsController implements Initializable {
     public static RoomEX roomEXItem;
     public int row_index;
     public int row_add_new_index;
+    public int pagination_index;
     public String new_Room_ID;
 
     private static final int ROWS_PER_PAGE = 20;
@@ -101,6 +102,7 @@ public class FXMLListRoomsController implements Initializable {
                 System.out.println(table_Rooms.getSelectionModel().getSelectedItem().getRoomID());
                 roomEXItem = table_Rooms.getSelectionModel().getSelectedItem();
                 row_index = table_Rooms.getSelectionModel().getSelectedIndex();
+                pagination_index = pagination.getCurrentPageIndex();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -187,30 +189,6 @@ public class FXMLListRoomsController implements Initializable {
         //table_Rooms.getItems().clear();
         table_Rooms.setItems(listRoomEXs);
 
-        if (check_Add_New) {
-            //Setting new room index
-            for (RoomEX item : table_Rooms.getItems()) {
-                if (new_Room_ID.equals(item.getRoomID())) {
-                    row_add_new_index = table_Rooms.getItems().indexOf(item);
-                    break;
-                }
-            }
-            Platform.runLater(() -> {
-                table_Rooms.requestFocus();
-                table_Rooms.getSelectionModel().select(row_add_new_index);
-                table_Rooms.getFocusModel().focus(row_add_new_index);
-            });
-
-            check_Add_New = false;
-        } else {
-            //Forcus to the editing row
-            Platform.runLater(() -> {
-                table_Rooms.requestFocus();
-                table_Rooms.getSelectionModel().select(row_index);
-                table_Rooms.getFocusModel().focus(row_index);
-            });
-        }
-
         //Set filterData and Pagination
         filteredData = new FilteredList<>(listRoomEXs, list -> true);
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
@@ -233,6 +211,39 @@ public class FXMLListRoomsController implements Initializable {
         changeTableView(0, ROWS_PER_PAGE);
         pagination.currentPageIndexProperty().addListener(
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+
+        if (check_Add_New) {
+            //Setting new room index
+            for (RoomEX item : listRoomEXs) {
+                if (new_Room_ID.equals(item.getRoomID())) {
+                    row_add_new_index = listRoomEXs.indexOf(item);
+                    break;
+                }
+            }
+            Platform.runLater(() -> {
+                int focusPage = (int) row_add_new_index / ROWS_PER_PAGE;
+                int new_index = row_add_new_index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(focusPage);
+                changeTableView(focusPage, ROWS_PER_PAGE);
+                table_Rooms.requestFocus();
+                table_Rooms.getSelectionModel().select(new_index);
+                table_Rooms.getFocusModel().focus(new_index);
+
+            });
+
+            check_Add_New = false;
+        } else {
+            //Forcus to the editing row
+            Platform.runLater(() -> {
+                //int focusPage = (int) row_index / ROWS_PER_PAGE;
+                //int new_index = row_index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(pagination_index);
+                changeTableView(pagination_index, ROWS_PER_PAGE);
+                table_Rooms.requestFocus();
+                table_Rooms.getSelectionModel().select(row_index);
+                table_Rooms.getFocusModel().focus(row_index);
+            });
+        }
     }
 
     @FXML
