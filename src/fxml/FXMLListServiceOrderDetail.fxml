@@ -46,7 +46,7 @@
          <bottom>
             <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <Pagination fx:id="pagination" pageCount="10" />
+                  <Pagination fx:id="pagination" pageCount="1" />
                </children>
             </HBox>
          </bottom>

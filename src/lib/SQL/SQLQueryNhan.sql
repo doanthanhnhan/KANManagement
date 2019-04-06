@@ -20,7 +20,7 @@
 	CONSTRAINT pk_RoomID_Rooms PRIMARY KEY (RoomID),
 	CONSTRAINT uc_RoomID_Rooms UNIQUE (RoomID)	
 )
-DROP TABLE Rooms
+
 CREATE TABLE RoomType(
 	-- Create columns		
 	RoomType varchar(100) NOT NULL,	
@@ -50,7 +50,6 @@ CREATE TABLE Customers(
 	CONSTRAINT pk_CustomerID_Customers PRIMARY KEY (CustomerID),
 	CONSTRAINT uc_CustomerID_Customers UNIQUE (CustomerID)
 )
-DROP TABLE Customers
 
 CREATE TABLE BookingInfo (
 	-- Create columns
@@ -84,7 +83,6 @@ CREATE TABLE CheckInOrders(
 	CONSTRAINT pk_CheckInID_CheckInOrders PRIMARY KEY (CheckInID),
 	CONSTRAINT uc_CheckInID_CheckInOrders UNIQUE (CheckInID)
 )
-DROP TABLE CheckInOrders
 
 CREATE TABLE CheckOutOrders(
 	-- Create columns		
@@ -105,7 +103,6 @@ CREATE TABLE CheckOutOrders(
 	CONSTRAINT uc_CheckOutID_CheckOutOrders UNIQUE (CheckOutID),
 	CONSTRAINT uc_CheckInID_CheckOutOrders UNIQUE (CheckInID)
 )
-DROP TABLE CheckOutOrders
 
 CREATE TABLE ServicesOrders(
 	-- Create columns		
@@ -120,7 +117,6 @@ CREATE TABLE ServicesOrders(
 	CONSTRAINT pk_OrderID_ServiceOrders PRIMARY KEY (OrderID),
 	CONSTRAINT uc_OrderID_ServiceOrders UNIQUE (OrderID)	
 )
-DROP TABLE ServicesOrders
 
 CREATE TABLE ServicesOrderDetails(
 	-- Create columns
@@ -135,7 +131,6 @@ CREATE TABLE ServicesOrderDetails(
 	-- Create constraint
 	CONSTRAINT pk_ID_ServicesOrderDetails PRIMARY KEY (ID)		
 )
-DROP TABLE ServicesOrderDetails
 
 CREATE TABLE ServiceType(
 	-- Create columns		
@@ -157,7 +152,6 @@ CREATE TABLE ServiceType(
 	CONSTRAINT uc_ServiceID_ServiceType UNIQUE (ServiceID),
 	CONSTRAINT uc_ServiceName_ServiceType UNIQUE (ServiceName)
 )
-DROP TABLE ServiceType
 
 CREATE TABLE UserLogs(
 	-- Create columns
@@ -170,7 +164,6 @@ CREATE TABLE UserLogs(
 	CONSTRAINT pk_ID_UserLogs PRIMARY KEY (ID)
 )
 
-DROP TABLE Departments
 CREATE TABLE Departments(
 	-- Create columns
 	DepartmentID varchar(100) NOT NULL,		
@@ -368,29 +361,27 @@ ADD CONSTRAINT fk_CustomerID_Bill FOREIGN KEY (CustomerID) REFERENCES Customers(
 	CONSTRAINT fk_UserName_Bills FOREIGN KEY (UserName) REFERENCES Users(UserName); 
 
 -- CREATE VIEW --
-DROP VIEW view_UserRole
 CREATE VIEW view_UserRole AS
 SELECT R.*, E.EmployeeFirstName, E.EmployeeMidName, E.EmployeeLastName FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID
 SELECT * FROM view_UserRole
 
 CREATE VIEW view_RoomProperty AS
-SELECT RoomType AS 'PropertyName', COUNT(RoomType) AS 'Total' FROM Rooms GROUP BY RoomType
+SELECT RoomType AS 'PropertyName', COUNT(RoomType) AS 'Total' FROM Rooms WHERE Active=1 GROUP BY RoomType
 UNION
-SELECT RoomStatus, COUNT(RoomStatus) AS 'Total' FROM Rooms GROUP BY RoomStatus
+SELECT RoomStatus, COUNT(RoomStatus) AS 'Total' FROM Rooms WHERE Active=1 GROUP BY RoomStatus
 UNION
 SELECT CASE WHEN Clean = 1 THEN 'Clean' ELSE 'Not Clean' END AS 'RoomStatus', COUNT(Clean) AS 'Total'
-FROM Rooms
+FROM Rooms WHERE Active=1
 GROUP BY Clean
 UNION
 SELECT CASE WHEN Repaired = 1 THEN 'Repaired' ELSE 'Not Repaired' END AS 'RoomStatus', COUNT(Repaired) AS 'Total'
-FROM Rooms
+FROM Rooms WHERE Active=1
 GROUP BY Repaired
 UNION
 SELECT CASE WHEN InProgress = 1 THEN 'Checking' ELSE 'Not Checking' END AS 'RoomStatus', COUNT(InProgress) AS 'Total'
-FROM Rooms
+FROM Rooms WHERE Active=1
 GROUP BY InProgress
 SELECT * FROM view_RoomProperty
-
 -- CREATE STORE PROCEDURE --
 CREATE PROC sp_Rooms_With_Status
 AS
@@ -605,3 +596,4 @@ WHERE B.CustomerID = C.CustomerID
 SELECT C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName FROM Customers C
 
 SELECT * FROM Customers
+SELECT * FROM view_RoomProperty

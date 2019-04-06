@@ -535,6 +535,8 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List Department menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLReActive.fxml", "List ReActive", "ReActive Informations");
     }
+    
+    @FXML
     private void handle_MenuItem_List_Service_Orders_Action(ActionEvent event) {
         System.out.println("List service orders item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listServiceOrders_Tab", "Service Orders");
@@ -561,11 +563,11 @@ public class FXMLMainFormController implements Initializable {
         formLoader("/fxml/FXMLAddNewEmployee.fxml", "/images/KAN Logo.png", "Add New Employee");
     }
 
-    private void handle_MenuItem_CheckIn_Action(ActionEvent event) {
-        checkRegis = true;
-        System.out.println("Add new User menu item clicked!");
-        formLoader("/fxml/FXMLCheckInOrders.fxml", "/images/KAN Logo.png", "Add CheckInOrder");
-    }
+//    private void handle_MenuItem_CheckIn_Action(ActionEvent event) {
+//        checkRegis = true;
+//        System.out.println("Add new User menu item clicked!");
+//        formLoader("/fxml/FXMLCheckInOrders.fxml", "/images/KAN Logo.png", "Add CheckInOrder");
+//    }
 
     @FXML
     private void handle_MenuItem_Add_Customer_Action(ActionEvent event) {

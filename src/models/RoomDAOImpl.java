@@ -38,7 +38,7 @@ public class RoomDAOImpl implements RoomDAO {
                 + "DATEDIFF(HOUR,R.BookingDate,GETDATE())/24 AS 'Day_Booking', \n"
                 + "RT.Price, RT.Discount\n"
                 + "FROM Rooms R, Customers C, RoomType RT\n"
-                + "WHERE R.CustomerID = C.CustomerID AND R.RoomType = RT.RoomType AND R.RoomID = '" + roomID + "'";
+                + "WHERE R.CustomerID = C.CustomerID AND R.Active=1 AND R.RoomType = RT.RoomType AND R.RoomID = '" + roomID + "'";
         Room room = new Room();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -88,7 +88,7 @@ public class RoomDAOImpl implements RoomDAO {
                 + "DATEDIFF(HOUR,R.BookingDate,GETDATE())/24 AS 'Day_Booking', \n"
                 + "RT.Price, RT.Discount\n"
                 + "FROM Rooms R, Customers C, RoomType RT\n"
-                + "WHERE R.CustomerID = C.CustomerID AND R.RoomType = RT.RoomType";
+                + "WHERE R.CustomerID = C.CustomerID AND R.RoomType = RT.RoomType AND R.Active=1";
         ObservableList<Room> listRooms = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -135,7 +135,7 @@ public class RoomDAOImpl implements RoomDAO {
     public ObservableList<Room> getAllStatusRooms(String roomStatus) {
         String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName' \n"
                 + "FROM Rooms R, Customers C\n"
-                + "WHERE R.CustomerID = C.CustomerID AND R.RoomStatus='" + roomStatus + "'";
+                + "WHERE R.CustomerID = C.CustomerID AND R.RoomStatus='" + roomStatus + "' AND R.Active=1";
         ObservableList<Room> listRooms = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -174,7 +174,7 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public ObservableList<String> getAllRoomID() {
-        String sql = "SELECT RoomID FROM Rooms";
+        String sql = "SELECT RoomID FROM Rooms WHERE Active=1";
         ObservableList<String> listRooms = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -200,7 +200,7 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public List<String> getAll_Available_RoomID() {
-        String sql = "SELECT RoomID FROM Rooms WHERE RoomStatus='Avaiable'";
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomStatus='Avaiable' AND Active=1";
         ObservableList<String> listRooms = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -226,7 +226,7 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public ObservableList<String> getAllStatusRoomID(String roomStatus) {
-        String sql = "SELECT RoomID FROM Rooms WHERE RoomStatus='" + roomStatus + "'";
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomStatus='" + roomStatus + "' AND Active=1";
         ObservableList<String> listRooms = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -278,7 +278,7 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public ObservableList<String> getAllStatusCustomerID(String roomStatus) {
-        String sql = "SELECT CustomerID FROM Rooms WHERE RoomStatus='" + roomStatus + "'"
+        String sql = "SELECT CustomerID FROM Rooms WHERE RoomStatus='" + roomStatus + "' AND Active=1"
                 + " GROUP BY CustomerID";
         ObservableList<String> listRooms = FXCollections.observableArrayList();
         try {
@@ -306,7 +306,7 @@ public class RoomDAOImpl implements RoomDAO {
     public ObservableList<RoomEX> getAllRoomEX() {
         String sql = "SELECT R.*, C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName AS 'CustomerFullName' \n"
                 + "FROM Rooms R, Customers C\n"
-                + "WHERE R.CustomerID = C.CustomerID";
+                + "WHERE R.CustomerID = C.CustomerID AND R.Active=1";
         ObservableList<RoomEX> listRooms = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
