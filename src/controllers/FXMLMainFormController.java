@@ -55,6 +55,7 @@ import utils.showFXMLLogin;
  */
 public class FXMLMainFormController implements Initializable {
 
+    public static Boolean checkRegisInfoEmployee = false;
     public static Boolean checkRegis = false;
     public boolean checkAddNewRoom = false;
     private Map<String, Tab> openTabs = new HashMap<>();
@@ -433,9 +434,8 @@ public class FXMLMainFormController implements Initializable {
             Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    // =============== START TOOLBAR ACTIONS ===============
 
+    // =============== START TOOLBAR ACTIONS ===============
     @FXML
     private void homeAction(ActionEvent event) {
         btn_Toolbar_Home.setDisable(true);
@@ -486,7 +486,7 @@ public class FXMLMainFormController implements Initializable {
         formLoader("/fxml/FXMLBillReport.fxml", "/images/KAN Logo.png", "Bill report");
     }
     // =============== END TOOLBAR ACTIONS ===============
-    
+
     // =============== START VIEW ACTIONS ===============
     @FXML
     private void handle_MenuItem_List_Service_Type_Action(ActionEvent event) {
@@ -535,7 +535,7 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List Department menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLReActive.fxml", "List ReActive", "ReActive Informations");
     }
-    
+
     @FXML
     private void handle_MenuItem_List_Service_Orders_Action(ActionEvent event) {
         System.out.println("List service orders item clicked!");
@@ -568,7 +568,6 @@ public class FXMLMainFormController implements Initializable {
 //        System.out.println("Add new User menu item clicked!");
 //        formLoader("/fxml/FXMLCheckInOrders.fxml", "/images/KAN Logo.png", "Add CheckInOrder");
 //    }
-
     @FXML
     private void handle_MenuItem_Add_Customer_Action(ActionEvent event) {
         checkRegis = true;
@@ -598,7 +597,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_Add_Room_Action(ActionEvent event) {
         System.out.println("Add new room menu item clicked!");
-        checkAddNewRoom = true; 
+        checkAddNewRoom = true;
         formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Add new room");
     }
 
@@ -612,7 +611,7 @@ public class FXMLMainFormController implements Initializable {
     // =============== EDIT ACTIONS ===============
     @FXML
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
-        checkRegis = true;
+        checkRegisInfoEmployee=true;
         FXMLListEmployeeController.check_form_list = false;
         FXMLInfoEmployeeController.check_delete = true;
         System.out.println("Edit Employee Informations menu item clicked!");
@@ -730,7 +729,7 @@ public class FXMLMainFormController implements Initializable {
                             stage.setScene(scene);
                             stage.initModality(Modality.APPLICATION_MODAL);
                             stage.setOnCloseRequest((event) -> {
-                                FXMLMainFormController.checkRegis = false;
+                                FXMLMainFormController.checkRegisInfoEmployee = false;
                             });
                             stage.show();
                         } catch (IOException ex) {

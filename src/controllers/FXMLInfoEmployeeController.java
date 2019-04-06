@@ -13,6 +13,7 @@ import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
 import static controllers.FXMLListCustomerController.ctm;
 import static controllers.FXMLListEmployeeController.Emp;
+import static controllers.FXMLMainFormController.checkRegisInfoEmployee;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.awt.image.BufferedImage;
@@ -194,9 +195,7 @@ public class FXMLInfoEmployeeController implements Initializable {
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
         validateInfoEmployee = false;
-        System.out.println("kiem tra validate Init" + validateInfoEmployee);
-        System.out.println("mainform check regis: " + FXMLMainFormController.checkRegis);
-        if (FXMLMainFormController.checkRegis && !FXMLListEmployeeController.check_form_list) {
+        if (FXMLMainFormController.checkRegisInfoEmployee) {
             try {
                 System.out.println("kiem tra validate mainform click:" + validateInfoEmployee);
                 HboxBoxId.getChildren().remove(iconRefresh);
@@ -231,7 +230,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             }
 
         }
-        if (FXMLListEmployeeController.check_form_list || DAOReActive.check_InfoEmployeeReactive) {
+        if ((FXMLListEmployeeController.check_form_list || DAOReActive.check_InfoEmployeeReactive)&&!FXMLMainFormController.checkRegisInfoEmployee) {
             System.out.println("Vao check_form_list = true");
             Job.setText("");
             Salary.setText("0");
@@ -462,7 +461,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             public void handle(Event event) {
                 System.out.println("Finished");
                 Platform.runLater(() -> {
-                    FXMLMainFormController.checkRegis = false;
+                    FXMLMainFormController.checkRegisInfoEmployee = false;
                     btnInfo.setDisable(false);
                     stageLoader.stopTimeline();
                     stageLoader.closeStage();
@@ -519,6 +518,8 @@ public class FXMLInfoEmployeeController implements Initializable {
     @FXML
     private void Cancel() {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
+        DAOReActive.check_InfoEmployeeReactive=false;
+        FXMLMainFormController.checkRegisInfoEmployee=false;
         // do what you have to do
         stage.hide();
     }
@@ -554,7 +555,7 @@ public class FXMLInfoEmployeeController implements Initializable {
 
     public void validateForm() throws ClassNotFoundException, IOException, SQLException {
 
-        if ((FXMLMainFormController.checkRegis || FXMLListEmployeeController.check_form_list) && !check_delete && !DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")) {
+        if ((FXMLMainFormController.checkRegisInfoEmployee || FXMLListEmployeeController.check_form_list) && !check_delete && !DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")&&!DAOReActive.check_InfoEmployeeReactive) {
             Platform.runLater(() -> {
                 AlertLoginAgain.alertLogin();
                 fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
@@ -821,7 +822,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                             validateInfoEmployee = true;
                             System.out.println("Vào chỗ submit user");
-                            FXMLMainFormController.checkRegis = false;
+                            FXMLMainFormController.checkRegisInfoEmployee = false;
                             Stage stage = (Stage) anchorPaneInfoEmployee.getScene().getWindow();
                             stage.close();
                         });
