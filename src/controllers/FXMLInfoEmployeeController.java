@@ -740,6 +740,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                                 Optional<ButtonType> option = alert.showAndWait();
                                 System.out.println(alert.getResult());
                                 if (option.get() == Default) {
+
                                     try {
                                         if (DAOCustomerBookingCheckIn.check_Role_View_Disable().equals(1) && DAOCustomerBookingCheckIn.check_Delete_Employee(Emp.getEmployee_ID())
                                                 && !DAOCustomerBookingCheckIn.check_RoleView_Department(DepartmentId.getValue())) {

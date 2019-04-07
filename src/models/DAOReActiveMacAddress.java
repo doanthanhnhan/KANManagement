@@ -16,6 +16,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -28,6 +30,7 @@ import static models.DAOReActive.Employee_ID;
 import static models.DAOReActive.check_InfoEmployeeReactive;
 import static models.DAOcheckRole.showFormLogin;
 import utils.AlertLoginAgain;
+import utils.GetInetAddress;
 import utils.StageLoader;
 import utils.connectDB;
 
@@ -38,7 +41,7 @@ import utils.connectDB;
 public class DAOReActiveMacAddress {
 
     private static FXMLReActiveMacAddressController fXMLReActiveMacAddressController;
-    
+
     public static ObservableList<MacAddress> getAllReActiveMacAddress() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<MacAddress> list = FXCollections.observableArrayList();
@@ -90,6 +93,9 @@ public class DAOReActiveMacAddress {
                         btn_Edit.setDisable(false);
                         if (cb_Active_MacAddress.isSelected()) {
                             update_MacAddress(Emp.getMACAddress());
+                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login,
+                                    "ReActive for " + Emp.getMACAddress(),
+                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                             fXMLReActiveMacAddressController = ConnectControllers.getfXMLReActiveMacAddressController();
                             fXMLReActiveMacAddressController.showUsersData();
                         }

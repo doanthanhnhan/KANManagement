@@ -361,7 +361,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 HboxContent.getChildren().add(label);
                 boxBookingID.requestFocus();
             });
-        } else if (boxCheckInType.getValue() == null) {
+        } else if (boxBookingID.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
@@ -369,16 +369,33 @@ public class FXMLCheckInOrdersController implements Initializable {
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(350, 35);
-                label.setText("CHECK IN TYPE MUST NOT EMPTY !!!");
+                label.setText("ID BOOKING MUST NOT EMPTY !!!");
                 label.setAlignment(Pos.CENTER_LEFT);
-                boxCheckInType.getStyleClass().removeAll();
-                boxCheckInType.getStyleClass().add("jfx-combo-box-fault");
+                boxBookingID.getStyleClass().removeAll();
+                boxBookingID.getStyleClass().add("jfx-combo-box-fault");
                 HboxContent.setSpacing(10);
                 HboxContent.setAlignment(Pos.CENTER_LEFT);
                 HboxContent.getChildren().clear();
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
-                boxCheckInType.requestFocus();
+                boxBookingID.requestFocus();
+            });
+        } else if (LeaveDate.getValue() == null) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setText("LEAVE DATE MUST NOT EMPTY !!!");
+                label.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                LeaveDate.requestFocus();
             });
         } else if (!PatternValided.PatternID(CheckInID.getText())) {
             Platform.runLater(() -> {
