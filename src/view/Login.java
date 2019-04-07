@@ -36,7 +36,7 @@ public class Login extends Application {
         if (DAO.check_invalid(GetInetAddress.getMacAddress()) && DAO.check_Active_MacAddress(GetInetAddress.getMacAddress()).equals(0)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("Your device has been blocked from using this program !!!");
+            alert.setHeaderText("MacAddress: "+GetInetAddress.getMacAddress()+".Your device has been blocked from using this program !!!");
             alert.setContentText("Please contact the administrator for reuse !!!");
             alert.showAndWait();
         } else{

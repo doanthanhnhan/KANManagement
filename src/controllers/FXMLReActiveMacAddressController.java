@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package controllers;
-import models.ReActive;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -24,27 +24,30 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import models.ButtonDecentralization;
 import models.DAOReActive;
+import models.DAOReActiveMacAddress;
+import models.MacAddress;
+import models.ReActive;
 
 /**
  * FXML Controller class
  *
  * @author Admin
  */
-public class FXMLReActiveController implements Initializable {
+public class FXMLReActiveMacAddressController implements Initializable {
 
-    ObservableList<ReActive> listEmp = FXCollections.observableArrayList();
-    public static ReActive Emp;
+    ObservableList<MacAddress> listMACAddress = FXCollections.observableArrayList();
     @FXML
     private AnchorPane main_AnchorPane;
     @FXML
     private Pagination pagination;
+    @FXML
+    private TableView<MacAddress> table_ReactiveMacAddress;
     @FXML
     private ContextMenu contextMenu_Main;
     @FXML
@@ -55,55 +58,49 @@ public class FXMLReActiveController implements Initializable {
     private MenuItem menuItem_Delete;
     @FXML
     private MenuItem menuItem_Refresh;
-    @FXML
-    private TableView<ReActive> table_Reactive;
-    private FilteredList<ReActive> filteredData;
+    private FilteredList<MacAddress> filteredData;
     private static final int ROWS_PER_PAGE = 10;
-    public static Boolean check_Edit_Action = false;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ConnectControllers.setfXMLReActiveController(this);
+        ConnectControllers.setfXMLReActiveMacAddressController(this);
         contextMenu_Main.getItems().remove(menuItem_Add);
         contextMenu_Main.getItems().remove(menuItem_Delete);
         contextMenu_Main.getItems().remove(menuItem_Edit);
-        ConnectControllers.setfXMLReActiveController(this);
-        check_Edit_Action = true;
         setColumns();
         showUsersData();
-        // Check item when click on table
     }
+
     private void changeTableView(int index, int limit) {
 
         int fromIndex = index * limit;
-        int toIndex = Math.min(fromIndex + limit, listEmp.size());
+        int toIndex = Math.min(fromIndex + limit, listMACAddress.size());
 
         int minIndex = Math.min(toIndex, filteredData.size());
 
-        SortedList<ReActive> sortedData = new SortedList<>(
+        SortedList<MacAddress> sortedData = new SortedList<>(
                 FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
 
-        sortedData.comparatorProperty().bind(table_Reactive.comparatorProperty());
+        sortedData.comparatorProperty().bind(table_ReactiveMacAddress.comparatorProperty());
 
-        table_Reactive.setItems(sortedData);
+        table_ReactiveMacAddress.setItems(sortedData);
 
     }
 
     private void setColumns() {
-        TableColumn<ReActive, String> empIDCol = new TableColumn<>("Emp ID");
-        TableColumn<ReActive, String> empFNameCol = new TableColumn<>("Emp FirstName");
-        TableColumn<ReActive, String> empMNameCol = new TableColumn<>("Emp MidName");
-        TableColumn<ReActive, String> empLNameCol = new TableColumn<>("Emp LastName");
-        TableColumn<ReActive, CheckBox> empCreateCol = new TableColumn<>("Active");
-        TableColumn<ReActive, ButtonDecentralization> btn_Action_Col = new TableColumn<>("Action");
+        TableColumn<MacAddress, Integer> IDCol = new TableColumn<>("ID");
+        TableColumn<MacAddress, String> MacAddressCol = new TableColumn<>("MacAddress");
+        TableColumn<MacAddress, Integer> TimesCol = new TableColumn<>("Times");
+        TableColumn<MacAddress, CheckBox> empCreateCol = new TableColumn<>("Active");
+        TableColumn<MacAddress, ButtonDecentralization> btn_Action_Col = new TableColumn<>("Action");
         TableColumn numberCol = new TableColumn("#");
-        numberCol.setCellValueFactory(new Callback<CellDataFeatures<ReActive, String>, ObservableValue<String>>() {
+        numberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ReActive, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(CellDataFeatures<ReActive, String> p) {
-                return new ReadOnlyObjectWrapper((table_Reactive.getItems().indexOf(p.getValue()) + 1) + "");
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ReActive, String> p) {
+                return new ReadOnlyObjectWrapper((table_ReactiveMacAddress.getItems().indexOf(p.getValue()) + 1) + "");
             }
         });
         numberCol.setSortable(false);
@@ -113,24 +110,24 @@ public class FXMLReActiveController implements Initializable {
 //            empReadCol.setCellValueFactory(new PropertyValueFactory<>("User_View"));
 //            empDeleteCol.setCellValueFactory(new PropertyValueFactory<>("User_Delete"));
 //        }
-        empIDCol.setCellValueFactory(new PropertyValueFactory<>("Employee_ID"));
-        empFNameCol.setCellValueFactory(new PropertyValueFactory<>("First_Name"));
-        empMNameCol.setCellValueFactory(new PropertyValueFactory<>("Mid_Name"));
-        empLNameCol.setCellValueFactory(new PropertyValueFactory<>("Last_Name"));
-        empCreateCol.setCellValueFactory(new PropertyValueFactory<>("Employee_ReActive"));
+        IDCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        MacAddressCol.setCellValueFactory(new PropertyValueFactory<>("MACAddress"));
+        TimesCol.setCellValueFactory(new PropertyValueFactory<>("Times"));
+        empCreateCol.setCellValueFactory(new PropertyValueFactory<>("MacAddress_ReActive"));
         btn_Action_Col.setCellValueFactory(new PropertyValueFactory<>("HboxReActive"));
-        numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empFNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empMNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empLNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        numberCol.setStyle("-fx-alignment: CENTER;");
+        IDCol.setStyle("-fx-alignment: CENTER;");
+        MacAddressCol.setStyle("-fx-alignment: CENTER;");
+        TimesCol.setStyle("-fx-alignment: CENTER;");
         empCreateCol.setStyle("-fx-alignment: CENTER;");
         btn_Action_Col.setStyle("-fx-alignment: CENTER;");
         btn_Action_Col.setPrefWidth(120);
+        MacAddressCol.setPrefWidth(200);
+        
 
         // Thêm cột vào bảng
-        table_Reactive.getColumns().clear();
-        table_Reactive.getColumns().addAll(numberCol, empIDCol, empFNameCol, empMNameCol, empLNameCol, empCreateCol, btn_Action_Col);
+        table_ReactiveMacAddress.getColumns().clear();
+        table_ReactiveMacAddress.getColumns().addAll(numberCol, IDCol, MacAddressCol, TimesCol, empCreateCol, btn_Action_Col);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -138,28 +135,25 @@ public class FXMLReActiveController implements Initializable {
 
     public void showUsersData() {
         try {
-            listEmp = DAOReActive.getAllDecentralization();
+            listMACAddress = DAOReActiveMacAddress.getAllReActiveMacAddress();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
         //table_ServiceType.getItems().clear();
-        table_Reactive.setItems(listEmp);
+        table_ReactiveMacAddress.setItems(listMACAddress);
 
         //Set filterData and Pagination
-        filteredData = new FilteredList<>(listEmp, list -> true);
+        filteredData = new FilteredList<>(listMACAddress, list -> true);
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(
-                    Emp -> newValue == null || newValue.isEmpty()
-                    || Emp.getEmployee_ID().toLowerCase().contains(newValue.toLowerCase())
-                    || Emp.getFirst_Name().toLowerCase().contains(newValue.toLowerCase())
-                    || Emp.getMid_Name().toLowerCase().contains(newValue.toLowerCase())
-                    || Emp.getLast_Name().toLowerCase().contains(newValue.toLowerCase()));
+                    listMACAddress -> newValue == null || newValue.isEmpty()
+                    || listMACAddress.getMACAddress().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
         });
 
-        int totalPage = (int) (Math.ceil(listEmp.size() * 1.0 / ROWS_PER_PAGE));
+        int totalPage = (int) (Math.ceil(listMACAddress.size() * 1.0 / ROWS_PER_PAGE));
         pagination.setPageCount(totalPage);
         pagination.setCurrentPageIndex(0);
         changeTableView(0, ROWS_PER_PAGE);

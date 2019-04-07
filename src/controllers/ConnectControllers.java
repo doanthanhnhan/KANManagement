@@ -35,6 +35,15 @@ public class ConnectControllers {
     public static FXMLEditCustomerController editCustomerController;
     public static FXMLReActiveController fXMLReActiveController;
     public static DAOReActive reActive;
+    public static FXMLReActiveMacAddressController fXMLReActiveMacAddressControllerController;
+
+    public static FXMLReActiveMacAddressController getfXMLReActiveMacAddressControllerController() {
+        return fXMLReActiveMacAddressControllerController;
+    }
+
+    public static void setfXMLReActiveMacAddressController(FXMLReActiveMacAddressController fXMLReActiveMacAddressControllerController) {
+        ConnectControllers.fXMLReActiveMacAddressControllerController = fXMLReActiveMacAddressControllerController;
+    }
 
     public static DAOReActive getreActive() {
         return reActive;

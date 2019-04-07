@@ -52,13 +52,13 @@ public class DAOReActive {
 //    check Active Employee
         public static Boolean checkActiveEmployee(String User) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp = "select ReActive from Employees where EmployeeID = ?";
+        String exp = "select Active from Employees where EmployeeID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, User);
         ResultSet rs;
         rs = pt.executeQuery();
         while (rs.next()) {
-            if (rs.getBoolean("ReActive")) {
+            if (rs.getBoolean("Active")) {
                 pt.close();
                 connection.close();
                 rs.close();

@@ -170,6 +170,8 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_List_Users_Log;
     @FXML
     private MenuItem menuItem_List_ReActive;
+    @FXML
+    private MenuItem menuItem_List_ReActiveMacAddress;
 
     /**
      * Initializes the controller class.
@@ -547,7 +549,11 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List service orders details item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
     }
-
+    @FXML
+    private void handle_MenuItem_List_ReActiveMacAddress_Action(ActionEvent event) {
+        System.out.println("List check out item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLReActiveMacAddress.fxml", "listReActiveMacAddress", "List ReActive MacAddress");
+    }
     @FXML
     private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
         System.out.println("List check out item clicked!");
