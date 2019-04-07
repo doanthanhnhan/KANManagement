@@ -28,10 +28,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
@@ -71,8 +74,10 @@ import models.InfoEmployee;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
+import utils.Email;
 import utils.FormatName;
 import utils.GetInetAddress;
+import utils.MD5Encrypt;
 import utils.PatternValided;
 import utils.StageLoader;
 import utils.showFXMLLogin;
@@ -230,7 +235,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             }
 
         }
-        if ((FXMLListEmployeeController.check_form_list || DAOReActive.check_InfoEmployeeReactive)&&!FXMLMainFormController.checkRegisInfoEmployee) {
+        if ((FXMLListEmployeeController.check_form_list || DAOReActive.check_InfoEmployeeReactive) && !FXMLMainFormController.checkRegisInfoEmployee) {
             System.out.println("Vao check_form_list = true");
             Job.setText("");
             Salary.setText("0");
@@ -243,7 +248,7 @@ public class FXMLInfoEmployeeController implements Initializable {
             if (DAOReActive.check_InfoEmployeeReactive) {
                 try {
                     fXMLReActiveController = ConnectControllers.getfXMLReActiveController();
-                    Emp = DAOReActive.getInfoEmployeeReactive(FXMLReActiveController.Emp.getEmployee_ID());
+                    Emp = DAOReActive.getInfoEmployeeReactive(DAOReActive.Employee_ID);
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -517,9 +522,11 @@ public class FXMLInfoEmployeeController implements Initializable {
 
     @FXML
     private void Cancel() {
+        fXMLReActiveController = ConnectControllers.getfXMLReActiveController();
+        fXMLReActiveController.showUsersData();
         Stage stage = (Stage) btnCancel.getScene().getWindow();
-        DAOReActive.check_InfoEmployeeReactive=false;
-        FXMLMainFormController.checkRegisInfoEmployee=false;
+        DAOReActive.check_InfoEmployeeReactive = false;
+        FXMLMainFormController.checkRegisInfoEmployee = false;
         // do what you have to do
         stage.hide();
     }
@@ -555,7 +562,7 @@ public class FXMLInfoEmployeeController implements Initializable {
 
     public void validateForm() throws ClassNotFoundException, IOException, SQLException {
 
-        if ((FXMLMainFormController.checkRegisInfoEmployee || FXMLListEmployeeController.check_form_list) && !check_delete && !DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit")&&!DAOReActive.check_InfoEmployeeReactive) {
+        if ((FXMLMainFormController.checkRegisInfoEmployee || FXMLListEmployeeController.check_form_list) && !check_delete && !DAOcheckRole.checkRoleDecentralization(userLogin, "Employee_Edit") && !DAOReActive.check_InfoEmployeeReactive) {
             Platform.runLater(() -> {
                 AlertLoginAgain.alertLogin();
                 fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
@@ -897,6 +904,31 @@ public class FXMLInfoEmployeeController implements Initializable {
                     }
                     fXMLReActiveController = ConnectControllers.getfXMLReActiveController();
                     fXMLReActiveController.showUsersData();
+                    String list_pass;
+                    String random_pass = "";
+                    list_pass = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    Random rand = new Random();
+                    for (int i = 0; i < 8; i++) {
+                        int randomIndex = rand.nextInt(list_pass.length());
+                        random_pass = random_pass + list_pass.charAt(randomIndex);
+                    }
+                    System.out.println("random pass" + random_pass);
+                    System.out.println("random pass lenght" + random_pass.length());
+                    String content = "Username: " + boxId.getValue() + ", Password: " + random_pass;
+                    try {
+                        utils.Email.send_Email_Without_Attach("smtp.gmail.com", Email.getText(), "KANManagement.AP146@gmail.com",
+                                "KAN@123456", "ReActive username and password", content);
+                    } catch (Exception ex) {
+                        Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    MD5Encrypt m;
+                    m = new MD5Encrypt();
+                    String Password = m.hashPass(random_pass);
+                    try {
+                        DAOReActive.update_Pass(boxId.getValue(), Password);
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     DAOReActive.check_InfoEmployeeReactive = false;
                     InfoEmployeeReActive = false;
                 }

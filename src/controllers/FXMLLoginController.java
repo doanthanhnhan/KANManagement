@@ -42,6 +42,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import models.DAOReActive;
 import models.notificationFunction;
 import utils.GetInetAddress;
 import utils.MD5Encrypt;
@@ -233,7 +234,7 @@ public class FXMLLoginController implements Initializable {
                                     Stage stageEdit = new Stage();
                                     Parent rootAdd = null;
 //                                Xử lý trường hợp đăng nhập lần đầu tiên
-                                    if (!DAO.checkSetPass(txtUserName.getText())) {
+                                    if (!DAO.checkSetPass(txtUserName.getText())||!DAOReActive.checkReactiveEmployee(txtUserName.getText())) {
                                         stageEdit.resizableProperty().setValue(Boolean.FALSE);
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLAccount.fxml"));
                                         stageEdit.setTitle("Set Password");

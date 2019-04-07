@@ -34,6 +34,7 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
@@ -41,6 +42,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import models.DAODepartMentReActive;
 import models.DAODepartmentDecentralization;
+import models.DAOReActive;
 import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.notificationFunction;
@@ -228,9 +230,12 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             stageMainForm.close();
             showFormLogin.showFormLogin();
         } else {
-            fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
-            fXMLListEmployeeController.check_Add_New = true;
-            fXMLListEmployeeController.new_Emp_ID = newId.getText();
+            if (FXMLListEmployeeController.check_Edit_Action) {
+                fXMLListEmployeeController = ConnectControllers.getfXMLListEmployeeController();
+                fXMLListEmployeeController.check_Add_New = true;
+                fXMLListEmployeeController.new_Emp_ID = newId.getText();
+            }
+
             btnAddNew.setDisable(true);
             // Đoạn này làm loading (đang làm chạy vô tận)
 
@@ -332,9 +337,18 @@ public class FXMLAddNewEmloyeeController implements Initializable {
             });
 
         } else {
-            if (DAO.check_Id(newId.getText())) {
+            if (DAO.check_Id(newId.getText()) && DAOReActive.checkActiveEmployee(newId.getText())) {
                 Platform.runLater(() -> {
                     notificationFunction.notification(newId, HboxContent, "ID ALREADY EXIST !!!");
+                });
+            } else if (DAO.check_Id(newId.getText()) && !DAOReActive.checkActiveEmployee(newId.getText())) {
+                Platform.runLater(() -> {
+                    notificationFunction.notification(newId, HboxContent, "ID ALREADY EXIST !!!");
+                    Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                    alert1.setTitle("Error");
+                    alert1.setHeaderText("You cannot create this account !!!");
+                    alert1.setContentText("Because the account already exist and has been locked please reactivate to use this account !!!");
+                    alert1.showAndWait();
                 });
             } else if (DAO.check_Email(newGmail.getText())) {
                 System.out.println("vao else if gmail");

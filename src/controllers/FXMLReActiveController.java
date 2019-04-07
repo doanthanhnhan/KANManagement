@@ -6,10 +6,8 @@
 package controllers;
 
 import static controllers.FXMLDecentralizationController.BoxValue;
-import static controllers.FXMLDecentralizationController.check_form_list;
 import models.ReActive;
 import com.jfoenix.controls.JFXComboBox;
-import static controllers.FXMLListEmployeeController.check_Edit_Action;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -32,14 +30,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import models.ButtonDecentralization;
 import models.DAOReActive;
-import models.DAOcheckRole;
 
 /**
  * FXML Controller class
@@ -79,16 +73,6 @@ public class FXMLReActiveController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ConnectControllers.setfXMLReActiveController(this);
-        table_Reactive.setOnMouseClicked((MouseEvent event) -> {
-            if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
-                    && table_Reactive.getSelectionModel().getSelectedItem() != null) {
-                Emp = table_Reactive.getSelectionModel().getSelectedItem();
-                table_Reactive.getSelectionModel().getSelectedItem().getEmployee_ReActive().setDisable(true);
-                table_Reactive.getSelectionModel().getSelectedItem().getHboxReActive().getChildren().get(0).setDisable(false);
-                table_Reactive.getSelectionModel().getSelectedItem().getHboxReActive().getChildren().get(1).setDisable(true);
-                
-            }
-        });
         contextMenu_Main.getItems().remove(menuItem_Add);
         contextMenu_Main.getItems().remove(menuItem_Delete);
         contextMenu_Main.getItems().remove(menuItem_Edit);

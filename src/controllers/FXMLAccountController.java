@@ -40,6 +40,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.DAO;
+import models.DAOReActive;
 import models.notificationFunction;
 import utils.GetInetAddress;
 import utils.PatternValided;
@@ -228,6 +229,9 @@ public class FXMLAccountController implements Initializable {
             DAO.SetPass(txtUsername.getText(), m.hashPass(newPassword.getText()), m.hashPass((String) newSerectQuestion.getValue()), m.hashPass((String) newSerectAnswer.getText()));
             DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Set pass " + txtUsername.getText(),
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+            if(!DAOReActive.checkReactiveEmployee(txtUsername.getText())){
+                DAOReActive.update_ReActiveEmployee(txtUsername.getText());
+            }
             Stage stage = (Stage) btnRegister.getScene().getWindow();
             // do what you have to do
             stage.close();

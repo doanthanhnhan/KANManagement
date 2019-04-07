@@ -45,9 +45,76 @@ import utils.connectDB;
  */
 public class DAOReActive {
 
+    public static String Employee_ID = null;
     public static boolean check_InfoEmployeeReactive = false;
     private static FXMLListEmployeeController fXMLListEmployeeController;
     private static FXMLReActiveController reActiveController;
+//    check Active Employee
+        public static Boolean checkActiveEmployee(String User) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "select ReActive from Employees where EmployeeID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, User);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        while (rs.next()) {
+            if (rs.getBoolean("ReActive")) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+        }
+        pt.close();
+        connection.close();
+        rs.close();
+        return false;
+    }
+//    update reactive employee
+
+    public static void update_ReActiveEmployee(String User) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String ex = "Update Employees Set ReActive=1 where EmployeeID=?";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setString(1, User);
+        pts.execute();
+        pts.close();
+        connection.close();
+    }
+//    check ReActive
+
+    public static Boolean checkReactiveEmployee(String User) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "select ReActive from Employees where EmployeeID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, User);
+        ResultSet rs;
+        rs = pt.executeQuery();
+        while (rs.next()) {
+            if (rs.getBoolean("ReActive")) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+        }
+        pt.close();
+        connection.close();
+        rs.close();
+        return false;
+    }
+//update pass reactive
+
+    public static void update_Pass(String User, String Pass) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String ex = "Update Users Set PassWord=? where EmployeeID=?";
+        PreparedStatement pts = connection.prepareStatement(ex);
+        pts.setString(1, Pass);
+        pts.setString(2, User);
+        pts.execute();
+        pts.close();
+        connection.close();
+    }
 
     public static ObservableList<ReActive> getAllDecentralization() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
@@ -92,11 +159,6 @@ public class DAOReActive {
                 btn_Edit.setDisable(true);
             });
 //            action Update            
-            if(FXMLReActiveController.Emp == null){
-                btn_Update.setDisable(true);
-                btn_Edit.setDisable(true);
-                cb_Active_Employee.setDisable(true);
-            }
             btn_Update.setOnAction((event) -> {
                 try {
                     if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "ReActive_View")) {
@@ -106,6 +168,7 @@ public class DAOReActive {
                         stageMainForm.close();
                         showFormLogin.showFormLogin();
                     } else {
+                        Employee_ID = Emp.getEmployee_ID();
                         cb_Active_Employee.setDisable(true);
                         btn_Update.setDisable(true);
                         check_InfoEmployeeReactive = true;

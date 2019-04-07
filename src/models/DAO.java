@@ -941,7 +941,7 @@ public class DAO {
             Calendar cal = Calendar.getInstance();
             String logtime;
             logtime = dateFormat.format(cal.getTime());
-            String e = "UPDATE Users SET Active = ? WHERE UserName = ?";
+            String e = "UPDATE Users SET Active = ?,ReActive=0 WHERE UserName = ?";
             PreparedStatement p = connection.prepareStatement(e);
             p.setInt(1, 0);
             p.setString(2, User);
