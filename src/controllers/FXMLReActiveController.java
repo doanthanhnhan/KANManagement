@@ -93,10 +93,10 @@ public class FXMLReActiveController implements Initializable {
     }
 
     private void setColumns() {
-        TableColumn<ReActive, String> empIDCol = new TableColumn<>("Emp ID");
-        TableColumn<ReActive, String> empFNameCol = new TableColumn<>("Emp FirstName");
-        TableColumn<ReActive, String> empMNameCol = new TableColumn<>("Emp MidName");
-        TableColumn<ReActive, String> empLNameCol = new TableColumn<>("Emp LastName");
+        TableColumn<ReActive, String> empIDCol = new TableColumn<>("ID");
+        TableColumn<ReActive, String> empFNameCol = new TableColumn<>("FirstName");
+        TableColumn<ReActive, String> empMNameCol = new TableColumn<>("MidName");
+        TableColumn<ReActive, String> empLNameCol = new TableColumn<>("LastName");
         TableColumn<ReActive, CheckBox> empCreateCol = new TableColumn<>("Active");
         TableColumn<ReActive, ButtonDecentralization> btn_Action_Col = new TableColumn<>("Action");
         TableColumn numberCol = new TableColumn("#");
@@ -119,11 +119,11 @@ public class FXMLReActiveController implements Initializable {
         empLNameCol.setCellValueFactory(new PropertyValueFactory<>("Last_Name"));
         empCreateCol.setCellValueFactory(new PropertyValueFactory<>("Employee_ReActive"));
         btn_Action_Col.setCellValueFactory(new PropertyValueFactory<>("HboxReActive"));
-        numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empFNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empMNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
-        empLNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        numberCol.setStyle("-fx-alignment: CENTER");
+        empIDCol.setStyle("-fx-alignment: CENTER");
+        empFNameCol.setStyle("-fx-alignment: CENTER");
+        empMNameCol.setStyle("-fx-alignment: CENTER");
+        empLNameCol.setStyle("-fx-alignment: CENTER");
         empCreateCol.setStyle("-fx-alignment: CENTER;");
         btn_Action_Col.setStyle("-fx-alignment: CENTER;");
         btn_Action_Col.setPrefWidth(120);

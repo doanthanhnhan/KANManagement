@@ -813,7 +813,26 @@ public class FXMLInfoEmployeeController implements Initializable {
                                     update_info();
                                 }
                             } else {
-                                update_info();
+                                StageLoader stageLoader = new StageLoader();
+                                stageLoader.loadingIndicator("Loading");
+                                Task loadOverview = new Task() {
+                                    @Override
+                                    protected Object call() throws Exception {
+                                        update_info();
+                                        return null;
+                                    }
+                                };
+                                loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                                    @Override
+                                    public void handle(Event event) {
+                                        System.out.println("Finished");
+                                        Platform.runLater(() -> {
+                                            stageLoader.stopTimeline();
+                                            stageLoader.closeStage();
+                                        });
+                                    }
+                                });
+                                new Thread(loadOverview).start();
                             }
                         });
                     } else {
