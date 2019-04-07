@@ -10,6 +10,7 @@ import controllers.ConnectControllers;
 import static controllers.ConnectControllers.fXMLMainFormController;
 import controllers.FXMLLoginController;
 import controllers.FXMLReActiveController;
+import controllers.FXMLReActiveMacAddressController;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,6 +37,8 @@ import utils.connectDB;
  */
 public class DAOReActiveMacAddress {
 
+    private static FXMLReActiveMacAddressController fXMLReActiveMacAddressController;
+    
     public static ObservableList<MacAddress> getAllReActiveMacAddress() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<MacAddress> list = FXCollections.observableArrayList();
@@ -80,15 +83,15 @@ public class DAOReActiveMacAddress {
                         Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
                         stageMainForm.close();
                         showFormLogin.showFormLogin();
-                    } else {                     
+                    } else {
                         cb_Active_MacAddress.setDisable(true);
                         btn_Update.setDisable(true);
                         check_InfoEmployeeReactive = true;
                         btn_Edit.setDisable(false);
                         if (cb_Active_MacAddress.isSelected()) {
                             update_MacAddress(Emp.getMACAddress());
-                            FXMLReActiveController fXMLReActiveController = ConnectControllers.getfXMLReActiveController();
-                            fXMLReActiveController.showUsersData();
+                            fXMLReActiveMacAddressController = ConnectControllers.getfXMLReActiveMacAddressController();
+                            fXMLReActiveMacAddressController.showUsersData();
                         }
 
                     }
@@ -102,7 +105,8 @@ public class DAOReActiveMacAddress {
         return list;
     }
 //    update macaddress
-        public static void update_MacAddress(String Mac) throws ClassNotFoundException, SQLException {
+
+    public static void update_MacAddress(String Mac) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String ex = "Update CheckBlockMacAddress Set Times=0,Active=1 where MACAddress=?";
         PreparedStatement pts = connection.prepareStatement(ex);

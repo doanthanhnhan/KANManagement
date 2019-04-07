@@ -37,7 +37,7 @@ public class ConnectControllers {
     public static DAOReActive reActive;
     public static FXMLReActiveMacAddressController fXMLReActiveMacAddressControllerController;
 
-    public static FXMLReActiveMacAddressController getfXMLReActiveMacAddressControllerController() {
+    public static FXMLReActiveMacAddressController getfXMLReActiveMacAddressController() {
         return fXMLReActiveMacAddressControllerController;
     }
 
