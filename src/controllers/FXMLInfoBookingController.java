@@ -113,6 +113,7 @@ public class FXMLInfoBookingController implements Initializable {
     public static boolean checkInfoBooking = false;
     private FXMLMainOverViewPaneController mainOverViewPaneController;
     private ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
+    private FXMLListBookingController fXMLListBookingController;
 
     /**
      * Initializes the controller class.
@@ -121,8 +122,8 @@ public class FXMLInfoBookingController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if (FXMLInfoCustomerController.checkInfoCustomerAlready) {
             list_Booking_Info = DAOCustomerBookingCheckIn.check_BookingIdCustomer(FXMLInfoCustomerController.CustomerIdConect);
-            System.out.println("Customer conect= "+FXMLInfoCustomerController.CustomerIdConect);
-            System.out.println("size lis booking= "+list_Booking_Info.size());
+            System.out.println("Customer conect= " + FXMLInfoCustomerController.CustomerIdConect);
+            System.out.println("size lis booking= " + list_Booking_Info.size());
         }
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
 
@@ -344,6 +345,11 @@ public class FXMLInfoBookingController implements Initializable {
             stageMainForm.close();
             showFormLogin.showFormLogin();
         } else {
+            if (FXMLListBookingController.check_formBooking_list) {
+                fXMLListBookingController = ConnectControllers.getfXMLListBookingController();
+                fXMLListBookingController.check_Add_New = true;
+                fXMLListBookingController.new_Emp_ID = BookingID.getValue();
+            }
             btnInfo.setDisable(true);
             // Đoạn này làm loading (đang làm chạy vô tận)
 
@@ -355,8 +361,9 @@ public class FXMLInfoBookingController implements Initializable {
                 protected Object call() throws Exception {
                     Platform.runLater(() -> {
                         HboxContent.getChildren().clear();
-                        BookingSubmitAction();
+
                     });
+                    BookingSubmitAction();
                     return null;
                 }
             };
@@ -502,6 +509,10 @@ public class FXMLInfoBookingController implements Initializable {
                     stage.close();
                     FXMLInfoCustomerController.checkInfoCustomer = false;
                     FXMLInfoCustomerController.checkInfoCustomerAlready = false;
+                }
+                if (FXMLListBookingController.check_formBooking_list) {
+                    fXMLListBookingController = ConnectControllers.getfXMLListBookingController();
+                    fXMLListBookingController.showUsersData();
                 }
                 boxIdRoom.setValue(null);
                 boxIdCustomer.setValue(null);

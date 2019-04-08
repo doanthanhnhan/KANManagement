@@ -39,6 +39,7 @@ import models.DAOCustomerBookingCheckIn;
 import models.InfoEmployee;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
+import utils.StageLoader;
 import utils.showFXMLLogin;
 
 /**
@@ -83,6 +84,7 @@ public class FXMLListBookingController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        check_formBooking_list=true;
         setColumns();
         showUsersData();
         ConnectControllers.setfXMLListBookingController(this);
@@ -249,6 +251,8 @@ public class FXMLListBookingController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
+        StageLoader stageLoader = new StageLoader();
+        stageLoader.formLoader("/fxml/FXMLBookingInfo.fxml", "/images/KAN Logo.png", "Add New Booking");
     }
 
     @FXML
@@ -257,6 +261,7 @@ public class FXMLListBookingController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Refresh_Action(ActionEvent event) {
+        showUsersData();
     }
 
 }

@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +33,7 @@ public class DAOCustomerBookingCheckIn {
     public static ObservableList<BookingInfo> getListBooking() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<BookingInfo> list_Booking = FXCollections.observableArrayList();
-        String sql = "select * from BookingInfo where  DateDiff(Day,DateBook,GetDate()) >=0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+        String sql = "select * from BookingInfo where  DateDiff(Day,DateBook,GetDate()) <=0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
         PreparedStatement pt = connection.prepareStatement(sql);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
@@ -44,7 +45,7 @@ public class DAOCustomerBookingCheckIn {
             bk.setUser(rs.getString("UserName"));
             bk.setNote(rs.getString("Note"));
             bk.setNumGuest(rs.getInt("NumberGuest"));
-            bk.setDate(rs.getString("DateBook"));
+            bk.setDate(LocalDate.parse(rs.getString("DateBook")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             list_Booking.add(bk);
         }
         return list_Booking;
