@@ -112,7 +112,7 @@ public class FXMLCheckInOrdersController implements Initializable {
     private RoomDAOImpl roomDAOImpl;
 
     private FXMLMainOverViewPaneController mainOverViewPaneController;
-
+    private Integer numberCustomer;
     /**
      * Initializes the controller class.
      */
@@ -279,6 +279,7 @@ public class FXMLCheckInOrdersController implements Initializable {
             boxBookingID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
         });
         // TODO
+        numberCustomer = Integer.parseInt(NumberOfCustomer.getText());
     }
 
     @FXML
@@ -423,7 +424,13 @@ public class FXMLCheckInOrdersController implements Initializable {
                 }
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Check In for booking id = " + boxBookingID.getValue(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
-
+                if(!numberCustomer.equals(NumberOfCustomer.getText())){
+                    try {
+                        DAOCustomerBookingCheckIn.Update_NumbercustomerOfBooking(boxBookingID.getValue(), Integer.parseInt(NumberOfCustomer.getText()));
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 //Getting Room infomations to update room Status after checking in - Nhan edit here
                 Room room = new Room();
                 room.setRoomID(RoomID.getText());

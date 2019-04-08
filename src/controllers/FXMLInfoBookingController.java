@@ -121,6 +121,8 @@ public class FXMLInfoBookingController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if (FXMLInfoCustomerController.checkInfoCustomerAlready) {
             list_Booking_Info = DAOCustomerBookingCheckIn.check_BookingIdCustomer(FXMLInfoCustomerController.CustomerIdConect);
+            System.out.println("Customer conect= "+FXMLInfoCustomerController.CustomerIdConect);
+            System.out.println("size lis booking= "+list_Booking_Info.size());
         }
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
 

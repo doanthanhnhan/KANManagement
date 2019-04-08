@@ -135,7 +135,7 @@
                      <children>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="NumberOfCustomer" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Number Of Customer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                              <JFXTextField fx:id="NumberOfCustomer" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Number Of Customer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>

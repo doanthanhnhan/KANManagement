@@ -27,6 +27,18 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    update numberofCustomer
+
+    public static void Update_NumbercustomerOfBooking(String id, Integer number) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE BookingInfo SET NumberGuest = ? WHERE BookingID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setInt(1, number);
+        pt.setString(2, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
 //    delete department
 
     public static void Delete_Department(String id) throws ClassNotFoundException, SQLException {
@@ -372,7 +384,7 @@ public class DAOCustomerBookingCheckIn {
         try {
             Connection connection = connectDB.connectSQLServer();
             // Tạo đối tượng Statement.
-            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) !=0 And Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) =0 And Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
             // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
             PreparedStatement pt = connection.prepareStatement(sql);
             pt.setString(1, ID);
