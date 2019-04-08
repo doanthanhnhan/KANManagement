@@ -27,6 +27,28 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    get list booking already
+
+    public static ObservableList<BookingInfo> getListBooking() throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<BookingInfo> list_Booking = FXCollections.observableArrayList();
+        String sql = "select * from BookingInfo where  DateDiff(Day,DateBook,GetDate()) >=0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            BookingInfo bk = new BookingInfo();
+            bk.setBookID(rs.getString("BookingID"));
+            bk.setCusID(rs.getString("CustomerID"));
+            bk.setRoomID(rs.getString("RoomID"));
+            bk.setUser(rs.getString("UserName"));
+            bk.setNote(rs.getString("Note"));
+            bk.setNumGuest(rs.getInt("NumberGuest"));
+            bk.setDate(rs.getString("DateBook"));
+            list_Booking.add(bk);
+        }
+        return list_Booking;
+    }
 //    update numberofCustomer
 
     public static void Update_NumbercustomerOfBooking(String id, Integer number) throws ClassNotFoundException, SQLException {
