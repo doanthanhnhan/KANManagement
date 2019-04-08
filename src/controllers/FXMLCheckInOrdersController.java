@@ -113,6 +113,7 @@ public class FXMLCheckInOrdersController implements Initializable {
 
     private FXMLMainOverViewPaneController mainOverViewPaneController;
     private Integer numberCustomer;
+
     /**
      * Initializes the controller class.
      */
@@ -137,7 +138,6 @@ public class FXMLCheckInOrdersController implements Initializable {
             System.out.println("booking info conect " + FXMLInfoBookingController.bookingIdConect);
             RoomID.setText(FXMLInfoBookingController.roomIdConect);
             CheckInID.setText("CI-" + FXMLInfoBookingController.bookingIdConect);
-            NumberOfCustomer.setDisable(true);
             LeaveDate.setDisable(false);
             LeaveDate.setDayCellFactory(picker -> new DateCell() {
                 @Override
@@ -398,9 +398,32 @@ public class FXMLCheckInOrdersController implements Initializable {
                 HboxContent.getChildren().add(label);
                 LeaveDate.requestFocus();
             });
-        } else if (!PatternValided.PatternID(CheckInID.getText())) {
+        } else if (NumberOfCustomer.getText() == null || NumberOfCustomer.getText().equals("")) {
             Platform.runLater(() -> {
-                notificationFunction.notification(CheckInID, HboxContent, "CHECK IN ID IS INCORRECT !!!");
+                notificationFunction.notification(NumberOfCustomer, HboxContent, "NUMBER OF CUSTOMER MUST NOT EMPTY !!!");
+            });
+        } else if (boxCheckInType.getValue() == null) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setText("CHECK IN TYPE MUST NOT EMPTY !!!");
+                label.setAlignment(Pos.CENTER_LEFT);
+                boxCheckInType.getStyleClass().removeAll();
+                boxBookingID.getStyleClass().add("jfx-combo-box-fault");
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                boxCheckInType.requestFocus();
+            });
+        } else if (!PatternValided.PatternNumberGuest(NumberOfCustomer.getText())) {
+            Platform.runLater(() -> {
+                notificationFunction.notification(NumberOfCustomer, HboxContent, "NUMBER OF CUSTOMER INCORRECT (1-8) !!!");
             });
         } else {
             Platform.runLater(() -> {
@@ -424,7 +447,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 }
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Check In for booking id = " + boxBookingID.getValue(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                if(!numberCustomer.equals(NumberOfCustomer.getText())){
+                if (!numberCustomer.equals(NumberOfCustomer.getText())) {
                     try {
                         DAOCustomerBookingCheckIn.Update_NumbercustomerOfBooking(boxBookingID.getValue(), Integer.parseInt(NumberOfCustomer.getText()));
                     } catch (ClassNotFoundException | SQLException ex) {
