@@ -5,6 +5,7 @@
  */
 package models;
 
+import com.jfoenix.controls.JFXCheckBox;
 import java.time.LocalDateTime;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -19,19 +20,23 @@ public class ServiceOrder {
 
     private StringProperty serviceOrderID;
     private StringProperty roomID;
-    private StringProperty customerID;   
-    private StringProperty userName;   
+    private StringProperty customerID;
+    private StringProperty userName;
     private IntegerProperty serviceQuantity;
     private LocalDateTime serviceOrderTime;
     private StringProperty serviceNote;
+    private boolean serviceFinish;
+    private JFXCheckBox checkBox_Finish;
+    private boolean serviceCheckOut;
 
     public ServiceOrder() {
-        this.serviceOrderID = new SimpleStringProperty();        
+        this.serviceOrderID = new SimpleStringProperty();
         this.roomID = new SimpleStringProperty();
         this.customerID = new SimpleStringProperty();
         this.userName = new SimpleStringProperty();
         this.serviceNote = new SimpleStringProperty();
         this.serviceQuantity = new SimpleIntegerProperty();
+        this.checkBox_Finish = new JFXCheckBox();
     }
 
     public final String getServiceOrderID() {
@@ -56,7 +61,7 @@ public class ServiceOrder {
 
     public StringProperty roomIDProperty() {
         return roomID;
-    }   
+    }
 
     public final int getServiceQuantity() {
         return serviceQuantity.get();
@@ -112,6 +117,30 @@ public class ServiceOrder {
 
     public StringProperty userNameProperty() {
         return userName;
+    }
+
+    public boolean isServiceFinish() {
+        return serviceFinish;
+    }
+
+    public void setServiceFinish(boolean serviceFinish) {
+        this.serviceFinish = serviceFinish;
+    }
+
+    public boolean isServiceCheckOut() {
+        return serviceCheckOut;
+    }
+
+    public void setServiceCheckOut(boolean serviceCheckOut) {
+        this.serviceCheckOut = serviceCheckOut;
+    }
+
+    public JFXCheckBox getCheckBox_Finish() {
+        return checkBox_Finish;
+    }
+
+    public void setCheckBox_Finish(JFXCheckBox checkBox_Finish) {
+        this.checkBox_Finish = checkBox_Finish;
     }
 
 }

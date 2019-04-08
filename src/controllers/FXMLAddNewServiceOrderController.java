@@ -450,6 +450,7 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         TableColumn<ServiceOrderDetail, ImageView> serviceImageCol = new TableColumn<>("Service image");
         TableColumn<ServiceOrderDetail, String> serviceDescriptionCol = new TableColumn<>("Service description");
         TableColumn<ServiceOrderDetail, JFXButton> serviceRemoveCol = new TableColumn<>("Action");
+        TableColumn<ServiceOrderDetail, JFXButton> serviceFinishCol = new TableColumn<>("Finish");
 
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServiceType, String>, ObservableValue<String>>() {
@@ -472,6 +473,7 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         serviceImageCol.setCellValueFactory(new PropertyValueFactory<>("imageView"));
         serviceDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("serviceDescription"));
         serviceRemoveCol.setCellValueFactory(new PropertyValueFactory<>("serviceRemoveButton"));
+        serviceFinishCol.setCellValueFactory(new PropertyValueFactory<>("checkBox_Finish"));
 
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -485,12 +487,13 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         serviceDescriptionCol.setPrefWidth(200);
         serviceImageCol.setStyle("-fx-alignment: CENTER;");
         serviceRemoveCol.setStyle("-fx-alignment: CENTER;");
+        serviceFinishCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         tableView_Service_Order_Detail.getColumns().clear();
         tableView_Service_Order_Detail.getColumns().addAll(numberCol, serviceIDCol, serviceNameCol, serviceUnitCol,
                 servicePriceCol, serviceQuantityCol, serviceTotalPriceCol, serviceDiscountCol,
-                serviceDescriptionCol, serviceImageCol, serviceRemoveCol);
+                serviceDescriptionCol, serviceImageCol, serviceFinishCol, serviceRemoveCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);

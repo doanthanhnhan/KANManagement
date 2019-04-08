@@ -6,6 +6,7 @@
 package models;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import controllers.ConnectControllers;
 import controllers.FXMLAddNewServiceOrderController;
 import controllers.FXMLMainFormController;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -39,7 +41,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
     @Override
     public ObservableList<ServiceOrderDetail> getAllServiceOrdersDetails() {
-        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID "
+        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, SOD.Finish, SOD.CheckOut, "
+                + "ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID "
                 + "FROM ServicesOrderDetails SOD "
                 + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID\n"
                 + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID\n"
@@ -58,6 +61,20 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceOrderDetail.setServicePriceTotal(rs.getBigDecimal("Price"));
                 serviceOrderDetail.setServiceDiscount(rs.getBigDecimal("Discount"));
                 serviceOrderDetail.setActive(rs.getBoolean("Active"));
+                serviceOrderDetail.setServiceFinish(rs.getBoolean("Finish"));
+                serviceOrderDetail.setServiceCheckOut(rs.getBoolean("CheckOut"));
+
+                JFXCheckBox checkBox = new JFXCheckBox();
+                checkBox.setOnAction((event) -> {
+                    updateSODFinish(!serviceOrderDetail.isServiceFinish(), serviceOrderDetail.getOrderID(), serviceOrderDetail.getServiceID());
+                });
+                if(serviceOrderDetail.isServiceFinish()){
+                    checkBox.setSelected(true);
+                }
+                if (serviceOrderDetail.isServiceCheckOut()) {
+                    checkBox.setDisable(true);
+                }
+                serviceOrderDetail.setCheckBox_Finish(checkBox);
 
                 serviceOrderDetail.setServiceName(rs.getNString("ServiceName"));
                 serviceOrderDetail.setServiceUnit(rs.getNString("ServiceUnit"));
@@ -99,7 +116,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
     @Override
     public ObservableList<ServiceOrderDetail> get_All_Details_In_One_Order(String serviceOrderID) {
-        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.* FROM ServicesOrderDetails SOD \n"
+        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, SOD.Finish, SOD.CheckOut, "
+                + "ST.* FROM ServicesOrderDetails SOD \n"
                 + "INNER JOIN ServiceType ST\n"
                 + "ON SOD.ServiceID = ST.ServiceID\n"
                 + "WHERE SOD.OrderID='" + serviceOrderID + "'";
@@ -115,6 +133,20 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceOrderDetail.setServicePriceTotal(rs.getBigDecimal("Price"));
                 serviceOrderDetail.setServiceDiscount(rs.getBigDecimal("Discount"));
                 serviceOrderDetail.setActive(rs.getBoolean("Active"));
+                serviceOrderDetail.setServiceFinish(rs.getBoolean("Finish"));
+                serviceOrderDetail.setServiceCheckOut(rs.getBoolean("CheckOut"));
+
+                JFXCheckBox checkBox = new JFXCheckBox();
+                checkBox.setOnAction((event) -> {
+                    updateSODFinish(!serviceOrderDetail.isServiceFinish(), serviceOrderDetail.getOrderID(), serviceOrderDetail.getServiceID());
+                });
+                if(serviceOrderDetail.isServiceFinish()){
+                    checkBox.setSelected(true);
+                }
+                if (serviceOrderDetail.isServiceCheckOut()) {
+                    checkBox.setDisable(true);
+                }
+                serviceOrderDetail.setCheckBox_Finish(checkBox);
 
                 JFXButton serviceRemoveButton = new JFXButton("Remove");
                 serviceRemoveButton.getStyleClass().add("btn-red-color");
@@ -193,7 +225,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
     @Override
     public ObservableList<ServiceOrderDetail> get_All_Details_Of_CheckInRoom(String roomID, String checkInID) {
-        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, "
+        String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, SOD.Finish , ST.*, "
                 + "SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, "
                 + "CIO.CheckInDate, CIO.CheckInID "
                 + "FROM ServicesOrderDetails SOD "
@@ -204,7 +236,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 + checkInID
                 + "' AND CIO.RoomID='"
                 + roomID
-                + "' AND SOD.Active=1";
+                + "' AND SOD.Active=1 AND SOD.Finish=1";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
         try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -219,6 +251,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 serviceOrderDetail.setServicePriceTotal(rs.getBigDecimal("Price"));
                 serviceOrderDetail.setServiceDiscount(rs.getBigDecimal("Discount"));
                 serviceOrderDetail.setActive(rs.getBoolean("Active"));
+                serviceOrderDetail.setServiceFinish(rs.getBoolean("Finish"));
 
                 serviceOrderDetail.setServiceName(rs.getNString("ServiceName"));
                 serviceOrderDetail.setServiceUnit(rs.getNString("ServiceUnit"));
@@ -287,7 +320,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
     @Override
     public void editServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail, Boolean active) {
         String sql = "UPDATE ServicesOrderDetails SET OrderID=?, ServiceID=?, UserName=?, "
-                + "ServiceQuantity=?, Price=?, Discount=?, Active=? "
+                + "ServiceQuantity=?, Price=?, Discount=?, Finish=?, Active=? "
                 + "WHERE ServiceID=? AND OrderID=?";
 
         try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -297,9 +330,10 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
             stmt.setInt(4, serviceOrderDetail.getServiceQuantity());
             stmt.setBigDecimal(5, serviceOrderDetail.getServicePriceTotal());
             stmt.setBigDecimal(6, serviceOrderDetail.getServiceDiscount());
-            stmt.setBoolean(7, true);
-            stmt.setString(8, serviceOrderDetail.getServiceID());
-            stmt.setString(9, serviceOrderDetail.getOrderID());
+            stmt.setBoolean(7, serviceOrderDetail.isServiceFinish());
+            stmt.setBoolean(8, true);
+            stmt.setString(9, serviceOrderDetail.getServiceID());
+            stmt.setString(10, serviceOrderDetail.getOrderID());
             stmt.executeUpdate();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -308,6 +342,54 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
             alert.setHeaderText("Error");
             alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
             alert.show();
+        }
+    }
+
+    @Override
+    public void updateSODFinish(boolean finish, String serviceOrderID, String serviceID) {
+        String sql = "UPDATE ServicesOrderDetails SET Finish=? "
+                + "WHERE ServiceID=? AND OrderID=?";
+
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBoolean(1, finish);
+
+            stmt.setString(2, serviceID);
+            stmt.setString(3, serviceOrderID);
+            stmt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
+                alert.show();
+            });
+        }
+    }
+
+    @Override
+    public void updateSODCheckOut(boolean checkout, String serviceOrderID, String serviceID) {
+        String sql = "UPDATE ServicesOrderDetails SET CheckOut=? "
+                + "WHERE ServiceID=? AND OrderID=?";
+
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBoolean(1, checkout);
+
+            stmt.setString(2, serviceID);
+            stmt.setString(3, serviceOrderID);
+            stmt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 

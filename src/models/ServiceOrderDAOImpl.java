@@ -5,6 +5,7 @@
  */
 package models;
 
+import com.jfoenix.controls.JFXCheckBox;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +26,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
     @Override
     public ObservableList<ServiceOrder> getAllServiceOrders() {
-        String sql = "SELECT OrderID, RoomID, CustomerID, UserName, ServiceOrderDate, ServiceNote FROM ServicesOrders WHERE ACTIVE=1";
+        String sql = "SELECT OrderID, RoomID, CustomerID, UserName, ServiceOrderDate, ServiceNote, Finish, CheckOut FROM ServicesOrders WHERE ACTIVE=1";
         ObservableList<ServiceOrder> listServiceOrders = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -33,10 +34,24 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
                     ServiceOrder serviceOrder = new ServiceOrder();
                     serviceOrder.setCustomerID(rs.getString("CustomerID"));
                     serviceOrder.setServiceOrderID(rs.getString("OrderID"));
-                    serviceOrder.setRoomID(rs.getString("RoomID"));                    
-                    serviceOrder.setUserName(rs.getString("UserName"));                    
-                    serviceOrder.setServiceNote(rs.getNString("ServiceNote"));                    
-                    serviceOrder.setServiceOrderTime(rs.getTimestamp("ServiceOrderDate").toLocalDateTime());                   
+                    serviceOrder.setRoomID(rs.getString("RoomID"));
+                    serviceOrder.setUserName(rs.getString("UserName"));
+                    serviceOrder.setServiceNote(rs.getNString("ServiceNote"));
+                    serviceOrder.setServiceOrderTime(rs.getTimestamp("ServiceOrderDate").toLocalDateTime());
+                    serviceOrder.setServiceFinish(rs.getBoolean("Finish"));
+                    serviceOrder.setServiceCheckOut(rs.getBoolean("CheckOut"));
+
+                    JFXCheckBox checkBox = new JFXCheckBox();
+                    checkBox.setOnAction((event) -> {
+                        updateServiceFinish(!serviceOrder.isServiceFinish(),serviceOrder.getServiceOrderID());
+                    });
+                    if (serviceOrder.isServiceFinish()) {
+                        checkBox.setSelected(true);
+                    }
+                    if (serviceOrder.isServiceCheckOut()) {
+                        checkBox.setDisable(true);
+                    }
+                    serviceOrder.setCheckBox_Finish(checkBox);
 
                     listServiceOrders.add(serviceOrder);
                 }
@@ -56,10 +71,34 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
                 stmt.setString(2, serviceOrder.getRoomID());
                 stmt.setString(3, serviceOrder.getCustomerID());
                 stmt.setString(4, serviceOrder.getUserName());
-                stmt.setTimestamp(5, Timestamp.valueOf(serviceOrder.getServiceOrderTime()));               
+                stmt.setTimestamp(5, Timestamp.valueOf(serviceOrder.getServiceOrderTime()));
                 stmt.setNString(6, serviceOrder.getServiceNote());
                 stmt.executeUpdate();
             }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceOrderDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void updateServiceFinish(boolean finish, String serviceOrderID) {
+        String sql = "UPDATE ServicesOrders SET Finish=? WHERE OrderID=?";
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setBoolean(1, finish);
+            stmt.setString(2, serviceOrderID);
+            stmt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceOrderDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void updateServiceCheckOut(boolean checkout, String serviceOrderID) {
+        String sql = "UPDATE ServicesOrders SET CheckOut=1 WHERE OrderID=?";
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setBoolean(1, checkout);
+            stmt.setString(2, serviceOrderID);
+            stmt.executeUpdate();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceOrderDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,18 +108,17 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
     public void editServiceOrder(ServiceOrder serviceOrder, Boolean active) {
         String sql = "UPDATE ServicesOrders SET OrderID=?, RoomID=?, CustomerID=?, "
                 + "UserName=?, ServiceOrderDate=?, ServiceNote=?  "
-                + "WHERE ServiceID=?";
-        try {
-            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, serviceOrder.getServiceOrderID());
-                stmt.setString(2, serviceOrder.getRoomID());
-                stmt.setString(3, serviceOrder.getCustomerID());
-                stmt.setString(4, serviceOrder.getUserName());
-                stmt.setTimestamp(5, Timestamp.valueOf(serviceOrder.getServiceOrderTime()));               
-                stmt.setNString(6, serviceOrder.getServiceNote());
-                stmt.setString(7, serviceOrder.getServiceOrderID());
-                stmt.executeUpdate();
-            }
+                + "WHERE OrderID=?";
+
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, serviceOrder.getServiceOrderID());
+            stmt.setString(2, serviceOrder.getRoomID());
+            stmt.setString(3, serviceOrder.getCustomerID());
+            stmt.setString(4, serviceOrder.getUserName());
+            stmt.setTimestamp(5, Timestamp.valueOf(serviceOrder.getServiceOrderTime()));
+            stmt.setNString(6, serviceOrder.getServiceNote());
+            stmt.setString(7, serviceOrder.getServiceOrderID());
+            stmt.executeUpdate();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceOrderDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -88,15 +126,17 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
     @Override
     public void deleteServiceOrder(ServiceOrder serviceOrder) {
-        String sql = "UPDATE ServicesOrders SET Active=? WHERE ServiceID=?";
+        String sql = "UPDATE ServicesOrders SET Active=? WHERE OrderID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setBoolean(1, false);
                 stmt.setString(2, serviceOrder.getServiceOrderID());
                 stmt.executeUpdate();
+
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServiceOrderDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServiceOrderDAOImpl.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -6,6 +6,7 @@
 package models;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
@@ -30,6 +31,9 @@ public class ServiceOrderDetail extends ServiceType {
     private BooleanProperty active;
     private JFXButton serviceRemoveButton;
     private LocalDateTime serviceOrderDate;
+    private boolean serviceFinish;
+    private JFXCheckBox checkBox_Finish;
+    private boolean serviceCheckOut;
 
     public ServiceOrderDetail() {
         this.active = new SimpleBooleanProperty();
@@ -38,6 +42,7 @@ public class ServiceOrderDetail extends ServiceType {
         this.roomID = new SimpleStringProperty();
         this.serviceQuantity = new SimpleIntegerProperty();
         this.serviceRemoveButton = new JFXButton("Remove");
+        this.checkBox_Finish = new JFXCheckBox();
     }
 
     public final String getOrderID() {
@@ -130,6 +135,30 @@ public class ServiceOrderDetail extends ServiceType {
 
     public StringProperty roomIDProperty() {
         return roomID;
+    }
+
+    public boolean isServiceFinish() {
+        return serviceFinish;
+    }
+
+    public void setServiceFinish(boolean serviceFinish) {
+        this.serviceFinish = serviceFinish;
+    }
+
+    public JFXCheckBox getCheckBox_Finish() {
+        return checkBox_Finish;
+    }
+
+    public void setCheckBox_Finish(JFXCheckBox checkBox_Finish) {
+        this.checkBox_Finish = checkBox_Finish;
+    }
+
+    public boolean isServiceCheckOut() {
+        return serviceCheckOut;
+    }
+
+    public void setServiceCheckOut(boolean serviceCheckOut) {
+        this.serviceCheckOut = serviceCheckOut;
     }
 
 }

@@ -12,8 +12,16 @@ import java.util.List;
  * @author Doan Thanh Nhan
  */
 public interface ServiceOrderDAO {
+
     List<ServiceOrder> getAllServiceOrders();
+
     void addServiceOrder(ServiceOrder serviceOrder);
+
     void editServiceOrder(ServiceOrder serviceOrder, Boolean active);
+
+    void updateServiceFinish(boolean finish, String serviceOrderID);
+
+    void updateServiceCheckOut(boolean checkout, String serviceOrderID);
+
     void deleteServiceOrder(ServiceOrder serviceOrder);
 }

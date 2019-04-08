@@ -111,7 +111,9 @@ CREATE TABLE ServicesOrders(
 	RoomID varchar(100) NOT NULL,
 	UserName varchar(100) NOT NULL,	
 	ServiceOrderDate datetime NOT NULL,
-	ServiceNote nvarchar(200),	
+	ServiceNote nvarchar(200),
+	Finish bit DEFAULT 0,
+	CheckOut bit DEFAULT 0,	
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
 	CONSTRAINT pk_OrderID_ServiceOrders PRIMARY KEY (OrderID),
@@ -127,6 +129,8 @@ CREATE TABLE ServicesOrderDetails(
 	ServiceQuantity int NOT NULL,
 	Price decimal(18,3) NOT NULL,	
 	Discount float,
+	Finish bit DEFAULT 0,
+	CheckOut bit DEFAULT 0,
 	Active bit DEFAULT 1 NOT NULL,
 	-- Create constraint
 	CONSTRAINT pk_ID_ServicesOrderDetails PRIMARY KEY (ID)		
@@ -345,7 +349,8 @@ ADD CONSTRAINT fk_CustomerID_CheckOutOrders FOREIGN KEY (CustomerID) REFERENCES 
 	CONSTRAINT fk_UserName_CheckOutOrders FOREIGN KEY (UserName) REFERENCES Users(UserName);
 
 ALTER TABLE ServicesOrders
-ADD CONSTRAINT fk_CustomerID_ServiceOrders FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+ADD CONSTRAINT fk_RoomID_ServiceOrders FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
+	CONSTRAINT fk_CustomerID_ServiceOrders FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
 	CONSTRAINT fk_UserName_ServicesOrders FOREIGN KEY (UserName) REFERENCES Users(UserName);
 
 ALTER TABLE ServicesOrderDetails
@@ -597,3 +602,4 @@ SELECT C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName FROM C
 
 SELECT * FROM Customers
 SELECT * FROM view_RoomProperty
+

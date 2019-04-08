@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import com.jfoenix.controls.JFXCheckBox;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -168,6 +169,7 @@ public class FXMLListServiceOrderController implements Initializable {
         TableColumn<ServiceOrder, String> userNameCol = new TableColumn<>("User name");
         TableColumn<ServiceOrder, LocalDateTime> orderDateCol = new TableColumn<>("Order date");
         TableColumn<ServiceOrder, String> orderNoteCol = new TableColumn<>("Order note");
+        TableColumn<ServiceOrder, JFXCheckBox> checkBoxFinishCol = new TableColumn<>("Finish");
 
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<CellDataFeatures<ServiceOrder, String>, ObservableValue<String>>() {
@@ -186,6 +188,7 @@ public class FXMLListServiceOrderController implements Initializable {
         userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
         orderDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceOrderTime"));
         orderNoteCol.setCellValueFactory(new PropertyValueFactory<>("serviceNote"));
+        checkBoxFinishCol.setCellValueFactory(new PropertyValueFactory<>("checkBox_Finish"));
 
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -194,11 +197,12 @@ public class FXMLListServiceOrderController implements Initializable {
         userNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderNoteCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        checkBoxFinishCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         table_Service_Order.getColumns().clear();
         table_Service_Order.getColumns().addAll(numberCol, orderIDCol, customerIDCol, roomIDCol,
-                userNameCol, orderDateCol, orderNoteCol);
+                userNameCol, orderDateCol, orderNoteCol, checkBoxFinishCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);

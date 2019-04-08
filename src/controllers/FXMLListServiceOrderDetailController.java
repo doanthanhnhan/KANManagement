@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import com.jfoenix.controls.JFXCheckBox;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -179,6 +180,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         TableColumn<ServiceOrderDetail, BigDecimal> serviceDiscountCol = new TableColumn<>("Discount");
         TableColumn<ServiceOrderDetail, ImageView> serviceImageCol = new TableColumn<>("Service image");
         TableColumn<ServiceOrderDetail, String> serviceDescriptionCol = new TableColumn<>("Service description");
+        TableColumn<ServiceOrderDetail, JFXCheckBox> checkBoxFinishCol = new TableColumn<>("Finish");
 
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<CellDataFeatures<ServiceOrderDetail, String>, ObservableValue<String>>() {
@@ -206,6 +208,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         serviceDiscountCol.setCellValueFactory(new PropertyValueFactory<>("serviceDiscount"));
         serviceImageCol.setCellValueFactory(new PropertyValueFactory<>("imageView"));
         serviceDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("serviceDescription"));
+        checkBoxFinishCol.setCellValueFactory(new PropertyValueFactory<>("checkBox_Finish"));
 
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -223,12 +226,13 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         serviceDescriptionCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceDescriptionCol.setPrefWidth(200);
         serviceImageCol.setStyle("-fx-alignment: CENTER;");
+        checkBoxFinishCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         table_Service_Order_Detail.getColumns().clear();
         table_Service_Order_Detail.getColumns().addAll(numberCol, orderIDCol, customerIDCol, roomIDCol, serviceIDCol, serviceNameCol, serviceUnitCol,
                 servicePriceCol, serviceInventoryCol, serviceQuantityCol, serviceOrderDateCol, serviceTotalPriceCol, serviceDiscountCol,
-                serviceDescriptionCol, serviceImageCol);
+                serviceDescriptionCol, serviceImageCol, checkBoxFinishCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
