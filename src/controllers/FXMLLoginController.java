@@ -234,7 +234,7 @@ public class FXMLLoginController implements Initializable {
                                     Stage stageEdit = new Stage();
                                     Parent rootAdd = null;
 //                                Xử lý trường hợp đăng nhập lần đầu tiên
-                                    if (!DAO.checkSetPass(txtUserName.getText())||!DAOReActive.checkReactiveEmployee(txtUserName.getText())) {
+                                    if (!DAO.checkSetPass(txtUserName.getText()) || !DAOReActive.checkReactiveEmployee(txtUserName.getText())) {
                                         stageEdit.resizableProperty().setValue(Boolean.FALSE);
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLAccount.fxml"));
                                         stageEdit.setTitle("Set Password");
@@ -245,7 +245,7 @@ public class FXMLLoginController implements Initializable {
                                         Calendar cal = Calendar.getInstance();
                                         String logtime;
                                         logtime = dateFormat.format(cal.getTime());
-                                        DAO.setUserLogs_With_MAC(txtUserName.getText(), "Login successful",
+                                        DAO.setUserLogs_With_MAC(txtUserName.getText(), "User: " + txtUserName.getText() + " login successful",
                                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                         DAO.reset_CheckLogin(txtUserName.getText(), logtime);
                                         checkLoginRegis = true;
@@ -255,7 +255,7 @@ public class FXMLLoginController implements Initializable {
 
                                     } else {
 
-                                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Login successful",
+                                        DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "User: " + FXMLLoginController.User_Login + " login successful",
                                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                         DAO.reset_CheckLogin(txtUserName.getText(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
                                         DAO.reset_CheckMac(GetInetAddress.getMacAddress());

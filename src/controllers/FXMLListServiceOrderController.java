@@ -165,6 +165,7 @@ public class FXMLListServiceOrderController implements Initializable {
     private void setColumns() {
         TableColumn<ServiceOrder, String> orderIDCol = new TableColumn<>("Order ID");
         TableColumn<ServiceOrder, String> customerIDCol = new TableColumn<>("Customer ID");
+        TableColumn<ServiceOrder, String> customerFullNameCol = new TableColumn<>("Customer Name");
         TableColumn<ServiceOrder, String> roomIDCol = new TableColumn<>("Room ID");
         TableColumn<ServiceOrder, String> userNameCol = new TableColumn<>("User name");
         TableColumn<ServiceOrder, LocalDateTime> orderDateCol = new TableColumn<>("Order date");
@@ -184,6 +185,7 @@ public class FXMLListServiceOrderController implements Initializable {
         // Lấy giá trị từ các thuộc tính của ServiceOrder.
         orderIDCol.setCellValueFactory(new PropertyValueFactory<>("serviceOrderID"));
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customerFullNameCol.setCellValueFactory(new PropertyValueFactory<>("customerFullName"));
         roomIDCol.setCellValueFactory(new PropertyValueFactory<>("roomID"));
         userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
         orderDateCol.setCellValueFactory(new PropertyValueFactory<>("serviceOrderTime"));
@@ -193,6 +195,7 @@ public class FXMLListServiceOrderController implements Initializable {
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         customerIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        customerFullNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         roomIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         userNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -201,7 +204,7 @@ public class FXMLListServiceOrderController implements Initializable {
 
         // Thêm cột vào bảng
         table_Service_Order.getColumns().clear();
-        table_Service_Order.getColumns().addAll(numberCol, orderIDCol, customerIDCol, roomIDCol,
+        table_Service_Order.getColumns().addAll(numberCol, orderIDCol, customerIDCol, customerFullNameCol, roomIDCol,
                 userNameCol, orderDateCol, orderNoteCol, checkBoxFinishCol);
 
         // Xét xắp xếp theo userName
@@ -221,6 +224,7 @@ public class FXMLListServiceOrderController implements Initializable {
                     serviceOrder -> newValue == null || newValue.isEmpty()
                     || serviceOrder.getServiceOrderID().toLowerCase().contains(newValue.toLowerCase())
                     || serviceOrder.getCustomerID().toLowerCase().contains(newValue.toLowerCase())
+                    || serviceOrder.getCustomerFullName().toLowerCase().contains(newValue.toLowerCase())
                     || serviceOrder.getRoomID().toLowerCase().contains(newValue.toLowerCase())
                     //|| serviceOrder.getServiceNote().toLowerCase().contains(newValue.toLowerCase())
                     || serviceOrder.getServiceOrderTime().toString().contains(newValue.toLowerCase())

@@ -42,10 +42,13 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
     @Override
     public ObservableList<ServiceOrderDetail> getAllServiceOrdersDetails() {
         String sql = "SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, SOD.Finish, SOD.CheckOut, "
-                + "ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID "
-                + "FROM ServicesOrderDetails SOD "
-                + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID\n"
-                + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID\n"
+                + "ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, "
+                + "CASE WHEN C.CustomerMidName <> '' THEN C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName "
+                + "ELSE C.CustomerFirstName+' ' +C.CustomerLastName END AS 'CustomerFullName' "
+                + "FROM ServicesOrderDetails SOD  "
+                + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID "
+                + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID "
+                + "INNER JOIN Customers C ON C.CustomerID = SO.CustomerID "
                 + "WHERE SOD.Active=1";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
@@ -54,6 +57,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail();
                 serviceOrderDetail.setOrderID(rs.getString("OrderID"));
                 serviceOrderDetail.setCustomerID(rs.getString("CustomerID"));
+                serviceOrderDetail.setCustomerFullName(rs.getString("CustomerFullName"));
                 serviceOrderDetail.setRoomID(rs.getString("RoomID"));
                 serviceOrderDetail.setServiceID(rs.getString("ServiceID"));
                 serviceOrderDetail.setUserName(rs.getString("UserName"));
@@ -68,7 +72,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 checkBox.setOnAction((event) -> {
                     updateSODFinish(!serviceOrderDetail.isServiceFinish(), serviceOrderDetail.getOrderID(), serviceOrderDetail.getServiceID());
                 });
-                if(serviceOrderDetail.isServiceFinish()){
+                if (serviceOrderDetail.isServiceFinish()) {
                     checkBox.setSelected(true);
                 }
                 if (serviceOrderDetail.isServiceCheckOut()) {
@@ -140,7 +144,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 checkBox.setOnAction((event) -> {
                     updateSODFinish(!serviceOrderDetail.isServiceFinish(), serviceOrderDetail.getOrderID(), serviceOrderDetail.getServiceID());
                 });
-                if(serviceOrderDetail.isServiceFinish()){
+                if (serviceOrderDetail.isServiceFinish()) {
                     checkBox.setSelected(true);
                 }
                 if (serviceOrderDetail.isServiceCheckOut()) {

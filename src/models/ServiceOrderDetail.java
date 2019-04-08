@@ -24,6 +24,7 @@ public class ServiceOrderDetail extends ServiceType {
 
     private StringProperty orderID;
     private StringProperty customerID;
+    private StringProperty customerFullName;
     private StringProperty roomID;
     private IntegerProperty serviceQuantity;
     private BigDecimal servicePriceTotal;
@@ -39,6 +40,7 @@ public class ServiceOrderDetail extends ServiceType {
         this.active = new SimpleBooleanProperty();
         this.orderID = new SimpleStringProperty();
         this.customerID = new SimpleStringProperty();
+        this.customerFullName = new SimpleStringProperty();
         this.roomID = new SimpleStringProperty();
         this.serviceQuantity = new SimpleIntegerProperty();
         this.serviceRemoveButton = new JFXButton("Remove");
@@ -159,6 +161,18 @@ public class ServiceOrderDetail extends ServiceType {
 
     public void setServiceCheckOut(boolean serviceCheckOut) {
         this.serviceCheckOut = serviceCheckOut;
+    }
+
+    public final String getCustomerFullName() {
+        return customerFullName.get();
+    }
+
+    public final void setCustomerFullName(String value) {
+        customerFullName.set(value);
+    }
+
+    public StringProperty customerFullNameProperty() {
+        return customerFullName;
     }
 
 }

@@ -26,13 +26,19 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
     @Override
     public ObservableList<ServiceOrder> getAllServiceOrders() {
-        String sql = "SELECT OrderID, RoomID, CustomerID, UserName, ServiceOrderDate, ServiceNote, Finish, CheckOut FROM ServicesOrders WHERE ACTIVE=1";
+        String sql = "SELECT SO.OrderID, SO.RoomID, SO.CustomerID, SO.UserName, SO.ServiceOrderDate, SO.ServiceNote, SO.Finish, SO.CheckOut, "
+                + "CASE WHEN C.CustomerMidName <> '' THEN C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName "
+                + "ELSE C.CustomerFirstName+' ' +C.CustomerLastName END AS 'CustomerFullName' "
+                + "FROM ServicesOrders SO "
+                + "INNER JOIN Customers C ON C.CustomerID = SO.CustomerID "
+                + "WHERE SO.ACTIVE=1";
         ObservableList<ServiceOrder> listServiceOrders = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
                 while (rs.next()) {
                     ServiceOrder serviceOrder = new ServiceOrder();
                     serviceOrder.setCustomerID(rs.getString("CustomerID"));
+                    serviceOrder.setCustomerFullName(rs.getString("CustomerFullName"));
                     serviceOrder.setServiceOrderID(rs.getString("OrderID"));
                     serviceOrder.setRoomID(rs.getString("RoomID"));
                     serviceOrder.setUserName(rs.getString("UserName"));
@@ -43,7 +49,7 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
                     JFXCheckBox checkBox = new JFXCheckBox();
                     checkBox.setOnAction((event) -> {
-                        updateServiceFinish(!serviceOrder.isServiceFinish(),serviceOrder.getServiceOrderID());
+                        updateServiceFinish(!serviceOrder.isServiceFinish(), serviceOrder.getServiceOrderID());
                     });
                     if (serviceOrder.isServiceFinish()) {
                         checkBox.setSelected(true);

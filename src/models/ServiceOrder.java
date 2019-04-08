@@ -21,6 +21,7 @@ public class ServiceOrder {
     private StringProperty serviceOrderID;
     private StringProperty roomID;
     private StringProperty customerID;
+    private StringProperty customerFullName;
     private StringProperty userName;
     private IntegerProperty serviceQuantity;
     private LocalDateTime serviceOrderTime;
@@ -33,6 +34,7 @@ public class ServiceOrder {
         this.serviceOrderID = new SimpleStringProperty();
         this.roomID = new SimpleStringProperty();
         this.customerID = new SimpleStringProperty();
+        this.customerFullName = new SimpleStringProperty();
         this.userName = new SimpleStringProperty();
         this.serviceNote = new SimpleStringProperty();
         this.serviceQuantity = new SimpleIntegerProperty();
@@ -141,6 +143,18 @@ public class ServiceOrder {
 
     public void setCheckBox_Finish(JFXCheckBox checkBox_Finish) {
         this.checkBox_Finish = checkBox_Finish;
+    }
+
+    public final String getCustomerFullName() {
+        return customerFullName.get();
+    }
+
+    public final void setCustomerFullName(String value) {
+        customerFullName.set(value);
+    }
+
+    public StringProperty customerFullNameProperty() {
+        return customerFullName;
     }
 
 }

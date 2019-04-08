@@ -167,6 +167,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
     private void setColumns() {
         TableColumn<ServiceOrderDetail, String> orderIDCol = new TableColumn<>("Order ID");
         TableColumn<ServiceOrderDetail, String> customerIDCol = new TableColumn<>("Customer ID");
+        TableColumn<ServiceOrderDetail, String> customerFullNameCol = new TableColumn<>("Customer Name");
         TableColumn<ServiceOrderDetail, String> roomIDCol = new TableColumn<>("Room ID");
         TableColumn<ServiceOrderDetail, String> serviceIDCol = new TableColumn<>("Service ID");
         TableColumn<ServiceOrderDetail, String> userNameCol = new TableColumn<>("User name");
@@ -195,6 +196,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         // Lấy giá trị từ các thuộc tính của ServiceOrderDetail.
         orderIDCol.setCellValueFactory(new PropertyValueFactory<>("orderID"));
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customerFullNameCol.setCellValueFactory(new PropertyValueFactory<>("customerFullName"));
         roomIDCol.setCellValueFactory(new PropertyValueFactory<>("roomID"));
         serviceIDCol.setCellValueFactory(new PropertyValueFactory<>("serviceID"));
         userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
@@ -213,6 +215,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         numberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         orderIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         customerIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        customerFullNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
         roomIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceIDCol.setStyle("-fx-alignment: CENTER-LEFT;");
         serviceNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
@@ -230,7 +233,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
 
         // Thêm cột vào bảng
         table_Service_Order_Detail.getColumns().clear();
-        table_Service_Order_Detail.getColumns().addAll(numberCol, orderIDCol, customerIDCol, roomIDCol, serviceIDCol, serviceNameCol, serviceUnitCol,
+        table_Service_Order_Detail.getColumns().addAll(numberCol, orderIDCol, customerIDCol, customerFullNameCol, roomIDCol, serviceIDCol, serviceNameCol, serviceUnitCol,
                 servicePriceCol, serviceInventoryCol, serviceQuantityCol, serviceOrderDateCol, serviceTotalPriceCol, serviceDiscountCol,
                 serviceDescriptionCol, serviceImageCol, checkBoxFinishCol);
 
@@ -250,6 +253,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
             filteredData.setPredicate(
                     serviceOrderDetail -> newValue == null || newValue.isEmpty()
                     || serviceOrderDetail.getServiceID().toLowerCase().contains(newValue.toLowerCase())
+                    || serviceOrderDetail.getCustomerFullName().toLowerCase().contains(newValue.toLowerCase())
                     //|| serviceOrderDetail.getServiceDescription().toLowerCase().contains(newValue.toLowerCase())
                     || serviceOrderDetail.getServiceUnit().toLowerCase().contains(newValue.toLowerCase())
                     || serviceOrderDetail.getServicePrice().toString().contains(newValue.toLowerCase())
