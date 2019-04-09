@@ -45,6 +45,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.mail.MessagingException;
 import models.BookingInfo;
 import models.DAO;
@@ -117,6 +118,7 @@ public class FXMLInfoBookingController implements Initializable {
     private ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
     private FXMLListBookingController fXMLListBookingController;
     private String roomID;
+    public static String CusID_BookingFuture;
 
     /**
      * Initializes the controller class.
@@ -289,7 +291,7 @@ public class FXMLInfoBookingController implements Initializable {
                 boxIdRoom.setValue(bk.getRoomID());
                 roomID = boxIdRoom.getValue();
                 DateBook.setDisable(true);
-                DateBook.setValue(LocalDate.now());
+                DateBook.setValue(LocalDate.parse(bk.getDate()));
                 boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
                 NumberGuest.setText(String.valueOf(bk.getNumGuest()));
                 Note.setText(bk.getNote());
@@ -312,7 +314,7 @@ public class FXMLInfoBookingController implements Initializable {
                                 boxIdRoom.setValue(list_Booking_Info.get(i).getRoomID());
                                 roomID = boxIdRoom.getValue();
                                 DateBook.setDisable(true);
-                                DateBook.setValue(LocalDate.now());
+                                DateBook.setValue(LocalDate.parse(list_Booking_Info.get(i).getDate()));
                                 boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
                                 NumberGuest.setText(String.valueOf(list_Booking_Info.get(i).getNumGuest()));
                                 Note.setText(list_Booking_Info.get(i).getNote());
@@ -327,6 +329,7 @@ public class FXMLInfoBookingController implements Initializable {
                 });
             }
         }
+        roomID = boxIdRoom.getValue();
     }
 
     @FXML
@@ -487,7 +490,7 @@ public class FXMLInfoBookingController implements Initializable {
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                     //CREATE QR CODE FILE AND SEND EMAIL
                     String customerEmail = DAOCustomerBookingCheckIn.getCustomerEmail(boxIdCustomer.getValue());
-                    if (!customerEmail.isEmpty()) {
+                    if (!FXMLInfoCustomerController.checkInfoCustomer || !FXMLInfoCustomerController.checkInfoCustomerAlready) {
                         String content = "BookingID : " + BookingID.getValue() + ". Use the attached QRCode for checking in faster.";
                         QRCreate.create_Booking_QRCode(BookingID.getValue());
                         File file = new File("");
@@ -515,25 +518,43 @@ public class FXMLInfoBookingController implements Initializable {
                             Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    Stage stageEdit = new Stage();
-                    stageEdit.resizableProperty().setValue(Boolean.FALSE);
-                    Parent root = null;
-                    try {
-                        root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCheckInOrders.fxml"));
-                    } catch (IOException ex) {
-                        Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                    if (!DAOCustomerBookingCheckIn.check_ListbookingFuture(boxIdCustomer.getValue()).isEmpty() && list_Booking_Info.isEmpty()) {
+                        CusID_BookingFuture = boxIdCustomer.getValue();
+                        Stage stageEdit = new Stage();
+                        stageEdit.resizableProperty().setValue(Boolean.FALSE);
+                        Parent root = null;
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLDeleteBookingVirtual.fxml"));
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                        Scene scene = new Scene(root);
+                        stageEdit.setScene(scene);
+                        stageEdit.initStyle(StageStyle.UNDECORATED);
+                        stageEdit.show();
+                    } else {
+                        Stage stageEdit = new Stage();
+                        stageEdit.resizableProperty().setValue(Boolean.FALSE);
+                        Parent root = null;
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("/fxml/FXMLCheckInOrders.fxml"));
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                        Scene scene = new Scene(root);
+                        stageEdit.setScene(scene);
+                        stageEdit.setOnCloseRequest((event) -> {
+                            checkInfoBooking = false;
+                        });
+                        stageEdit.show();
                     }
-                    stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
-                    Scene scene = new Scene(root);
-                    stageEdit.setScene(scene);
-                    stageEdit.setOnCloseRequest((event) -> {
-                        checkInfoBooking = false;
-                    });
-                    stageEdit.show();
                     Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
                     stage.close();
                     FXMLInfoCustomerController.checkInfoCustomer = false;
                     FXMLInfoCustomerController.checkInfoCustomerAlready = false;
+
                 }
                 if (FXMLListBookingController.check_formBooking_list) {
                     fXMLListBookingController = ConnectControllers.getfXMLListBookingController();

@@ -28,6 +28,37 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//     list booking future
+
+    public static ObservableList<BookingInfo> check_ListbookingFuture(String ID) {
+        ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) <0 And Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                BookingInfo bk = new BookingInfo();
+                bk.setBookID(rs.getString("BookingID"));
+                bk.setCusID(rs.getString("CustomerID"));
+                bk.setRoomID(rs.getString("RoomID"));
+                bk.setNote(rs.getString("Note"));
+                bk.setNumGuest(rs.getInt("NumberGuest"));
+                bk.setUser(rs.getString("UserName"));
+                bk.setDate(rs.getString("DateBook"));
+                list_Booking_Info.add(bk);
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list_Booking_Info;
+    }
 //    check bookingid have checkin
 
     public static boolean check_Booking(String ID) {
@@ -522,6 +553,7 @@ public class DAOCustomerBookingCheckIn {
                 bk.setNote(rs.getString("Note"));
                 bk.setNumGuest(rs.getInt("NumberGuest"));
                 bk.setUser(rs.getString("UserName"));
+                bk.setDate(rs.getString("DateBook"));
                 list_Booking_Info.add(bk);
             }
             pt.close();
