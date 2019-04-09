@@ -35,6 +35,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -114,12 +116,21 @@ public class FXMLInfoBookingController implements Initializable {
     private FXMLMainOverViewPaneController mainOverViewPaneController;
     private ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
     private FXMLListBookingController fXMLListBookingController;
+    private String roomID;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        DateBook.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
         if (FXMLInfoCustomerController.checkInfoCustomerAlready) {
             list_Booking_Info = DAOCustomerBookingCheckIn.check_BookingIdCustomer(FXMLInfoCustomerController.CustomerIdConect);
             System.out.println("Customer conect= " + FXMLInfoCustomerController.CustomerIdConect);
@@ -254,7 +265,6 @@ public class FXMLInfoBookingController implements Initializable {
         if (FXMLInfoCustomerController.checkInfoCustomer || (list_Booking_Info.isEmpty() && FXMLInfoCustomerController.checkInfoCustomerAlready)) {
             checkInfoBooking = true;
             boxIdCustomer.setDisable(true);
-            boxIdRoom.setDisable(true);
             BookingID.setDisable(true);
             boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
             System.out.println("RoomID = " + mainOverViewPaneController.service_Room_ID);
@@ -274,10 +284,10 @@ public class FXMLInfoBookingController implements Initializable {
             for (BookingInfo bk : list_Booking_Info) {
                 checkInfoBooking = true;
                 boxIdCustomer.setDisable(true);
-                boxIdRoom.setDisable(true);
                 BookingID.setDisable(false);
                 BookingID.setValue(bk.getBookID());
                 boxIdRoom.setValue(bk.getRoomID());
+                roomID = boxIdRoom.getValue();
                 DateBook.setDisable(true);
                 DateBook.setValue(LocalDate.now());
                 boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
@@ -297,10 +307,10 @@ public class FXMLInfoBookingController implements Initializable {
                             if (newItem.equals(list_Booking_Info.get(i).getBookID())) {
                                 checkInfoBooking = true;
                                 boxIdCustomer.setDisable(true);
-                                boxIdRoom.setDisable(true);
                                 BookingID.setDisable(false);
                                 BookingID.setValue(list_Booking_Info.get(i).getBookID());
                                 boxIdRoom.setValue(list_Booking_Info.get(i).getRoomID());
+                                roomID = boxIdRoom.getValue();
                                 DateBook.setDisable(true);
                                 DateBook.setValue(LocalDate.now());
                                 boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
@@ -448,6 +458,12 @@ public class FXMLInfoBookingController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(NumberGuest, HboxContent, "NUMBER GUEST IS INCORRECT (1-8) !!!");
             });
+        } else if (DAOCustomerBookingCheckIn.check_Booking(BookingID.getValue())) {
+            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+            alert1.setTitle("Error");
+            alert1.setHeaderText("You have no right to do this !!!");
+            alert1.setContentText("Because BookingID has been check in !!!");
+            alert1.showAndWait();
         } else {
             System.out.println("trong else" + FXMLInfoCustomerController.checkInfoCustomer);
             Platform.runLater(() -> {
@@ -490,6 +506,15 @@ public class FXMLInfoBookingController implements Initializable {
                     roomIdConect = boxIdRoom.getValue();
                     numberofcustomer = NumberGuest.getText();
                     customerIdConect = boxIdCustomer.getValue();
+                    if (!roomID.equals(boxIdRoom.getValue())) {
+                        try {
+                            DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue());
+                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Change Room for bookingID= " + BookingID.getValue(),
+                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                        } catch (ClassNotFoundException | SQLException ex) {
+                            Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     Stage stageEdit = new Stage();
                     stageEdit.resizableProperty().setValue(Boolean.FALSE);
                     Parent root = null;

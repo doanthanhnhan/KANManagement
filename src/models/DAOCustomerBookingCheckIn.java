@@ -28,6 +28,44 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    check bookingid have checkin
+
+    public static boolean check_Booking(String ID) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "select BookingID from CheckInOrders where BookingID = ?";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, ID);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+//    update roombooking
+
+    public static void Update_RoomBooking(String id, String RoomID) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE BookingInfo SET RoomID = ? WHERE BookingID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, RoomID);
+        pt.setString(2, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+
     public static void deleteBooking(String id) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "Delete from BookingInfo WHERE BookingID = ?";
@@ -37,6 +75,7 @@ public class DAOCustomerBookingCheckIn {
         pt.close();
         connection.close();
     }
+
     //    get list booking Virtual with from date and todate
     public static ObservableList<BookingInfo> getListBookingVirtual(String FromDate, String ToDate) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();

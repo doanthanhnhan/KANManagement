@@ -311,6 +311,8 @@ public class FXMLListBookingVirtualController implements Initializable {
     private void handle_MenuItem_Refresh_Action(ActionEvent event) {
         ToDate.setValue(null);
         FromDate.setValue(null);
+        ToDate.setPromptText("To Date");
+        FromDate.setPromptText("From Date");
         showUsersData();
     }
 
