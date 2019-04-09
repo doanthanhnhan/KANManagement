@@ -697,7 +697,7 @@ public class DAOCustomerBookingCheckIn {
         Connection connection = connectDB.connectSQLServer();
         // Tạo đối tượng Statement.
         Statement statement = connection.createStatement();
-        String sql = "select CustomerID from Customers where Active = 1";
+        String sql = "select CustomerID from Customers where Active = 1 And CustomerID != CTM-000000000";
 
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = statement.executeQuery(sql);
