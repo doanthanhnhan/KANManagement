@@ -54,6 +54,7 @@
                               <MenuItem fx:id="menuItem_List_Users_Log" mnemonicParsing="false" onAction="#handle_MenuItem_List_UserLogs_Action" text="List Users Log" />
                               <MenuItem fx:id="menuItem_List_ReActive" mnemonicParsing="false" onAction="#handle_MenuItem_List_ReActive_Action" text="List ReActive Employee" />
                               <MenuItem fx:id="menuItem_List_ReActiveMacAddress" mnemonicParsing="false" onAction="#handle_MenuItem_List_ReActiveMacAddress_Action" text="List ReActive MacAddress" />
+                              <MenuItem fx:id="menuItem_List_Booking_Virtual" mnemonicParsing="false" onAction="#handle_MenuItem_List_Booking_Virtual_Action" text="List Booking Virtual" />
                            </items>
                         </Menu>
                         <Menu fx:id="menu_Add" mnemonicParsing="false" text="Add">

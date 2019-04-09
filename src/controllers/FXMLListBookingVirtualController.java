@@ -5,8 +5,7 @@
  */
 package controllers;
 
-import static controllers.FXMLListEmployeeController.Emp;
-import static controllers.FXMLListEmployeeController.check_Edit_Action;
+import static controllers.FXMLListBookingController.bk;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -28,39 +27,34 @@ import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import models.BookingInfo;
-import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.InfoEmployee;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
-import utils.StageLoader;
-import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
  *
  * @author Admin
  */
-public class FXMLListBookingController implements Initializable {
+public class FXMLListBookingVirtualController implements Initializable {
 
+    private static final int ROWS_PER_PAGE = 10;
+    private FilteredList<BookingInfo> filteredData;
+    ObservableList<BookingInfo> listBooking = FXCollections.observableArrayList();
     public boolDecentralizationModel userRole;
     RoleDAOImpl roleDAOImpl;
-    private showFXMLLogin showFormLogin = new showFXMLLogin();
-    ObservableList<BookingInfo> listBooking = FXCollections.observableArrayList();
     @FXML
     private AnchorPane main_AnchorPane;
     @FXML
     private Pagination pagination;
-    private static final int ROWS_PER_PAGE = 10;
-    private FilteredList<BookingInfo> filteredData;
     @FXML
-    private TableView<BookingInfo> table_ListBooking;
+    private TableView<BookingInfo> table_ListBookingVirtual;
     @FXML
     private ContextMenu contextMenu_Main;
     @FXML
@@ -71,12 +65,6 @@ public class FXMLListBookingController implements Initializable {
     private MenuItem menuItem_Delete;
     @FXML
     private MenuItem menuItem_Refresh;
-    public String new_Emp_ID;
-    public int row_add_new_index;
-    public boolean check_Add_New = false;
-    public int pagination_index;
-    public int row_index;
-    public static Boolean check_formBooking_list = false;
     public static BookingInfo bk;
 
     /**
@@ -84,21 +72,18 @@ public class FXMLListBookingController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        contextMenu_Main.getItems().remove(menuItem_Delete);
-        check_formBooking_list = true;
+        contextMenu_Main.getItems().remove(menuItem_Add);
+        contextMenu_Main.getItems().remove(menuItem_Edit);
         setColumns();
         showUsersData();
-        ConnectControllers.setfXMLListBookingController(this);
         roleDAOImpl = new RoleDAOImpl();
         // Check item when click on table
-        table_ListBooking.setOnMouseClicked((MouseEvent event) -> {
+        table_ListBookingVirtual.setOnMouseClicked((MouseEvent event) -> {
             if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
-                    && table_ListBooking.getSelectionModel().getSelectedItem() != null) {
+                    && table_ListBookingVirtual.getSelectionModel().getSelectedItem() != null) {
                 menuItem_Edit.setDisable(false);
                 menuItem_Delete.setDisable(false);
-                bk = table_ListBooking.getSelectionModel().getSelectedItem();
-                row_index = table_ListBooking.getSelectionModel().getSelectedIndex();
-                pagination_index = pagination.getCurrentPageIndex();
+                bk = table_ListBookingVirtual.getSelectionModel().getSelectedItem();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -109,11 +94,8 @@ public class FXMLListBookingController implements Initializable {
         //userRole = mainFormController.getUserRole();
         userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
         //11.SERVICE TYPE CRUD
-        if (!userRole.ischeckBooking_Add()) {
-            contextMenu_Main.getItems().remove(menuItem_Add);
-        }
-        if (!userRole.ischeckBooking_Edit()) {
-            contextMenu_Main.getItems().remove(menuItem_Edit);
+        if (!userRole.ischeckBooking_Delete()) {
+            contextMenu_Main.getItems().remove(menuItem_Delete);
         }
     }
 
@@ -127,9 +109,9 @@ public class FXMLListBookingController implements Initializable {
         SortedList<BookingInfo> sortedData = new SortedList<>(
                 FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
 
-        sortedData.comparatorProperty().bind(table_ListBooking.comparatorProperty());
+        sortedData.comparatorProperty().bind(table_ListBookingVirtual.comparatorProperty());
 
-        table_ListBooking.setItems(sortedData);
+        table_ListBookingVirtual.setItems(sortedData);
 
     }
 
@@ -145,7 +127,7 @@ public class FXMLListBookingController implements Initializable {
         numberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<InfoEmployee, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<InfoEmployee, String> p) {
-                return new ReadOnlyObjectWrapper((table_ListBooking.getItems().indexOf(p.getValue()) + 1) + "");
+                return new ReadOnlyObjectWrapper((table_ListBookingVirtual.getItems().indexOf(p.getValue()) + 1) + "");
             }
         });
         numberCol.setSortable(false);
@@ -170,8 +152,8 @@ public class FXMLListBookingController implements Initializable {
         noteCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
-        table_ListBooking.getColumns().clear();
-        table_ListBooking.getColumns().addAll(numberCol, bkIdCol, cusIdCol, roomIdCol, userCol, dateCol, noteCol, numberGuestCol);
+        table_ListBookingVirtual.getColumns().clear();
+        table_ListBookingVirtual.getColumns().addAll(numberCol, bkIdCol, cusIdCol, roomIdCol, userCol, dateCol, noteCol, numberGuestCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -179,12 +161,12 @@ public class FXMLListBookingController implements Initializable {
 
     public void showUsersData() {
         try {
-            listBooking = DAOCustomerBookingCheckIn.getListBooking();
+            listBooking = DAOCustomerBookingCheckIn.getListBookingVirtual();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
         //table_ServiceType.getItems().clear();
-        table_ListBooking.setItems(listBooking);
+        table_ListBookingVirtual.setItems(listBooking);
 
         //Set filterData and Pagination
         filteredData = new FilteredList<>(listBooking, list -> true);
@@ -207,37 +189,6 @@ public class FXMLListBookingController implements Initializable {
         changeTableView(0, ROWS_PER_PAGE);
         pagination.currentPageIndexProperty().addListener(
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
-        if (check_Add_New) {
-            //Setting new room index
-            for (BookingInfo item : listBooking) {
-                if (new_Emp_ID.equals(item.getBookID())) {
-                    row_add_new_index = listBooking.indexOf(item);
-                    break;
-                }
-            }
-            Platform.runLater(() -> {
-                int focusPage = (int) row_add_new_index / ROWS_PER_PAGE;
-                int new_index = row_add_new_index % ROWS_PER_PAGE;
-                pagination.setCurrentPageIndex(focusPage);
-                changeTableView(focusPage, ROWS_PER_PAGE);
-                table_ListBooking.requestFocus();
-                table_ListBooking.getSelectionModel().select(new_index);
-                table_ListBooking.getFocusModel().focus(new_index);
-
-            });
-            check_Add_New = false;
-        } else {
-            //Forcus to the editing row
-            Platform.runLater(() -> {
-                //int focusPage = (int) row_index / ROWS_PER_PAGE;
-                //int new_index = row_index % ROWS_PER_PAGE;
-                pagination.setCurrentPageIndex(pagination_index);
-                changeTableView(pagination_index, ROWS_PER_PAGE);
-                table_ListBooking.requestFocus();
-                table_ListBooking.getSelectionModel().select(row_index);
-                table_ListBooking.getFocusModel().focus(row_index);
-            });
-        }
     }
 
     @FXML
@@ -246,8 +197,6 @@ public class FXMLListBookingController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
-        StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLBookingInfo.fxml", "/images/KAN Logo.png", "Add New Booking");
     }
 
     @FXML
