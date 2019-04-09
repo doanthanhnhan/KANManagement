@@ -93,7 +93,7 @@ public class FXMLCheckInOrdersController implements Initializable {
     @FXML
     private JFXDatePicker LeaveDate;
     @FXML
-    private JFXComboBox<?> boxCheckInType;
+    private JFXComboBox<String> boxCheckInType;
     @FXML
     private JFXTextField CustomerPackage;
     @FXML

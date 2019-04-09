@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import de.jensd.fx.glyphs.icons525.Icons525View?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Pagination?>
@@ -9,12 +12,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="main_AnchorPane" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLListBookingVirtualController">
    <children>
-      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutY="53.0" prefHeight="715.0" prefWidth="1366.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
          <center>
-            <TableView fx:id="table_ListBookingVirtual" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="table_ListBookingVirtual" prefHeight="661.0" prefWidth="1366.0" BorderPane.alignment="CENTER">
                <columns>
                   <TableColumn prefWidth="75.0" text="C1" />
                   <TableColumn prefWidth="75.0" text="C2" />
@@ -55,5 +59,27 @@
             </HBox>
          </bottom>
       </BorderPane>
+      <HBox alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="1357.0">
+         <children>
+            <JFXDatePicker fx:id="FromDate" editable="false" onAction="#Format_Show_FromDate_Calender" promptText="From Date">
+               <HBox.margin>
+                  <Insets left="10.0" right="30.0" top="15.0" />
+               </HBox.margin>
+            </JFXDatePicker>
+            <JFXDatePicker fx:id="ToDate" editable="false" onAction="#Format_Show_ToDate_Calender" promptText="To Date">
+               <HBox.margin>
+                  <Insets right="20.0" top="15.0" />
+               </HBox.margin>
+            </JFXDatePicker>
+            <JFXButton fx:id="btnSubmit" buttonType="RAISED" prefHeight="30.0" prefWidth="80.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="15.0" />
+               </HBox.margin>
+            </JFXButton>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

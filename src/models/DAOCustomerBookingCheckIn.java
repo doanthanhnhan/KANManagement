@@ -28,6 +28,47 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+    public static void deleteBooking(String id) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "Delete from BookingInfo WHERE BookingID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+    //    get list booking Virtual with from date and todate
+    public static ObservableList<BookingInfo> getListBookingVirtual(String FromDate, String ToDate) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<BookingInfo> list_Booking = FXCollections.observableArrayList();
+        String sql;
+        if (FromDate.equals("")) {
+            sql = "select * from BookingInfo where  DateBook<=? And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+        } else {
+            sql = "select * from BookingInfo where  ?<=DateBook AND DateBook<=? And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+        }
+        PreparedStatement pt = connection.prepareStatement(sql);
+        if (FromDate.equals("")) {
+            pt.setString(1, ToDate);
+        } else {
+            pt.setString(1, FromDate);
+            pt.setString(2, ToDate);
+        }
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            BookingInfo bk = new BookingInfo();
+            bk.setBookID(rs.getString("BookingID"));
+            bk.setCusID(rs.getString("CustomerID"));
+            bk.setRoomID(rs.getString("RoomID"));
+            bk.setUser(rs.getString("UserName"));
+            bk.setNote(rs.getString("Note"));
+            bk.setNumGuest(rs.getInt("NumberGuest"));
+            bk.setDate(LocalDate.parse(rs.getString("DateBook")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            list_Booking.add(bk);
+        }
+        return list_Booking;
+    }
     //    get list booking Virtual
 
     public static ObservableList<BookingInfo> getListBookingVirtual() throws ClassNotFoundException, SQLException {

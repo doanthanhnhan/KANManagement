@@ -5,9 +5,21 @@
  */
 package controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
+import static controllers.ConnectControllers.fXMLMainFormController;
 import static controllers.FXMLListBookingController.bk;
+import static controllers.FXMLListCustomerController.ctm;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,21 +33,34 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.BookingInfo;
+import models.DAO;
 import models.DAOCustomerBookingCheckIn;
+import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
+import models.formatCalender;
+import utils.AlertLoginAgain;
+import utils.GetInetAddress;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -66,12 +91,55 @@ public class FXMLListBookingVirtualController implements Initializable {
     @FXML
     private MenuItem menuItem_Refresh;
     public static BookingInfo bk;
+    @FXML
+    private JFXDatePicker FromDate;
+    @FXML
+    private JFXDatePicker ToDate;
+    @FXML
+    private JFXButton btnSubmit;
+    private boolean checkSubmit = false;
+    private showFXMLLogin showFormLogin = new showFXMLLogin();
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ToDate.valueProperty().addListener((obs, oldItem, newItem) -> {
+            ToDate.setStyle("-jfx-default-color: #6447cd;");
+        });
+        ToDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                Format_Show_Booking_Date_Calender();
+            }
+        });
+        FromDate.valueProperty().addListener((obs, oldItem, newItem) -> {
+            FromDate.setStyle("-jfx-default-color: #6447cd;");
+        });
+        FromDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                Format_Show_Booking_Date_Calender();
+            }
+        });
+        btnSubmit.setOnAction((event) -> {
+            Format_Show_Booking_Date_Calender();
+        });
+        ToDate.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) > -1);
+            }
+        });
+        FromDate.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) > -1);
+            }
+        });
         contextMenu_Main.getItems().remove(menuItem_Add);
         contextMenu_Main.getItems().remove(menuItem_Edit);
         setColumns();
@@ -161,7 +229,15 @@ public class FXMLListBookingVirtualController implements Initializable {
 
     public void showUsersData() {
         try {
-            listBooking = DAOCustomerBookingCheckIn.getListBookingVirtual();
+            if (!checkSubmit) {
+                listBooking = DAOCustomerBookingCheckIn.getListBookingVirtual();
+            } else {
+                String fromdate = "";
+                if (FromDate.getValue() != null) {
+                    fromdate = String.valueOf(FromDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                }
+                listBooking = DAOCustomerBookingCheckIn.getListBookingVirtual(fromdate, String.valueOf(ToDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+            }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -189,6 +265,7 @@ public class FXMLListBookingVirtualController implements Initializable {
         changeTableView(0, ROWS_PER_PAGE);
         pagination.currentPageIndexProperty().addListener(
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+        checkSubmit = false;
     }
 
     @FXML
@@ -200,12 +277,81 @@ public class FXMLListBookingVirtualController implements Initializable {
     }
 
     @FXML
-    private void handle_MenuItem_Delete_Action(ActionEvent event) {
+    private void handle_MenuItem_Delete_Action(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
+        if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Booking_Delete")) {
+            AlertLoginAgain.alertLogin();
+            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            Stage stage = (Stage) main_AnchorPane.getScene().getWindow();
+            stage.close();
+            stageMainForm.close();
+            showFormLogin.showFormLogin();
+        } else {
+            System.out.println("Kien");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Comfirm");
+            alert.setContentText("Do you want to delete " + bk.getBookID()+ "?");
+            alert.showAndWait();
+            System.out.println(alert.getResult());
+            if (alert.getResult() == ButtonType.OK) {
+                try {
+                    DAOCustomerBookingCheckIn.deleteBooking(bk.getBookID());
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + bk.getBookID(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                    System.out.println("Delete successful");
+                    showUsersData();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     @FXML
     private void handle_MenuItem_Refresh_Action(ActionEvent event) {
+        ToDate.setValue(null);
+        FromDate.setValue(null);
         showUsersData();
     }
 
+    public void Format_Show_Booking_Date_Calender() {
+        boolean check_OK = true;
+        if (ToDate.getValue() == null) {
+            LocalDate today = LocalDate.now();
+            LocalDate yesterday = today.minus(Period.ofDays(1));
+            ToDate.setValue(yesterday);
+            Format_Show_ToDate_Calender();
+        }
+        if (FromDate.getValue() != null) {
+            if (ToDate.getValue().compareTo(FromDate.getValue()) < 0) {
+                Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                alert1.setTitle("Error");
+                alert1.setHeaderText("You have no right to do this !!!");
+                alert1.setContentText("Because From Date Cannot Be Bigger Than Today !!!");
+                alert1.showAndWait();
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                ToDate.setStyle("-jfx-default-color: RED;");
+                ToDate.requestFocus();
+                check_OK = false;
+            }
+        }
+        if (check_OK) {
+            checkSubmit = true;
+            showUsersData();
+        }
+    }
+
+    @FXML
+    private void Format_Show_ToDate_Calender() {
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, ToDate);
+    }
+
+    @FXML
+    private void Format_Show_FromDate_Calender() {
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, FromDate);
+    }
 }

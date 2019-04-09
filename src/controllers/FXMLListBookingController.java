@@ -85,6 +85,7 @@ public class FXMLListBookingController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         contextMenu_Main.getItems().remove(menuItem_Delete);
+        contextMenu_Main.getItems().remove(menuItem_Edit);
         check_formBooking_list = true;
         setColumns();
         showUsersData();
@@ -111,9 +112,6 @@ public class FXMLListBookingController implements Initializable {
         //11.SERVICE TYPE CRUD
         if (!userRole.ischeckBooking_Add()) {
             contextMenu_Main.getItems().remove(menuItem_Add);
-        }
-        if (!userRole.ischeckBooking_Edit()) {
-            contextMenu_Main.getItems().remove(menuItem_Edit);
         }
     }
 

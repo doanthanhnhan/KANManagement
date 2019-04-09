@@ -537,12 +537,12 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_List_Booking_Action(ActionEvent event) {
         System.out.println("List Booking menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListBooking.fxml", "ListBooking", "List Booking Informations");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListBooking.fxml", "List Booking", "List Booking Informations");
     }
     @FXML
     private void handle_MenuItem_List_Booking_Virtual_Action(ActionEvent event) {
         System.out.println("List Booking Virtual menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListBookingVirtual.fxml", "ListBookingVirtual", "List Booking Virtual Informations");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListBookingVirtual.fxml", "List Booking Virtual", "List Booking Virtual Informations");
     }
     @FXML
     private void handle_MenuItem_List_Department_Action(ActionEvent event) {
