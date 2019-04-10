@@ -36,6 +36,15 @@ public class ConnectControllers {
     public static FXMLReActiveController fXMLReActiveController;
     public static DAOReActive reActive;
     public static FXMLReActiveMacAddressController fXMLReActiveMacAddressControllerController;
+    public static FXMLListBookingController fXMLListBookingController;
+
+    public static FXMLListBookingController getfXMLListBookingController() {
+        return fXMLListBookingController;
+    }
+
+    public static void setfXMLListBookingController(FXMLListBookingController fXMLListBookingController) {
+        ConnectControllers.fXMLListBookingController = fXMLListBookingController;
+    }
 
     public static FXMLReActiveMacAddressController getfXMLReActiveMacAddressController() {
         return fXMLReActiveMacAddressControllerController;

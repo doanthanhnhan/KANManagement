@@ -172,6 +172,8 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_List_ReActive;
     @FXML
     private MenuItem menuItem_List_ReActiveMacAddress;
+    @FXML
+    private MenuItem menuItem_List_Booking_Virtual;
 
     /**
      * Initializes the controller class.
@@ -215,6 +217,9 @@ public class FXMLMainFormController implements Initializable {
         }
         if (!userRole.ischeckBooking_View()) {
             menu_View.getItems().remove(menuItem_List_Booking);
+        }
+        if (!userRole.ischeckBooking_View()) {
+            menu_View.getItems().remove(menuItem_List_Booking_Virtual);
         }
         //02.CHECK IN CRUD
         if (!userRole.ischeckCheckIn_Add()) {
@@ -375,6 +380,9 @@ public class FXMLMainFormController implements Initializable {
         if (!userRole.ischeckReActive_View()) {
             menu_View.getItems().remove(menuItem_List_ReActive);
         }
+        if (!userRole.ischeckReActive_View()) {
+            menu_View.getItems().remove(menuItem_List_ReActiveMacAddress);
+        }
         //ENDING SETTING ROLE TO FORM
 
         //Setting logout button
@@ -527,6 +535,16 @@ public class FXMLMainFormController implements Initializable {
     }
 
     @FXML
+    private void handle_MenuItem_List_Booking_Action(ActionEvent event) {
+        System.out.println("List Booking menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListBooking.fxml", "List Booking", "List Booking Informations");
+    }
+    @FXML
+    private void handle_MenuItem_List_Booking_Virtual_Action(ActionEvent event) {
+        System.out.println("List Booking Virtual menu item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListBookingVirtual.fxml", "List Booking Virtual", "List Booking Virtual Informations");
+    }
+    @FXML
     private void handle_MenuItem_List_Department_Action(ActionEvent event) {
         System.out.println("List Department menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListDepartment.fxml", "List Department", "Department Informations");
@@ -549,11 +567,13 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List service orders details item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
     }
+
     @FXML
     private void handle_MenuItem_List_ReActiveMacAddress_Action(ActionEvent event) {
         System.out.println("List check out item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLReActiveMacAddress.fxml", "listReActiveMacAddress", "List ReActive MacAddress");
     }
+
     @FXML
     private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
         System.out.println("List check out item clicked!");
@@ -617,7 +637,7 @@ public class FXMLMainFormController implements Initializable {
     // =============== EDIT ACTIONS ===============
     @FXML
     private void handle_MenuItem_Edit_Employee_Action(ActionEvent event) {
-        checkRegisInfoEmployee=true;
+        checkRegisInfoEmployee = true;
         FXMLListEmployeeController.check_form_list = false;
         FXMLInfoEmployeeController.check_delete = true;
         System.out.println("Edit Employee Informations menu item clicked!");

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package controllers;
+
 import models.ReActive;
 import java.net.URL;
 import java.sql.SQLException;
@@ -76,11 +77,11 @@ public class FXMLReActiveController implements Initializable {
         showUsersData();
         // Check item when click on table
     }
+
     private void changeTableView(int index, int limit) {
 
         int fromIndex = index * limit;
         int toIndex = Math.min(fromIndex + limit, listEmp.size());
-
         int minIndex = Math.min(toIndex, filteredData.size());
 
         SortedList<ReActive> sortedData = new SortedList<>(

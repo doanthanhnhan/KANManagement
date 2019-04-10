@@ -40,19 +40,20 @@
                         </Menu>
                         <Menu fx:id="menu_View" mnemonicParsing="false" text="View">
                            <items>
-                              <MenuItem fx:id="menuItem_List_Booking" mnemonicParsing="false" text="List Booking" />
+                              <MenuItem fx:id="menuItem_List_Booking" mnemonicParsing="false" onAction="#handle_MenuItem_List_Booking_Action" text="List Booking" />
+                              <MenuItem fx:id="menuItem_List_Booking_Virtual" mnemonicParsing="false" onAction="#handle_MenuItem_List_Booking_Virtual_Action" text="List Booking Virtual" />
                               <MenuItem fx:id="menuItem_List_Check_In" mnemonicParsing="false" text="List Check in" />
                               <MenuItem fx:id="menuItem_List_Check_Out" mnemonicParsing="false" onAction="#handle_MenuItem_List_CheckOut_Action" text="List Check out" />
                               <MenuItem fx:id="menuItem_List_Customers" mnemonicParsing="false" onAction="#handle_MenuItem_List_Customer_Action" text="List Customers" />
                               <MenuItem fx:id="menuItem_List_Department" mnemonicParsing="false" onAction="#handle_MenuItem_List_Department_Action" text="List Departments" />
                               <MenuItem fx:id="menuItem_List_Employees" mnemonicParsing="false" onAction="#handle_MenuItem_List_Employee_Action" text="List Employees" />
+                              <MenuItem fx:id="menuItem_List_ReActive" mnemonicParsing="false" onAction="#handle_MenuItem_List_ReActive_Action" text="List ReActive Employee" />
                               <MenuItem fx:id="menuItem_List_Role" mnemonicParsing="false" onAction="#handle_MenuItem_List_Role_Action" text="List Role" />
                               <MenuItem fx:id="menuItem_List_Rooms" mnemonicParsing="false" onAction="#handle_MenuItem_List_Rooms_Action" text="List Rooms" />
                               <MenuItem fx:id="menuItem_List_Service_Orders" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Orders_Action" text="List Service Orders" />
                               <MenuItem fx:id="menuItem_List_Service_Orders_Details" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Orders_Details_Action" text="List Service Orders Details" />
                               <MenuItem fx:id="menuItem_List_Service_Type" mnemonicParsing="false" onAction="#handle_MenuItem_List_Service_Type_Action" text="List Service Type" />
                               <MenuItem fx:id="menuItem_List_Users_Log" mnemonicParsing="false" onAction="#handle_MenuItem_List_UserLogs_Action" text="List Users Log" />
-                              <MenuItem fx:id="menuItem_List_ReActive" mnemonicParsing="false" onAction="#handle_MenuItem_List_ReActive_Action" text="List ReActive Employee" />
                               <MenuItem fx:id="menuItem_List_ReActiveMacAddress" mnemonicParsing="false" onAction="#handle_MenuItem_List_ReActiveMacAddress_Action" text="List ReActive MacAddress" />
                            </items>
                         </Menu>
