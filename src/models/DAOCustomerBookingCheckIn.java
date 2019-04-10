@@ -28,6 +28,17 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    update booking active =0
+
+    public static void deleteBookingActive(String id) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "Update BookingInfo set Active = 0 WHERE BookingID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
 //     list booking future
 
     public static ObservableList<BookingInfo> check_ListbookingFuture(String ID) {
@@ -35,7 +46,7 @@ public class DAOCustomerBookingCheckIn {
         try {
             Connection connection = connectDB.connectSQLServer();
             // Tạo đối tượng Statement.
-            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) <0 And Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) <0 And Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders) And Bookinginfo.Active=1";
             // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
             PreparedStatement pt = connection.prepareStatement(sql);
             pt.setString(1, ID);
@@ -144,7 +155,7 @@ public class DAOCustomerBookingCheckIn {
     public static ObservableList<BookingInfo> getListBookingVirtual() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<BookingInfo> list_Booking = FXCollections.observableArrayList();
-        String sql = "select * from BookingInfo where  DateDiff(Day,DateBook,GetDate()) >0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+        String sql = "select * from BookingInfo where  (DateDiff(Day,DateBook,GetDate()) >0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)) OR Active = 0";
         PreparedStatement pt = connection.prepareStatement(sql);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
@@ -166,7 +177,7 @@ public class DAOCustomerBookingCheckIn {
     public static ObservableList<BookingInfo> getListBooking() throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<BookingInfo> list_Booking = FXCollections.observableArrayList();
-        String sql = "select * from BookingInfo where  DateDiff(Day,DateBook,GetDate()) <=0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+        String sql = "select * from BookingInfo where  DateDiff(Day,DateBook,GetDate()) <=0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders) And Active = 1";
         PreparedStatement pt = connection.prepareStatement(sql);
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
@@ -540,7 +551,7 @@ public class DAOCustomerBookingCheckIn {
         try {
             Connection connection = connectDB.connectSQLServer();
             // Tạo đối tượng Statement.
-            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) =0 And Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+            String sql = "select * from bookinginfo where CustomerID=? And DateDiff(Day,DateBook,GetDate()) =0 And Bookinginfo.BookingID NOT IN (SELECT BookingID FROM CheckInOrders) And Bookinginfo.Active=1";
             // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
             PreparedStatement pt = connection.prepareStatement(sql);
             pt.setString(1, ID);
@@ -678,7 +689,7 @@ public class DAOCustomerBookingCheckIn {
 
     public static void AddNewBooking(BookingInfo bk) throws MalformedURLException, SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
-        String exm = "Insert into Bookinginfo values(?,?,?,?,?,?,?)";
+        String exm = "Insert into Bookinginfo values(?,?,?,?,?,?,?,?)";
         PreparedStatement pt = connection.prepareStatement(exm);
         pt.setString(1, bk.getBookID());
         pt.setString(2, bk.getCusID());
@@ -687,6 +698,7 @@ public class DAOCustomerBookingCheckIn {
         pt.setString(5, bk.getNote());
         pt.setInt(6, bk.getNumGuest());
         pt.setString(7, bk.getDate());
+        pt.setInt(8, 1);
         pt.execute();
         pt.close();
         connection.close();

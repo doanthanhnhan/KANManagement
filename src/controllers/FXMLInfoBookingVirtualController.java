@@ -86,7 +86,7 @@ public class FXMLInfoBookingVirtualController implements Initializable {
     @FXML
     private JFXButton btnCancel;
     private ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
-
+    private FXMLListBookingController fXMLListBookingController;
     /**
      * Initializes the controller class.
      */
@@ -188,6 +188,10 @@ public class FXMLInfoBookingVirtualController implements Initializable {
                 System.out.println("Delete successful");
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (FXMLListBookingController.check_formBooking_list) {
+                fXMLListBookingController = ConnectControllers.getfXMLListBookingController();
+                fXMLListBookingController.showUsersData();
             }
         }
         Stage stage = (Stage) anchorPaneBookingVirtual.getScene().getWindow();

@@ -490,7 +490,7 @@ public class FXMLInfoBookingController implements Initializable {
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                     //CREATE QR CODE FILE AND SEND EMAIL
                     String customerEmail = DAOCustomerBookingCheckIn.getCustomerEmail(boxIdCustomer.getValue());
-                    if (!FXMLInfoCustomerController.checkInfoCustomer || !FXMLInfoCustomerController.checkInfoCustomerAlready) {
+                    if ((!FXMLInfoCustomerController.checkInfoCustomer || !FXMLInfoCustomerController.checkInfoCustomerAlready)&& !customerEmail.equals("")) {
                         String content = "BookingID : " + BookingID.getValue() + ". Use the attached QRCode for checking in faster.";
                         QRCreate.create_Booking_QRCode(BookingID.getValue());
                         File file = new File("");

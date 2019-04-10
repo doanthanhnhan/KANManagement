@@ -37,6 +37,24 @@ public class ConnectControllers {
     public static DAOReActive reActive;
     public static FXMLReActiveMacAddressController fXMLReActiveMacAddressControllerController;
     public static FXMLListBookingController fXMLListBookingController;
+    public static FXMLListBookingVirtualController fXMLListBookingVirtualController;
+    public static FXMLInfoBookingVirtualController fXMLInfoBookingVirtualController;
+
+    public static FXMLInfoBookingVirtualController getfXMLInfoBookingVirtualController() {
+        return fXMLInfoBookingVirtualController;
+    }
+
+    public static void setfXMLInfoBookingVirtualController(FXMLInfoBookingVirtualController fXMLInfoBookingVirtualController) {
+        ConnectControllers.fXMLInfoBookingVirtualController = fXMLInfoBookingVirtualController;
+    }
+
+    public static FXMLListBookingVirtualController getfXMLListBookingVirtualController() {
+        return fXMLListBookingVirtualController;
+    }
+
+    public static void setfXMLListBookingVirtualController(FXMLListBookingVirtualController fXMLListBookingVirtualController) {
+        ConnectControllers.fXMLListBookingVirtualController = fXMLListBookingVirtualController;
+    }
 
     public static FXMLListBookingController getfXMLListBookingController() {
         return fXMLListBookingController;

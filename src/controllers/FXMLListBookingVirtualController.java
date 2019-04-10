@@ -69,7 +69,7 @@ import utils.showFXMLLogin;
  */
 public class FXMLListBookingVirtualController implements Initializable {
 
-    private static final int ROWS_PER_PAGE = 10;
+    private static final int ROWS_PER_PAGE = 20;
     private FilteredList<BookingInfo> filteredData;
     ObservableList<BookingInfo> listBooking = FXCollections.observableArrayList();
     public boolDecentralizationModel userRole;
@@ -99,12 +99,15 @@ public class FXMLListBookingVirtualController implements Initializable {
     private JFXButton btnSubmit;
     private boolean checkSubmit = false;
     private showFXMLLogin showFormLogin = new showFXMLLogin();
+    public static boolean checkformBookingVirtual = false;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ConnectControllers.setfXMLListBookingVirtualController(this);
+        checkformBookingVirtual = true;
         ToDate.valueProperty().addListener((obs, oldItem, newItem) -> {
             ToDate.setStyle("-jfx-default-color: #6447cd;");
         });

@@ -5,10 +5,15 @@
  */
 package controllers;
 
+import static controllers.ConnectControllers.fXMLMainFormController;
+import static controllers.FXMLListBookingVirtualController.bk;
 import static controllers.FXMLListEmployeeController.Emp;
 import static controllers.FXMLListEmployeeController.check_Edit_Action;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +27,8 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
@@ -32,13 +39,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.BookingInfo;
 import models.DAO;
 import models.DAOCustomerBookingCheckIn;
+import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
+import utils.AlertLoginAgain;
+import utils.GetInetAddress;
 import utils.StageLoader;
 import utils.showFXMLLogin;
 
@@ -57,7 +68,7 @@ public class FXMLListBookingController implements Initializable {
     private AnchorPane main_AnchorPane;
     @FXML
     private Pagination pagination;
-    private static final int ROWS_PER_PAGE = 10;
+    private static final int ROWS_PER_PAGE = 20;
     private FilteredList<BookingInfo> filteredData;
     @FXML
     private TableView<BookingInfo> table_ListBooking;
@@ -78,13 +89,13 @@ public class FXMLListBookingController implements Initializable {
     public int row_index;
     public static Boolean check_formBooking_list = false;
     public static BookingInfo bk;
+    private FXMLListBookingVirtualController fXMLListBookingVirtualController;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        contextMenu_Main.getItems().remove(menuItem_Delete);
         contextMenu_Main.getItems().remove(menuItem_Edit);
         check_formBooking_list = true;
         setColumns();
@@ -112,6 +123,9 @@ public class FXMLListBookingController implements Initializable {
         //11.SERVICE TYPE CRUD
         if (!userRole.ischeckBooking_Add()) {
             contextMenu_Main.getItems().remove(menuItem_Add);
+        }
+        if (!userRole.ischeckBooking_Delete()) {
+            contextMenu_Main.getItems().remove(menuItem_Delete);
         }
     }
 
@@ -249,7 +263,38 @@ public class FXMLListBookingController implements Initializable {
     }
 
     @FXML
-    private void handle_MenuItem_Delete_Action(ActionEvent event) {
+    private void handle_MenuItem_Delete_Action(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
+        if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Booking_Delete")) {
+            AlertLoginAgain.alertLogin();
+            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            Stage stage = (Stage) main_AnchorPane.getScene().getWindow();
+            stage.close();
+            stageMainForm.close();
+            showFormLogin.showFormLogin();
+        } else {
+            System.out.println("Kien");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Comfirm");
+            alert.setContentText("Do you want to delete " + bk.getBookID() + "?");
+            alert.showAndWait();
+            System.out.println(alert.getResult());
+            if (alert.getResult() == ButtonType.OK) {
+                try {
+                    DAOCustomerBookingCheckIn.deleteBookingActive(bk.getBookID());
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete Active = 0 for " + bk.getBookID(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                    System.out.println("Delete successful");
+                    showUsersData();
+                    if (FXMLListBookingVirtualController.checkformBookingVirtual) {
+                        fXMLListBookingVirtualController = ConnectControllers.getfXMLListBookingVirtualController();
+                        fXMLListBookingVirtualController.showUsersData();
+                    }
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     @FXML
