@@ -190,6 +190,7 @@ public class FXMLInfoBookingVirtualController implements Initializable {
                 Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (FXMLListBookingController.check_formBooking_list) {
+                System.out.println("vao check form");
                 fXMLListBookingController = ConnectControllers.getfXMLListBookingController();
                 fXMLListBookingController.showUsersData();
             }
