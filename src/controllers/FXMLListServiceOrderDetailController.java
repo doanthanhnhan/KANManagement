@@ -59,7 +59,14 @@ public class FXMLListServiceOrderDetailController implements Initializable {
     public boolDecentralizationModel userRole;
 
     public Boolean check_Edit_Action;
+    public boolean check_Add_Action = false;
+    public boolean check_Add_New = false;
     public ServiceOrderDetail serviceOrderDetailItem;
+    public String new_SO_ID;
+    public String new_SOD_Service_ID;
+    public int row_Index;
+    public int row_Add_New_Index;
+    public int pagination_Index;
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<ServiceOrderDetail> filteredData;
@@ -123,6 +130,9 @@ public class FXMLListServiceOrderDetailController implements Initializable {
                 menuItem_Delete.setDisable(false);
                 System.out.println(table_Service_Order_Detail.getSelectionModel().getSelectedItem().getServiceID());
                 serviceOrderDetailItem = table_Service_Order_Detail.getSelectionModel().getSelectedItem();
+
+                row_Index = table_Service_Order_Detail.getSelectionModel().getSelectedIndex();
+                pagination_Index = pagination.getCurrentPageIndex();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -278,6 +288,38 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         changeTableView(0, ROWS_PER_PAGE);
         pagination.currentPageIndexProperty().addListener(
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+
+        //Focus to the new item or editing item
+        if (check_Add_New) {
+            //Setting new SO index
+            for (ServiceOrderDetail item : listServiceOrderDetails) {
+                if (new_SO_ID.equals(item.getOrderID()) && new_SOD_Service_ID.equals(item.getServiceID())) {
+                    row_Add_New_Index = listServiceOrderDetails.indexOf(item);
+                    break;
+                }
+            }
+            Platform.runLater(() -> {
+                int focusPage = (int) row_Add_New_Index / ROWS_PER_PAGE;
+                int new_index = row_Add_New_Index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(focusPage);
+                changeTableView(focusPage, ROWS_PER_PAGE);
+                table_Service_Order_Detail.requestFocus();
+                table_Service_Order_Detail.getSelectionModel().select(new_index);
+                table_Service_Order_Detail.getFocusModel().focus(new_index);
+            });
+            check_Add_New = false;
+        } else {
+            //Forcus to the editing row
+            Platform.runLater(() -> {
+                //int focusPage = (int) row_index / ROWS_PER_PAGE;
+                //int new_index = row_index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(pagination_Index);
+                changeTableView(pagination_Index, ROWS_PER_PAGE);
+                table_Service_Order_Detail.requestFocus();
+                table_Service_Order_Detail.getSelectionModel().select(row_Index);
+                table_Service_Order_Detail.getFocusModel().focus(row_Index);
+            });
+        }
     }
 
     public void update_Service_Type_After_Remove() {
@@ -291,11 +333,11 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         selected_Service_Type.setServiceImportQuantity(serviceOrderDetailItem.getServiceImportQuantity());
         selected_Service_Type.setServiceName(serviceOrderDetailItem.getServiceName());
         selected_Service_Type.setServicePrice(serviceOrderDetailItem.getServicePrice());
-        selected_Service_Type.setServiceUnit(serviceOrderDetailItem.getServiceUnit());        
-        
+        selected_Service_Type.setServiceUnit(serviceOrderDetailItem.getServiceUnit());
+
         selected_Service_Type.setServiceInventory(serviceOrderDetailItem.getServiceInventory() + serviceOrderDetailItem.getServiceQuantity());
         selected_Service_Type.setServiceExportQuantity(serviceOrderDetailItem.getServiceExportQuantity() - serviceOrderDetailItem.getServiceQuantity());
-        
+
         selected_Service_Type.setUserName(mainFormController.getUserRole().getEmployee_ID());
         serviceTypeDAOImpl.editServiceType(selected_Service_Type, true);
     }
@@ -310,6 +352,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
             alert.show();
         } else {
             this.setCheck_Edit_Action(true);
+            check_Add_Action = false;
             if (mainOverViewPaneController != null) {
                 mainOverViewPaneController.check_Services_Button_Clicked = false;
             }
@@ -325,6 +368,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
         this.setCheck_Edit_Action(false);
+        check_Add_Action = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Add new Service Order Informations");
     }

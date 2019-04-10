@@ -629,4 +629,4 @@ SELECT * FROM ServicesOrderDetails WHERE OrderID = 'SO-20190410-181914' AND Acti
 DELETE FROM ServicesOrderDetails
 DELETE FROM ServicesOrders
 
-SELECT * FROM S
+

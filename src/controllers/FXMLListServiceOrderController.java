@@ -35,6 +35,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import models.DAO;
 import models.RoleDAOImpl;
+import models.RoomEX;
 import models.ServiceOrder;
 import models.ServiceOrderDAOImpl;
 import models.boolDecentralizationModel;
@@ -54,8 +55,15 @@ public class FXMLListServiceOrderController implements Initializable {
     public boolDecentralizationModel userRole;
 
     public Boolean check_Edit_Action;
+    public boolean check_Add_Action = false;
+    public boolean check_Add_New = false;
     public ServiceOrder serviceOrderItem;
     public String customer_Full_Name;
+    public String new_SO_ID;
+    public int row_Index;
+    public int row_Add_New_Index;
+    public int pagination_Index;
+    
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<ServiceOrder> filteredData;
@@ -119,6 +127,9 @@ public class FXMLListServiceOrderController implements Initializable {
                 System.out.println(table_Service_Order.getSelectionModel().getSelectedItem().getServiceOrderID());
                 serviceOrderItem = table_Service_Order.getSelectionModel().getSelectedItem();
                 customer_Full_Name = table_Service_Order.getSelectionModel().getSelectedItem().getCustomerFullName();
+                
+                row_Index = table_Service_Order.getSelectionModel().getSelectedIndex();
+                pagination_Index = pagination.getCurrentPageIndex();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -246,10 +257,42 @@ public class FXMLListServiceOrderController implements Initializable {
         changeTableView(0, ROWS_PER_PAGE);
         pagination.currentPageIndexProperty().addListener(
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
+        
+        //Focus to the new item or editing item
+        if (check_Add_New) {
+            //Setting new SO index
+            for (ServiceOrder item : listServiceOrders) {
+                if (new_SO_ID.equals(item.getServiceOrderID())) {
+                    row_Add_New_Index = listServiceOrders.indexOf(item);
+                    break;
+                }
+            }
+            Platform.runLater(() -> {
+                int focusPage = (int) row_Add_New_Index / ROWS_PER_PAGE;
+                int new_index = row_Add_New_Index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(focusPage);
+                changeTableView(focusPage, ROWS_PER_PAGE);
+                table_Service_Order.requestFocus();
+                table_Service_Order.getSelectionModel().select(new_index);
+                table_Service_Order.getFocusModel().focus(new_index);
+            });
+            check_Add_New = false;
+        } else {
+            //Forcus to the editing row
+            Platform.runLater(() -> {
+                //int focusPage = (int) row_index / ROWS_PER_PAGE;
+                //int new_index = row_index % ROWS_PER_PAGE;
+                pagination.setCurrentPageIndex(pagination_Index);
+                changeTableView(pagination_Index, ROWS_PER_PAGE);
+                table_Service_Order.requestFocus();
+                table_Service_Order.getSelectionModel().select(row_Index);
+                table_Service_Order.getFocusModel().focus(row_Index);
+            });
+        }
     }
 
     @FXML
-    private void handle_MenuItem_Edit_Action(ActionEvent event) {
+    private void handle_MenuItem_Edit_Action(ActionEvent event) {        
         if (serviceOrderItem.isServiceCheckOut()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Message");
@@ -258,6 +301,7 @@ public class FXMLListServiceOrderController implements Initializable {
             alert.show();
         } else {
             this.setCheck_Edit_Action(true);
+            check_Add_Action = false;
             if (mainOverViewPaneController != null) {
                 mainOverViewPaneController.check_Services_Button_Clicked = false;
             }
@@ -273,6 +317,7 @@ public class FXMLListServiceOrderController implements Initializable {
     @FXML
     private void handle_MenuItem_Add_Action(ActionEvent event) {
         this.setCheck_Edit_Action(false);
+        check_Add_Action = true;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Add new Service order Informations");
     }

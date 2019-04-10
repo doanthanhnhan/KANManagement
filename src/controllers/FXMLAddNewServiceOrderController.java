@@ -497,6 +497,21 @@ public class FXMLAddNewServiceOrderController implements Initializable {
                 + FormatName.format(txt_Service_Name.getText()),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
 
+        // Setting value for focusing new item
+        if (listServiceOrderDetailController != null) {
+            listServiceOrderDetailController.new_SO_ID = txt_Order_ID.getText();
+            listServiceOrderDetailController.new_SOD_Service_ID = comboBox_Service_ID.getValue();
+            listServiceOrderDetailController.check_Add_New = true;
+            listServiceOrderDetailController.showUsersData();
+        }
+        
+        if (listServiceOrderController != null) {
+            listServiceOrderController.new_SO_ID = txt_Order_ID.getText();
+            listServiceOrderController.check_Add_New = true;
+            listServiceOrderController.showUsersData();
+        }        
+
+        // Refresh form after adding new service type
         refresh_After_Add();
 
         btn_Add_Service.setDisable(true);
@@ -668,7 +683,22 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Edit ServiceOrderDetail, ServiceName: "
                 + FormatName.format(txt_Service_Name.getText()),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
-
+        
+        // Setting value for focusing new item
+        if (listServiceOrderDetailController != null) {
+            listServiceOrderDetailController.new_SO_ID = txt_Order_ID.getText();
+            listServiceOrderDetailController.new_SOD_Service_ID = comboBox_Service_ID.getValue();
+            listServiceOrderDetailController.check_Add_New = true;
+            listServiceOrderDetailController.showUsersData();
+        }
+        
+        if (listServiceOrderController != null) {
+            listServiceOrderController.new_SO_ID = txt_Order_ID.getText();
+            listServiceOrderController.check_Add_New = true;
+            listServiceOrderController.showUsersData();
+        }
+        
+        // Refresh form after adding new service type
         refresh_After_Add();
 
         btn_Edit_Service.setDisable(true);
@@ -694,6 +724,13 @@ public class FXMLAddNewServiceOrderController implements Initializable {
 
         txt_Discount.setEditable(true);
         txt_Order_Quantity.setEditable(true);
+
+        if (listServiceOrderController != null) {
+            listServiceOrderController.new_SO_ID = txt_Order_ID.getText();
+            listServiceOrderController.check_Add_New = true;
+            listServiceOrderController.showUsersData();
+        }
+
         setColumns();
         showUsersData();
     }
