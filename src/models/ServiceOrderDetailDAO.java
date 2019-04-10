@@ -27,5 +27,9 @@ public interface ServiceOrderDetailDAO {
 
     void updateSODCheckOut(boolean checkout, String serviceOrderID, String serviceID);
 
+    void update_CheckIN_SOD_CheckOut(String checkInID);
+    
+    boolean check_SOD_Per_SO_Finish(String serviceOrderID);
+
     void deleteServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail);
 }

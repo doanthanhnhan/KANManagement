@@ -39,6 +39,8 @@ import models.DAO;
 import models.RoleDAOImpl;
 import models.ServiceOrderDetail;
 import models.ServiceOrderDetailDAOImpl;
+import models.ServiceType;
+import models.ServiceTypeDAOImpl;
 import models.boolDecentralizationModel;
 import utils.FormatName;
 import utils.StageLoader;
@@ -53,6 +55,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
     ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
     ServiceOrderDetailDAOImpl serviceOrderDetailDAOImpl;
     RoleDAOImpl roleDAOImpl;
+    ServiceTypeDAOImpl serviceTypeDAOImpl;
     public boolDecentralizationModel userRole;
 
     public Boolean check_Edit_Action;
@@ -62,6 +65,8 @@ public class FXMLListServiceOrderDetailController implements Initializable {
     private FilteredList<ServiceOrderDetail> filteredData;
 
     private FXMLMainFormController mainFormController;
+    private FXMLMainOverViewPaneController mainOverViewPaneController;
+    private FXMLListServiceOrderController listServiceOrderController;
 
     @FXML
     private MenuItem menuItem_Edit;
@@ -91,8 +96,11 @@ public class FXMLListServiceOrderDetailController implements Initializable {
         System.out.println("List Service order details initialize...");
         ConnectControllers.setfXMLListServiceOrderDetailController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
+        mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
+        listServiceOrderController = ConnectControllers.getfXMLListServiceOrderController();
         serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
         roleDAOImpl = new RoleDAOImpl();
+        serviceTypeDAOImpl = new ServiceTypeDAOImpl();
         check_Edit_Action = false;
         setColumns();
         if (!serviceOrderDetailDAOImpl.getAllServiceOrdersDetails().isEmpty()) {
@@ -272,13 +280,46 @@ public class FXMLListServiceOrderDetailController implements Initializable {
                 (observable, oldValue, newValue) -> changeTableView(newValue.intValue(), ROWS_PER_PAGE));
     }
 
+    public void update_Service_Type_After_Remove() {
+        ServiceType selected_Service_Type = new ServiceType();
+        selected_Service_Type.setImageView(serviceOrderDetailItem.getImageView());
+        selected_Service_Type.setServiceDescription(serviceOrderDetailItem.getServiceDescription());
+        selected_Service_Type.setServiceExportDate(serviceOrderDetailItem.getServiceExportDate());
+        selected_Service_Type.setServiceID(serviceOrderDetailItem.getServiceID());
+        selected_Service_Type.setServiceImage(serviceOrderDetailItem.getServiceImage());
+        selected_Service_Type.setServiceImportDate(serviceOrderDetailItem.getServiceImportDate());
+        selected_Service_Type.setServiceImportQuantity(serviceOrderDetailItem.getServiceImportQuantity());
+        selected_Service_Type.setServiceName(serviceOrderDetailItem.getServiceName());
+        selected_Service_Type.setServicePrice(serviceOrderDetailItem.getServicePrice());
+        selected_Service_Type.setServiceUnit(serviceOrderDetailItem.getServiceUnit());        
+        
+        selected_Service_Type.setServiceInventory(serviceOrderDetailItem.getServiceInventory() + serviceOrderDetailItem.getServiceQuantity());
+        selected_Service_Type.setServiceExportQuantity(serviceOrderDetailItem.getServiceExportQuantity() - serviceOrderDetailItem.getServiceQuantity());
+        
+        selected_Service_Type.setUserName(mainFormController.getUserRole().getEmployee_ID());
+        serviceTypeDAOImpl.editServiceType(selected_Service_Type, true);
+    }
+
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
-        this.setCheck_Edit_Action(true);
-        System.out.println("Edit clicked and check = " + getCheck_Edit_Action() + " adress: " + getCheck_Edit_Action().hashCode());
-        StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Edit Service Order Informations");
-
+        if (serviceOrderDetailItem.isServiceCheckOut()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Message");
+            alert.setHeaderText("Warning");
+            alert.setContentText("This service had checked out so can not allow editing!");
+            alert.show();
+        } else {
+            this.setCheck_Edit_Action(true);
+            if (mainOverViewPaneController != null) {
+                mainOverViewPaneController.check_Services_Button_Clicked = false;
+            }
+            if (listServiceOrderController != null) {
+                listServiceOrderController.check_Edit_Action = false;
+            }
+            System.out.println("Edit clicked and check = " + getCheck_Edit_Action() + " adress: " + getCheck_Edit_Action().hashCode());
+            StageLoader stageLoader = new StageLoader();
+            stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Edit Service Order Informations");
+        }
     }
 
     @FXML
@@ -301,6 +342,7 @@ public class FXMLListServiceOrderDetailController implements Initializable {
                     + FormatName.format(serviceOrderDetailItem.getServiceID()),
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
             System.out.println("Delete successful");
+            update_Service_Type_After_Remove();
             showUsersData();
         }
     }

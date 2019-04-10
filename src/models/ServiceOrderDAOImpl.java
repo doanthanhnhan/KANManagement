@@ -14,8 +14,10 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import utils.connectDB;
 
 /**
@@ -49,7 +51,17 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
 
                     JFXCheckBox checkBox = new JFXCheckBox();
                     checkBox.setOnAction((event) -> {
-                        updateServiceFinish(!serviceOrder.isServiceFinish(), serviceOrder.getServiceOrderID());
+                        ServiceOrderDetailDAOImpl serviceOrderDetailDAOImpl = new ServiceOrderDetailDAOImpl();
+                        if (!serviceOrderDetailDAOImpl.check_SOD_Per_SO_Finish(serviceOrder.getServiceOrderID())) {
+                            updateServiceFinish(!serviceOrder.isServiceFinish(), serviceOrder.getServiceOrderID());
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Message");
+                            alert.setHeaderText("Error");
+                            alert.setContentText("Still having not finished items inside, so can not allow setting finish.");
+                            alert.show();
+                            checkBox.setSelected(false);
+                        }
                     });
                     if (serviceOrder.isServiceFinish()) {
                         checkBox.setSelected(true);
@@ -128,6 +140,53 @@ public class ServiceOrderDAOImpl implements ServiceOrderDAO {
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceOrderDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void update_CheckIn_SO_CheckOut(String checkInID) {
+        String sql = "UPDATE ServicesOrders SET CheckOut=1 WHERE OrderID IN (\n"
+                + "SELECT SO.OrderID FROM ServicesOrders SO\n"
+                + "INNER JOIN (SELECT RoomID FROM CheckInOrders WHERE CheckInID NOT IN (SELECT CheckInID FROM CheckOutOrders) \n"
+                + "AND CheckInID=?) CIO \n"
+                + "ON SO.RoomID = CIO.RoomID)";
+
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, checkInID);
+            //stmt.executeUpdate();            
+            System.out.println("Update row successful: " + stmt.executeUpdate());
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated Service Order in Database or Can't connect to Database");
+                alert.show();
+            });
+        }
+    }
+
+    @Override
+    public boolean check_For_Delete_Order(String serviceOrderID) {
+        String sql = "SELECT * FROM ServicesOrderDetails WHERE OrderID=? AND Active=1";
+
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, serviceOrderID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated Service Order in Database or Can't connect to Database");
+                alert.show();
+            });
+        }
+        return false;
     }
 
     @Override

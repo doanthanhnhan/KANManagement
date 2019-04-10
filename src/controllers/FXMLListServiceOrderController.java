@@ -55,11 +55,14 @@ public class FXMLListServiceOrderController implements Initializable {
 
     public Boolean check_Edit_Action;
     public ServiceOrder serviceOrderItem;
+    public String customer_Full_Name;
 
     private static final int ROWS_PER_PAGE = 20;
     private FilteredList<ServiceOrder> filteredData;
 
     private FXMLMainFormController mainFormController;
+    private FXMLMainOverViewPaneController mainOverViewPaneController;
+    private FXMLListServiceOrderDetailController listServiceOrderDetailController;
 
     @FXML
     private MenuItem menuItem_Edit;
@@ -89,6 +92,8 @@ public class FXMLListServiceOrderController implements Initializable {
         System.out.println("List Service Type initialize...");
         ConnectControllers.setfXMLListServiceOrderController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
+        mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
+        listServiceOrderDetailController = ConnectControllers.getfXMLListServiceOrderDetailController();
         serviceOrderDAOImpl = new ServiceOrderDAOImpl();
         roleDAOImpl = new RoleDAOImpl();
         check_Edit_Action = false;
@@ -113,6 +118,7 @@ public class FXMLListServiceOrderController implements Initializable {
                 menuItem_Delete.setDisable(false);
                 System.out.println(table_Service_Order.getSelectionModel().getSelectedItem().getServiceOrderID());
                 serviceOrderItem = table_Service_Order.getSelectionModel().getSelectedItem();
+                customer_Full_Name = table_Service_Order.getSelectionModel().getSelectedItem().getCustomerFullName();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -244,11 +250,24 @@ public class FXMLListServiceOrderController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
-        this.setCheck_Edit_Action(true);
-        System.out.println("Edit clicked and check = " + getCheck_Edit_Action() + " adress: " + getCheck_Edit_Action().hashCode());
-        StageLoader stageLoader = new StageLoader();
-        stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Edit Service order Informations");
-
+        if (serviceOrderItem.isServiceCheckOut()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Message");
+            alert.setHeaderText("Warning");
+            alert.setContentText("This service had checked out so can not allow editing!");
+            alert.show();
+        } else {
+            this.setCheck_Edit_Action(true);
+            if (mainOverViewPaneController != null) {
+                mainOverViewPaneController.check_Services_Button_Clicked = false;
+            }
+            if (listServiceOrderDetailController != null) {
+                listServiceOrderDetailController.check_Edit_Action = false;
+            }
+            System.out.println("Edit clicked and check = " + getCheck_Edit_Action() + " adress: " + getCheck_Edit_Action().hashCode());
+            StageLoader stageLoader = new StageLoader();
+            stageLoader.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png", "Edit Service order Informations - Customer name: " + customer_Full_Name);
+        }
     }
 
     @FXML
@@ -260,18 +279,30 @@ public class FXMLListServiceOrderController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Delete_Action(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Comfirm");
-        alert.setContentText("Do you want to delete this?");
-        alert.showAndWait();
-        System.out.println(alert.getResult());
-        if (alert.getResult() == ButtonType.OK) {
-            serviceOrderDAOImpl.deleteServiceOrder(serviceOrderItem);
-            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceOrder ID: "
-                    + FormatName.format(serviceOrderItem.getServiceOrderID()),
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
-            System.out.println("Delete successful");
-            showUsersData();
+        if (serviceOrderItem.isServiceCheckOut()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setContentText("This order was checked out so can't allow deleting!");
+            alert.show();
+        } else if (serviceOrderDAOImpl.check_For_Delete_Order(serviceOrderItem.getServiceOrderID())) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setContentText("Must remove all items of this order before deleting!");
+            alert.show();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Comfirm");
+            alert.setContentText("Do you want to delete this?");
+            alert.showAndWait();
+            System.out.println(alert.getResult());
+            if (alert.getResult() == ButtonType.OK) {
+                serviceOrderDAOImpl.deleteServiceOrder(serviceOrderItem);
+                DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Delete ServiceOrder ID: "
+                        + FormatName.format(serviceOrderItem.getServiceOrderID()),
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+                System.out.println("Delete successful");
+                showUsersData();
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextArea?>
@@ -22,64 +23,101 @@
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <VBox spacing="20.0" BorderPane.alignment="CENTER">
                <children>
                   <HBox alignment="CENTER" spacing="50.0">
                      <children>
-                        <VBox prefHeight="200.0" spacing="20.0">
+                        <VBox spacing="20.0">
                            <children>
-                              <JFXTextField fx:id="txt_Check_In_ID" labelFloat="true" prefWidth="500.0" promptText="Check in ID" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
-                              <JFXTextField fx:id="txt_Check_Out_ID" labelFloat="true" prefWidth="500.0" promptText="Check out ID" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
-                              <JFXTextField fx:id="txt_Customer_ID" labelFloat="true" prefWidth="500.0" promptText="Customer ID" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
-                              <JFXTextField fx:id="txt_Full_Name" editable="false" labelFloat="true" prefWidth="500.0" promptText="Customer full name" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
-                              <JFXTextField fx:id="txt_Room_ID" labelFloat="true" prefWidth="500.0" promptText="Room ID" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
-                              <JFXTextField fx:id="txt_Total_Guests" labelFloat="true" prefWidth="500.0" promptText="Total Guests" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
+                              <HBox prefWidth="600.0" spacing="20.0">
+                                 <children>
+                                    <JFXTextField fx:id="txt_Check_In_ID" labelFloat="true" prefWidth="600.0" promptText="Check in ID" styleClass="te">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="txt_Check_Out_ID" labelFloat="true" prefWidth="600.0" promptText="Check out ID" styleClass="te">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefWidth="600.0" spacing="20.0">
+                                 <children>
+                                    <JFXTextField fx:id="txt_Customer_ID" labelFloat="true" prefWidth="600.0" promptText="Customer ID" styleClass="te">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="txt_Full_Name" editable="false" labelFloat="true" prefWidth="600.0" promptText="Customer full name" styleClass="te">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefWidth="600.0" spacing="20.0">
+                                 <children>
+                                    <JFXTextField fx:id="txt_Room_ID" labelFloat="true" prefWidth="600.0" promptText="Room ID" styleClass="te">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="txt_Total_Guests" labelFloat="true" prefWidth="600.0" promptText="Total Guests" styleClass="te">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
-                        <VBox prefHeight="200.0" spacing="20.0">
+                        <VBox spacing="20.0">
                            <children>
-                              <JFXDatePicker fx:id="datePicker_Check_In" prefWidth="500.0" promptText="Check in date" showWeekNumbers="true" />
-                              <JFXDatePicker fx:id="datePicker_Check_Out" layoutX="10.0" layoutY="10.0" prefWidth="500.0" promptText="Check out date" showWeekNumbers="true" />
-                              <JFXComboBox fx:id="comboBox_Payment_Method" labelFloat="true" prefWidth="500.0" promptText="Customer payment method" />
-                              <JFXTextField fx:id="txt_Discount" editable="false" labelFloat="true" prefWidth="500.0" promptText="Discount" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
-                              <JFXTextField fx:id="txt_Tax" editable="false" labelFloat="true" layoutX="10.0" layoutY="160.0" prefWidth="500.0" promptText="Tax" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
-                              <JFXTextField fx:id="txt_Total_Bill" editable="false" labelFloat="true" layoutX="10.0" layoutY="211.0" prefWidth="500.0" promptText="Total Bill amount" styleClass="te">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXTextField>
+                              <HBox prefWidth="600.0" spacing="20.0">
+                                 <children>
+                                    <JFXDatePicker fx:id="datePicker_Check_In" prefWidth="600.0" promptText="Check in date" showWeekNumbers="true" />
+                                    <JFXDatePicker fx:id="datePicker_Check_Out" prefWidth="600.0" promptText="Check out date" showWeekNumbers="true" />
+                                 </children>
+                              </HBox>
+                              <HBox prefWidth="600.0" spacing="20.0">
+                                 <children>
+                                    <JFXComboBox fx:id="comboBox_Payment_Method" labelFloat="true" prefWidth="600.0" promptText="Customer payment method" />
+                                    <HBox prefWidth="600.0" spacing="20.0">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Discount" editable="false" labelFloat="true" prefWidth="600.0" promptText="Discount" styleClass="te">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="txt_Tax" editable="false" labelFloat="true" prefWidth="600.0" promptText="Tax" styleClass="te">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox prefWidth="600.0" spacing="20.0">
+                                 <children>
+                                    <JFXTextField fx:id="txt_Total_Bill" editable="false" labelFloat="true" prefWidth="600.0" promptText="Total Bill amount" styleClass="te">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <HBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="20.0">
+                                       <children>
+                                          <JFXCheckBox fx:id="checkBox_Allow_OverTime_CO" checkedColor="#6747cd" onAction="#handle_Allow_OverTime_CO_Action" text="Allow over time check out" textFill="#6467cd" unCheckedColor="#6747cd">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
                      </children>
@@ -88,12 +126,12 @@
                      <children>
                         <VBox spacing="20.0">
                            <children>
-                              <TableView fx:id="tableView_Service_Order" prefWidth="500.0" />
+                              <TableView fx:id="tableView_Service_Order" prefHeight="500.0" prefWidth="600.0" />
                            </children>
                         </VBox>
                         <VBox spacing="20.0">
                            <children>
-                              <JFXTextArea fx:id="txt_Area_Total_Bill" editable="false" labelFloat="true" prefHeight="300.0" prefWidth="500.0" promptText="Bill detail">
+                              <JFXTextArea fx:id="txt_Area_Total_Bill" editable="false" labelFloat="true" prefHeight="500.0" prefWidth="600.0" promptText="Bill detail">
                                  <font>
                                     <Font name="Monospaced Bold" size="15.0" />
                                  </font>

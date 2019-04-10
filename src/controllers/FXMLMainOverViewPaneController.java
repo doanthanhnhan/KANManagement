@@ -59,6 +59,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
     private FilteredList<Room> filteredRoom;
 
     FXMLMainFormController mainFormController;
+    FXMLListServiceOrderController listServiceOrderController;
+    FXMLListServiceOrderDetailController listServiceOrderDetailController;
 
     public Boolean check_Services_Button_Clicked;
     public Boolean check_Check_In_Button_Clicked;
@@ -157,6 +159,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
         ConnectControllers.setfXMLMainOverViewPaneController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
+        listServiceOrderController = ConnectControllers.getfXMLListServiceOrderController();
+        listServiceOrderDetailController = ConnectControllers.getfXMLListServiceOrderDetailController();
 
         //Initialize label room property
         init_Label_Room_Property();
@@ -483,10 +487,16 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 btn_Services.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " services!");
                     check_Services_Button_Clicked = true;
+                    if (listServiceOrderDetailController != null) {
+                        listServiceOrderDetailController.check_Edit_Action = false;
+                    }
+                    if (listServiceOrderController != null) {
+                        listServiceOrderController.check_Edit_Action = false;
+                    }
                     service_Room_ID = label_Room_Number.getText();
                     service_Customer_ID = listRoom.getCustomerID();
                     mainFormController.formLoader("/fxml/FXMLAddNewServiceOrder.fxml", "/images/KAN Logo.png",
-                            "Add new Service Order for Room: " + label_Room_Number.getText());
+                            "Add new Service Order for Room: " + label_Room_Number.getText() + " and Customer Name: " + listRoom.getCustomerName());
                 });
                 label_Room_Number.setText(listRoom.getRoomID());
                 if (listRoom.getRoomStatus().equals("Reserved")) {

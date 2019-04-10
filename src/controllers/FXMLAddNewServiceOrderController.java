@@ -259,93 +259,157 @@ public class FXMLAddNewServiceOrderController implements Initializable {
         });
 
         //CHECK IF OPEN FOR EDITING
-        if (listServiceOrderController != null) {
+        if (listServiceOrderController != null && listServiceOrderDetailController == null && mainOverViewPaneController == null) {
+            // CASE 1: LIST SO OPENED
             if (listServiceOrderController.check_Edit_Action) {
-                //Initialize OrderID
-                txt_Order_ID.setText(listServiceOrderController.serviceOrderItem.getServiceOrderID());
-                //Order date
-                datePicker_Order_Date.setValue(listServiceOrderController.serviceOrderItem.getServiceOrderTime().toLocalDate());
-                //Initialize Button
-                btn_Save_Order.setText("Edit order");
-                btn_Save_Order.setDisable(true);
-
-                //Initialize ComboBox
-                comboBox_Customer_ID.setValue(listServiceOrderController.serviceOrderItem.getCustomerID());
-                comboBox_Room_ID.setValue(listServiceOrderController.serviceOrderItem.getRoomID());
-                //Setting after loading finished
-                comboBox_Customer_ID.setDisable(true);
-                comboBox_Room_ID.setDisable(true);
-                comboBox_Service_ID.setDisable(false);
-                comboBox_Service_ID.requestFocus();
-                txt_Note.setDisable(true);
-
-                txt_Discount.setEditable(true);
-                txt_Order_Quantity.setEditable(true);
-                setColumns();
-                showUsersData();
+                open_Editing_From_ListSO();
             } else {
                 //Initialize OrderID
-                txt_Order_ID.setText("KAN-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+                txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
                 //Order date
                 datePicker_Order_Date.setValue(LocalDate.now());
             }
-        } else if (listServiceOrderDetailController != null) {
+        } else if (listServiceOrderController == null && listServiceOrderDetailController != null && mainOverViewPaneController == null) {
+            // CASE 2: LIST SOD OPENED
             if (listServiceOrderDetailController.check_Edit_Action) {
-                //Initialize OrderID
-                txt_Order_ID.setText(listServiceOrderDetailController.serviceOrderDetailItem.getOrderID());
-                //Order date
-                datePicker_Order_Date.setValue(listServiceOrderDetailController.serviceOrderDetailItem.getServiceOrderDate().toLocalDate());
-                //Initialize Button
-                btn_Save_Order.setText("Edit order");
-                btn_Save_Order.setDisable(true);
-                //Initialize ComboBox
-                comboBox_Customer_ID.setValue(listServiceOrderDetailController.serviceOrderDetailItem.getCustomerID());
-                comboBox_Room_ID.setValue(listServiceOrderDetailController.serviceOrderDetailItem.getRoomID());
-
-                //Setting after loading finished
-                comboBox_Customer_ID.setDisable(true);
-                comboBox_Room_ID.setDisable(true);
-                comboBox_Service_ID.setDisable(false);
-                comboBox_Service_ID.requestFocus();
-                txt_Note.setDisable(true);
-
-                txt_Discount.setEditable(true);
-                txt_Order_Quantity.setEditable(true);
-                setColumns();
-                showUsersData();
+                open_Editing_From_ListSOD();
             } else {
                 //Initialize OrderID
-                txt_Order_ID.setText("KAN-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+                txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
                 //Order date
                 datePicker_Order_Date.setValue(LocalDate.now());
             }
-        } else if (mainOverViewPaneController != null) {
-            if (mainOverViewPaneController.check_Services_Button_Clicked) {
-                //Initialize OrderID
-                txt_Order_ID.setText("KAN-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
-                //Order date
-                datePicker_Order_Date.setValue(LocalDate.now());
-
-                //Initialize ComboBox
-                comboBox_Customer_ID.setValue(mainOverViewPaneController.service_Customer_ID);
-                comboBox_Room_ID.setValue(mainOverViewPaneController.service_Room_ID);
-
-                //Setting after loading finished
-                comboBox_Customer_ID.setDisable(true);
-                comboBox_Room_ID.setDisable(true);
-
+        } else if (listServiceOrderController != null && listServiceOrderDetailController != null && mainOverViewPaneController == null) {
+            // CASE 3: LIST SO OPENED && LIST SOD OPENED
+            if (listServiceOrderController.check_Edit_Action) {
+                open_Editing_From_ListSOD();
+            } else if (listServiceOrderDetailController.check_Edit_Action) {
+                open_Editing_From_ListSOD();
             } else {
                 //Initialize OrderID
-                txt_Order_ID.setText("KAN-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+                txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+                //Order date
+                datePicker_Order_Date.setValue(LocalDate.now());
+            }
+        } else if (listServiceOrderController == null && listServiceOrderDetailController == null && mainOverViewPaneController != null) {
+            // CASE 4: MAIN OVERVIEW OPENED
+            if (mainOverViewPaneController.check_Services_Button_Clicked) {
+                open_Add_New_From_Main_Form();
+            } else {
+                //Initialize OrderID
+                txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+                //Order date
+                datePicker_Order_Date.setValue(LocalDate.now());
+            }
+        } else if (listServiceOrderController != null && listServiceOrderDetailController == null && mainOverViewPaneController != null) {
+            // CASE 4: MAIN OVERVIEW OPENED && LIST SO OPENED
+            if (mainOverViewPaneController.check_Services_Button_Clicked) {
+                open_Add_New_From_Main_Form();
+            } else if (listServiceOrderController.check_Edit_Action) {
+                open_Editing_From_ListSO();
+            } else {
+                //Initialize OrderID
+                txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+                //Order date
+                datePicker_Order_Date.setValue(LocalDate.now());
+            }
+        } else if (listServiceOrderController == null && listServiceOrderDetailController != null && mainOverViewPaneController != null) {
+            // CASE 4: MAIN OVERVIEW OPENED && LIST SO OPENED
+            if (mainOverViewPaneController.check_Services_Button_Clicked) {
+                open_Add_New_From_Main_Form();
+            } else if (listServiceOrderDetailController.check_Edit_Action) {
+                open_Editing_From_ListSOD();
+            } else {
+                //Initialize OrderID
+                txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+                //Order date
+                datePicker_Order_Date.setValue(LocalDate.now());
+            }
+        } else if (listServiceOrderController != null && listServiceOrderDetailController != null && mainOverViewPaneController != null) {
+            // CASE 4: MAIN OVERVIEW OPENED && LIST SO OPENED
+            if (mainOverViewPaneController.check_Services_Button_Clicked) {
+                open_Add_New_From_Main_Form();
+            } else if (listServiceOrderController.check_Edit_Action) {
+                open_Editing_From_ListSO();
+            } else if (listServiceOrderDetailController.check_Edit_Action) {
+                open_Editing_From_ListSOD();
+            } else {
+                //Initialize OrderID
+                txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
                 //Order date
                 datePicker_Order_Date.setValue(LocalDate.now());
             }
         } else {
             //Initialize OrderID
-            txt_Order_ID.setText("KAN-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+            txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
             //Order date
             datePicker_Order_Date.setValue(LocalDate.now());
         }
+    }
+
+    public void open_Editing_From_ListSO() {
+        //Initialize OrderID
+        txt_Order_ID.setText(listServiceOrderController.serviceOrderItem.getServiceOrderID());
+        //Order date
+        datePicker_Order_Date.setValue(listServiceOrderController.serviceOrderItem.getServiceOrderTime().toLocalDate());
+        //Initialize Button
+        btn_Save_Order.setText("Edit order");
+        btn_Save_Order.setDisable(true);
+
+        //Initialize ComboBox
+        comboBox_Customer_ID.setValue(listServiceOrderController.serviceOrderItem.getCustomerID());
+        comboBox_Room_ID.setValue(listServiceOrderController.serviceOrderItem.getRoomID());
+        //Setting after loading finished
+        comboBox_Customer_ID.setDisable(true);
+        comboBox_Room_ID.setDisable(true);
+        comboBox_Service_ID.setDisable(false);
+        comboBox_Service_ID.requestFocus();
+        txt_Note.setDisable(true);
+
+        txt_Discount.setEditable(true);
+        txt_Order_Quantity.setEditable(true);
+        setColumns();
+        showUsersData();
+    }
+
+    public void open_Editing_From_ListSOD() {
+        //Initialize OrderID
+        txt_Order_ID.setText(listServiceOrderDetailController.serviceOrderDetailItem.getOrderID());
+        //Order date
+        datePicker_Order_Date.setValue(listServiceOrderDetailController.serviceOrderDetailItem.getServiceOrderDate().toLocalDate());
+        //Initialize Button
+        btn_Save_Order.setText("Edit order");
+        btn_Save_Order.setDisable(true);
+        //Initialize ComboBox
+        comboBox_Customer_ID.setValue(listServiceOrderDetailController.serviceOrderDetailItem.getCustomerID());
+        comboBox_Room_ID.setValue(listServiceOrderDetailController.serviceOrderDetailItem.getRoomID());
+
+        //Setting after loading finished
+        comboBox_Customer_ID.setDisable(true);
+        comboBox_Room_ID.setDisable(true);
+        comboBox_Service_ID.setDisable(false);
+        comboBox_Service_ID.requestFocus();
+        txt_Note.setDisable(true);
+
+        txt_Discount.setEditable(true);
+        txt_Order_Quantity.setEditable(true);
+        setColumns();
+        showUsersData();
+    }
+
+    public void open_Add_New_From_Main_Form() {
+        //Initialize OrderID
+        txt_Order_ID.setText("SO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
+        //Order date
+        datePicker_Order_Date.setValue(LocalDate.now());
+
+        //Initialize ComboBox
+        comboBox_Customer_ID.setValue(mainOverViewPaneController.service_Customer_ID);
+        comboBox_Room_ID.setValue(mainOverViewPaneController.service_Room_ID);
+
+        //Setting after loading finished
+        comboBox_Customer_ID.setDisable(true);
+        comboBox_Room_ID.setDisable(true);
     }
 
     public void refresh_Service_Type() {

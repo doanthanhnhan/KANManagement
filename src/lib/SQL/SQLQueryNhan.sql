@@ -536,11 +536,15 @@ INSERT INTO ServicesOrderDetails(OrderID, ServiceID, UserName, ServiceQuantity, 
 ('Order002','KANService004', 'admin', 15, 30, 0.3),
 ('Order002','KANService006', 'admin', 10, 15, 0.05),
 
-SELECT SOD.OrderID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, CIO.CheckInDate, CIO.CheckInID
-FROM ServicesOrderDetails SOD 
+SELECT SOD.OrderID , SOD.ServiceID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, ST.*, SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, 
+	CIO.CheckInDate, CIO.CheckInID,
+	CASE WHEN C.CustomerMidName <> '' THEN C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName
+	ELSE C.CustomerFirstName+' ' +C.CustomerLastName END AS 'CustomerFullName'
+FROM ServicesOrderDetails SOD
 INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID
 INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID 
 INNER JOIN CheckInOrders CIO ON SO.RoomID = CIO.RoomID
+INNER JOIN Customers C ON C.CustomerID = CIO.CustomerID
 WHERE CIO.CheckInID='CI-BK-2019-03-28-00-17-05-57000' AND CIO.RoomID='R0101' AND SOD.Active=1
 WHERE SOD.OrderID='Order001' 
 
@@ -603,3 +607,26 @@ SELECT C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName FROM C
 SELECT * FROM Customers
 SELECT * FROM view_RoomProperty
 
+UPDATE ServicesOrderDetails SET Finish=1 WHERE ServiceID='Kanservice003' AND OrderID='KAN-20190408-101406'
+
+UPDATE ServicesOrderDetails SET CheckOut=0 WHERE OrderID IN (
+SELECT SO.OrderID FROM ServicesOrders SO
+INNER JOIN (SELECT RoomID FROM CheckInOrders WHERE CheckInID NOT IN (SELECT CheckInID FROM CheckOutOrders) 
+AND CheckInID='CI-BK-2019-04-08-00-12-07-36100') CIO 
+ON SO.RoomID = CIO.RoomID)
+
+UPDATE ServicesOrders SET CheckOut=0 WHERE OrderID IN (
+SELECT SO.OrderID FROM ServicesOrders SO
+INNER JOIN (SELECT RoomID FROM CheckInOrders WHERE CheckInID NOT IN (SELECT CheckInID FROM CheckOutOrders) 
+AND CheckInID='CI-BK-2019-04-08-17-45-22-87600') CIO 
+ON SO.RoomID = CIO.RoomID)
+
+SELECT * FROM CheckInOrders
+SELECT * FROM CheckOutOrders
+SELECT * FROM ServicesOrders
+SELECT * FROM ServicesOrderDetails
+SELECT * FROM ServicesOrderDetails WHERE OrderID = 'SO-20190410-181914' AND Active=1
+DELETE FROM ServicesOrderDetails
+DELETE FROM ServicesOrders
+
+SELECT * FROM S

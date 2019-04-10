@@ -124,7 +124,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 + "ST.* FROM ServicesOrderDetails SOD \n"
                 + "INNER JOIN ServiceType ST\n"
                 + "ON SOD.ServiceID = ST.ServiceID\n"
-                + "WHERE SOD.OrderID='" + serviceOrderID + "'";
+                + "WHERE SOD.Active=1 AND SOD.OrderID='" + serviceOrderID + "'";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
         try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -395,6 +395,51 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 alert.show();
             });
         }
+    }
+
+    @Override
+    public void update_CheckIN_SOD_CheckOut(String checkInID) {
+        String sql = "UPDATE ServicesOrderDetails SET CheckOut=1 WHERE OrderID IN (\n"
+                + "SELECT SO.OrderID FROM ServicesOrders SO\n"
+                + "INNER JOIN (SELECT RoomID FROM CheckInOrders WHERE CheckInID NOT IN (SELECT CheckInID FROM CheckOutOrders) \n"
+                + "AND CheckInID=?) CIO \n"
+                + "ON SO.RoomID = CIO.RoomID)";
+
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, checkInID);
+            stmt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
+                alert.show();
+            });
+        }
+    }
+
+    @Override
+    public boolean check_SOD_Per_SO_Finish(String serviceOrderID) {
+        String sql = "SELECT * FROM ServicesOrderDetails WHERE OrderID=? AND Finish=0";        
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, serviceOrderID);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                return true;
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Can't connect to Database");
+                alert.show();
+            });
+        }
+        return false;
     }
 
     @Override
