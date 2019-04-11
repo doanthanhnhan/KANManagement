@@ -75,6 +75,11 @@ public class PatternValided {
         return Number.matcher(value).matches();
     }
 
+    public static Boolean PatternRoomArea(String value) {
+        Pattern Number = Pattern.compile("^[\\d][\\d]{0,4}\\.?[\\d]{0,3}$");
+        return Number.matcher(value).matches();
+    }
+
     /**
      * Pattern validation for JFXTextField
      *
@@ -88,6 +93,7 @@ public class PatternValided {
     public static Boolean validateTextField(HBox hbox, JFXTextField textField, String regexString, String warningEmpty, String warningPattern) {
         Boolean check;
         Pattern pattern = Pattern.compile(regexString);
+
         if (textField.getText().equals("")) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
@@ -166,5 +172,55 @@ public class PatternValided {
             check = false;
         }
         return check;
+    }
+
+    public static void validateTextField_New(JFXTextField textField, String regexString) {
+        Pattern pattern = Pattern.compile(regexString);
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                if (!newValue.isEmpty()) {
+                    if (pattern.matcher(newValue).matches()) {
+                        textField.getStyleClass().removeAll("text-field-fault");
+                    } else {
+                        textField.setText(oldValue);
+                        textField.getStyleClass().add("text-field-fault");
+                    }
+                } else {
+                    textField.setText("");
+                    textField.getStyleClass().removeAll("text-field-fault");
+                }
+            }
+        });
+    }
+
+    public static void validateRoomID_New(JFXTextField textField, String regexString) {
+        Pattern pattern = Pattern.compile(regexString);
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                if (!newValue.isEmpty()) {
+                    if (pattern.matcher(newValue).matches()) {
+                        textField.getStyleClass().removeAll("text-field-fault");
+                    } else {
+                        if (newValue.length() < 3) {
+                            textField.setText("R-");
+                            textField.getStyleClass().add("text-field-fault");
+                        } else if (newValue.length() < 7) {
+                            for (int i = 2; i < newValue.length(); i++) {
+                                if (!Character.isDigit(newValue.charAt(i))) {
+                                    textField.setText(oldValue);
+                                    textField.getStyleClass().add("text-field-fault");
+                                }
+                            }
+                        } else {
+                            textField.setText(oldValue);
+                            textField.getStyleClass().removeAll("text-field-fault");
+                        }                        
+                    }
+                } else {
+                    textField.setText("");
+                    textField.getStyleClass().removeAll("text-field-fault");
+                }
+            }
+        });
     }
 }
