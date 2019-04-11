@@ -593,38 +593,56 @@ public class FXMLInfoBookingController implements Initializable {
             });
         } else if (DAOCustomerBookingCheckIn.check_RoomIdAgain(boxIdRoom.getValue(), String.valueOf(DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
                 String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))) && list_Booking_Info.isEmpty()) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("This RoomID Can Not Booking Please Choose Again !!!");
-            boxIdRoom.setStyle("-jfx-default-color: RED;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            boxIdRoom.requestFocus();
+            Platform.runLater(() -> {
+                System.out.println("da vao chekc trung");
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setText("This RoomID Can Not Booking Please Choose Again !!!");
+                boxIdRoom.setStyle("-jfx-default-color: RED;");
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                boxIdRoom.requestFocus();
+                try {
+                    boxIdRoom.setItems(DAOCustomerBookingCheckIn.getAllRoomBooking(String.valueOf(DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+                            String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))));
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
         } else if (DAOCustomerBookingCheckIn.check_RoomIdAgainBookingalready(boxIdRoom.getValue(), String.valueOf(DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
-                String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),BookingID.getValue()) && !list_Booking_Info.isEmpty()) {
-            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-            icon.setSize("16");
-            icon.setStyleClass("jfx-glyhp-icon");
-            Label label = new Label();
-            label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-            label.setPrefSize(350, 35);
-            label.setAlignment(Pos.CENTER_LEFT);
-            label.setText("This RoomID Can Not Booking Please Choose Again !!!");
-            boxIdRoom.setStyle("-jfx-default-color: RED;");
-            HboxContent.setAlignment(Pos.CENTER_LEFT);
-            HboxContent.setSpacing(10);
-            HboxContent.getChildren().clear();
-            HboxContent.getChildren().add(icon);
-            HboxContent.getChildren().add(label);
-            boxIdRoom.requestFocus();
+                String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), BookingID.getValue()) && !list_Booking_Info.isEmpty()) {
+            Platform.runLater(() -> {
+                System.out.println("da vao chekc trung roi");
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setText("This RoomID Can Not Booking Please Choose Again !!!");
+                boxIdRoom.setStyle("-jfx-default-color: RED;");
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                boxIdRoom.requestFocus();
+                try {
+                    boxIdRoom.setItems(DAOCustomerBookingCheckIn.getAllRoomBookingNoCheck(String.valueOf(DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+                                String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), BookingID.getValue()));
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
         } else {
             System.out.println("trong else" + FXMLInfoCustomerController.checkInfoCustomer);
             Platform.runLater(() -> {
@@ -671,7 +689,7 @@ public class FXMLInfoBookingController implements Initializable {
                     customerIdConect = boxIdCustomer.getValue();
                     if (!roomID.equals(boxIdRoom.getValue())) {
                         try {
-                            DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue(),String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+                            DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue(), String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
                             DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Change Room for bookingID= " + BookingID.getValue(),
                                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                         } catch (ClassNotFoundException | SQLException ex) {
