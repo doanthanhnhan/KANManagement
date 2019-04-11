@@ -25,7 +25,7 @@
          <center>
             <VBox spacing="20.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER" spacing="50.0">
+                  <HBox alignment="CENTER" spacing="20.0">
                      <children>
                         <VBox spacing="20.0">
                            <children>
@@ -59,16 +59,34 @@
                               </HBox>
                               <HBox prefWidth="600.0" spacing="20.0">
                                  <children>
-                                    <JFXTextField fx:id="txt_Room_ID" labelFloat="true" prefWidth="600.0" promptText="Room ID" styleClass="te">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
-                                    <JFXTextField fx:id="txt_Total_Guests" labelFloat="true" prefWidth="600.0" promptText="Total Guests" styleClass="te">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
+                                    <HBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="20.0">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Room_ID" labelFloat="true" prefWidth="600.0" promptText="Room ID" styleClass="te">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="txt_Total_Guests" labelFloat="true" prefWidth="600.0" promptText="Total Guests" styleClass="te">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="20.0">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Customer_Give" labelFloat="true" prefWidth="600.0" promptText="Customer Give" styleClass="te">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="txt_Customer_Change" editable="false" labelFloat="true" prefWidth="600.0" promptText="Customer Change" styleClass="te">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
                                  </children>
                               </HBox>
                            </children>
@@ -109,7 +127,12 @@
                                     </JFXTextField>
                                     <HBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="20.0">
                                        <children>
-                                          <JFXCheckBox fx:id="checkBox_Allow_OverTime_CO" checkedColor="#6747cd" onAction="#handle_Allow_OverTime_CO_Action" text="Allow over time check out" textFill="#6467cd" unCheckedColor="#6747cd">
+                                          <JFXCheckBox fx:id="checkBox_Allow_OverTime_CO" checkedColor="#6747cd" onAction="#handle_Allow_OverTime_CO_Action" prefWidth="600.0" text="Allow over time" textFill="#6467cd" unCheckedColor="#6747cd">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="checkBox_All_Rooms" checkedColor="#6747cd" onAction="#handle_Allow_OverTime_CO_Action" prefWidth="600.0" text="All rooms" textFill="#6467cd" unCheckedColor="#6747cd">
                                              <font>
                                                 <Font name="System Bold" size="15.0" />
                                              </font>
@@ -122,7 +145,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" spacing="50.0">
+                  <HBox alignment="CENTER" spacing="20.0">
                      <children>
                         <VBox spacing="20.0">
                            <children>

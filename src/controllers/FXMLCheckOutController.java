@@ -63,6 +63,7 @@ import models.ServiceOrderDAOImpl;
 import models.ServiceOrderDetail;
 import models.ServiceOrderDetailDAOImpl;
 import utils.FormatName;
+import utils.PatternValided;
 import utils.PrintReport;
 import utils.QRCreate;
 import utils.QRWebCam;
@@ -143,6 +144,12 @@ public class FXMLCheckOutController implements Initializable {
     private WebView webView_ToolTip;
     @FXML
     private JFXCheckBox checkBox_Allow_OverTime_CO;
+    @FXML
+    private JFXTextField txt_Customer_Give;
+    @FXML
+    private JFXTextField txt_Customer_Change;
+    @FXML
+    private JFXCheckBox checkBox_All_Rooms;
 
     /**
      * Initializes the controller class.
@@ -182,6 +189,7 @@ public class FXMLCheckOutController implements Initializable {
         listPayments.addAll("Cash", "Credit and Debit card", "Direct debit", "EFTPOS",
                 "Online Payment", "Cheque", "Gift cards and vouchers", "Bitcoin and digital currencies");
         comboBox_Payment_Method.getItems().addAll(listPayments);
+        comboBox_Payment_Method.setValue("Cash");
         // Init stringbuilder     
         string_Total_Bill = new StringBuilder();
 
@@ -192,12 +200,29 @@ public class FXMLCheckOutController implements Initializable {
         txt_Total_Guests.setText(checkInRoom.getNumberOfCustomer().toString());
         txt_Full_Name.setText(mainOverViewPaneController.service_Customer_Full_Name);
         //txt_Discount.setText();
-
         txt_Check_In_ID.setDisable(true);
         txt_Check_Out_ID.setDisable(true);
         txt_Customer_ID.setDisable(true);
         txt_Total_Guests.setDisable(true);
         txt_Full_Name.setDisable(true);
+        //Calculate customer change
+        txt_Customer_Give.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                if (!newValue.isEmpty()) {
+                    if (PatternValided.PatternSalary(newValue)) {
+                        Double changeMoney = Double.valueOf(newValue) - total_Bill;
+                        txt_Customer_Change.setText(String.format("%.3f", changeMoney));
+                        txt_Customer_Give.getStyleClass().removeAll("text-field-fault");
+                    } else {
+                        txt_Customer_Give.setText(oldValue);
+                        txt_Customer_Give.getStyleClass().add("text-field-fault");
+                    }
+                } else {
+                    txt_Customer_Give.setText("");
+                    txt_Customer_Change.setText("");
+                }
+            }
+        });
 
         //Format calender picker display
         formatCalender.format("dd-MM-yyyy", datePicker_Check_In);
@@ -364,7 +389,7 @@ public class FXMLCheckOutController implements Initializable {
 
         System.out.println(string_Total_Bill);
         txt_Area_Total_Bill.setText(string_Total_Bill.toString());
-        txt_Total_Bill.setText(total_Bill.toString());
+        txt_Total_Bill.setText(String.format("%.3f", total_Bill));
         txt_Total_Bill.setDisable(true);
         txt_Tax.setText("0.1");
         txt_Tax.setDisable(true);
@@ -409,9 +434,9 @@ public class FXMLCheckOutController implements Initializable {
         bill.setCheckInID(txt_Check_In_ID.getText());
         bill.setCheckOutDate(LocalDateTime.now());
         bill.setCheckOutID(txt_Check_Out_ID.getText());
-        bill.setCustomerChange(BigDecimal.valueOf(Double.valueOf("0")));
+        bill.setCustomerChange(BigDecimal.valueOf(Double.valueOf(txt_Customer_Change.getText())));
         bill.setCustomerDiscount(BigDecimal.valueOf(total_With_Customer_Discount));
-        bill.setCustomerGive(BigDecimal.valueOf(Double.valueOf("0")));
+        bill.setCustomerGive(BigDecimal.valueOf(Double.valueOf(txt_Customer_Give.getText())));
         bill.setCustomerID(txt_Customer_ID.getText());
         bill.setNoOfDay(day_Stay_Print);
         bill.setPayableAmount(BigDecimal.valueOf(total_Bill));
@@ -501,7 +526,12 @@ public class FXMLCheckOutController implements Initializable {
 
     @FXML
     private void handle_Save_Button_Action(ActionEvent event) {
-        submit_Check_Out();
+        if (txt_Customer_Give.getText().isEmpty()) {
+            txt_Customer_Give.getStyleClass().add("text-field-fault");
+            txt_Customer_Give.requestFocus();
+        } else {
+            submit_Check_Out();
+        }
     }
 
     @FXML

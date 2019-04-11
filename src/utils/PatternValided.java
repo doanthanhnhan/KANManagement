@@ -70,6 +70,11 @@ public class PatternValided {
         return Number.matcher(value).matches();
     }
 
+    public static Boolean PatternServiceInventory(String value) {
+        Pattern Number = Pattern.compile("^[1-9][\\d]{0,8}$");
+        return Number.matcher(value).matches();
+    }
+
     /**
      * Pattern validation for JFXTextField
      *
