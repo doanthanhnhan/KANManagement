@@ -28,6 +28,119 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    nocheck booking
+
+    public static ObservableList<String> getAllRoomBookingNoCheck(String dateB, String dateL, String ID) throws SQLException, ClassNotFoundException {
+        Connection connection = connectDB.connectSQLServer();
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where BookingID !=? AND Active!=0 ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+                + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
+                + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
+                + "))";
+        ObservableList<String> listRooms = FXCollections.observableArrayList();
+        PreparedStatement pt = connection.prepareStatement(sql);
+        pt.setString(1, ID);
+        pt.setString(2, dateB);
+        pt.setString(3, dateB);
+        pt.setString(4, dateL);
+        pt.setString(5, dateL);
+        pt.setString(6, dateL);
+        pt.setString(7, dateB);
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            listRooms.add(rs.getString("RoomID"));
+        }
+        return listRooms;
+    }//    check again roomid can booking
+
+    public static boolean check_RoomIdAgainBookingalready(String roomID, String DateBook, String DateLeave,String IdBooking) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "SELECT RoomID FROM Rooms WHERE RoomID=? AND RoomID IN (Select RoomID from BookingInfo where BookingID !=? And Active!=0 And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+                    + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
+                    + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
+                    + "))";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, roomID);
+            pt.setString(2, IdBooking);
+            pt.setString(3, DateBook);
+            pt.setString(4, DateBook);
+            pt.setString(5, DateLeave);
+            pt.setString(6, DateLeave);
+            pt.setString(7, DateLeave);
+            pt.setString(8, DateBook);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+//    check again roomid can booking
+
+    public static boolean check_RoomIdAgain(String roomID, String DateBook, String DateLeave) {
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "SELECT RoomID FROM Rooms WHERE RoomID=? AND RoomID IN (Select RoomID from BookingInfo where Active !=0 And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+                    + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
+                    + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
+                    + "))";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, roomID);
+            pt.setString(2, DateBook);
+            pt.setString(3, DateBook);
+            pt.setString(4, DateLeave);
+            pt.setString(5, DateLeave);
+            pt.setString(6, DateLeave);
+            pt.setString(7, DateBook);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                pt.close();
+                connection.close();
+                rs.close();
+                return true;
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+//    getRoomId can booking
+
+    public static ObservableList<String> getAllRoomBooking(String dateB, String dateL) throws SQLException, ClassNotFoundException {
+        Connection connection = connectDB.connectSQLServer();
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where Active!=0 And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+                + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
+                + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
+                + "))";
+        ObservableList<String> listRooms = FXCollections.observableArrayList();
+        PreparedStatement pt = connection.prepareStatement(sql);
+        pt.setString(1, dateB);
+        pt.setString(2, dateB);
+        pt.setString(3, dateL);
+        pt.setString(4, dateL);
+        pt.setString(5, dateL);
+        pt.setString(6, dateB);
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            listRooms.add(rs.getString("RoomID"));
+        }
+        return listRooms;
+    }
 //    update booking active =0
 
     public static void deleteBookingActive(String id) throws ClassNotFoundException, SQLException {
@@ -97,12 +210,13 @@ public class DAOCustomerBookingCheckIn {
     }
 //    update roombooking
 
-    public static void Update_RoomBooking(String id, String RoomID) throws ClassNotFoundException, SQLException {
+    public static void Update_RoomBooking(String id, String RoomID, String DateLeave) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
-        String exp = "UPDATE BookingInfo SET RoomID = ? WHERE BookingID = ?";
+        String exp = "UPDATE BookingInfo SET RoomID = ?,DateLeave=? WHERE BookingID = ?";
         PreparedStatement pt = connection.prepareStatement(exp);
         pt.setString(1, RoomID);
-        pt.setString(2, id);
+        pt.setString(2, DateLeave);
+        pt.setString(3, id);
         pt.execute();
         pt.close();
         connection.close();
@@ -168,6 +282,8 @@ public class DAOCustomerBookingCheckIn {
             bk.setNote(rs.getString("Note"));
             bk.setNumGuest(rs.getInt("NumberGuest"));
             bk.setDate(LocalDate.parse(rs.getString("DateBook")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            bk.setDateLeave(LocalDate.parse(rs.getString("DateLeave")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            bk.setCusName(rs.getString("CustomerName"));
             list_Booking.add(bk);
         }
         return list_Booking;
@@ -565,6 +681,7 @@ public class DAOCustomerBookingCheckIn {
                 bk.setNumGuest(rs.getInt("NumberGuest"));
                 bk.setUser(rs.getString("UserName"));
                 bk.setDate(rs.getString("DateBook"));
+                bk.setDateLeave(rs.getString("DateLeave"));
                 list_Booking_Info.add(bk);
             }
             pt.close();
@@ -689,8 +806,24 @@ public class DAOCustomerBookingCheckIn {
 
     public static void AddNewBooking(BookingInfo bk) throws MalformedURLException, SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
-        String exm = "Insert into Bookinginfo values(?,?,?,?,?,?,?,?)";
+        // Tạo đối tượng Statement.
+        String fullName = "";
+        Statement statement = connection.createStatement();
+        String sql = "select CustomerFirstName,CustomerMidName,CustomerLastName from Customers where CustomerID = ?";
+        PreparedStatement pts = connection.prepareStatement(sql);
+        pts.setString(1, bk.getCusID());
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pts.executeQuery();
+        while (rs.next()) {
+            if (rs.getString("CustomerMidName") == null) {
+                fullName = rs.getString("CustomerLastName") + " " + rs.getString("CustomerFirstName");
+            } else {
+                fullName = rs.getString("CustomerLastName") + " " + rs.getString("CustomerMidName") + " " + rs.getString("CustomerFirstName");
+            }
+        }
+        String exm = "Insert into Bookinginfo values(?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pt = connection.prepareStatement(exm);
+
         pt.setString(1, bk.getBookID());
         pt.setString(2, bk.getCusID());
         pt.setString(3, bk.getRoomID());
@@ -699,8 +832,12 @@ public class DAOCustomerBookingCheckIn {
         pt.setInt(6, bk.getNumGuest());
         pt.setString(7, bk.getDate());
         pt.setInt(8, 1);
+        pt.setString(9, bk.getDateLeave());
+        pt.setString(10, fullName);
         pt.execute();
+
         pt.close();
+        rs.close();
         connection.close();
     }
 //    Get all Id of Customer
@@ -763,10 +900,14 @@ public class DAOCustomerBookingCheckIn {
             pt.close();
             connection.close();
             rs.close();
+
         } catch (SQLException ex) {
-            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DAOCustomerBookingCheckIn.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DAOCustomerBookingCheckIn.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return true;
     }

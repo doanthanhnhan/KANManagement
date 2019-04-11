@@ -16,13 +16,13 @@ import javafx.beans.property.StringProperty;
  */
 public class BookingInfo {
 
-    public StringProperty BookID, CusID, RoomID, User, Note, Date;
+    public StringProperty BookID, CusID, RoomID, User, Note, Date, DateLeave, CusName;
     public IntegerProperty NumGuest;
 
     public BookingInfo() {
     }
 
-    public BookingInfo(String BookID, String CusID, String RoomID, String User, String Note, Integer NumGuest, String Date) {
+    public BookingInfo(String BookID, String CusID, String RoomID, String User, String Note, Integer NumGuest, String Date, String DateLeave, String CusName) {
         this.BookID = new SimpleStringProperty(BookID);
         this.CusID = new SimpleStringProperty(CusID);
         this.RoomID = new SimpleStringProperty(RoomID);
@@ -30,6 +30,24 @@ public class BookingInfo {
         this.Note = new SimpleStringProperty(Note);
         this.NumGuest = new SimpleIntegerProperty(NumGuest);
         this.Date = new SimpleStringProperty(Date);
+        this.DateLeave = new SimpleStringProperty(DateLeave);
+        this.CusName = new SimpleStringProperty(CusName);
+    }
+
+    public String getCusName() {
+        return CusName.get();
+    }
+
+    public void setCusName(String CusName) {
+        this.CusName = new SimpleStringProperty(CusName);
+    }
+
+    public String getDateLeave() {
+        return DateLeave.get();
+    }
+
+    public void setDateLeave(String DateLeave) {
+        this.DateLeave = new SimpleStringProperty(DateLeave);
     }
 
     public String getBookID() {
@@ -71,8 +89,6 @@ public class BookingInfo {
     public void setNote(String Note) {
         this.Note = new SimpleStringProperty(Note);
     }
-
-
 
     public String getDate() {
         return Date.get();

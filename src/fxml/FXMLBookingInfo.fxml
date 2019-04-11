@@ -102,7 +102,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </JFXComboBox>
-                                    <JFXComboBox fx:id="boxIdRoom" labelFloat="true" prefHeight="35.0" prefWidth="190.0" promptText="Select Id Room">
+                                    <JFXComboBox fx:id="boxIdRoom" disable="true" labelFloat="true" prefHeight="35.0" prefWidth="190.0" promptText="Select Id Room">
                                        <HBox.margin>
                                           <Insets top="30.0" />
                                        </HBox.margin>
@@ -111,6 +111,9 @@
                                        </cursor>
                                     </JFXComboBox>
                                  </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
                               </HBox>
                            </children>
                         </HBox>
@@ -120,14 +123,29 @@
                      <children>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXDatePicker fx:id="DateBook" defaultColor="#6467cd" editable="false" onAction="#Format_Show_Calender" prefHeight="35.0" prefWidth="400.0" promptText="Date Book">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
+                              <HBox prefHeight="35.0" prefWidth="400.0" spacing="20.0">
+                                 <children>
+                                    <JFXDatePicker fx:id="DateBook" defaultColor="#6467cd" editable="false" onAction="#Format_Show_Calender" prefHeight="35.0" prefWidth="195.0" promptText="Date Book">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXDatePicker>
+                                    <JFXDatePicker fx:id="DateLeave" defaultColor="#6467cd" editable="false" layoutX="90.0" layoutY="30.0" onAction="#Format_Show_Calender_DateLeave" prefHeight="35.0" promptText="Date Leave">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXDatePicker>
+                                 </children>
                                  <HBox.margin>
-                                    <Insets left="80.0" right="80.0" top="20.0" />
+                                    <Insets top="30.0" />
                                  </HBox.margin>
-                              </JFXDatePicker>
+                              </HBox>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER">
@@ -137,10 +155,13 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                    <Insets left="80.0" right="80.0" />
                                  </HBox.margin>
                               </JFXTextField>
                            </children>
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>

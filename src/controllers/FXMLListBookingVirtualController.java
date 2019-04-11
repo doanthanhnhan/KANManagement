@@ -189,9 +189,11 @@ public class FXMLListBookingVirtualController implements Initializable {
     private void setColumns() {
         TableColumn<BookingInfo, String> bkIdCol = new TableColumn<>("Booking ID");
         TableColumn<BookingInfo, String> cusIdCol = new TableColumn<>("Customer ID");
+        TableColumn<BookingInfo, String> cusNameCol = new TableColumn<>("Customer Name");
         TableColumn<BookingInfo, String> roomIdCol = new TableColumn<>("Room ID");
         TableColumn<BookingInfo, String> userCol = new TableColumn<>("User Booking");
         TableColumn<BookingInfo, String> dateCol = new TableColumn<>("Date Booking");
+        TableColumn<BookingInfo, String> dateLeaveCol = new TableColumn<>("Date Leave");
         TableColumn<BookingInfo, String> noteCol = new TableColumn<>("Note");
         TableColumn<BookingInfo, Integer> numberGuestCol = new TableColumn<>("Number Guest");
         TableColumn numberCol = new TableColumn("#");
@@ -208,8 +210,10 @@ public class FXMLListBookingVirtualController implements Initializable {
         bkIdCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
         cusIdCol.setCellValueFactory(new PropertyValueFactory<>("CusID"));
         roomIdCol.setCellValueFactory(new PropertyValueFactory<>("RoomID"));
+        cusNameCol.setCellValueFactory(new PropertyValueFactory<>("CusName"));
         userCol.setCellValueFactory(new PropertyValueFactory<>("User"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("Date"));
+        dateLeaveCol.setCellValueFactory(new PropertyValueFactory<>("DateLeave"));
         noteCol.setCellValueFactory(new PropertyValueFactory<>("Note"));
         numberGuestCol.setCellValueFactory(new PropertyValueFactory<>("NumGuest"));
 
@@ -221,10 +225,11 @@ public class FXMLListBookingVirtualController implements Initializable {
         dateCol.setStyle("-fx-alignment: CENTER;");
         numberGuestCol.setStyle("-fx-alignment: CENTER;");
         noteCol.setStyle("-fx-alignment: CENTER;");
-
+        cusNameCol.setStyle("-fx-alignment: CENTER;");
+        dateLeaveCol.setStyle("-fx-alignment: CENTER;");
         // Thêm cột vào bảng
         table_ListBookingVirtual.getColumns().clear();
-        table_ListBookingVirtual.getColumns().addAll(numberCol, bkIdCol, cusIdCol, roomIdCol, userCol, dateCol, noteCol, numberGuestCol);
+        table_ListBookingVirtual.getColumns().addAll(numberCol, bkIdCol, cusIdCol, cusNameCol, roomIdCol, userCol, dateCol, dateLeaveCol, noteCol, numberGuestCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -255,6 +260,8 @@ public class FXMLListBookingVirtualController implements Initializable {
                     bk -> newValue == null || newValue.isEmpty()
                     || bk.getBookID().toLowerCase().contains(newValue.toLowerCase())
                     || bk.getCusID().toLowerCase().contains(newValue.toLowerCase())
+                    || bk.getCusName().toLowerCase().contains(newValue.toLowerCase())
+                    || bk.getDateLeave().toLowerCase().contains(newValue.toLowerCase())
                     || bk.getDate().toLowerCase().contains(newValue.toLowerCase())
                     || bk.getNumGuest().toString().toLowerCase().contains(newValue.toLowerCase())
                     || bk.getRoomID().toLowerCase().contains(newValue.toLowerCase())
@@ -293,13 +300,13 @@ public class FXMLListBookingVirtualController implements Initializable {
             System.out.println("Kien");
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Comfirm");
-            alert.setContentText("Do you want to delete " + bk.getBookID()+ "?");
+            alert.setContentText("Do you want to delete " + bk.getBookID() + "?");
             alert.showAndWait();
             System.out.println(alert.getResult());
             if (alert.getResult() == ButtonType.OK) {
                 try {
                     DAOCustomerBookingCheckIn.deleteBooking(bk.getBookID());
-                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete " + bk.getBookID(),
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete Booking ID = " + bk.getBookID()+" Customer ID = "+bk.getCusID()+" Customer Name = "+bk.getCusName(),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                     System.out.println("Delete successful");
                     showUsersData();
