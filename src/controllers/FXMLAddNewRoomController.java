@@ -95,6 +95,13 @@ public class FXMLAddNewRoomController implements Initializable {
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
         listRoomsController = ConnectControllers.getfXMLListRoomsController();
         init_ComboBox_Value();
+
+        //Initialize textfield
+        PatternValided.validateTextField_New(txt_Room_Area, "^[\\d][\\d]{0,4}\\.?[\\d]{0,3}$");
+        PatternValided.validateTextField_New(txt_Room_Day_Remaining, "[\\d]{1,4}");
+        PatternValided.validateRoomID_New(txt_Room_ID, "^[R][-][0-9]{4}$");
+        PatternValided.validateTextField_New(txt_Room_On_Floor, "[\\d]{1,2}");
+        PatternValided.validateTextField_New(txt_Room_Phone_Number, "^([0-9][0-9]{0,19}$)|\\+[0-9]{0,19}$");
         //Check form was call from List Room Form
         if (mainFormController.checkAddNewRoom) {
             comboBox_Room_Status.setValue("Available");
@@ -297,8 +304,11 @@ public class FXMLAddNewRoomController implements Initializable {
 
     public void submit_Add_New_Room() {
         btnAddNew.setDisable(true);
-        listRoomsController.check_Add_New = true;
-        listRoomsController.new_Room_ID = txt_Room_ID.getText();
+        if (listRoomsController != null) {
+            listRoomsController.check_Add_New = true;
+            listRoomsController.new_Room_ID = txt_Room_ID.getText();
+        }
+
         //Calling loading form and thread task
         StageLoader stageLoader = new StageLoader();
         stageLoader.loadingIndicator("Adding Room");
@@ -333,21 +343,23 @@ public class FXMLAddNewRoomController implements Initializable {
                     stageLoader.stopTimeline();
                     stageLoader.closeStage();
                     System.out.println("Form check validate: " + check_Validate);
-                    if (listRoomsController != null) {
-                        listRoomsController.check_Add_Action = false;
-                        listRoomsController.showRoomsData();
-                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
-                        stageUpdate.close();
-                    } else if (mainFormController.checkAddNewRoom) {
-                        mainFormController.checkAddNewRoom = false;
-                        mainOverViewPaneController.refreshForm();
-                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
-                        stageUpdate.close();
-                    } else {
-                        listRoomsController.check_Add_Action = false;
-                        mainFormController.checkAddNewRoom = false;
-                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
-                        stageUpdate.close();
+                    if (check_Validate) {
+                        if (listRoomsController != null) {
+                            listRoomsController.check_Add_Action = false;
+                            listRoomsController.showRoomsData();
+                            Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+                            stageUpdate.close();
+                        } else if (mainFormController.checkAddNewRoom) {
+                            mainFormController.checkAddNewRoom = false;
+                            mainOverViewPaneController.refreshForm();
+                            Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+                            stageUpdate.close();
+                        } else {
+                            listRoomsController.check_Add_Action = false;
+                            mainFormController.checkAddNewRoom = false;
+                            Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+                            stageUpdate.close();
+                        }
                     }
                 });
                 System.out.println("Finished");
@@ -421,7 +433,7 @@ public class FXMLAddNewRoomController implements Initializable {
     }
 
     public void validateForm() {
-        if (PatternValided.validateTextField(hBoxContent, txt_Room_Area, "^[\\d][\\d]*\\.?[\\d]*$",
+        if (PatternValided.validateTextField(hBoxContent, txt_Room_Area, "^[\\d][\\d]{0,4}\\.?[\\d]{0,3}$",
                 "ROOM AREA MUST NOT BE EMPTY !!!",
                 "AREA MUST CONTAIN NUMBERS, \nMUST BE NOT CONTAIN CHARACTER OR CHARACTER SPECIAL !!!")) {
             System.out.println("Room area false");
@@ -431,7 +443,7 @@ public class FXMLAddNewRoomController implements Initializable {
                 "DAY MUST CONTAIN 1-4 NUMBERS, \nMUST BE NOT CONTAIN CHARACTER OR CHARACTER SPECIAL !!!")) {
             System.out.println("Room day remaining false");
             check_Validate = false;
-        } else if (PatternValided.validateTextField(hBoxContent, txt_Room_ID, "^(?=.{1,20}$)[a-zA-Z][a-zA-Z0-9_]+$",
+        } else if (PatternValided.validateTextField(hBoxContent, txt_Room_ID, "^(?=.{1,20}$)[a-zA-Z][a-zA-Z0-9_-]+$",
                 "ROOM ID MUST NOT BE EMPTY !!!",
                 "ID MUST CONTAIN 1-20 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR SPECIAL CHARACTER  !!!")) {
             System.out.println("Room ID false");
@@ -445,6 +457,9 @@ public class FXMLAddNewRoomController implements Initializable {
                 "ROOM PHONE NUMBER MUST NOT BE EMPTY !!!",
                 "PHONE NUMBER MUST CONTAIN NUMBER \nAND MUST BE CORRECT PHONE NUMBER FORMAT !!!")) {
             System.out.println("Room on floor false");
+            check_Validate = false;
+        } else if (comboBox_Room_Type.getValue() == null) {
+            System.out.println("Room type is not selected");
             check_Validate = false;
         } else {
             System.out.println("Validate finished");
