@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -324,8 +326,15 @@ public class RoomDAOImpl implements RoomDAO {
                     room.setRoomClean(rs.getBoolean("Clean"));
                     room.setRoomRepaired(rs.getBoolean("Repaired"));
                     room.setRoomInProgress(rs.getBoolean("InProgress"));
-                    room.setDayRemaining(rs.getInt("DayRemaining"));
                     room.setActive(rs.getBoolean("Active"));
+                    room.setBookingDate(rs.getTimestamp("BookingDate").toLocalDateTime());
+                    room.setCheckInDate(rs.getTimestamp("CheckInDate").toLocalDateTime());
+                    room.setLeaveDate(rs.getTimestamp("LeaveDate").toLocalDateTime());
+                    if (room.getRoomStatus().equals("Occupied")) {
+                        room.setDayRemaining((int) ChronoUnit.DAYS.between(LocalDateTime.now(), room.getLeaveDate()));
+                    } else if (room.getRoomStatus().equals("Reserved")){
+                        room.setDayRemaining((int) ChronoUnit.DAYS.between(room.getBookingDate(),LocalDateTime.now()));
+                    }
 
                     //Setting checkboxes
                     CheckBox cb_Clean = new CheckBox("");
@@ -549,7 +558,7 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.setString(1, room.getCustomerID());
                 stmt.setString(2, room.getUserName());
                 stmt.setString(3, room.getRoomStatus());
-                stmt.setInt(4, room.getDayRemaining());
+                stmt.setInt(4, (int) ChronoUnit.DAYS.between(room.getBookingDate(),LocalDateTime.now()));
                 stmt.setTimestamp(5, Timestamp.valueOf(room.getBookingDate()));
                 stmt.setTimestamp(6, Timestamp.valueOf(room.getLeaveDate()));
                 stmt.setString(7, room.getRoomID());

@@ -83,7 +83,8 @@ public class FXMLListRoomsController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url,
+            ResourceBundle rb) {
         System.out.println("List Rooms initialize...");
         ConnectControllers.setfXMLListRoomsController(this);
         mainFormController = ConnectControllers.getfXMLMainFormController();
@@ -110,7 +111,8 @@ public class FXMLListRoomsController implements Initializable {
         });
     }
 
-    private void changeTableView(int index, int limit) {
+    private void changeTableView(int index,
+            int limit) {
 
         int fromIndex = index * limit;
         int toIndex = Math.min(fromIndex + limit, listRoomEXs.size());
@@ -131,6 +133,9 @@ public class FXMLListRoomsController implements Initializable {
         TableColumn<RoomEX, String> roomTypeCol = new TableColumn<>("Room type");
         TableColumn<RoomEX, String> roomStatusCol = new TableColumn<>("Status");
         TableColumn<RoomEX, String> customerNameCol = new TableColumn<>("Customer name");
+        TableColumn<RoomEX, LocalDateTime> bookingDateCol = new TableColumn<>("Booking date");
+        TableColumn<RoomEX, LocalDateTime> checkInDateCol = new TableColumn<>("Check in date");
+        TableColumn<RoomEX, LocalDateTime> leaveDateCol = new TableColumn<>("Leave date");
         TableColumn<RoomEX, Integer> remainingDaysCol = new TableColumn<>("Days");
         TableColumn<RoomEX, String> roomPhoneNumberCol = new TableColumn<>("Phone number");
         TableColumn<RoomEX, Integer> roomOnFloorCol = new TableColumn<>("Floor");
@@ -142,7 +147,8 @@ public class FXMLListRoomsController implements Initializable {
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<CellDataFeatures<RoomEX, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(CellDataFeatures<RoomEX, String> p) {
+            public ObservableValue<String> call(
+                    CellDataFeatures<RoomEX, String> p) {
                 return new ReadOnlyObjectWrapper((table_Rooms.getItems().indexOf(p.getValue()) + 1) + "");
             }
         });
@@ -154,6 +160,9 @@ public class FXMLListRoomsController implements Initializable {
         roomTypeCol.setCellValueFactory(new PropertyValueFactory<>("roomType"));
         roomStatusCol.setCellValueFactory(new PropertyValueFactory<>("roomStatus"));
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        bookingDateCol.setCellValueFactory(new PropertyValueFactory<>("bookingDate"));
+        checkInDateCol.setCellValueFactory(new PropertyValueFactory<>("checkInDate"));
+        leaveDateCol.setCellValueFactory(new PropertyValueFactory<>("leaveDate"));
         remainingDaysCol.setCellValueFactory(new PropertyValueFactory<>("dayRemaining"));
         roomPhoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("roomPhoneNumber"));
         roomOnFloorCol.setCellValueFactory(new PropertyValueFactory<>("roomOnFloor"));
@@ -167,6 +176,9 @@ public class FXMLListRoomsController implements Initializable {
         roomTypeCol.setStyle("-fx-alignment: CENTER-LEFT;");
         roomStatusCol.setStyle("-fx-alignment: CENTER-LEFT;");
         customerNameCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        bookingDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        checkInDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
+        leaveDateCol.setStyle("-fx-alignment: CENTER-LEFT;");
         remainingDaysCol.setStyle("-fx-alignment: CENTER-LEFT;");
         roomPhoneNumberCol.setStyle("-fx-alignment: CENTER-LEFT;");
         roomOnFloorCol.setStyle("-fx-alignment: CENTER-LEFT;");

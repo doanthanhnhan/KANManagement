@@ -59,12 +59,14 @@ CREATE TABLE BookingInfo (
 	UserName varchar(100) NOT NULL,
 	Note nvarchar(1000),	
 	NumberGuest tinyint not null,
-	DateBook date not null	
+	DateBook date not null,
+	DateLeave datetime null,
+	CustomerName nvarchar(100) null,
+	Active bit DEFAULT 1	
 	-- Create constraint
 	CONSTRAINT pk_BookingID_BookingInfo PRIMARY KEY (BookingID),
 	CONSTRAINT uc_BookingID_BookingInfo UNIQUE (BookingID)
 )
-DROP TABLE BookingInfo
 
 CREATE TABLE CheckInOrders(
 	-- Create columns	
@@ -313,6 +315,16 @@ CREATE TABLE Bill (
 	Active bit DEFAULT 1
 	-- Create constraint
 	CONSTRAINT pk_ID_Bill PRIMARY KEY (ID)
+)
+
+CREATE TABLE CheckBlockMacAddress (
+	-- Create columns
+	ID int IDENTITY(1,1),
+	MACAddress varchar(30) NOT NULL,
+	Times int NOT NULL,	
+	Active bit NOT NULL DEFAULT 1
+	-- Create constraint
+	CONSTRAINT pk_ID_CheckBlockMacAddress PRIMARY KEY (ID)
 )
 
 -- CREATE CONSTRAINT FOR TABLES --
@@ -629,4 +641,6 @@ SELECT * FROM ServicesOrderDetails WHERE OrderID = 'SO-20190410-181914' AND Acti
 DELETE FROM ServicesOrderDetails
 DELETE FROM ServicesOrders
 
+SELECT * FROM BookingInfo
+DELETE FROM BookingInfo WHERE RoomID = 'R0103'
 

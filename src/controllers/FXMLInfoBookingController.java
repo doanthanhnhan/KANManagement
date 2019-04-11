@@ -18,7 +18,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +53,7 @@ import models.BookingInfo;
 import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.DAOcheckRole;
+import models.Room;
 import models.RoomDAOImpl;
 import models.formatCalender;
 import models.notificationFunction;
@@ -126,10 +129,11 @@ public class FXMLInfoBookingController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {        
         DateBook.setDayCellFactory(picker -> new DateCell() {
             @Override
-            public void updateItem(LocalDate date, boolean empty) {
+            public void updateItem(LocalDate date,
+                    boolean empty) {
                 super.updateItem(date, empty);
                 LocalDate today = LocalDate.now();
                 setDisable(empty || date.compareTo(today) < 0);
@@ -638,7 +642,7 @@ public class FXMLInfoBookingController implements Initializable {
                 boxIdRoom.requestFocus();
                 try {
                     boxIdRoom.setItems(DAOCustomerBookingCheckIn.getAllRoomBookingNoCheck(String.valueOf(DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
-                                String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), BookingID.getValue()));
+                            String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), BookingID.getValue()));
                 } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -666,6 +670,18 @@ public class FXMLInfoBookingController implements Initializable {
 //                set Userlogs
                     DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Booking for " + boxIdCustomer.getValue(),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                    //UPDATE INFORMATIONS FOR ROOM WHICH HAS BEEN BOOKED
+                    roomDAOImpl = new RoomDAOImpl();
+                    Room room = roomDAOImpl.getRoom(boxIdRoom.getValue());
+                    if ((int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0 || (int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.now()) > 0) {
+                        room.setCustomerID(boxIdCustomer.getValue());
+                        room.setUserName(Username.getText());
+                        room.setRoomStatus("Reserved");
+                        room.setBookingDate(LocalDateTime.of(DateBook.getValue(), LocalTime.now()));
+                        room.setLeaveDate(LocalDateTime.of(DateLeave.getValue(), LocalTime.now()));
+                        roomDAOImpl.editBookingRoom(room, true);
+                    }
+                    //END UNDATE ROOM
                     //CREATE QR CODE FILE AND SEND EMAIL
                     String customerEmail = DAOCustomerBookingCheckIn.getCustomerEmail(boxIdCustomer.getValue());
                     if ((!FXMLInfoCustomerController.checkInfoCustomer || !FXMLInfoCustomerController.checkInfoCustomerAlready) && !customerEmail.equals("")) {
@@ -675,7 +691,7 @@ public class FXMLInfoBookingController implements Initializable {
                         String filePath = file.getAbsolutePath() + "/src/images/BookingQRCode.png";
                         try {
                             Email.sendEmail_With_Attach("smtp.gmail.com", customerEmail, "KANManagement.AP146@gmail.com",
-                                    "KAN@123456", "Default username and password", content, filePath);
+                                    "KAN@123456", "Booking infomations: ID & QRCode", content, filePath);
                         } catch (MessagingException ex) {
                             Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                         }
