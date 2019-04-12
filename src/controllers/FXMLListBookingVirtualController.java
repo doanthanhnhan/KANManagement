@@ -216,7 +216,11 @@ public class FXMLListBookingVirtualController implements Initializable {
         dateLeaveCol.setCellValueFactory(new PropertyValueFactory<>("DateLeave"));
         noteCol.setCellValueFactory(new PropertyValueFactory<>("Note"));
         numberGuestCol.setCellValueFactory(new PropertyValueFactory<>("NumGuest"));
-
+        bkIdCol.setPrefWidth(200);
+        cusIdCol.setPrefWidth(200);
+        cusNameCol.setPrefWidth(120);
+        dateCol.setPrefWidth(120);
+        numberGuestCol.setPrefWidth(150);
         numberCol.setStyle("-fx-alignment: CENTER;");
         bkIdCol.setStyle("-fx-alignment: CENTER;");
         cusIdCol.setStyle("-fx-alignment: CENTER;");
@@ -306,7 +310,7 @@ public class FXMLListBookingVirtualController implements Initializable {
             if (alert.getResult() == ButtonType.OK) {
                 try {
                     DAOCustomerBookingCheckIn.deleteBooking(bk.getBookID());
-                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete Booking ID = " + bk.getBookID()+" Customer ID = "+bk.getCusID()+" Customer Name = "+bk.getCusName(),
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete Booking ID = " + bk.getBookID() + " Customer ID = " + bk.getCusID() + " Customer Name = " + bk.getCusName(),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                     System.out.println("Delete successful");
                     showUsersData();

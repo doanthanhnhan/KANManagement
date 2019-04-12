@@ -6,9 +6,6 @@
 package controllers;
 
 import static controllers.ConnectControllers.fXMLMainFormController;
-import static controllers.FXMLListBookingVirtualController.bk;
-import static controllers.FXMLListEmployeeController.Emp;
-import static controllers.FXMLListEmployeeController.check_Edit_Action;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -35,7 +32,6 @@ import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -148,9 +144,11 @@ public class FXMLListBookingController implements Initializable {
     private void setColumns() {
         TableColumn<BookingInfo, String> bkIdCol = new TableColumn<>("Booking ID");
         TableColumn<BookingInfo, String> cusIdCol = new TableColumn<>("Customer ID");
+        TableColumn<BookingInfo, String> cusNameCol = new TableColumn<>("Customer Name");
         TableColumn<BookingInfo, String> roomIdCol = new TableColumn<>("Room ID");
         TableColumn<BookingInfo, String> userCol = new TableColumn<>("User Booking");
         TableColumn<BookingInfo, String> dateCol = new TableColumn<>("Date Booking");
+        TableColumn<BookingInfo, String> dateLeaveCol = new TableColumn<>("Date Leave");
         TableColumn<BookingInfo, String> noteCol = new TableColumn<>("Note");
         TableColumn<BookingInfo, Integer> numberGuestCol = new TableColumn<>("Number Guest");
         TableColumn numberCol = new TableColumn("#");
@@ -167,23 +165,31 @@ public class FXMLListBookingController implements Initializable {
         bkIdCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
         cusIdCol.setCellValueFactory(new PropertyValueFactory<>("CusID"));
         roomIdCol.setCellValueFactory(new PropertyValueFactory<>("RoomID"));
+        cusNameCol.setCellValueFactory(new PropertyValueFactory<>("CusName"));
         userCol.setCellValueFactory(new PropertyValueFactory<>("User"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("Date"));
+        dateLeaveCol.setCellValueFactory(new PropertyValueFactory<>("DateLeave"));
         noteCol.setCellValueFactory(new PropertyValueFactory<>("Note"));
         numberGuestCol.setCellValueFactory(new PropertyValueFactory<>("NumGuest"));
-
+        bkIdCol.setPrefWidth(200);
+        cusIdCol.setPrefWidth(200);
+        cusNameCol.setPrefWidth(120);
+        dateCol.setPrefWidth(120);
+        numberGuestCol.setPrefWidth(150);
         numberCol.setStyle("-fx-alignment: CENTER;");
         bkIdCol.setStyle("-fx-alignment: CENTER;");
         cusIdCol.setStyle("-fx-alignment: CENTER;");
         roomIdCol.setStyle("-fx-alignment: CENTER;");
         userCol.setStyle("-fx-alignment: CENTER;");
         dateCol.setStyle("-fx-alignment: CENTER;");
+        cusNameCol.setStyle("-fx-alignment: CENTER;");
+        dateLeaveCol.setStyle("-fx-alignment: CENTER;");
         numberGuestCol.setStyle("-fx-alignment: CENTER;");
         noteCol.setStyle("-fx-alignment: CENTER;");
 
         // Thêm cột vào bảng
         table_ListBooking.getColumns().clear();
-        table_ListBooking.getColumns().addAll(numberCol, bkIdCol, cusIdCol, roomIdCol, userCol, dateCol, noteCol, numberGuestCol);
+        table_ListBooking.getColumns().addAll(numberCol, bkIdCol, cusIdCol, cusNameCol, roomIdCol, userCol, dateCol, dateLeaveCol, noteCol, numberGuestCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -206,6 +212,8 @@ public class FXMLListBookingController implements Initializable {
                     bk -> newValue == null || newValue.isEmpty()
                     || bk.getBookID().toLowerCase().contains(newValue.toLowerCase())
                     || bk.getCusID().toLowerCase().contains(newValue.toLowerCase())
+                    || bk.getCusName().toLowerCase().contains(newValue.toLowerCase())
+                    || bk.getDateLeave().toLowerCase().contains(newValue.toLowerCase())
                     || bk.getDate().toLowerCase().contains(newValue.toLowerCase())
                     || bk.getNumGuest().toString().toLowerCase().contains(newValue.toLowerCase())
                     || bk.getRoomID().toLowerCase().contains(newValue.toLowerCase())

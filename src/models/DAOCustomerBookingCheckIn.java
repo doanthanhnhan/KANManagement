@@ -357,11 +357,13 @@ public class DAOCustomerBookingCheckIn {
             BookingInfo bk = new BookingInfo();
             bk.setBookID(rs.getString("BookingID"));
             bk.setCusID(rs.getString("CustomerID"));
+            bk.setCusName(rs.getString("CustomerName"));
             bk.setRoomID(rs.getString("RoomID"));
             bk.setUser(rs.getString("UserName"));
             bk.setNote(rs.getString("Note"));
             bk.setNumGuest(rs.getInt("NumberGuest"));
             bk.setDate(LocalDate.parse(rs.getString("DateBook")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            bk.setDateLeave(LocalDate.parse(rs.getString("DateLeave")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             list_Booking.add(bk);
         }
         return list_Booking;
