@@ -642,5 +642,6 @@ DELETE FROM ServicesOrderDetails
 DELETE FROM ServicesOrders
 
 SELECT * FROM BookingInfo
+SELECT * FROM Rooms
 DELETE FROM BookingInfo WHERE RoomID = 'R0103'
 

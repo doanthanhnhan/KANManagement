@@ -129,7 +129,7 @@ public class FXMLInfoBookingController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {        
+    public void initialize(URL url, ResourceBundle rb) {
         DateBook.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date,
@@ -705,9 +705,23 @@ public class FXMLInfoBookingController implements Initializable {
                     customerIdConect = boxIdCustomer.getValue();
                     if (!roomID.equals(boxIdRoom.getValue())) {
                         try {
-                            DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue(), String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+                            DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue(), 
+                                    String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
                             DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Change Room for bookingID= " + BookingID.getValue(),
                                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                            //UPDATE INFORMATIONS FOR ROOM WHICH HAS BEEN BOOKED
+                            roomDAOImpl = new RoomDAOImpl();
+                            Room room = roomDAOImpl.getRoom(boxIdRoom.getValue());
+                            if ((int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0 
+                                    || (int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.now()) > 0) {
+                                room.setCustomerID(boxIdCustomer.getValue());
+                                room.setUserName(Username.getText());
+                                room.setRoomStatus("Reserved");
+                                room.setBookingDate(LocalDateTime.of(DateBook.getValue(), LocalTime.now()));
+                                room.setLeaveDate(LocalDateTime.of(DateLeave.getValue(), LocalTime.now()));
+                                roomDAOImpl.editBookingRoom(room, true);
+                            }
+                            //END UNDATE ROOM
                         } catch (ClassNotFoundException | SQLException ex) {
                             Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                         }
