@@ -673,7 +673,7 @@ public class FXMLInfoBookingController implements Initializable {
                     //UPDATE INFORMATIONS FOR ROOM WHICH HAS BEEN BOOKED
                     roomDAOImpl = new RoomDAOImpl();
                     Room room = roomDAOImpl.getRoom(boxIdRoom.getValue());
-                    if ((int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0 || (int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.now()) > 0) {
+                    if ((int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0 || (int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.now()) >= 0) {
                         room.setCustomerID(boxIdCustomer.getValue());
                         room.setUserName(Username.getText());
                         room.setRoomStatus("Reserved");
