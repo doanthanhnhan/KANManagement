@@ -595,6 +595,7 @@ public class FXMLInfoBookingController implements Initializable {
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
                 DateBook.requestFocus();
+                
             });
         } else if (DAOCustomerBookingCheckIn.check_RoomIdAgain(boxIdRoom.getValue(), String.valueOf(DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
                 String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))) && list_Booking_Info.isEmpty()) {
