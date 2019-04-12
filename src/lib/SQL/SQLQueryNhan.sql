@@ -590,7 +590,7 @@ INSERT INTO CheckInOrders(CheckInID, BookingID, CustomerID, RoomID, UserName, Ch
 ('CI1903120009', '1903090009', 'CTM-000000002', 'R0206', 'admin', 'Reception', 4, '2019-03-09 07:00:00', '2019-04-01 08:00:00'),
 ('CI1903120010', '1903090010', 'CTM-000000008', 'R0202', 'admin', 'Reception', 2, '2019-03-09 10:15:00', '2019-04-02 08:00:00')
 
-SELECT * FROM CheckInOrders WHERE RoomID IN (SELECT RoomID FROM Rooms WHERE RoomStatus = 'Occupied') AND RoomID = 'R0801'
+SELECT * FROM CheckInOrders WHERE RoomID IN (SELECT RoomID FROM Rooms WHERE RoomStatus = 'Occupied') AND RoomID = 'R-0101'
 
 SELECT RoomID FROM Rooms WHERE RoomStatus = 'Occupied'
 DELETE FROM CheckInOrders
@@ -651,3 +651,6 @@ DELETE FROM BookingInfo
 DELETE FROM Rooms
 DELETE FROM BookingInfo WHERE BookingID NOT IN (SELECT BookingID FROM CheckInOrders)
 
+SELECT COUNT(BookingID) AS 'NoOfBooking' FROM BookingInfo WHERE BookingID NOT IN (SELECT BookingID FROM CheckInOrders) 
+AND RoomID = 'R-0101';
+SELECT * FROM BookingInfo WHERE DateBook IN (SELECT MIN(DateBook) FROM BookingInfo WHERE DateBook > GETDATE())

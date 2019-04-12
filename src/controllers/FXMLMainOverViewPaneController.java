@@ -638,8 +638,13 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     icon_Clean_Status.getStyleClass().removeAll();
                     icon_Clean_Status.getStyleClass().add("glyph-icon-primary");
                 }
+                // Display number of booking and guests in a room
                 label_No_Of_Booking.setText(String.valueOf(listRoom.getNoOfBooking()) + " Booking");
+                label_No_Of_Booking.getStyleClass().removeAll();
+                label_No_Of_Booking.getStyleClass().add("label-Primary-Status");
                 label_No_Of_Guests.setText(String.valueOf(listRoom.getNoOfGuests()) + " Guests");
+                label_No_Of_Guests.getStyleClass().removeAll();
+                label_No_Of_Guests.getStyleClass().add("label-Primary-Status");
 
                 parentPane.getChildren().add(pane);
 

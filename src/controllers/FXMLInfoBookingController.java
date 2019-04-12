@@ -595,7 +595,7 @@ public class FXMLInfoBookingController implements Initializable {
                 HboxContent.getChildren().add(icon);
                 HboxContent.getChildren().add(label);
                 DateBook.requestFocus();
-                
+
             });
         } else if (DAOCustomerBookingCheckIn.check_RoomIdAgain(boxIdRoom.getValue(), String.valueOf(DateBook.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
                 String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))) && list_Booking_Info.isEmpty()) {
@@ -675,10 +675,13 @@ public class FXMLInfoBookingController implements Initializable {
                     //UPDATE INFORMATIONS FOR ROOM WHICH HAS BEEN BOOKED
                     roomDAOImpl = new RoomDAOImpl();
                     Room room = roomDAOImpl.getRoom(boxIdRoom.getValue());
-                    if ((int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0 || (int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.now()) >= 0) {
+                    if ((int) ChronoUnit.HOURS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0 
+                            || (int) ChronoUnit.HOURS.between(room.getBookingDate(), LocalDateTime.now()) >= 0) {
                         room.setCustomerID(boxIdCustomer.getValue());
                         room.setUserName(Username.getText());
-                        room.setRoomStatus("Reserved");
+                        if (room.getRoomStatus().equals("Available")) {
+                            room.setRoomStatus("Reserved");
+                        }
                         room.setBookingDate(LocalDateTime.of(DateBook.getValue(), LocalTime.now()));
                         room.setLeaveDate(LocalDateTime.of(DateLeave.getValue(), LocalTime.now()));
                         roomDAOImpl.editBookingRoom(room, true);
@@ -686,7 +689,8 @@ public class FXMLInfoBookingController implements Initializable {
                     //END UNDATE ROOM
                     //CREATE QR CODE FILE AND SEND EMAIL
                     String customerEmail = DAOCustomerBookingCheckIn.getCustomerEmail(boxIdCustomer.getValue());
-                    if ((!FXMLInfoCustomerController.checkInfoCustomer || !FXMLInfoCustomerController.checkInfoCustomerAlready) && !customerEmail.equals("")) {
+                    if ((!FXMLInfoCustomerController.checkInfoCustomer || !FXMLInfoCustomerController.checkInfoCustomerAlready) 
+                            && !customerEmail.equals("")) {
                         String content = "BookingID : " + BookingID.getValue() + ". Use the attached QRCode for checking in faster.";
                         QRCreate.create_Booking_QRCode(BookingID.getValue());
                         File file = new File("");
@@ -716,11 +720,13 @@ public class FXMLInfoBookingController implements Initializable {
                             //UPDATE INFORMATIONS FOR ROOM WHICH HAS BEEN BOOKED
                             roomDAOImpl = new RoomDAOImpl();
                             Room room = roomDAOImpl.getRoom(boxIdRoom.getValue());
-                            if ((int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0
-                                    || (int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.now()) > 0) {
+                            if ((int) ChronoUnit.HOURS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0
+                                    || (int) ChronoUnit.HOURS.between(room.getBookingDate(), LocalDateTime.now()) > 0) {
                                 room.setCustomerID(boxIdCustomer.getValue());
                                 room.setUserName(Username.getText());
-                                room.setRoomStatus("Reserved");
+                                if (room.getRoomStatus().equals("Available")) {
+                                    room.setRoomStatus("Reserved");
+                                }
                                 room.setBookingDate(LocalDateTime.of(DateBook.getValue(), LocalTime.now()));
                                 room.setLeaveDate(LocalDateTime.of(DateLeave.getValue(), LocalTime.now()));
                                 roomDAOImpl.editBookingRoom(room, true);

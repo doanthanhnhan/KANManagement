@@ -533,7 +533,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 }
                 //Getting Room infomations to update room Status after checking in - Nhan edit here
                 Room room = new Room();
-                room.setRoomID(boxBookingID.getValue());
+                room.setRoomID(boxRoomID.getValue());
                 room.setCustomerID(CustomerID.getText());
                 room.setUserName(Username.getText());
                 room.setRoomStatus("Occupied");
