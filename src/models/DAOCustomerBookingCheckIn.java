@@ -52,7 +52,7 @@ public class DAOCustomerBookingCheckIn {
         return listRooms;
     }//    check again roomid can booking
 
-    public static boolean check_RoomIdAgainBookingalready(String roomID, String DateBook, String DateLeave,String IdBooking) {
+    public static boolean check_RoomIdAgainBookingalready(String roomID, String DateBook, String DateLeave, String IdBooking) {
         try {
             Connection connection = connectDB.connectSQLServer();
             // Tạo đối tượng Statement.
@@ -183,9 +183,10 @@ public class DAOCustomerBookingCheckIn {
         }
         return list_Booking_Info;
     }
+
     // COUNT NUMBER BOOKING OF A ROOM - NHAN EDIT
-    public static int count_No_Of_Booking(String roomID){
-        int count=0;
+    public static int count_No_Of_Booking(String roomID) {
+        int count = 0;
         try {
             Connection connection = connectDB.connectSQLServer();
             // Tạo đối tượng Statement.
@@ -324,11 +325,13 @@ public class DAOCustomerBookingCheckIn {
             BookingInfo bk = new BookingInfo();
             bk.setBookID(rs.getString("BookingID"));
             bk.setCusID(rs.getString("CustomerID"));
+            bk.setCusName(rs.getString("CustomerName"));
             bk.setRoomID(rs.getString("RoomID"));
             bk.setUser(rs.getString("UserName"));
             bk.setNote(rs.getString("Note"));
             bk.setNumGuest(rs.getInt("NumberGuest"));
             bk.setDate(LocalDate.parse(rs.getString("DateBook")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            bk.setDateLeave(LocalDate.parse(rs.getString("DateLeave")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             list_Booking.add(bk);
         }
         return list_Booking;

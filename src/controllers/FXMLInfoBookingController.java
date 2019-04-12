@@ -277,7 +277,6 @@ public class FXMLInfoBookingController implements Initializable {
             BookingID.setDisable(true);
             boxIdCustomer.setValue(FXMLInfoCustomerController.CustomerIdConect);
             System.out.println("RoomID = " + mainOverViewPaneController.service_Room_ID);
-            boxIdRoom.setValue(mainOverViewPaneController.service_Room_ID);
             DateBook.setDisable(true);
             DateBook.setValue(LocalDate.now());
             String pattern = "dd-MM-yyyy";
@@ -359,7 +358,7 @@ public class FXMLInfoBookingController implements Initializable {
 
     @FXML
     private void Format_Show_Calender(ActionEvent event) {
-        DateBook.setPromptText("Date Leave");
+        DateBook.setPromptText("Date Book");
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, DateBook);
         if (DateBook.getValue() != null && DateLeave.getValue() != null) {
@@ -393,7 +392,7 @@ public class FXMLInfoBookingController implements Initializable {
 
     @FXML
     private void Format_Show_Calender_DateLeave(ActionEvent event) {
-        DateBook.setPromptText("Date Book");
+        DateLeave.setPromptText("Date Leave");
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, DateLeave);
         if (DateBook.getValue() != null && DateLeave.getValue() != null) {
