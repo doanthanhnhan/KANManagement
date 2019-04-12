@@ -32,7 +32,7 @@ public class DAOCustomerBookingCheckIn {
 
     public static ObservableList<String> getAllRoomBookingNoCheck(String dateB, String dateL, String ID) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
-        String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where BookingID !=? AND Active!=0 ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where BookingID !=? AND Active!=0 And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
                 + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
                 + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
                 + "))";

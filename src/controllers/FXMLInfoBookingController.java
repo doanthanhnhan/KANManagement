@@ -116,11 +116,13 @@ public class FXMLInfoBookingController implements Initializable {
     public static String roomIdConect;
     public static String numberofcustomer;
     public static String customerIdConect;
+    public static LocalDate dateBookingConect;
+    public static LocalDate dateLeaveConnect;
     public static boolean checkInfoBooking = false;
     private FXMLMainOverViewPaneController mainOverViewPaneController;
     private ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
     private FXMLListBookingController fXMLListBookingController;
-    private String roomID;
+    private String dateLeave;
     public static String CusID_BookingFuture;
     @FXML
     private JFXDatePicker DateLeave;
@@ -302,7 +304,7 @@ public class FXMLInfoBookingController implements Initializable {
                 BookingID.setDisable(false);
                 BookingID.setValue(bk.getBookID());
                 boxIdRoom.setValue(bk.getRoomID());
-                roomID = boxIdRoom.getValue();
+                dateLeave = String.valueOf(DateLeave.getValue());
                 DateBook.setDisable(true);
                 DateBook.setValue(LocalDate.parse(bk.getDate()));
                 DateLeave.setValue(LocalDate.parse(bk.getDateLeave()));
@@ -334,7 +336,7 @@ public class FXMLInfoBookingController implements Initializable {
                                 BookingID.setDisable(false);
                                 BookingID.setValue(list_Booking_Info.get(i).getBookID());
                                 boxIdRoom.setValue(list_Booking_Info.get(i).getRoomID());
-                                roomID = boxIdRoom.getValue();
+                                dateLeave = String.valueOf(DateLeave.getValue());
                                 DateBook.setDisable(true);
                                 DateBook.setValue(LocalDate.parse(list_Booking_Info.get(i).getDate()));
                                 DateLeave.setValue(LocalDate.parse(list_Booking_Info.get(i).getDateLeave()));
@@ -353,7 +355,7 @@ public class FXMLInfoBookingController implements Initializable {
                 });
             }
         }
-        roomID = boxIdRoom.getValue();
+        dateLeave = String.valueOf(DateLeave.getValue());
     }
 
     @FXML
@@ -702,16 +704,18 @@ public class FXMLInfoBookingController implements Initializable {
                     roomIdConect = boxIdRoom.getValue();
                     numberofcustomer = NumberGuest.getText();
                     customerIdConect = boxIdCustomer.getValue();
-                    if (!roomID.equals(boxIdRoom.getValue())) {
+                    dateBookingConect = DateBook.getValue();
+                    dateLeaveConnect = DateLeave.getValue();
+                    if (!dateLeave.equals(String.valueOf(DateLeave.getValue()))) {
                         try {
-                            DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue(), 
+                            DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue(),
                                     String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
-                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Change Room for bookingID= " + BookingID.getValue(),
+                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Change DateLeave for bookingID= " + BookingID.getValue(),
                                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                             //UPDATE INFORMATIONS FOR ROOM WHICH HAS BEEN BOOKED
                             roomDAOImpl = new RoomDAOImpl();
                             Room room = roomDAOImpl.getRoom(boxIdRoom.getValue());
-                            if ((int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0 
+                            if ((int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0
                                     || (int) ChronoUnit.DAYS.between(room.getBookingDate(), LocalDateTime.now()) > 0) {
                                 room.setCustomerID(boxIdCustomer.getValue());
                                 room.setUserName(Username.getText());
