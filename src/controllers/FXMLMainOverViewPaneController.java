@@ -11,7 +11,9 @@ import com.jfoenix.controls.JFXComboBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +40,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import models.BookingInfo;
+import models.DAOCustomerBookingCheckIn;
 import models.Room;
 import models.RoomDAOImpl;
 import models.RoomProperty;
@@ -533,10 +537,20 @@ public class FXMLMainOverViewPaneController implements Initializable {
                             service_Customer_Full_Name = listRoom.getCustomerName();
                             room_Check_In_Date = listRoom.getCheckInDate();
 
+                            BookingInfo bookingInfo = DAOCustomerBookingCheckIn.get_Nearest_Booking(label_Room_Number.getText());
+
                             Room room = new Room();
                             room.setRoomID(label_Room_Number.getText());
                             room.setUserName(mainFormController.getUserRole().getEmployee_ID());
-                            room.setRoomStatus("Available");
+                            room.setNoOfGuests(0);
+                            room.setNoOfBooking(DAOCustomerBookingCheckIn.count_No_Of_Booking(label_Room_Number.getText()));
+                            if (bookingInfo.getBookID() == null) {
+                                room.setRoomStatus("Available");
+                                room.setBookingDate(LocalDateTime.now());
+                            } else {
+                                room.setRoomStatus("Reserved");
+                                room.setBookingDate(LocalDateTime.of(LocalDate.parse(bookingInfo.getDate()), LocalTime.now()));
+                            }
                             roomDAOImpl.editAfterCheckingRoom(room, true);
                             refreshForm();
                         });

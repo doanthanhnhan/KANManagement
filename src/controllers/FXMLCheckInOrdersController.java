@@ -463,6 +463,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 room.setCheckInDate(LocalDateTime.now());
                 room.setLeaveDate(LocalDateTime.of(LeaveDate.getValue(), LocalTime.now()));
                 room.setDayRemaining((int) ChronoUnit.DAYS.between(room.getCheckInDate(), room.getLeaveDate()));
+                room.setNoOfGuests(Integer.valueOf(NumberOfCustomer.getText()));
                 roomDAOImpl.editCheckInRoom(room, true);
                 mainOverViewPaneController.refreshForm();
 
