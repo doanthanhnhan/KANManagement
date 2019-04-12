@@ -426,6 +426,24 @@ public class FXMLCheckInOrdersController implements Initializable {
                 HboxContent.getChildren().add(label);
                 LeaveDate.requestFocus();
             });
+        } else if (CheckInDate.getValue().compareTo(LeaveDate.getValue()) > 0) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setText("Date Leave Cannot Be Bigger Than Date Book !!!");
+                LeaveDate.setStyle("-jfx-default-color: RED;");
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                LeaveDate.requestFocus();
+            });
         } else if (NumberOfCustomer.getText() == null || NumberOfCustomer.getText().equals("")) {
             Platform.runLater(() -> {
                 notificationFunction.notification(NumberOfCustomer, HboxContent, "NUMBER OF CUSTOMER MUST NOT EMPTY !!!");
@@ -487,7 +505,6 @@ public class FXMLCheckInOrdersController implements Initializable {
             });
         } else {
             Platform.runLater(() -> {
-
                 String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 CheckIn ck = new CheckIn();
                 ck.setBookID(boxBookingID.getValue());
