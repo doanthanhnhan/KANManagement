@@ -329,11 +329,11 @@ public class FXMLCheckInOrdersController implements Initializable {
 
     @FXML
     private void Cancel(ActionEvent event) {
-        if(FXMLInfoBookingVirtualController.checkInfoBookingVirtual){
-            System.out.println("Booking ID connect = "+FXMLInfoBookingController.bookingIdConect);
+        if (FXMLInfoBookingVirtualController.checkInfoBookingVirtual) {
+            System.out.println("Booking ID connect = " + FXMLInfoBookingController.bookingIdConect);
         }
         FXMLInfoBookingController.checkInfoBooking = false;
-        FXMLInfoBookingVirtualController.checkInfoBookingVirtual=false;
+        FXMLInfoBookingVirtualController.checkInfoBookingVirtual = false;
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         // do what you have to do
         stage.close();
@@ -386,24 +386,9 @@ public class FXMLCheckInOrdersController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(CheckInID, HboxContent, "Check In ID MUST NOT EMPTY !!!");
             });
-        } else if (boxBookingID.getValue() == null) {
+        } else if (NumberOfCustomer.getText() == null || NumberOfCustomer.getText().equals("")) {
             Platform.runLater(() -> {
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-                icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");
-                Label label = new Label();
-                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
-                label.setPrefSize(350, 35);
-                label.setText("ID BOOKING MUST NOT EMPTY !!!");
-                label.setAlignment(Pos.CENTER_LEFT);
-                boxBookingID.getStyleClass().removeAll();
-                boxBookingID.getStyleClass().add("jfx-combo-box-fault");
-                HboxContent.setSpacing(10);
-                HboxContent.setAlignment(Pos.CENTER_LEFT);
-                HboxContent.getChildren().clear();
-                HboxContent.getChildren().add(icon);
-                HboxContent.getChildren().add(label);
-                boxBookingID.requestFocus();
+                notificationFunction.notification(NumberOfCustomer, HboxContent, "NUMBER OF CUSTOMER MUST NOT EMPTY !!!");
             });
         } else if (boxBookingID.getValue() == null) {
             Platform.runLater(() -> {
@@ -467,6 +452,38 @@ public class FXMLCheckInOrdersController implements Initializable {
         } else if (!PatternValided.PatternNumberGuest(NumberOfCustomer.getText())) {
             Platform.runLater(() -> {
                 notificationFunction.notification(NumberOfCustomer, HboxContent, "NUMBER OF CUSTOMER INCORRECT (1-8) !!!");
+            });
+        } else if (DAOCustomerBookingCheckIn.check_Booking(boxBookingID.getValue())) {
+            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+            alert1.setTitle("Error");
+            alert1.setHeaderText("You have no right to do this !!!");
+            alert1.setContentText("Because BookingID has been check in !!!");
+            alert1.showAndWait();
+        } else if (DAOCustomerBookingCheckIn.check_RoomIdAgainBookingalready(boxRoomID.getValue(), String.valueOf(CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+                String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), boxBookingID.getValue())) {
+            Platform.runLater(() -> {
+                System.out.println("da vao chekc trung roi");
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setText("This RoomID Can Not Booking Please Choose Again !!!");
+                boxRoomID.setStyle("-jfx-default-color: RED;");
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                boxRoomID.requestFocus();
+                try {
+                    boxRoomID.setItems(DAOCustomerBookingCheckIn.getAllRoomBookingNoCheck(String.valueOf(CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+                            String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), boxBookingID.getValue()));
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
         } else {
             Platform.runLater(() -> {
