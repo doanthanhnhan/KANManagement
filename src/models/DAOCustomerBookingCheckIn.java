@@ -32,7 +32,9 @@ public class DAOCustomerBookingCheckIn {
 
     public static ObservableList<String> getAllRoomBookingNoCheck(String dateB, String dateL, String ID) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
-        String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where BookingID !=? AND Active!=0 And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where BookingID !=? AND Active!=0 "
+                + "And BookingID NOT IN (select * from BookingInfo where  (DateDiff(Day,DateBook,GetDate()) >0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)))"
+                + "And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
                 + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
                 + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
                 + "))";
@@ -56,7 +58,9 @@ public class DAOCustomerBookingCheckIn {
         try {
             Connection connection = connectDB.connectSQLServer();
             // Tạo đối tượng Statement.
-            String sql = "SELECT RoomID FROM Rooms WHERE RoomID=? AND RoomID IN (Select RoomID from BookingInfo where BookingID !=? And Active!=0 And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+            String sql = "SELECT RoomID FROM Rooms WHERE RoomID=? AND RoomID IN (Select RoomID from BookingInfo where BookingID !=? And Active!=0 "
+                    + "And BookingID NOT IN (select * from BookingInfo where  (DateDiff(Day,DateBook,GetDate()) >0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)))"
+                    + "And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
                     + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
                     + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
                     + "))";
@@ -91,7 +95,9 @@ public class DAOCustomerBookingCheckIn {
         try {
             Connection connection = connectDB.connectSQLServer();
             // Tạo đối tượng Statement.
-            String sql = "SELECT RoomID FROM Rooms WHERE RoomID=? AND RoomID IN (Select RoomID from BookingInfo where Active !=0 And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+            String sql = "SELECT RoomID FROM Rooms WHERE RoomID=? AND RoomID IN (Select RoomID from BookingInfo where Active !=0 "
+                    + "And BookingID NOT IN (select * from BookingInfo where  (DateDiff(Day,DateBook,GetDate()) >0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)))"
+                    + "And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
                     + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
                     + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
                     + "))";
@@ -123,7 +129,9 @@ public class DAOCustomerBookingCheckIn {
 
     public static ObservableList<String> getAllRoomBooking(String dateB, String dateL) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
-        String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where Active!=0 And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
+        String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where Active!=0 "
+                + "And BookingID NOT IN (select * from BookingInfo where  (DateDiff(Day,DateBook,GetDate()) >0 And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)))"
+                + " And ((DATEDIFF(day,DateBook,?)>=0 AND DATEDIFF(day,DateLeave,?)<0 ) \n"
                 + "OR (DATEDIFF(day,DateLeave,?)<=0 AND DATEDIFF(day,DateBook,?)>0)"
                 + "OR (DATEDIFF(day,DateLeave,?)>=0 AND DATEDIFF(day,DateBook,?)<=0)"
                 + "))";
