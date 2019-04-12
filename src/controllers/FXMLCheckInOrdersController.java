@@ -409,6 +409,25 @@ public class FXMLCheckInOrdersController implements Initializable {
                 HboxContent.getChildren().add(label);
                 boxBookingID.requestFocus();
             });
+        } else if (boxRoomID.getValue() == null) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setText("ID ROOM MUST NOT EMPTY !!!");
+                label.setAlignment(Pos.CENTER_LEFT);
+                boxRoomID.getStyleClass().removeAll();
+                boxRoomID.getStyleClass().add("jfx-combo-box-fault");
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                boxRoomID.requestFocus();
+            });
         } else if (LeaveDate.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
