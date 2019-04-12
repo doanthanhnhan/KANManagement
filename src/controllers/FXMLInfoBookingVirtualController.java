@@ -87,11 +87,14 @@ public class FXMLInfoBookingVirtualController implements Initializable {
     private JFXButton btnCancel;
     private ObservableList<BookingInfo> list_Booking_Info = FXCollections.observableArrayList();
     private FXMLListBookingController fXMLListBookingController;
+    public static boolean checkInfoBookingVirtual = false;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        checkInfoBookingVirtual=true;
         btnInfo.setOnAction((event) -> {
             delete();
         });
@@ -169,6 +172,7 @@ public class FXMLInfoBookingVirtualController implements Initializable {
         Scene scene = new Scene(root);
         stageEdit.setScene(scene);
         stageEdit.setOnCloseRequest((event) -> {
+            checkInfoBookingVirtual=false;
             FXMLInfoBookingController.checkInfoBooking = false;
         });
         stageEdit.show();

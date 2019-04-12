@@ -124,6 +124,7 @@ public class FXMLCheckInOrdersController implements Initializable {
         try {
             listRoomID = DAOCustomerBookingCheckIn.getAllRoomBookingNoCheck(String.valueOf((FXMLInfoBookingController.dateBookingConect).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
                     String.valueOf((FXMLInfoBookingController.dateLeaveConnect).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), FXMLInfoBookingController.bookingIdConect);
+            boxRoomID.setItems(listRoomID);
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -135,7 +136,6 @@ public class FXMLCheckInOrdersController implements Initializable {
         refreshIdUser();
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
         roomDAOImpl = new RoomDAOImpl();
-        LeaveDate.setDisable(true);
         if (FXMLInfoBookingController.checkInfoBooking) {
             System.out.println("check info booking " + FXMLInfoBookingController.checkInfoBooking);
             System.out.println("booking info conect " + FXMLInfoBookingController.bookingIdConect);
@@ -160,6 +160,7 @@ public class FXMLCheckInOrdersController implements Initializable {
             HboxBoxId.getChildren().remove(iconRefresh);
             String pattern = "dd-MM-yyyy";
             formatCalender.format(pattern, CheckInDate);
+            formatCalender.format(pattern, LeaveDate);
             NumberOfCustomer.setText(FXMLInfoBookingController.numberofcustomer);
             btnInfo.setOnAction((event) -> {
                 try {
@@ -293,6 +294,7 @@ public class FXMLCheckInOrdersController implements Initializable {
 
     @FXML
     private void Format_Show_Calender_Hiredate(ActionEvent event) {
+        boxRoomID.setDisable(false);
         LeaveDate.setPromptText("Date Leave");
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, LeaveDate);
@@ -327,7 +329,11 @@ public class FXMLCheckInOrdersController implements Initializable {
 
     @FXML
     private void Cancel(ActionEvent event) {
+        if(FXMLInfoBookingVirtualController.checkInfoBookingVirtual){
+            System.out.println("Booking ID connect = "+FXMLInfoBookingController.bookingIdConect);
+        }
         FXMLInfoBookingController.checkInfoBooking = false;
+        FXMLInfoBookingVirtualController.checkInfoBookingVirtual=false;
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         // do what you have to do
         stage.close();
@@ -471,7 +477,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 ck.setUser(Username.getText());
                 ck.setCheckID(CheckInID.getText());
                 ck.setCusID(CustomerID.getText());
-                ck.setRoomID(RoomID.getText());
+                ck.setRoomID(boxRoomID.getValue());
                 ck.setNumberOfCustomer(Integer.valueOf(NumberOfCustomer.getText()));
                 ck.setDateIn(String.valueOf(LocalDateTime.now()));
                 ck.setDateOut(dateOut);
@@ -493,7 +499,7 @@ public class FXMLCheckInOrdersController implements Initializable {
                 }
                 //Getting Room infomations to update room Status after checking in - Nhan edit here
                 Room room = new Room();
-                room.setRoomID(RoomID.getText());
+                room.setRoomID(boxBookingID.getValue());
                 room.setCustomerID(CustomerID.getText());
                 room.setUserName(Username.getText());
                 room.setRoomStatus("Occupied");
