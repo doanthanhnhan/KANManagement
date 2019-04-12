@@ -9,6 +9,8 @@
 	RoomArea decimal(8,3) NOT NULL,
 	RoomStatus varchar(10) NOT NULL,
 	DayRemaining int DEFAULT 0,
+	NoOfBooking int DEFAULT 0,
+	NoOfGuests int DEFAULT 0,
 	BookingDate datetime DEFAULT GETDATE(),
 	CheckInDate datetime DEFAULT GETDATE(),
 	LeaveDate datetime DEFAULT GETDATE(),
@@ -399,6 +401,7 @@ SELECT CASE WHEN InProgress = 1 THEN 'Checking' ELSE 'Not Checking' END AS 'Room
 FROM Rooms WHERE Active=1
 GROUP BY InProgress
 SELECT * FROM view_RoomProperty
+
 -- CREATE STORE PROCEDURE --
 CREATE PROC sp_Rooms_With_Status
 AS
@@ -643,5 +646,8 @@ DELETE FROM ServicesOrders
 
 SELECT * FROM BookingInfo
 SELECT * FROM Rooms
-DELETE FROM BookingInfo WHERE RoomID = 'R0103'
+DELETE FROM CheckInOrders
+DELETE FROM BookingInfo
+DELETE FROM Rooms
+DELETE FROM BookingInfo WHERE BookingID NOT IN (SELECT BookingID FROM CheckInOrders)
 

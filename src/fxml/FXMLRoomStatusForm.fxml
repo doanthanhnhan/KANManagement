@@ -54,6 +54,22 @@
                         <Label id="label_Repaired_Status" fx:id="label_Repair_Status" layoutX="80.0" layoutY="10.0" text="Repaired" />
                      </children>
                   </HBox>
+                  <HBox alignment="CENTER" prefWidth="200.0">
+                     <children>
+                        <FontAwesomeIconView id="icon_Date_Remaining" glyphName="BOOK">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </FontAwesomeIconView>
+                        <Label id="label_Date_Remaining" fx:id="label_Booking" text="0 Reserved" />
+                        <FontAwesomeIconView id="icon_Clean_Status" glyphName="ADDRESS_CARD">
+                           <HBox.margin>
+                              <Insets left="10.0" right="5.0" />
+                           </HBox.margin>
+                        </FontAwesomeIconView>
+                        <Label id="label_Clean_Status" fx:id="label_No_Of_Guests" layoutX="10.0" layoutY="10.0" text="0 Customers" />
+                     </children>
+                  </HBox>
                   <HBox id="hBox_Buttons" fx:id="hBox_Buttons" alignment="CENTER" prefWidth="200.0" spacing="5.0">
                      <children>
                         <JFXButton id="btn_CheckIn" fx:id="btn_Check_In" prefWidth="125.0" styleClass="btn-green-color" text="Check in">

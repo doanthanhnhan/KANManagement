@@ -183,6 +183,29 @@ public class DAOCustomerBookingCheckIn {
         }
         return list_Booking_Info;
     }
+    // COUNT NUMBER BOOKING OF A ROOM - NHAN EDIT
+    public static int count_No_Of_Booking(String roomID){
+        int count=0;
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "SELECT COUNT(BookingID) AS 'NoOfBooking' FROM BookingInfo WHERE BookingID NOT IN (SELECT BookingID FROM CheckInOrders) "
+                    + "AND RoomID = ?";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, roomID);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                count = rs.getInt("NoOfBooking");
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
 //    check bookingid have checkin
 
     public static boolean check_Booking(String ID) {

@@ -35,6 +35,8 @@ public class Room {
     private BooleanProperty roomRepaired;
     private BooleanProperty roomInProgress;
     private IntegerProperty dayRemaining;
+    private IntegerProperty noOfBooking;
+    private IntegerProperty noOfGuests;
     private IntegerProperty dayLeave;
     private IntegerProperty dayBooking;
     private BooleanProperty Active;
@@ -59,6 +61,8 @@ public class Room {
         this.roomRepaired = new SimpleBooleanProperty();
         this.roomInProgress = new SimpleBooleanProperty();
         this.dayRemaining = new SimpleIntegerProperty();
+        this.noOfBooking = new SimpleIntegerProperty();
+        this.noOfGuests = new SimpleIntegerProperty();
         this.dayBooking = new SimpleIntegerProperty();
         this.dayLeave = new SimpleIntegerProperty();
         this.Active = new SimpleBooleanProperty();
@@ -305,6 +309,30 @@ public class Room {
 
     public void setCusDiscount(BigDecimal cusDiscount) {
         this.cusDiscount = cusDiscount;
+    }
+
+    public final int getNoOfBooking() {
+        return noOfBooking.get();
+    }
+
+    public final void setNoOfBooking(int value) {
+        noOfBooking.set(value);
+    }
+
+    public IntegerProperty noOfBookingProperty() {
+        return noOfBooking;
+    }
+
+    public final int getNoOfGuests() {
+        return noOfGuests.get();
+    }
+
+    public final void setNoOfGuests(int value) {
+        noOfGuests.set(value);
+    }
+
+    public IntegerProperty noOfGuestsProperty() {
+        return noOfGuests;
     }
 
     @Override
