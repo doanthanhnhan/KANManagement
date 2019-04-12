@@ -47,6 +47,10 @@ public class FXMLRoomStatusFormController implements Initializable {
     private JFXButton btn_Service;
     @FXML
     private HBox hBox_Buttons;
+    @FXML
+    private Label label_Booking;
+    @FXML
+    private Label label_No_Of_Guests;
 
     /**
      * Initializes the controller class.
