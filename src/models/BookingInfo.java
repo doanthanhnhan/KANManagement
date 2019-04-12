@@ -20,6 +20,15 @@ public class BookingInfo {
     public IntegerProperty NumGuest;
 
     public BookingInfo() {
+        this.BookID = new SimpleStringProperty();
+        this.CusID = new SimpleStringProperty();
+        this.RoomID = new SimpleStringProperty();
+        this.User = new SimpleStringProperty();
+        this.Note = new SimpleStringProperty();
+        this.NumGuest = new SimpleIntegerProperty();
+        this.Date = new SimpleStringProperty();
+        this.DateLeave = new SimpleStringProperty();
+        this.CusName = new SimpleStringProperty();
     }
 
     public BookingInfo(String BookID, String CusID, String RoomID, String User, String Note, Integer NumGuest, String Date, String DateLeave, String CusName) {

@@ -207,6 +207,38 @@ public class DAOCustomerBookingCheckIn {
         }
         return count;
     }
+
+    // GET NEAREST BOOKING OF A ROOM - NHAN EDIT
+    public static BookingInfo get_Nearest_Booking(String roomID) {
+        BookingInfo bk = new BookingInfo();
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "SELECT * FROM BookingInfo WHERE DateBook IN (SELECT MIN(DateBook) FROM BookingInfo WHERE DateBook > GETDATE()) "
+                    + "AND RoomID=? AND Active=1";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, roomID);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                bk.setBookID(rs.getString("BookingID"));
+                bk.setCusID(rs.getString("CustomerID"));
+                bk.setRoomID(rs.getString("RoomID"));
+                bk.setNote(rs.getString("Note"));
+                bk.setNumGuest(rs.getInt("NumberGuest"));
+                bk.setUser(rs.getString("UserName"));
+                bk.setDate(rs.getString("DateBook"));
+                bk.setDateLeave(rs.getString("DateLeave"));
+                bk.setCusName(rs.getString("CustomerName"));
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return bk;
+    }
 //    check bookingid have checkin
 
     public static boolean check_Booking(String ID) {

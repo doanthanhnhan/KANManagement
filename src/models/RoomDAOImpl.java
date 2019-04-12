@@ -474,7 +474,7 @@ public class RoomDAOImpl implements RoomDAO {
     @Override
     public void editCheckInRoom(Room room, Boolean active) {
         String sql = "UPDATE Rooms SET CustomerID=?, UserName=?, RoomStatus=?, "
-                + "DayRemaining=?, CheckInDate=?, LeaveDate=? "
+                + "DayRemaining=?, CheckInDate=?, LeaveDate=?, NoOfGuests=? "
                 + "WHERE RoomID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -484,7 +484,8 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.setInt(4, room.getDayRemaining());
                 stmt.setTimestamp(5, Timestamp.valueOf(room.getCheckInDate()));
                 stmt.setTimestamp(6, Timestamp.valueOf(room.getLeaveDate()));
-                stmt.setString(7, room.getRoomID());
+                stmt.setInt(7, room.getNoOfGuests());
+                stmt.setString(8, room.getRoomID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -530,8 +531,8 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public void editAfterCheckingRoom(Room room, Boolean active) {
-        String sql = "UPDATE Rooms SET UserName=?, RoomStatus=?, "
-                + "Clean=?, InProgress=?, Repaired=? "
+        String sql = "UPDATE Rooms SET UserName=?, RoomStatus=?, Clean=?, InProgress=?, Repaired=?, "
+                + "NoOfBooking=?, NoOfGuests=?, BookingDate=? "
                 + "WHERE RoomID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -540,7 +541,10 @@ public class RoomDAOImpl implements RoomDAO {
                 stmt.setBoolean(3, true);
                 stmt.setBoolean(4, false);
                 stmt.setBoolean(5, true);
-                stmt.setString(6, room.getRoomID());
+                stmt.setInt(6, room.getNoOfBooking());
+                stmt.setInt(7, room.getNoOfGuests());
+                stmt.setTimestamp(8, Timestamp.valueOf(room.getBookingDate()));
+                stmt.setString(9, room.getRoomID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
