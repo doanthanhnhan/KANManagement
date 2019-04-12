@@ -847,7 +847,7 @@ public class DAOCustomerBookingCheckIn {
                 fullName = rs.getString("CustomerLastName") + " " + rs.getString("CustomerMidName") + " " + rs.getString("CustomerFirstName");
             }
         }
-        String exm = "Insert into Bookinginfo values(?,?,?,?,?,?,?,?,?,?)";
+        String exm = "Insert into Bookinginfo (BookingID, CustomerID, RoomID, UserName, Note, NumberGuest, DateBook, Active, DateLeave, CustomerName) values(?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pt = connection.prepareStatement(exm);
 
         pt.setString(1, bk.getBookID());

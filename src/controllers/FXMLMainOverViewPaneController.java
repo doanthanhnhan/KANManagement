@@ -451,6 +451,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 Label label_Clean_Status = (Label) pane.lookup("#label_Clean_Status");
                 Label label_Repaired_Status = (Label) pane.lookup("#label_Repaired_Status");
                 Label label_Customer_Name = (Label) pane.lookup("#label_Customer_Name");
+                Label label_No_Of_Booking = (Label) pane.lookup("#label_Booking");
+                Label label_No_Of_Guests = (Label) pane.lookup("#label_No_Of_Guests");
                 //HBox hbox_Room_Owner_Type = (HBox) pane.lookup("#hbox_Room_Owner_Type");                
                 HBox hBox_Buttons = (HBox) pane.lookup("#hBox_Buttons");
                 FontAwesomeIconView icon_Room_Type = (FontAwesomeIconView) pane.lookup("#icon_Room_Type");
@@ -622,6 +624,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
                     icon_Clean_Status.getStyleClass().removeAll();
                     icon_Clean_Status.getStyleClass().add("glyph-icon-primary");
                 }
+                label_No_Of_Booking.setText(String.valueOf(listRoom.getNoOfBooking()) + " Booking");
+                label_No_Of_Guests.setText(String.valueOf(listRoom.getNoOfGuests()) + " Guests");
 
                 parentPane.getChildren().add(pane);
 
