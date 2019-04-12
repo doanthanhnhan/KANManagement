@@ -124,6 +124,7 @@ public class FXMLInfoBookingController implements Initializable {
     private FXMLListBookingController fXMLListBookingController;
     private String dateLeave;
     public static String CusID_BookingFuture;
+    public static Integer checkDeleteBookingID;
     @FXML
     private JFXDatePicker DateLeave;
 
@@ -356,6 +357,7 @@ public class FXMLInfoBookingController implements Initializable {
             }
         }
         dateLeave = String.valueOf(DateLeave.getValue());
+        checkDeleteBookingID = list_Booking_Info.size();
     }
 
     @FXML
@@ -675,7 +677,7 @@ public class FXMLInfoBookingController implements Initializable {
                     //UPDATE INFORMATIONS FOR ROOM WHICH HAS BEEN BOOKED
                     roomDAOImpl = new RoomDAOImpl();
                     Room room = roomDAOImpl.getRoom(boxIdRoom.getValue());
-                    if ((int) ChronoUnit.HOURS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0 
+                    if ((int) ChronoUnit.HOURS.between(room.getBookingDate(), LocalDateTime.of(DateBook.getValue(), LocalTime.now())) < 0
                             || (int) ChronoUnit.HOURS.between(room.getBookingDate(), LocalDateTime.now()) >= 0) {
                         room.setCustomerID(boxIdCustomer.getValue());
                         room.setUserName(Username.getText());
@@ -689,7 +691,7 @@ public class FXMLInfoBookingController implements Initializable {
                     //END UNDATE ROOM
                     //CREATE QR CODE FILE AND SEND EMAIL
                     String customerEmail = DAOCustomerBookingCheckIn.getCustomerEmail(boxIdCustomer.getValue());
-                    if ((!FXMLInfoCustomerController.checkInfoCustomer || !FXMLInfoCustomerController.checkInfoCustomerAlready) 
+                    if ((!FXMLInfoCustomerController.checkInfoCustomer || !FXMLInfoCustomerController.checkInfoCustomerAlready)
                             && !customerEmail.equals("")) {
                         String content = "BookingID : " + BookingID.getValue() + ". Use the attached QRCode for checking in faster.";
                         QRCreate.create_Booking_QRCode(BookingID.getValue());
@@ -764,6 +766,13 @@ public class FXMLInfoBookingController implements Initializable {
                         Scene scene = new Scene(root);
                         stageEdit.setScene(scene);
                         stageEdit.setOnCloseRequest((event) -> {
+                            if (FXMLInfoBookingController.checkDeleteBookingID.equals(0)) {
+                                try {
+                                    DAOCustomerBookingCheckIn.deleteBooking(BookingID.getValue());
+                                } catch (ClassNotFoundException | SQLException ex) {
+                                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
                             checkInfoBooking = false;
                         });
                         stageEdit.show();

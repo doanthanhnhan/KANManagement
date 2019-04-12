@@ -94,7 +94,7 @@ public class FXMLInfoBookingVirtualController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        checkInfoBookingVirtual=true;
+        checkInfoBookingVirtual = true;
         btnInfo.setOnAction((event) -> {
             delete();
         });
@@ -172,7 +172,14 @@ public class FXMLInfoBookingVirtualController implements Initializable {
         Scene scene = new Scene(root);
         stageEdit.setScene(scene);
         stageEdit.setOnCloseRequest((event) -> {
-            checkInfoBookingVirtual=false;
+            if (FXMLInfoBookingController.checkDeleteBookingID.equals(0)) {
+                try {
+                    DAOCustomerBookingCheckIn.deleteBooking(FXMLInfoBookingController.bookingIdConect);
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(FXMLInfoBookingVirtualController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            checkInfoBookingVirtual = false;
             FXMLInfoBookingController.checkInfoBooking = false;
         });
         stageEdit.show();

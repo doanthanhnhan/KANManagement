@@ -328,9 +328,9 @@ public class FXMLCheckInOrdersController implements Initializable {
     }
 
     @FXML
-    private void Cancel(ActionEvent event) {
-        if (FXMLInfoBookingVirtualController.checkInfoBookingVirtual) {
-            System.out.println("Booking ID connect = " + FXMLInfoBookingController.bookingIdConect);
+    private void Cancel(ActionEvent event) throws ClassNotFoundException, SQLException {
+        if(FXMLInfoBookingController.checkDeleteBookingID.equals(0)){
+            DAOCustomerBookingCheckIn.deleteBooking(boxBookingID.getValue());
         }
         FXMLInfoBookingController.checkInfoBooking = false;
         FXMLInfoBookingVirtualController.checkInfoBookingVirtual = false;
