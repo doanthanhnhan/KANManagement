@@ -8,191 +8,189 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="450.0" prefWidth="400.0" stylesheets="@../css/dark-theme.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controllers.FXMLSettingsController">
+<AnchorPane id="AnchorPane" prefHeight="450.0" prefWidth="400.0" stylesheets="@../css/dark-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLSettingsController">
    <children>
-      <JFXTabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <tabs>
-            <Tab text="General">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <JFXTabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+               <tabs>
+                  <Tab fx:id="tab_General" text="General">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <HBox alignment="CENTER">
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <ComboBox prefWidth="300.0" promptText="Choose server" styleClass="jfx-combo-box" />
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <ComboBox fx:id="comboBox_Choose_Server" prefWidth="300.0" promptText="Choose server" styleClass="jfx-combo-box" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_SMTP_Server" labelFloat="true" prefWidth="300.0" promptText="SMTP Server">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_SMTP_Port" labelFloat="true" prefWidth="300.0" promptText="SMTP Port">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Email" labelFloat="true" prefWidth="300.0" promptText="Email address">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXPasswordField fx:id="txt_Email_Password" labelFloat="true" prefWidth="300.0" promptText="Email password">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXPasswordField>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="SMTP Server">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="Port">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="Email">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXPasswordField labelFloat="true" prefWidth="300.0" promptText="Email password">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXPasswordField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" spacing="20.0">
-                                 <children>
-                                    <JFXButton prefWidth="120.0" styleClass="btn-green-color" text="Save" />
-                                    <JFXButton prefWidth="120.0" styleClass="btn-red-color" text="Cancel" />
-                                 </children>
-                              </HBox>
+                                 <padding>
+                                    <Insets bottom="30.0" top="50.0" />
+                                 </padding>
+                              </VBox>
                            </children>
-                           <padding>
-                              <Insets bottom="30.0" top="50.0" />
-                           </padding>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
-            <Tab text="Local Server">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tab_Local" text="Local Server">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <HBox alignment="CENTER">
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="Database URL">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Local_Database_URL" labelFloat="true" prefWidth="300.0" promptText="Database URL">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Local_Database_Name" labelFloat="true" prefWidth="300.0" promptText="Database name">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Local_Server_User" labelFloat="true" prefWidth="300.0" promptText="User">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXPasswordField fx:id="txt_Local_Server_Password" labelFloat="true" prefWidth="300.0" promptText="Password">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXPasswordField>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="Database name">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="User">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXPasswordField labelFloat="true" prefWidth="300.0" promptText="Password">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXPasswordField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" spacing="20.0">
-                                 <children>
-                                    <JFXButton prefWidth="120.0" styleClass="btn-green-color" text="Save" />
-                                    <JFXButton prefWidth="120.0" styleClass="btn-red-color" text="Cancel" />
-                                 </children>
-                              </HBox>
+                                 <padding>
+                                    <Insets bottom="30.0" top="50.0" />
+                                 </padding>
+                              </VBox>
                            </children>
-                           <padding>
-                              <Insets bottom="30.0" top="50.0" />
-                           </padding>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-            <Tab text="Remote Server">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="tab_Remote" text="Remote Server">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <HBox alignment="CENTER">
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="Database URL">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Remote_Server_Database_URL" labelFloat="true" prefWidth="300.0" promptText="Database URL">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Remote_Server_Database_Name" labelFloat="true" prefWidth="300.0" promptText="Database name">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXTextField fx:id="txt_Remote_Server_User" labelFloat="true" prefWidth="300.0" promptText="User">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXPasswordField fx:id="txt_Remote_Server_Password" labelFloat="true" prefWidth="300.0" promptText="Password">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </JFXPasswordField>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="Database name">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXTextField labelFloat="true" prefWidth="300.0" promptText="User">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXTextField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
-                                    <JFXPasswordField labelFloat="true" prefWidth="300.0" promptText="Password">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXPasswordField>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" spacing="20.0">
-                                 <children>
-                                    <JFXButton prefWidth="120.0" styleClass="btn-green-color" text="Save" />
-                                    <JFXButton prefWidth="120.0" styleClass="btn-red-color" text="Cancel" />
-                                 </children>
-                              </HBox>
+                                 <padding>
+                                    <Insets bottom="30.0" top="50.0" />
+                                 </padding>
+                              </VBox>
                            </children>
-                           <padding>
-                              <Insets bottom="30.0" top="50.0" />
-                           </padding>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-         </tabs>
-      </JFXTabPane>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+               </tabs>
+            </JFXTabPane>
+         </center>
+         <bottom>
+            <HBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXButton fx:id="btn_Save" onAction="#Save_Action" prefWidth="120.0" styleClass="btn-green-color" text="Save" />
+                  <JFXButton fx:id="btn_Cancel" onAction="#Cancel_Action" prefWidth="120.0" styleClass="btn-red-color" text="Cancel" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" />
+               </BorderPane.margin>
+            </HBox>
+         </bottom>
+      </BorderPane>
    </children>
 </AnchorPane>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:setting xmlns:ns2="https://www.google.com/">
+    <chooseServer>s6BR4BJmHZo=</chooseServer>
+    <smtpServer>dWsIOGZb+oY3YjYBT1xwVg==</smtpServer>
+    <smtpPort>Taa1Qo+a79k=</smtpPort>
+    <emailAdress>Lbw+pAshyysPRfFLMCLxyeJddgVb3Bs3g7/aDpkfgMs=</emailAdress>
+    <emailPassword>R7mhpT0AOgOyYxTUP8OFXQ==</emailPassword>
+    <localServer_DB_URL>nhe0wOHWnkT1MmTBbkJDSA==</localServer_DB_URL>
+    <localServer_DB_Name>9nj3fAJ0m43qxSsz2oNd8g==</localServer_DB_Name>
+    <localServer_User>Wo79Sxa5Mub7GiprzpKK9g==</localServer_User>
+    <localServer_Password>sRF1xTHIhCpIf6O/zUwLLA==</localServer_Password>
+    <remoteServer_DB_URL>5ewtT2KCDRaLrVhxmTHLxQ==</remoteServer_DB_URL>
+    <remoteServer_DB_Name>n7eFjl2E/j7pXXmwrUlhEw==</remoteServer_DB_Name>
+    <remoteServer_User>5ewtT2KCDRZBBsx+B4roag==</remoteServer_User>
+    <remoteServer_Password>2EUBBY1UNMsQ/KIiqamG3Q==</remoteServer_Password>
+    <secretKey>lx/VYagszgg=</secretKey>
+</ns2:setting>

@@ -14,7 +14,8 @@ import java.security.NoSuchAlgorithmException;
  * @author Admin
  */
 public class MD5Encrypt {
-      public String encryptPass(String pass) {
+
+    public String encryptPass(String pass) {
 
         String passEncrypt;
 
@@ -22,14 +23,15 @@ public class MD5Encrypt {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException ex) {
-            
+
         }
         md5.update(pass.getBytes());
         BigInteger dis = new BigInteger(1, md5.digest());
         passEncrypt = dis.toString();
         return passEncrypt;
     }
-    public String hashPass(String pass){
+
+    public String hashPass(String pass) {
         String hash;
         pass = pass + "KAN";
         hash = encryptPass(pass);

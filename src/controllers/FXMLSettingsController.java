@@ -5,23 +5,216 @@
  */
 package controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXTextField;
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
+import javafx.stage.Stage;
+import models.Setting;
+import utils.PatternValided;
+import utils.SettingXML;
 
 /**
  * FXML Controller class
  *
- * @author Đoàn Thanh Nhân <your.name at your.org>
+ * @author Đoàn Thanh Nhân
  */
 public class FXMLSettingsController implements Initializable {
+
+    private boolean check_Validate_Form;
+    private SimpleStringProperty local_Server_URL;
+
+    @FXML
+    private ComboBox<String> comboBox_Choose_Server;
+    @FXML
+    private JFXTextField txt_SMTP_Server;
+    @FXML
+    private JFXTextField txt_SMTP_Port;
+    @FXML
+    private JFXTextField txt_Email;
+    @FXML
+    private JFXPasswordField txt_Email_Password;
+    @FXML
+    private JFXTextField txt_Local_Database_URL;
+    @FXML
+    private JFXTextField txt_Local_Database_Name;
+    @FXML
+    private JFXTextField txt_Local_Server_User;
+    @FXML
+    private JFXPasswordField txt_Local_Server_Password;
+    @FXML
+    private JFXTextField txt_Remote_Server_Database_URL;
+    @FXML
+    private JFXTextField txt_Remote_Server_Database_Name;
+    @FXML
+    private JFXTextField txt_Remote_Server_User;
+    @FXML
+    private JFXPasswordField txt_Remote_Server_Password;
+    @FXML
+    private JFXButton btn_Save;
+    @FXML
+    private JFXButton btn_Cancel;
+    @FXML
+    private Tab tab_General;
+    @FXML
+    private Tab tab_Local;
+    @FXML
+    private Tab tab_Remote;
+    @FXML
+    private JFXTabPane mainTabPane;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+        local_Server_URL = new SimpleStringProperty();
+        // Initialize comboBox
+        ObservableList<String> listServer = FXCollections.observableArrayList();
+        listServer.addAll("Local", "Remote");
+        comboBox_Choose_Server.setItems(listServer);
+
+        // Initialize Text field
+        File file = new File("");
+        File fileSetting = new File(file.getAbsolutePath() + "/src/xml/settings.xml");
+        if (fileSetting.exists() && !fileSetting.isDirectory()) {
+            Setting setting = SettingXML.readXML();
+
+            comboBox_Choose_Server.setValue(setting.getChooseServer());
+            txt_Email.setText(setting.getEmailAdress());
+            txt_Email_Password.setText(setting.getEmailPassword());
+            txt_Local_Database_Name.setText(setting.getLocalServer_DB_Name());
+            txt_Local_Database_URL.setText(setting.getLocalServer_DB_URL());
+            txt_Local_Server_Password.setText(setting.getLocalServer_Password());
+            txt_Local_Server_User.setText(setting.getLocalServer_User());
+            txt_Remote_Server_Database_Name.setText(setting.getRemoteServer_DB_Name());
+            txt_Remote_Server_Database_URL.setText(setting.getRemoteServer_DB_URL());
+            txt_Remote_Server_Password.setText(setting.getRemoteServer_Password());
+            txt_Remote_Server_User.setText(setting.getRemoteServer_User());
+            txt_SMTP_Port.setText(setting.getSmtpPort());
+            txt_SMTP_Server.setText(setting.getSmtpServer());
+
+        } else {
+            comboBox_Choose_Server.setValue("Local");
+        }
+    }
+
+    public Setting get_Data_From_Form() {
+        Setting setting = new Setting();
+        setting.setChooseServer(comboBox_Choose_Server.getValue());
+        setting.setEmailAdress(txt_Email.getText());
+        setting.setEmailPassword(txt_Email_Password.getText());
+        setting.setLocalServer_DB_Name(txt_Local_Database_Name.getText());
+        setting.setLocalServer_DB_URL(txt_Local_Database_URL.getText());
+        setting.setLocalServer_Password(txt_Local_Server_Password.getText());
+        setting.setLocalServer_User(txt_Local_Server_User.getText());
+        setting.setRemoteServer_DB_Name(txt_Remote_Server_Database_Name.getText());
+        setting.setRemoteServer_DB_URL(txt_Remote_Server_Database_URL.getText());
+        setting.setRemoteServer_Password(txt_Remote_Server_Password.getText());
+        setting.setRemoteServer_User(txt_Remote_Server_User.getText());
+        setting.setSmtpPort(txt_SMTP_Port.getText());
+        setting.setSmtpServer(txt_SMTP_Server.getText());
+        return setting;
+    }
+
+    public void validate_Form() {
+        if (txt_Email.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_General);
+            txt_Email.requestFocus();
+            txt_Email.getStyleClass().add("text-field-fault");
+        } else if (txt_Email_Password.getText().isEmpty() || PatternValided.PatternEmail(txt_Email_Password.getText())) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_General);
+            txt_Email_Password.requestFocus();
+            txt_Email_Password.getStyleClass().add("text-field-fault");
+        } else if (txt_Local_Database_Name.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_Local);
+            txt_Local_Database_Name.requestFocus();
+            txt_Local_Database_Name.getStyleClass().add("text-field-fault");
+        } else if (txt_Local_Database_URL.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_Local);
+            txt_Local_Database_URL.requestFocus();
+            txt_Local_Database_URL.getStyleClass().add("text-field-fault");
+        } else if (txt_Local_Server_Password.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_Local);
+            txt_Local_Server_Password.requestFocus();
+            txt_Local_Server_Password.getStyleClass().add("text-field-fault");
+        } else if (txt_Local_Server_User.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_Local);
+            txt_Local_Server_User.requestFocus();
+            txt_Local_Server_User.getStyleClass().add("text-field-fault");
+        } else if (txt_Remote_Server_Database_Name.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_Remote);
+            txt_Remote_Server_Database_Name.requestFocus();
+            txt_Remote_Server_Database_Name.getStyleClass().add("text-field-fault");
+        } else if (txt_Remote_Server_Database_URL.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_Remote);
+            txt_Remote_Server_Database_URL.requestFocus();
+            txt_Remote_Server_Database_URL.getStyleClass().add("text-field-fault");
+        } else if (txt_Remote_Server_Password.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_Remote);
+            txt_Remote_Server_Password.requestFocus();
+            txt_Remote_Server_Password.getStyleClass().add("text-field-fault");
+        } else if (txt_Remote_Server_User.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_Remote);
+            txt_Remote_Server_User.requestFocus();
+            txt_Remote_Server_User.getStyleClass().add("text-field-fault");
+        } else if (txt_SMTP_Port.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_General);
+            txt_SMTP_Port.requestFocus();
+            txt_SMTP_Port.getStyleClass().add("text-field-fault");
+        } else if (txt_SMTP_Server.getText().isEmpty()) {
+            check_Validate_Form = false;
+            mainTabPane.getSelectionModel().select(tab_General);
+            txt_SMTP_Server.requestFocus();
+            txt_SMTP_Server.getStyleClass().add("text-field-fault");
+        } else {
+            System.out.println("Validate finished!");
+            check_Validate_Form = true;
+        }
+    }
+
+    @FXML
+    private void Save_Action(ActionEvent event) {
+        validate_Form();
+        if (check_Validate_Form) {
+            Setting setting = get_Data_From_Form();
+            SettingXML.writeXML(setting);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText("Informations");
+            alert.setContentText("Setting informations have been saved successful!");
+            alert.show();
+        }
+    }
+
+    @FXML
+    private void Cancel_Action(ActionEvent event) {
+        Stage stage = (Stage) btn_Cancel.getScene().getWindow();
+        stage.close();
+    }
 }
