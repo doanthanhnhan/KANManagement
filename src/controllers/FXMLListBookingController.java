@@ -92,7 +92,6 @@ public class FXMLListBookingController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        contextMenu_Main.getItems().remove(menuItem_Edit);
         check_formBooking_list = true;
         setColumns();
         showUsersData();
@@ -122,6 +121,9 @@ public class FXMLListBookingController implements Initializable {
         }
         if (!userRole.ischeckBooking_Delete()) {
             contextMenu_Main.getItems().remove(menuItem_Delete);
+        }
+        if (!userRole.ischeckBooking_Edit()) {
+            contextMenu_Main.getItems().remove(menuItem_Edit);
         }
     }
 
@@ -262,6 +264,8 @@ public class FXMLListBookingController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
+        StageLoader stageLoader = new StageLoader();
+        stageLoader.formLoader("/fxml/FXMLEditBooking.fxml", "/images/KAN Logo.png", "Edit Booking Informations");
     }
 
     @FXML

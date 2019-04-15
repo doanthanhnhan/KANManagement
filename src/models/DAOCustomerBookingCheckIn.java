@@ -28,8 +28,47 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
-//    nocheck booking
+//    check DateBook
 
+    public static String DateBookCheck(String IdBooking) {
+        String datebook = null;
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "SELECT DateBook from BookingInfo where BookingId=?";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, IdBooking);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                datebook = rs.getString("DateBook");
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return datebook;
+    }
+    //    update edit booking
+
+    public static void Update_EditBooking(String id, String RoomID, String DateBook, String DateLeave, Integer NumberGuest, String Note) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE BookingInfo SET RoomID = ?,DateLeave=?,DateBook=?,Note=?,NumberGuest=? WHERE BookingID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, RoomID);
+        pt.setString(2, DateLeave);
+        pt.setString(3, DateBook);
+        pt.setString(4, Note);
+        pt.setInt(5, NumberGuest);
+        pt.setString(6, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+
+//    nocheck booking
     public static ObservableList<String> getAllRoomBookingNoCheck(String dateB, String dateL, String ID) throws SQLException, ClassNotFoundException {
         Connection connection = connectDB.connectSQLServer();
         String sql = "SELECT RoomID FROM Rooms WHERE RoomID NOT IN (Select RoomID from BookingInfo where BookingID !=? AND Active!=0 "

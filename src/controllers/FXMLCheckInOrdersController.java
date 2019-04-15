@@ -83,7 +83,6 @@ public class FXMLCheckInOrdersController implements Initializable {
     private HBox HboxBoxId;
     @FXML
     private JFXComboBox<String> boxBookingID;
-    private JFXTextField RoomID;
     @FXML
     private VBox vBox_Info_Right;
     @FXML
@@ -115,6 +114,8 @@ public class FXMLCheckInOrdersController implements Initializable {
     private Integer numberCustomer;
     @FXML
     private JFXComboBox<String> boxRoomID;
+    private String RoomIDBooking;
+    private String LeaveDateBooking;
 
     /**
      * Initializes the controller class.
@@ -258,38 +259,10 @@ public class FXMLCheckInOrdersController implements Initializable {
                 }
             }
         });
-//        install when click box booking id show all info booking
-        boxBookingID.valueProperty().addListener((obs, oldItem, newItem) -> {
-            System.out.println("Kiem tra newItem: " + newItem);
-            if (newItem != null && !newItem.equals("")) {
-                LeaveDate.setDisable(false);
-                LeaveDate.setDayCellFactory(picker -> new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate date, boolean empty) {
-                        super.updateItem(date, empty);
-                        LocalDate today = LocalDate.now();
-                        setDisable(empty || date.compareTo(today) < 0);
-                    }
-                });
-                BookingInfo bk = new BookingInfo();
-                try {
-                    bk = DAOCustomerBookingCheckIn.getAllBookingInfo(newItem);
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                CustomerID.setText(bk.getCusID());
-                NumberOfCustomer.setText(String.valueOf(bk.getNumGuest()));
-                RoomID.setText(bk.getRoomID());
-                CheckInID.setText("CI-" + newItem);
-                CheckInDate.setValue(LocalDate.now());
-                String pattern = "dd-MM-yyyy";
-                formatCalender.format(pattern, CheckInDate);
-            }
-            HboxContent.getChildren().clear();
-            boxBookingID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
-        });
         // TODO
         numberCustomer = Integer.parseInt(NumberOfCustomer.getText());
+        RoomIDBooking = boxRoomID.getValue();
+        LeaveDateBooking = String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     }
 
     @FXML
@@ -329,7 +302,7 @@ public class FXMLCheckInOrdersController implements Initializable {
 
     @FXML
     private void Cancel(ActionEvent event) throws ClassNotFoundException, SQLException {
-        if(FXMLInfoBookingController.checkDeleteBookingID.equals(0)){
+        if (FXMLInfoBookingController.checkDeleteBookingID.equals(0)) {
             DAOCustomerBookingCheckIn.deleteBooking(boxBookingID.getValue());
         }
         FXMLInfoBookingController.checkInfoBooking = false;
@@ -522,8 +495,27 @@ public class FXMLCheckInOrdersController implements Initializable {
                     Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
+        } else if (!String.valueOf(CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).equals(DAOCustomerBookingCheckIn.DateBookCheck(boxBookingID.getValue()))) {
+            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+            alert1.setTitle("Error");
+            alert1.setHeaderText("You have no right to do this !!!");
+            alert1.setContentText("Because BookingID has been change DateBooking. Please Check Again !!!");
+            alert1.showAndWait();
+            Stage stage = (Stage) anchorPaneCheckInOrders.getScene().getWindow();
+            stage.close();
+            FXMLInfoBookingController.checkInfoBooking = false;
         } else {
             Platform.runLater(() -> {
+                if (!String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).equals(LeaveDateBooking)
+                        || !RoomIDBooking.equals(boxRoomID.getValue())) {
+                    try {
+                        DAOCustomerBookingCheckIn.Update_BookingLeave(boxBookingID.getValue(), boxRoomID.getValue(), String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "CHECK IN !!! Change InfoBooking booking id = " + boxBookingID.getValue(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                }
                 String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 CheckIn ck = new CheckIn();
                 ck.setBookID(boxBookingID.getValue());
@@ -571,7 +563,6 @@ public class FXMLCheckInOrdersController implements Initializable {
                     CheckInID.setText("");
                     boxBookingID.setValue(null);
                     CustomerID.setText("");
-                    RoomID.setText("");
                     NumberOfCustomer.setText("");
                     CheckInDate.setValue(null);
                     LeaveDate.setValue(null);

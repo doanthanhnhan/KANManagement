@@ -39,6 +39,15 @@ public class ConnectControllers {
     public static FXMLListBookingController fXMLListBookingController;
     public static FXMLListBookingVirtualController fXMLListBookingVirtualController;
     public static FXMLInfoBookingVirtualController fXMLInfoBookingVirtualController;
+    public static FXMLEditBookingController fXMLEditBookingController;
+
+    public static FXMLEditBookingController getfXMLEditBookingController() {
+        return fXMLEditBookingController;
+    }
+
+    public static void setfXMLEditBookingController(FXMLEditBookingController fXMLEditBookingController) {
+        ConnectControllers.fXMLEditBookingController = fXMLEditBookingController;
+    }
 
     public static FXMLInfoBookingVirtualController getfXMLInfoBookingVirtualController() {
         return fXMLInfoBookingVirtualController;

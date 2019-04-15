@@ -127,7 +127,7 @@ public class FXMLInfoBookingController implements Initializable {
     public static Integer checkDeleteBookingID;
     @FXML
     private JFXDatePicker DateLeave;
-
+    String RoomIDBooking;
     /**
      * Initializes the controller class.
      */
@@ -194,6 +194,24 @@ public class FXMLInfoBookingController implements Initializable {
             });
         });
         DateBook.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            Platform.runLater(() -> {
+                HboxContent.getChildren().clear();
+            });
+            if (event.getCode() == KeyCode.ENTER) {
+                try {
+                    btnSubmitBooking();
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        DateLeave.valueProperty().addListener((obs, oldItem, newItem) -> {
+            Platform.runLater(() -> {
+                DateLeave.setStyle("-jfx-default-color: #6447cd;");
+                HboxContent.getChildren().clear();
+            });
+        });
+        DateLeave.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             Platform.runLater(() -> {
                 HboxContent.getChildren().clear();
             });
@@ -315,7 +333,7 @@ public class FXMLInfoBookingController implements Initializable {
                 NumberGuest.setDisable(true);
                 Note.setDisable(true);
                 String pattern = "dd-MM-yyyy";
-                formatCalender.format(pattern, DateLeave);
+                formatCalender.format(pattern, DateBook);
                 formatCalender.format(pattern, DateLeave);
                 break;
             }
@@ -358,6 +376,7 @@ public class FXMLInfoBookingController implements Initializable {
         }
         dateLeave = String.valueOf(DateLeave.getValue());
         checkDeleteBookingID = list_Booking_Info.size();
+        RoomIDBooking=boxIdRoom.getValue();
     }
 
     @FXML
@@ -651,7 +670,7 @@ public class FXMLInfoBookingController implements Initializable {
                     Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-        } else {
+        }  else {
             System.out.println("trong else" + FXMLInfoCustomerController.checkInfoCustomer);
             Platform.runLater(() -> {
                 if (list_Booking_Info.isEmpty()) {
@@ -713,11 +732,11 @@ public class FXMLInfoBookingController implements Initializable {
                     customerIdConect = boxIdCustomer.getValue();
                     dateBookingConect = DateBook.getValue();
                     dateLeaveConnect = DateLeave.getValue();
-                    if (!dateLeave.equals(String.valueOf(DateLeave.getValue()))) {
+                    if (!dateLeave.equals(String.valueOf(DateLeave.getValue()))|| !RoomIDBooking.equals(boxIdRoom.getValue())) {
                         try {
                             DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue(),
                                     String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
-                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Change DateLeave for bookingID= " + BookingID.getValue(),
+                            DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Change DateLeave or RoomID for bookingID= " + BookingID.getValue(),
                                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                             //UPDATE INFORMATIONS FOR ROOM WHICH HAS BEEN BOOKED
                             roomDAOImpl = new RoomDAOImpl();
