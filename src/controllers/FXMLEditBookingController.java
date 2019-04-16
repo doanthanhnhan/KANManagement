@@ -107,6 +107,13 @@ public class FXMLEditBookingController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        btnInfo.setOnAction((event) -> {
+            try {
+                btnSubmitBooking();
+            } catch (ClassNotFoundException | SQLException | IOException ex) {
+                Logger.getLogger(FXMLEditBookingController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         DateBook.valueProperty().addListener((obs, oldItem, newItem) -> {
             Platform.runLater(() -> {
                 DateBook.setStyle("-jfx-default-color: #6447cd;");
@@ -208,7 +215,7 @@ public class FXMLEditBookingController implements Initializable {
         fXMLListBookingController = ConnectControllers.getfXMLListBookingController();
         bk = FXMLListBookingController.bk;
         BookingID.setText(bk.getBookID());
-        DateBook.setValue(LocalDate.parse(bk.getDate()));
+        DateBook.setValue(LocalDate.parse((bk.getDate())));
         DateLeave.setValue(LocalDate.parse(bk.getDateLeave()));
         try {
             listRoomID = DAOCustomerBookingCheckIn.getAllRoomBookingNoCheck(String.valueOf(DateBook.getValue()),
@@ -296,6 +303,8 @@ public class FXMLEditBookingController implements Initializable {
 
     @FXML
     private void Cancel(ActionEvent event) {
+        Stage stage = (Stage) anchorPaneBooking.getScene().getWindow();
+        stage.close();
     }
 
     private void btnSubmitBooking() throws ClassNotFoundException, SQLException, IOException {

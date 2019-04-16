@@ -28,6 +28,42 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
+//    update bookking if dateleave checkin change
+
+    public static void Update_BookingLeave(String id, String RoomID, String DateLeave) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE BookingInfo SET RoomID = ?,DateLeave=? WHERE BookingID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setString(1, RoomID);
+        pt.setString(2, DateLeave);
+        pt.setString(3, id);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+    //    check DateLeave
+
+    public static String DateLeaveCheck(String IdBooking) {
+        String datebook = null;
+        try {
+            Connection connection = connectDB.connectSQLServer();
+            // Tạo đối tượng Statement.
+            String sql = "SELECT DateLeave from BookingInfo where BookingId=?";
+            // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+            PreparedStatement pt = connection.prepareStatement(sql);
+            pt.setString(1, IdBooking);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()) {
+                datebook = rs.getString("DateLeave");
+            }
+            pt.close();
+            connection.close();
+            rs.close();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(DAOCustomerBookingCheckIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return datebook;
+    }
 //    check DateBook
 
     public static String DateBookCheck(String IdBooking) {
@@ -413,8 +449,8 @@ public class DAOCustomerBookingCheckIn {
             bk.setUser(rs.getString("UserName"));
             bk.setNote(rs.getString("Note"));
             bk.setNumGuest(rs.getInt("NumberGuest"));
-            bk.setDate(LocalDate.parse(rs.getString("DateBook")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-            bk.setDateLeave(LocalDate.parse(rs.getString("DateLeave")).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            bk.setDate(rs.getString("DateBook"));
+            bk.setDateLeave(rs.getString("DateLeave"));
             list_Booking.add(bk);
         }
         return list_Booking;
