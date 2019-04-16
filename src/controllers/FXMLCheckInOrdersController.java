@@ -508,11 +508,7 @@ public class FXMLCheckInOrdersController implements Initializable {
             Platform.runLater(() -> {
                 if (!String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).equals(LeaveDateBooking)
                         || !RoomIDBooking.equals(boxRoomID.getValue())) {
-                    try {
-                        DAOCustomerBookingCheckIn.Update_BookingLeave(boxBookingID.getValue(), boxRoomID.getValue(), String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
-                    } catch (ClassNotFoundException | SQLException ex) {
-                        Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    //DAOCustomerBookingCheckIn.Update_BookingLeave(boxBookingID.getValue(), boxRoomID.getValue(), String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
                     DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "CHECK IN !!! Change InfoBooking booking id = " + boxBookingID.getValue(),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
                 }

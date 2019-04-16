@@ -9,9 +9,13 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
+import static controllers.ConnectControllers.fXMLMainFormController;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -25,8 +29,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 import models.Setting;
+import utils.AlertLoginAgain;
 import utils.PatternValided;
 import utils.SettingXML;
+import utils.connectDB;
+import static utils.connectDB.DATABASENAME;
+import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
@@ -37,6 +45,8 @@ public class FXMLSettingsController implements Initializable {
 
     private boolean check_Validate_Form;
     private SimpleStringProperty local_Server_URL;
+    private showFXMLLogin showFormLogin;
+    private FXMLMainFormController mainFormController;
 
     @FXML
     private ComboBox<String> comboBox_Choose_Server;
@@ -76,6 +86,14 @@ public class FXMLSettingsController implements Initializable {
     private Tab tab_Remote;
     @FXML
     private JFXTabPane mainTabPane;
+    @FXML
+    private JFXButton btn_Create_Local_DB;
+    @FXML
+    private JFXButton btn_ReLogIn_Local;
+    @FXML
+    private JFXButton btn_Create_Remote_DB;
+    @FXML
+    private JFXButton btn_ReLogin_Remote;
 
     /**
      * Initializes the controller class.
@@ -111,6 +129,17 @@ public class FXMLSettingsController implements Initializable {
         } else {
             comboBox_Choose_Server.setValue("Local");
         }
+
+        // Initialize Buttons
+        comboBox_Choose_Server.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("Local")) {
+                btn_Create_Local_DB.setDisable(false);
+                btn_ReLogIn_Local.setDisable(true);
+            } else if (newValue.equals("Remote")) {
+                btn_Create_Remote_DB.setDisable(false);
+                btn_ReLogin_Remote.setDisable(true);
+            }
+        });
     }
 
     public Setting get_Data_From_Form() {
@@ -198,6 +227,19 @@ public class FXMLSettingsController implements Initializable {
         }
     }
 
+    public void reLogin() {
+        mainFormController = ConnectControllers.getfXMLMainFormController();
+        Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+        Stage stage = (Stage) mainTabPane.getScene().getWindow();
+        stage.close();
+        stageMainForm.close();
+        try {
+            showFormLogin.showFormLogin();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @FXML
     private void Save_Action(ActionEvent event) {
         validate_Form();
@@ -216,5 +258,38 @@ public class FXMLSettingsController implements Initializable {
     private void Cancel_Action(ActionEvent event) {
         Stage stage = (Stage) btn_Cancel.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    private void Create_Local_DB_Action(ActionEvent event) {
+        if (!connectDB.checkDBExists()) {
+            connectDB.createSQLDatabase();
+            connectDB.createTables();
+            connectDB.createViews();
+        } else {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Message");
+                alert.setHeaderText("Querry result");
+                alert.setContentText("This DBName: " + DATABASENAME + " is exists.");
+                alert.show();
+            });
+        }
+    }
+
+    @FXML
+    private void Create_Remote_DB_Action(ActionEvent event) {
+        if (!connectDB.checkDBExists()) {
+            connectDB.createTables();
+            connectDB.createViews();
+        } else {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Message");
+                alert.setHeaderText("Querry result");
+                alert.setContentText("This DBName: " + DATABASENAME + " is exists.");
+                alert.show();
+            });
+        }
     }
 }
