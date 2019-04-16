@@ -177,6 +177,8 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_List_Booking_Virtual;
     @FXML
     private ToolBar main_Toolbar;
+    @FXML
+    private MenuItem menuItem_List_Room_Type;
 
     /**
      * Initializes the controller class.
@@ -620,6 +622,12 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List check out item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
     }
+
+    @FXML
+    private void handle_MenuItem_List_Room_Type_Action(ActionEvent event) {
+        System.out.println("List Room type item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListRoomType.fxml", "listRoomType_Tab", "List Room Type");
+    }
     // ############### END VIEW ACTIONS ###############
 
     // =============== START ADD ACTIONS ===============
@@ -685,7 +693,7 @@ public class FXMLMainFormController implements Initializable {
         formLoader_With_Close_Action("/fxml/FXMLInfoEmployee.fxml", "/images/KAN Logo.png", "Edit Employee Informations");
     }
 
-    // ############### END VIEW ACTIONS ###############
+    // ############### END EDIT ACTIONS ###############
     // =============== PUBLIC METHODS ===============
     public TextField getTxt_Search() {
         return txt_Search;

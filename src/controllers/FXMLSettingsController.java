@@ -13,6 +13,7 @@ import static controllers.ConnectControllers.fXMLMainFormController;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,18 +24,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import models.DAO;
 import models.Setting;
 import utils.AlertLoginAgain;
+import utils.GetInetAddress;
 import utils.PatternValided;
 import utils.SettingXML;
 import utils.connectDB;
 import static utils.connectDB.DATABASENAME;
 import utils.showFXMLLogin;
+import view.Login;
 
 /**
  * FXML Controller class
@@ -144,6 +152,13 @@ public class FXMLSettingsController implements Initializable {
                 btn_ReLogin_Remote.setDisable(true);
             }
         });
+
+        btn_ReLogIn_Local.setOnAction((event) -> {
+            reLogin();
+        });
+        btn_ReLogin_Remote.setOnAction((event) -> {
+            reLogin();
+        });
     }
 
     public Setting get_Data_From_Form() {
@@ -233,14 +248,54 @@ public class FXMLSettingsController implements Initializable {
 
     public void reLogin() {
         mainFormController = ConnectControllers.getfXMLMainFormController();
-        Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+        Platform.runLater(() -> {
+            Stage stage = new Stage();
+            if (connectDB.checkDBExists()) {
+                try {
+                    if (DAO.check_invalid(GetInetAddress.getMacAddress()) && DAO.check_Active_MacAddress(GetInetAddress.getMacAddress()).equals(0)) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("MacAddress: " + GetInetAddress.getMacAddress() + ".Your device has been blocked from using this program !!!");
+                        alert.setContentText("Please contact the administrator for reuse !!!");
+                        alert.showAndWait();
+                    } else {
+                        if (DAO.checkFirstLogin() == 0) {
+                            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLAddNewEmployee.fxml"));
+                            stage.setTitle("Add New Employee");
+                            Scene scene = new Scene(root);
+                            stage.setScene(scene);
+                        } else {
+                            Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
+                            stage.setTitle("Login");
+                            Scene scene = new Scene(root);
+                            stage.setScene(scene);
+                        }
+                        stage.resizableProperty().setValue(Boolean.FALSE);
+                        stage.getIcons().add(new Image("/images/KAN Logo.png"));
+                        stage.show();
+                    }
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    Logger.getLogger(FXMLSettingsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLSettings.fxml"));
+                    stage.setTitle("Settings");
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.resizableProperty().setValue(Boolean.FALSE);
+                    stage.getIcons().add(new Image("/images/KAN Logo.png"));
+                    stage.show();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLSettingsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         Stage stage = (Stage) mainTabPane.getScene().getWindow();
         stage.close();
-        stageMainForm.close();
-        try {
-            showFormLogin.showFormLogin();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLInfoCustomerController.class.getName()).log(Level.SEVERE, null, ex);
+        if (mainFormController != null) {
+            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
+            stageMainForm.close();
         }
     }
 
@@ -271,7 +326,7 @@ public class FXMLSettingsController implements Initializable {
             connectDB.createTables();
             connectDB.createViews();
             btn_Create_Local_DB.setDisable(true);
-            btn_ReLogIn_Local.setDisable(false);            
+            btn_ReLogIn_Local.setDisable(false);
         } else {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

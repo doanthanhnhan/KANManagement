@@ -617,29 +617,53 @@ public class FXMLAddNewServiceOrderController implements Initializable {
                 "DISCOUNT MUST CONTAIN NUMBERS, \nMUST BE NOT CONTAIN CHARACTER OR CHARACTER SPECIAL !!!")) {
             System.out.println("Room area false");
             check_Validate = false;
+            txt_Discount.getStyleClass().add("text-field-fault");
+            txt_Discount.requestFocus();
         } else if (PatternValided.validateTextField(hBoxContent, txt_Service_Price, "^[\\d][\\d]*\\.?[\\d]*$",
                 "PRICE MUST NOT BE EMPTY !!!",
                 "PRICE MUST CONTAIN NUMBERS, \nMUST BE NOT CONTAIN CHARACTER OR CHARACTER SPECIAL !!!")) {
             System.out.println("Room area false");
             check_Validate = false;
+            txt_Service_Price.getStyleClass().add("text-field-fault");
+            txt_Service_Price.requestFocus();
         } else if (PatternValided.validateTextField(hBoxContent, txt_Order_Quantity, "[\\d]{1,4}",
                 "QUANTITY MUST NOT BE EMPTY !!!",
                 "QUANTITY MUST CONTAIN 1-4 INTEGER NUMBERS, \nMUST BE NOT CONTAIN CHARACTER OR CHARACTER SPECIAL !!!")) {
             System.out.println("Room day remaining false");
             check_Validate = false;
+            txt_Order_Quantity.getStyleClass().add("text-field-fault");
+            txt_Order_Quantity.requestFocus();
         } else if (PatternValided.validateTextField(hBoxContent, txt_Order_ID, "^(?=.{1,20}$)[a-zA-Z][a-zA-Z0-9_]+$",
                 "ORDER ID MUST NOT BE EMPTY !!!",
                 "ID MUST CONTAIN 1-20 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR SPECIAL CHARACTER  !!!")) {
             System.out.println("Room ID false");
             check_Validate = false;
+            txt_Order_ID.getStyleClass().add("text-field-fault");
+            txt_Order_ID.requestFocus();
         } else if (PatternValided.validateTextField(hBoxContent, txt_Service_Inventory, "[\\d]{1,4}",
                 "INVENTORY MUST NOT BE EMPTY !!!",
                 "INVENTORY MUST CONTAIN 1-4 INTEGER NUMBER \nAND MUST BE CORRECT NUMBER FORMAT !!!")) {
             System.out.println("Room on floor false");
             check_Validate = false;
+            txt_Service_Inventory.getStyleClass().add("text-field-fault");
+            txt_Service_Inventory.requestFocus();
         } else {
-            System.out.println("Validate finished");
-            System.out.println("Add finished");
+            System.out.println("Validate add service detail finished");
+            check_Validate = true;
+        }
+    }
+
+    public void validateFormSaveOrder() {
+        if (comboBox_Customer_ID.getValue() == null || comboBox_Customer_ID.getValue().isEmpty()) {
+            check_Validate = true;
+            comboBox_Customer_ID.requestFocus();
+            comboBox_Customer_ID.getStyleClass().add("jfx-combo-box-fault");
+        } else if (comboBox_Room_ID.getValue() == null || comboBox_Room_ID.getValue().isEmpty()) {
+            check_Validate = true;
+            comboBox_Room_ID.requestFocus();
+            comboBox_Room_ID.getStyleClass().add("jfx-combo-box-fault");
+        } else {
+            System.out.println("Validate service order finished");
             check_Validate = true;
         }
     }
@@ -727,30 +751,33 @@ public class FXMLAddNewServiceOrderController implements Initializable {
     @FXML
     private void save_Order_Action(ActionEvent event) {
         System.out.println("Save order button clicked.");
-        ServiceOrder serviceOrder = get_Service_Order_Data();
-        serviceOrderDAOImpl.addServiceOrder(serviceOrder);
-        DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceOrderID: "
-                + FormatName.format(txt_Order_ID.getText()),
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+        validateFormSaveOrder();
+        if (check_Validate) {
+            ServiceOrder serviceOrder = get_Service_Order_Data();
+            serviceOrderDAOImpl.addServiceOrder(serviceOrder);
+            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new ServiceOrderID: "
+                    + FormatName.format(txt_Order_ID.getText()),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
 
-        btn_Save_Order.setDisable(true);
+            btn_Save_Order.setDisable(true);
 
-        comboBox_Customer_ID.setDisable(true);
-        comboBox_Room_ID.setDisable(true);
-        comboBox_Service_ID.setDisable(false);
-        comboBox_Service_ID.requestFocus();
-        txt_Note.setDisable(true);
+            comboBox_Customer_ID.setDisable(true);
+            comboBox_Room_ID.setDisable(true);
+            comboBox_Service_ID.setDisable(false);
+            comboBox_Service_ID.requestFocus();
+            txt_Note.setDisable(true);
 
-        txt_Discount.setEditable(true);
-        txt_Order_Quantity.setEditable(true);
+            txt_Discount.setEditable(true);
+            txt_Order_Quantity.setEditable(true);
 
-        if (listServiceOrderController != null) {
-            listServiceOrderController.new_SO_ID = txt_Order_ID.getText();
-            listServiceOrderController.check_Add_New = true;
-            listServiceOrderController.showUsersData();
+            if (listServiceOrderController != null) {
+                listServiceOrderController.new_SO_ID = txt_Order_ID.getText();
+                listServiceOrderController.check_Add_New = true;
+                listServiceOrderController.showUsersData();
+            }
+
+            setColumns();
+            showUsersData();
         }
-
-        setColumns();
-        showUsersData();
     }
 }

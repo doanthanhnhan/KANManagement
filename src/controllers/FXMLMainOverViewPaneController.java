@@ -483,8 +483,8 @@ public class FXMLMainOverViewPaneController implements Initializable {
                         mainFormController.formLoader("/fxml/FXMLCheckIdCardCustomer.fxml", "/images/KAN Logo.png",
                                 "Check Id Card Customer: " + label_Room_Number.getText());
                     } else if (alert.getResult() == ButtonType.YES) {
-//                        mainFormController.formLoader("/fxml/FXMLCheckInOrdersQRCode.fxml", "/images/KAN Logo.png",
-//                                "Check In Form");
+                        mainFormController.formLoader("/fxml/FXMLCheckInOrdersQRCode.fxml", "/images/KAN Logo.png",
+                                "Check In Form");
                     }
 
                 });

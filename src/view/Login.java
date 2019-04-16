@@ -90,6 +90,10 @@ public class Login extends Application {
             //System.out.println(progress);
         }
     }
+    
+    public static void reLogin(){
+        LauncherImpl.launchApplication(Login.class, MainFXPreloader.class, null);
+    }
 
     /**
      * @param args the command line arguments

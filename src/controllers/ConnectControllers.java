@@ -25,7 +25,8 @@ public class ConnectControllers {
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
     public static FXMLListServiceOrderController fXMLListServiceOrderController;
     public static FXMLListServiceOrderDetailController fXMLListServiceOrderDetailController;
-    public static FXMLListEmployeeController fXMLListEmployeeController;
+    public static FXMLListEmployeeController fXMLListEmployeeController;    
+    public static FXMLListRoomTypeController fXMLListRoomTypeController;
     public static FXMLListRoomsController fXMLListRoomsController;
     public static FXMLInfoEmployeeController fXMLInfoEmployeeController;
     public static FXMLSplashScreenController fXMLSplashScreenController;
@@ -40,6 +41,7 @@ public class ConnectControllers {
     public static FXMLListBookingVirtualController fXMLListBookingVirtualController;
     public static FXMLInfoBookingVirtualController fXMLInfoBookingVirtualController;
     public static FXMLEditBookingController fXMLEditBookingController;
+    public static FXMLRoomTypeController fXMLRoomTypeController;
 
     public static FXMLEditBookingController getfXMLEditBookingController() {
         return fXMLEditBookingController;
@@ -265,6 +267,38 @@ public class ConnectControllers {
 
     public static void setfXMLAddNewRoomController(FXMLAddNewRoomController fXMLAddNewRoomController) {
         ConnectControllers.fXMLAddNewRoomController = fXMLAddNewRoomController;
+    }
+
+    public static FXMLListRoomTypeController getfXMLListRoomTypeController() {
+        return fXMLListRoomTypeController;
+    }
+
+    public static void setfXMLListRoomTypeController(FXMLListRoomTypeController fXMLListRoomTypeController) {
+        ConnectControllers.fXMLListRoomTypeController = fXMLListRoomTypeController;
+    }
+
+    public static DAOReActive getReActive() {
+        return reActive;
+    }
+
+    public static void setReActive(DAOReActive reActive) {
+        ConnectControllers.reActive = reActive;
+    }
+
+    public static FXMLReActiveMacAddressController getfXMLReActiveMacAddressControllerController() {
+        return fXMLReActiveMacAddressControllerController;
+    }
+
+    public static void setfXMLReActiveMacAddressControllerController(FXMLReActiveMacAddressController fXMLReActiveMacAddressControllerController) {
+        ConnectControllers.fXMLReActiveMacAddressControllerController = fXMLReActiveMacAddressControllerController;
+    }
+
+    public static FXMLRoomTypeController getfXMLRoomTypeController() {
+        return fXMLRoomTypeController;
+    }
+
+    public static void setfXMLRoomTypeController(FXMLRoomTypeController fXMLRoomTypeController) {
+        ConnectControllers.fXMLRoomTypeController = fXMLRoomTypeController;
     }
 
 }

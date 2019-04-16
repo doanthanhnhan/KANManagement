@@ -79,6 +79,11 @@ public class PatternValided {
         Pattern Number = Pattern.compile("^[\\d][\\d]{0,4}\\.?[\\d]{0,3}$");
         return Number.matcher(value).matches();
     }
+    
+    public static Boolean PatternRoomDiscount(String value){
+        Pattern Number = Pattern.compile("^[0]\\.[\\d]{1,3}$");
+        return Number.matcher(value).matches();
+    }
 
     /**
      * Pattern validation for JFXTextField

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -114,8 +115,29 @@ public class RoomTypeDAOImpl implements RoomTypeDAO {
         }
     }
 
+    public void addInitRoomType() {
+        String sql = "INSERT INTO RoomType(RoomType, Price, Discount) VALUES \n"
+                + "('Single', 100, 0.10),\n"
+                + "('Double', 200, 0.10),\n"
+                + "('Triple', 250, 0.10),\n"
+                + "('Family', 300, 0.10),\n"
+                + "('Deluxe', 1000, 0.10)";
+        try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(RoomTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Can't connect to Database");
+                alert.show();
+            });
+        }
+    }
+
     public ObservableList<String> getAllStringRoomType() {
-        String sql = "SELECT RoomType FROM RoomType WHERE RoomType NOT IN ('Deluxe','Double', 'Family', 'Single', 'Triple')";
+        String sql = "SELECT RoomType FROM RoomType";
         ObservableList<String> listRoomTypes = FXCollections.observableArrayList();
         try {
             try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {

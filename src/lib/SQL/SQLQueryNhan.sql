@@ -164,7 +164,8 @@ CREATE TABLE ServiceType(
 CREATE TABLE UserLogs(
 	-- Create columns
 	ID int IDENTITY(1,1),
-	UserName varchar(100) NOT NULL,	
+	UserName varchar(100) NOT NULL,
+	MACAddress varchar(20) DEFAULT '00-00-00-00-00-00',	
 	LogContent nvarchar(200) NOT NULL,
 	LogTime datetime NOT NULL,
 	Active bit DEFAULT 1 NOT NULL,
@@ -177,6 +178,63 @@ CREATE TABLE Departments(
 	DepartmentID varchar(100) NOT NULL,		
 	DepartmentName nvarchar(100) NOT NULL,
 	Active bit DEFAULT 1 NOT NULL,
+	Username nvarchar(50),
+	Employee_View bit DEFAULT 0,
+	Employee_Add bit DEFAULT 0,
+	Employee_Edit bit DEFAULT 0,
+	Employee_Delete bit DEFAULT 0,
+	User_View bit DEFAULT 0,
+	User_Add bit DEFAULT 0,
+	User_Edit bit DEFAULT 0,
+	User_Delete bit DEFAULT 0,
+	Booking_View bit DEFAULT 0,
+	Booking_Add bit DEFAULT 0,
+	Booking_Edit bit DEFAULT 0,
+	Booking_Delete bit DEFAULT 0,
+	CheckIn_View bit DEFAULT 0,
+	CheckIn_Add bit DEFAULT 0,
+	CheckIn_Edit bit DEFAULT 0,
+	CheckIn_Delete bit DEFAULT 0,
+	CheckOut_View bit DEFAULT 0,
+	CheckOut_Add bit DEFAULT 0,
+	CheckOut_Edit bit DEFAULT 0,
+	CheckOut_Delete bit DEFAULT 0,
+	Customer_View bit DEFAULT 0,
+	Customer_Add bit DEFAULT 0,
+	Customer_Edit bit DEFAULT 0,
+	Customer_Delete bit DEFAULT 0,
+	Department_View bit DEFAULT 0,
+	Department_Add bit DEFAULT 0,
+	Department_Edit bit DEFAULT 0,
+	Department_Delete bit DEFAULT 0,
+	Role_View bit DEFAULT 0,
+	Role_Add bit DEFAULT 0,
+	Role_Edit bit DEFAULT 0,
+	Role_Delete bit DEFAULT 0,
+	Room_View bit DEFAULT 0,
+	Room_Add bit DEFAULT 0,
+	Room_Edit bit DEFAULT 0,
+	Room_Delete bit DEFAULT 0,
+	SODetail_View bit DEFAULT 0,
+	SODetail_Add bit DEFAULT 0,
+	SODetail_Edit bit DEFAULT 0,
+	SODetail_Delete bit DEFAULT 0,
+	SOder_View bit DEFAULT 0,
+	SOder_Add bit DEFAULT 0,
+	SOder_Edit bit DEFAULT 0,
+	SOder_Delete bit DEFAULT 0,
+	SType_View bit DEFAULT 0,
+	SType_Add bit DEFAULT 0,
+	SType_Edit bit DEFAULT 0,
+	SType_Delete bit DEFAULT 0,
+	UserLog_View bit DEFAULT 0,
+	UserLog_Add bit DEFAULT 0,
+	UserLog_Edit bit DEFAULT 0,
+	UserLog_Delete bit DEFAULT 0,
+	ReActive_View bit DEFAULT 0,
+	ReActive_Add bit DEFAULT 0,
+	ReActive_Edit bit DEFAULT 0,
+	ReActive_Delete bit DEFAULT 0
 	-- Create constraint
 	CONSTRAINT pk_DepartmentID_Departments PRIMARY KEY (DepartmentID),
 	CONSTRAINT uc_DepartmentID_Departments UNIQUE (DepartmentID)
@@ -203,6 +261,7 @@ CREATE TABLE Employees(
 	Email varchar(100),
 	Active bit DEFAULT 1,	
 	[Image] varbinary(MAX),
+	ReActive bit DEFAULT 0
 	-- Create constraint
 	CONSTRAINT pk_EmployeeID_Employees PRIMARY KEY (EmployeeID),
 	CONSTRAINT uc_EmployeeID_Employees UNIQUE (EmployeeID)	
@@ -380,8 +439,9 @@ ADD CONSTRAINT fk_CustomerID_Bill FOREIGN KEY (CustomerID) REFERENCES Customers(
 	CONSTRAINT fk_UserName_Bills FOREIGN KEY (UserName) REFERENCES Users(UserName); 
 
 -- CREATE VIEW --
+GO
 CREATE VIEW view_UserRole AS
-SELECT R.*, E.EmployeeFirstName, E.EmployeeMidName, E.EmployeeLastName FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID
+SELECT R.*, E.EmployeeFirstName, E.EmployeeMidName, E.EmployeeLastName FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID;
 SELECT * FROM view_UserRole
 
 CREATE VIEW view_RoomProperty AS
@@ -399,7 +459,7 @@ GROUP BY Repaired
 UNION
 SELECT CASE WHEN InProgress = 1 THEN 'Checking' ELSE 'Not Checking' END AS 'RoomStatus', COUNT(InProgress) AS 'Total'
 FROM Rooms WHERE Active=1
-GROUP BY InProgress
+GROUP BY InProgress;
 SELECT * FROM view_RoomProperty
 
 -- CREATE STORE PROCEDURE --
@@ -462,11 +522,11 @@ INSERT INTO Users(ID_User, EmployeeID, UserName, [PassWord], Active, Serect_Ques
 SELECT * FROM Users
 
 INSERT INTO RoomType(RoomType, Price, Discount) VALUES 
-('Single', 100, 0.12),
-('Double', 200, 0.13),
-('Triple', 250, 0.14),
-('Family', 300, 0.15),
-('Deluxe', 1000, 0.16)
+('Single', 100, 0.10),
+('Double', 200, 0.10),
+('Triple', 250, 0.10),
+('Family', 300, 0.10),
+('Deluxe', 1000, 0.10)
 
 SELECT * FROM Rooms
 DELETE FROM Rooms

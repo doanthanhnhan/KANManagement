@@ -119,14 +119,11 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXTextField fx:id="RoomID" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Room Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
+                              <JFXComboBox fx:id="boxRoomID" disable="true" prefHeight="35.0" prefWidth="400.0" promptText="Room ID">
                                  <HBox.margin>
-                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                    <Insets top="30.0" />
                                  </HBox.margin>
-                              </JFXTextField>
+                              </JFXComboBox>
                            </children>
                         </HBox>
                      </children>

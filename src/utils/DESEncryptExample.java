@@ -99,8 +99,8 @@ public class DESEncryptExample {
         String help = "Su dung DES de ma hoa tap tin";
         System.out.println(help);
         try {
-            desEncrypt(file.getAbsolutePath() + "/src/lib/SQL/CreateViewRoomProperties.txt", file.getAbsolutePath() + "/src/lib/SQL/CreateViewRoomPropertiesEnCrypt.txt", "DoanThanhNhan");
-            desDecrypt(file.getAbsolutePath() + "/src/lib/SQL/CreateViewRoomPropertiesEnCrypt.txt", file.getAbsolutePath() + "/src/lib/SQL/plaintext1.txt", "DoanThanhNhan");
+            desEncrypt(file.getAbsolutePath() + "/src/lib/SQL/CreateTables.txt", file.getAbsolutePath() + "/src/lib/SQL/CreateTablesEnCrypt.txt", "DoanThanhNhan");
+            desDecrypt(file.getAbsolutePath() + "/src/lib/SQL/CreateTablesEnCrypt.txt", file.getAbsolutePath() + "/src/lib/SQL/plaintext1.txt", "DoanThanhNhan");
         } catch (Exception e) {
             System.err.println(e.getLocalizedMessage());
         }

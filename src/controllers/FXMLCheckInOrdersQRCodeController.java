@@ -34,6 +34,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -84,7 +85,7 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
     @FXML
     private JFXComboBox<String> boxBookingID;
     @FXML
-    private JFXTextField RoomID;
+    private JFXComboBox<String> boxRoomID;
     @FXML
     private VBox vBox_Info_Right;
     @FXML
@@ -111,18 +112,29 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
     private JFXTextField CustomerID;
     @FXML
     private FontAwesomeIconView iconRefresh;
-    
+
     private showFXMLLogin showFormLogin = new showFXMLLogin();
     private RoomDAOImpl roomDAOImpl;
+    ObservableList<String> listRoomID;
 
     private FXMLMainOverViewPaneController mainOverViewPaneController;
-    
+    private Integer numberCustomer;
+    private String RoomIDBooking;
+    private String LeaveDateBooking;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            //Lọc RoomID --- Lấy khoảng ngày hiện tại và +30 ngày
+            listRoomID = DAOCustomerBookingCheckIn.getAllRoomBookingNoCheck(String.valueOf((FXMLInfoBookingController.dateBookingConect).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+                    String.valueOf((FXMLInfoBookingController.dateLeaveConnect).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), FXMLInfoBookingController.bookingIdConect);
+            boxRoomID.setItems(listRoomID);
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //Setting event mouseclick for iconrefresh
         iconRefresh.setOnMouseClicked((event) -> {
             refreshIdUser();
@@ -130,8 +142,7 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
         //        set box booking id 
         refreshIdUser();
         mainOverViewPaneController = ConnectControllers.getfXMLMainOverViewPaneController();
-        roomDAOImpl = new RoomDAOImpl();
-        LeaveDate.setDisable(true);
+        roomDAOImpl = new RoomDAOImpl();        
         if (FXMLInfoBookingController.checkInfoBooking) {
             System.out.println("check info booking " + FXMLInfoBookingController.checkInfoBooking);
             System.out.println("booking info conect " + FXMLInfoBookingController.bookingIdConect);
@@ -140,7 +151,7 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
             boxBookingID.setValue(FXMLInfoBookingController.bookingIdConect);
             System.out.println("booking info conect " + boxBookingID.getValue());
             System.out.println("booking info conect " + FXMLInfoBookingController.bookingIdConect);
-            RoomID.setText(FXMLInfoBookingController.roomIdConect);
+            boxRoomID.setValue(FXMLInfoBookingController.roomIdConect);
             CheckInID.setText("CI-" + FXMLInfoBookingController.bookingIdConect);
             NumberOfCustomer.setDisable(true);
             LeaveDate.setDisable(false);
@@ -274,11 +285,14 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
                 }
                 CustomerID.setText(bk.getCusID());
                 NumberOfCustomer.setText(String.valueOf(bk.getNumGuest()));
-                RoomID.setText(bk.getRoomID());
+                boxRoomID.setValue(bk.getRoomID());
                 CheckInID.setText("CI-" + newItem);
                 CheckInDate.setValue(LocalDate.now());
+                LeaveDate.setValue(LocalDate.parse(bk.getDateLeave()));
+                boxCheckInType.setValue("Reception Desk");
                 String pattern = "dd-MM-yyyy";
                 formatCalender.format(pattern, CheckInDate);
+                formatCalender.format(pattern, LeaveDate);
             }
             HboxContent.getChildren().clear();
             boxBookingID.setStyle("-jfx-focus-color: -fx-primarycolor;-jfx-unfocus-color: -fx-primarycolor;");
@@ -288,13 +302,46 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
 
     @FXML
     private void Format_Show_Calender_Hiredate(ActionEvent event) {
+        boxRoomID.setDisable(false);
+        LeaveDate.setPromptText("Date Leave");
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, LeaveDate);
+        if (LeaveDate.getValue() != null) {
+            boolean check_OK = true;
+            if (CheckInDate.getValue().compareTo(LeaveDate.getValue()) > 0) {
+                Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                alert1.setTitle("Error");
+                alert1.setHeaderText("You have no right to do this !!!");
+                alert1.setContentText("Because Date Leave Cannot Be Bigger Than Date Book !!!");
+                alert1.showAndWait();
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                LeaveDate.setStyle("-jfx-default-color: RED;");
+                LeaveDate.requestFocus();
+                check_OK = false;
+            }
+            if (check_OK) {
+                boxRoomID.setItems(null);
+                boxRoomID.setDisable(false);
+                try {
+                    listRoomID = DAOCustomerBookingCheckIn.getAllRoomBookingNoCheck(String.valueOf(CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+                            String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), boxBookingID.getValue());
+                    boxRoomID.setItems(listRoomID);
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     @FXML
-    private void Cancel(ActionEvent event) {
+    private void Cancel(ActionEvent event) throws ClassNotFoundException, SQLException {
+        if (FXMLInfoBookingController.checkDeleteBookingID.equals(0)) {
+            DAOCustomerBookingCheckIn.deleteBooking(boxBookingID.getValue());
+        }
         FXMLInfoBookingController.checkInfoBooking = false;
+        FXMLInfoBookingVirtualController.checkInfoBookingVirtual = false;
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         // do what you have to do
         stage.close();
@@ -347,6 +394,10 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
             Platform.runLater(() -> {
                 notificationFunction.notification(CheckInID, HboxContent, "Check In ID MUST NOT EMPTY !!!");
             });
+        } else if (NumberOfCustomer.getText() == null || NumberOfCustomer.getText().equals("")) {
+            Platform.runLater(() -> {
+                notificationFunction.notification(NumberOfCustomer, HboxContent, "NUMBER OF CUSTOMER MUST NOT EMPTY !!!");
+            });
         } else if (boxBookingID.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
@@ -366,6 +417,64 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
                 HboxContent.getChildren().add(label);
                 boxBookingID.requestFocus();
             });
+        } else if (boxRoomID.getValue() == null) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setText("ID ROOM MUST NOT EMPTY !!!");
+                label.setAlignment(Pos.CENTER_LEFT);
+                boxRoomID.getStyleClass().removeAll();
+                boxRoomID.getStyleClass().add("jfx-combo-box-fault");
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                boxRoomID.requestFocus();
+            });
+        } else if (LeaveDate.getValue() == null) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setText("LEAVE DATE MUST NOT EMPTY !!!");
+                label.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                LeaveDate.requestFocus();
+            });
+        } else if (CheckInDate.getValue().compareTo(LeaveDate.getValue()) > 0) {
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setText("Date Leave Cannot Be Bigger Than Date Book !!!");
+                LeaveDate.setStyle("-jfx-default-color: RED;");
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                LeaveDate.requestFocus();
+            });
+        } else if (NumberOfCustomer.getText() == null || NumberOfCustomer.getText().equals("")) {
+            Platform.runLater(() -> {
+                notificationFunction.notification(NumberOfCustomer, HboxContent, "NUMBER OF CUSTOMER MUST NOT EMPTY !!!");
+            });
         } else if (boxCheckInType.getValue() == null) {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
@@ -377,7 +486,7 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
                 label.setText("CHECK IN TYPE MUST NOT EMPTY !!!");
                 label.setAlignment(Pos.CENTER_LEFT);
                 boxCheckInType.getStyleClass().removeAll();
-                boxCheckInType.getStyleClass().add("jfx-combo-box-fault");
+                boxBookingID.getStyleClass().add("jfx-combo-box-fault");
                 HboxContent.setSpacing(10);
                 HboxContent.setAlignment(Pos.CENTER_LEFT);
                 HboxContent.getChildren().clear();
@@ -385,20 +494,66 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
                 HboxContent.getChildren().add(label);
                 boxCheckInType.requestFocus();
             });
-        } else if (!PatternValided.PatternID(CheckInID.getText())) {
+        } else if (!PatternValided.PatternNumberGuest(NumberOfCustomer.getText())) {
             Platform.runLater(() -> {
-                notificationFunction.notification(CheckInID, HboxContent, "CHECK IN ID IS INCORRECT !!!");
+                notificationFunction.notification(NumberOfCustomer, HboxContent, "NUMBER OF CUSTOMER INCORRECT (1-8) !!!");
             });
+        } else if (DAOCustomerBookingCheckIn.check_Booking(boxBookingID.getValue())) {
+            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+            alert1.setTitle("Error");
+            alert1.setHeaderText("You have no right to do this !!!");
+            alert1.setContentText("Because BookingID has been check in !!!");
+            alert1.showAndWait();
+        } else if (DAOCustomerBookingCheckIn.check_RoomIdAgainBookingalready(boxRoomID.getValue(), String.valueOf(CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+                String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), boxBookingID.getValue())) {
+            Platform.runLater(() -> {
+                System.out.println("da vao chekc trung roi");
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(350, 35);
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setText("This RoomID Can Not Booking Please Choose Again !!!");
+                boxRoomID.setStyle("-jfx-default-color: RED;");
+                HboxContent.setAlignment(Pos.CENTER_LEFT);
+                HboxContent.setSpacing(10);
+                HboxContent.getChildren().clear();
+                HboxContent.getChildren().add(icon);
+                HboxContent.getChildren().add(label);
+                boxRoomID.requestFocus();
+                try {
+                    boxRoomID.setItems(DAOCustomerBookingCheckIn.getAllRoomBookingNoCheck(String.valueOf(CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))),
+                            String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), boxBookingID.getValue()));
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        } else if (!String.valueOf(CheckInDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).equals(DAOCustomerBookingCheckIn.DateBookCheck(boxBookingID.getValue()))) {
+            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+            alert1.setTitle("Error");
+            alert1.setHeaderText("You have no right to do this !!!");
+            alert1.setContentText("Because BookingID has been change DateBooking. Please Check Again !!!");
+            alert1.showAndWait();
+            Stage stage = (Stage) anchorPaneCheckInOrders.getScene().getWindow();
+            stage.close();
+            FXMLInfoBookingController.checkInfoBooking = false;
         } else {
             Platform.runLater(() -> {
-
+                if (!String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).equals(LeaveDateBooking)
+                        || !RoomIDBooking.equals(boxRoomID.getValue())) {
+                    //DAOCustomerBookingCheckIn.Update_BookingLeave(boxBookingID.getValue(), boxRoomID.getValue(), String.valueOf(LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "CHECK IN !!! Change InfoBooking booking id = " + boxBookingID.getValue(),
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
+                }
                 String dateOut = LeaveDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 CheckIn ck = new CheckIn();
                 ck.setBookID(boxBookingID.getValue());
                 ck.setUser(Username.getText());
                 ck.setCheckID(CheckInID.getText());
                 ck.setCusID(CustomerID.getText());
-                ck.setRoomID(RoomID.getText());
+                ck.setRoomID(boxRoomID.getValue());
                 ck.setNumberOfCustomer(Integer.valueOf(NumberOfCustomer.getText()));
                 ck.setDateIn(String.valueOf(LocalDateTime.now()));
                 ck.setDateOut(dateOut);
@@ -407,20 +562,27 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
                 try {
                     DAOCustomerBookingCheckIn.AddNewCheckIn(ck);
                 } catch (MalformedURLException | SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(FXMLCheckInOrdersQRCodeController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Add Check In for booking id = " + boxBookingID.getValue(),
                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), GetInetAddress.getMacAddress());
-
+                if (!numberCustomer.equals(NumberOfCustomer.getText())) {
+                    try {
+                        DAOCustomerBookingCheckIn.Update_NumbercustomerOfBooking(boxBookingID.getValue(), Integer.parseInt(NumberOfCustomer.getText()));
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 //Getting Room infomations to update room Status after checking in - Nhan edit here
                 Room room = new Room();
-                room.setRoomID(RoomID.getText());
+                room.setRoomID(boxRoomID.getValue());
                 room.setCustomerID(CustomerID.getText());
                 room.setUserName(Username.getText());
                 room.setRoomStatus("Occupied");
                 room.setCheckInDate(LocalDateTime.now());
                 room.setLeaveDate(LocalDateTime.of(LeaveDate.getValue(), LocalTime.now()));
                 room.setDayRemaining((int) ChronoUnit.DAYS.between(room.getCheckInDate(), room.getLeaveDate()));
+                room.setNoOfGuests(Integer.valueOf(NumberOfCustomer.getText()));
                 roomDAOImpl.editCheckInRoom(room, true);
                 mainOverViewPaneController.refreshForm();
 
@@ -432,7 +594,6 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
                     CheckInID.setText("");
                     boxBookingID.setValue(null);
                     CustomerID.setText("");
-                    RoomID.setText("");
                     NumberOfCustomer.setText("");
                     CheckInDate.setValue(null);
                     LeaveDate.setValue(null);
@@ -451,7 +612,7 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
             //        set add booking id for box booking id
             boxBookingID.setItems(DAOCustomerBookingCheckIn.getAllBookingID());
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(FXMLCheckInOrdersQRCodeController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLCheckInOrdersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -459,11 +620,11 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
     private void QRCodeScanner_Action(ActionEvent event) {
         QRWebCam qrWebCam = new QRWebCam();
         qrWebCam.txtQR.addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {                
+            if (newValue != null) {
                 Platform.runLater(() -> {
                     boxBookingID.getSelectionModel().select(newValue);
                     boxCheckInType.setValue("Reception Desk");
-                    
+
                     try {
                         //comboBox_Check_Out_ID.setValue(string[0]);
                         enter_Submit_Action();
@@ -471,7 +632,7 @@ public class FXMLCheckInOrdersQRCodeController implements Initializable {
                         Logger.getLogger(FXMLCheckInOrdersQRCodeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
-                
+
             }
         });
     }
