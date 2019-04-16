@@ -33,7 +33,7 @@
                      <menus>
                         <Menu fx:id="menu_File" mnemonicParsing="false" text="File">
                            <items>
-                              <MenuItem fx:id="menuItem_Settings" mnemonicParsing="false" text="Settings" />
+                              <MenuItem fx:id="menuItem_Settings" mnemonicParsing="false" onAction="#menuItem_Settings_Action" text="Settings" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="menuItem_Close" mnemonicParsing="false" onAction="#handle_Menu_Item_Close_Action" text="Exit" />
                            </items>
@@ -178,7 +178,7 @@
                               <Tooltip contentDisplay="TOP" text="Accounting" textAlignment="CENTER" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="btn_Toolbar_Settings" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" textAlignment="CENTER">
+                        <Button fx:id="btn_Toolbar_Settings" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#toolbar_Settings_Action" textAlignment="CENTER">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

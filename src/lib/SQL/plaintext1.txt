@@ -1,0 +1,16 @@
+CREATE VIEW view_RoomProperty AS
+SELECT RoomType AS 'PropertyName', COUNT(RoomType) AS 'Total' FROM Rooms WHERE Active=1 GROUP BY RoomType
+UNION
+SELECT RoomStatus, COUNT(RoomStatus) AS 'Total' FROM Rooms WHERE Active=1 GROUP BY RoomStatus
+UNION
+SELECT CASE WHEN Clean = 1 THEN 'Clean' ELSE 'Not Clean' END AS 'RoomStatus', COUNT(Clean) AS 'Total'
+FROM Rooms WHERE Active=1
+GROUP BY Clean
+UNION
+SELECT CASE WHEN Repaired = 1 THEN 'Repaired' ELSE 'Not Repaired' END AS 'RoomStatus', COUNT(Repaired) AS 'Total'
+FROM Rooms WHERE Active=1
+GROUP BY Repaired
+UNION
+SELECT CASE WHEN InProgress = 1 THEN 'Checking' ELSE 'Not Checking' END AS 'RoomStatus', COUNT(InProgress) AS 'Total'
+FROM Rooms WHERE Active=1
+GROUP BY InProgress;

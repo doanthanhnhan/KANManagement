@@ -1,0 +1,2 @@
+CREATE VIEW view_UserRole AS
+SELECT R.*, E.EmployeeFirstName, E.EmployeeMidName, E.EmployeeLastName FROM [Role] R, Employees E WHERE R.EmployeeID=E.EmployeeID;

@@ -861,4 +861,16 @@ public class FXMLMainFormController implements Initializable {
         });
     }
 
+    @FXML
+    private void menuItem_Settings_Action(ActionEvent event) {
+        System.out.println("Settings menu item clicked!");
+        formLoader_With_Close_Action("/fxml/FXMLSettings.fxml", "/images/KAN Logo.png", "Settings");
+    }
+
+    @FXML
+    private void toolbar_Settings_Action(ActionEvent event) {
+        System.out.println("Settings toolbar clicked!");
+        formLoader_With_Close_Action("/fxml/FXMLSettings.fxml", "/images/KAN Logo.png", "Settings");
+    }
+
 }
