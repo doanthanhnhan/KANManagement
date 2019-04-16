@@ -100,7 +100,7 @@ public class FXMLListCheckOutController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Message");
                 alert.setHeaderText("Error");
-                alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+                alert.setContentText("Don't have any Check out in Database or Can't connect to Database");
                 alert.show();
             });
         }

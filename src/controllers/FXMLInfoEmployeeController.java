@@ -936,8 +936,7 @@ public class FXMLInfoEmployeeController implements Initializable {
                     System.out.println("random pass lenght" + random_pass.length());
                     String content = "Username: " + boxId.getValue() + ", Password: " + random_pass;
                     try {
-                        utils.Email.send_Email_Without_Attach("smtp.gmail.com", Email.getText(), "KANManagement.AP146@gmail.com",
-                                "KAN@123456", "ReActive username and password", content);
+                        utils.Email.send_Email_Without_Attach(Email.getText(), "ReActive username and password", content);
                     } catch (Exception ex) {
                         Logger.getLogger(FXMLInfoEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
                     }

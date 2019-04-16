@@ -128,6 +128,7 @@ public class FXMLInfoBookingController implements Initializable {
     @FXML
     private JFXDatePicker DateLeave;
     String RoomIDBooking;
+
     /**
      * Initializes the controller class.
      */
@@ -376,7 +377,7 @@ public class FXMLInfoBookingController implements Initializable {
         }
         dateLeave = String.valueOf(DateLeave.getValue());
         checkDeleteBookingID = list_Booking_Info.size();
-        RoomIDBooking=boxIdRoom.getValue();
+        RoomIDBooking = boxIdRoom.getValue();
     }
 
     @FXML
@@ -670,7 +671,7 @@ public class FXMLInfoBookingController implements Initializable {
                     Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-        }  else {
+        } else {
             System.out.println("trong else" + FXMLInfoCustomerController.checkInfoCustomer);
             Platform.runLater(() -> {
                 if (list_Booking_Info.isEmpty()) {
@@ -717,8 +718,7 @@ public class FXMLInfoBookingController implements Initializable {
                         File file = new File("");
                         String filePath = file.getAbsolutePath() + "/src/images/BookingQRCode.png";
                         try {
-                            Email.sendEmail_With_Attach("smtp.gmail.com", customerEmail, "KANManagement.AP146@gmail.com",
-                                    "KAN@123456", "Booking infomations: ID & QRCode", content, filePath);
+                            Email.sendEmail_With_Attach(customerEmail, "Booking infomations: ID & QRCode", content, filePath);
                         } catch (MessagingException ex) {
                             Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -732,7 +732,7 @@ public class FXMLInfoBookingController implements Initializable {
                     customerIdConect = boxIdCustomer.getValue();
                     dateBookingConect = DateBook.getValue();
                     dateLeaveConnect = DateLeave.getValue();
-                    if (!dateLeave.equals(String.valueOf(DateLeave.getValue()))|| !RoomIDBooking.equals(boxIdRoom.getValue())) {
+                    if (!dateLeave.equals(String.valueOf(DateLeave.getValue())) || !RoomIDBooking.equals(boxIdRoom.getValue())) {
                         try {
                             DAOCustomerBookingCheckIn.Update_RoomBooking(BookingID.getValue(), boxIdRoom.getValue(),
                                     String.valueOf(DateLeave.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));

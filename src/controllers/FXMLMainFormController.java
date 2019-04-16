@@ -35,6 +35,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -174,6 +175,8 @@ public class FXMLMainFormController implements Initializable {
     private MenuItem menuItem_List_ReActiveMacAddress;
     @FXML
     private MenuItem menuItem_List_Booking_Virtual;
+    @FXML
+    private ToolBar main_Toolbar;
 
     /**
      * Initializes the controller class.
@@ -217,6 +220,7 @@ public class FXMLMainFormController implements Initializable {
         }
         if (!userRole.ischeckBooking_View()) {
             menu_View.getItems().remove(menuItem_List_Booking);
+            main_Toolbar.getItems().remove(btn_Toolbar_Booking);
         }
         if (!userRole.ischeckBooking_View()) {
             menu_View.getItems().remove(menuItem_List_Booking_Virtual);
@@ -233,6 +237,7 @@ public class FXMLMainFormController implements Initializable {
         }
         if (!userRole.ischeckCheckIn_View()) {
             menu_View.getItems().remove(menuItem_List_Check_In);
+            main_Toolbar.getItems().remove(btn_Toolbar_Checkin);
         }
         //03.CHECK OUT CRUD
         if (!userRole.ischeckCheckOut_Add()) {
@@ -246,6 +251,7 @@ public class FXMLMainFormController implements Initializable {
         }
         if (!userRole.ischeckCheckOut_View()) {
             menu_View.getItems().remove(menuItem_List_Check_Out);
+            main_Toolbar.getItems().remove(btn_Toolbar_Checkout);
         }
         //04.CUSTOMER CRUD
         if (!userRole.ischeckCustomer_Add()) {
@@ -285,6 +291,7 @@ public class FXMLMainFormController implements Initializable {
 //        }
         if (!userRole.ischeckEmployee_View()) {
             menu_View.getItems().remove(menuItem_List_Employees);
+            main_Toolbar.getItems().remove(btn_Toolbar_Employees);
         }
         //07.ROLE CRUD
         if (!userRole.ischeckRole_Add()) {
@@ -298,6 +305,7 @@ public class FXMLMainFormController implements Initializable {
         }
         if (!userRole.ischeckRole_View()) {
             menu_View.getItems().remove(menuItem_List_Role);
+            main_Toolbar.getItems().remove(btn_Toolbar_Settings);
         }
         //08.ROOM CRUD
         if (!userRole.ischeckRoom_Add()) {
@@ -324,6 +332,7 @@ public class FXMLMainFormController implements Initializable {
         }
         if (!userRole.ischeckSODer_View()) {
             menu_View.getItems().remove(menuItem_List_Service_Orders);
+            main_Toolbar.getItems().remove(btn_Toolbar_Services);
         }
         //10.SERVICE ORDER DETAILS CRUD
         if (!userRole.ischeckSODetail_Add()) {

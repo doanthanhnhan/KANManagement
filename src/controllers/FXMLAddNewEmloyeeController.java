@@ -384,8 +384,7 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             DAO.setRoleUser(newId.getText());
                             DAO.Set_Role_Employee(Emp.getWork_Dept(), newId.getText());
                             String content = "Username: " + newId.getText() + ", Password: 123456";
-                            Email.send_Email_Without_Attach("smtp.gmail.com", newGmail.getText(), "KANManagement.AP146@gmail.com",
-                                    "KAN@123456", "Default username and password", content);
+                            Email.send_Email_Without_Attach(newGmail.getText(), "Default username and password", content);
                             if (!DAO.checkFirstLogin().equals(1)) {
                                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create " + newId.getText(),
                                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());

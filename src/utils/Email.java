@@ -31,25 +31,23 @@ import javax.mail.internet.MimeMultipart;
 public class Email {
 
     /**
-     * 
+     *
      * @param smtpServer : Ex Gmail : smtp.gmail.com
      * @param to : Receiver email address
      * @param from : Sender email address
      * @param psw: Password of sender email
      * @param subject: Subject of email (Title)
      * @param body : Email content
-     * @throws Exception 
+     * @throws Exception
      */
-
-    public static void send_Email_Without_Attach(String smtpServer, String to, String from, String psw,
-            String subject, String body) throws Exception {
+    public static void send_Email_Without_Attach(String to, String subject, String body) throws Exception {
 
         Properties props = System.getProperties();
-        props.put("mail.smtp.host", smtpServer);
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.host", connectDB.SMTP_SERVER);
+        props.put("mail.smtp.port", connectDB.SMTP_PORT);
         props.put("mail.smtp.starttls.enable", "true");
-        final String login = from;
-        final String pwd = psw;
+        final String login = connectDB.EMAIL;
+        final String pwd = connectDB.EMAIL_PASS;
         Authenticator pa = null;
         if (login != null && pwd != null) {
             props.put("mail.smtp.auth", "true");
@@ -64,7 +62,7 @@ public class Email {
 // — Create a new message –
         Message msg = new MimeMessage(session);
 // — Set the FROM and TO fields –
-        msg.setFrom(new InternetAddress(from));
+        msg.setFrom(new InternetAddress(connectDB.EMAIL));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(
                 to, false));
 
@@ -79,27 +77,24 @@ public class Email {
         Transport.send(msg);
         System.out.println("Mail da duoc gui");
     }
-    
+
     /**
-     * 
-     * @param smtpServer : Ex Gmail : smtp.gmail.com
+     *
      * @param sendTo : Receiver email address
-     * @param sendFrom : Sender email address
-     * @param pass : Password of sender email
      * @param subject : Subject of email (Title)
      * @param body : Email content
      * @param fileAttach : File need to attach
      * @throws AddressException
-     * @throws MessagingException 
+     * @throws MessagingException
      */
-    public static void sendEmail_With_Attach(String smtpServer, String sendTo, String sendFrom, String pass, String subject, String body, String fileAttach) throws AddressException, MessagingException {
+    public static void sendEmail_With_Attach(String sendTo, String subject, String body, String fileAttach) throws AddressException, MessagingException {
         // 1) get the session object
         Properties props = System.getProperties();
-        props.put("mail.smtp.host", smtpServer);
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.host", connectDB.SMTP_SERVER);
+        props.put("mail.smtp.port", connectDB.SMTP_PORT);
         props.put("mail.smtp.starttls.enable", "true");
-        final String login = sendFrom;
-        final String pwd = pass;
+        final String login = connectDB.EMAIL;
+        final String pwd = connectDB.EMAIL_PASS;
         Authenticator pa = null;
         if (login != null && pwd != null) {
             props.put("mail.smtp.auth", "true");
@@ -116,7 +111,7 @@ public class Email {
         // — Create a new message –
         Message msg = new MimeMessage(session);
 // — Set the FROM and TO fields –
-        msg.setFrom(new InternetAddress(sendFrom));
+        msg.setFrom(new InternetAddress(connectDB.EMAIL));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sendTo, false));
         // — Set the subject and body text –
         msg.setSubject(subject);
@@ -147,11 +142,6 @@ public class Email {
     }
 
     public static void main(String[] args) throws Exception {
-        try {
-            send_Email_Without_Attach("smtp.gmail.com", "dakuwashizen6789@gmail.com", "KANManagement.AP146@gmail.com",
-                    "KAN@123456", "Nhân gửi test", "Nội dung abcde");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        
     }
 }

@@ -80,7 +80,7 @@
                         </Menu>
                      </menus>
                   </MenuBar>
-                  <ToolBar>
+                  <ToolBar fx:id="main_Toolbar">
                      <items>
                         <Button fx:id="btn_Toolbar_Home" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#homeAction">
                            <graphic>
