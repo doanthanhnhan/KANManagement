@@ -714,3 +714,22 @@ DELETE FROM BookingInfo WHERE BookingID NOT IN (SELECT BookingID FROM CheckInOrd
 SELECT COUNT(BookingID) AS 'NoOfBooking' FROM BookingInfo WHERE BookingID NOT IN (SELECT BookingID FROM CheckInOrders) 
 AND RoomID = 'R-0101';
 SELECT * FROM BookingInfo WHERE DateBook IN (SELECT MIN(DateBook) FROM BookingInfo WHERE DateBook > GETDATE())
+
+
+-- Design by Gosu
+DELETE FROM ServicesOrderDetails
+DELETE FROM ServicesOrders
+DELETE FROM ServiceType
+DELETE FROM Bill
+DELETE FROM CheckOutOrders
+DELETE FROM CheckInOrders
+DELETE FROM BookingInfo
+DELETE FROM Rooms
+DELETE FROM RoomType
+DELETE FROM CheckBlockMacAddress
+DELETE FROM UserLogs
+DELETE FROM Role
+DELETE FROM Users
+DELETE FROM Employees
+DELETE FROM Departments
+DELETE FROM Customers 

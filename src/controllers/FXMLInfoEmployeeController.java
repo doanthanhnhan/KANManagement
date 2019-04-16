@@ -485,6 +485,8 @@ public class FXMLInfoEmployeeController implements Initializable {
                             Stage stage = new Stage();
                             Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
                             Scene scene = new Scene(root);
+                            stage.setTitle("KANManagement");
+                            stage.getIcons().add(new Image("/images/KAN Logo.png"));
                             stage.setScene(scene);
                             stage.show();
                             FXMLLoginController.checkLoginRegis = false;
