@@ -97,13 +97,24 @@ public class connectDB {
 
     public static boolean checkDBExists() {
         try {
-            String sql = "SELECT * FROM sys.databases WHERE name LIKE 'KanManagement'";
-            Connection conn = connectDB.connectSQLServerToCreateDB();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                return true;
+            if (SETTING.getChooseServer().equals("Local")) {
+                String sql = "SELECT * FROM sys.databases WHERE name LIKE 'KanManagement'";
+                Connection conn = connectDB.connectSQLServerToCreateDB();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                while (rs.next()) {
+                    return true;
+                }
+            } else if (SETTING.getChooseServer().equals("Remote")) {
+                String sql = "SELECT * FROM sys.databases WHERE name LIKE 'KanManagement'";
+                Connection conn = connectDB.connectSQLServer();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                while (rs.next()) {
+                    return true;
+                }
             }
+
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(connectDB.class.getName()).log(Level.SEVERE, null, ex);
         }

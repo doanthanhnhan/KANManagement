@@ -94,7 +94,7 @@
                               <Tooltip contentDisplay="TOP" text="Home" textAlignment="CENTER" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="btn_Toolbar_Booking" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                        <Button fx:id="btn_Toolbar_Booking" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_Booking_Action">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -130,7 +130,7 @@
                               <Tooltip contentDisplay="TOP" text="Check out" textAlignment="CENTER" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="btn_Toolbar_Services" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                        <Button fx:id="btn_Toolbar_Services" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_Services_Action">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -142,7 +142,7 @@
                               <Tooltip contentDisplay="TOP" text="Services" textAlignment="CENTER" />
                            </tooltip>
                         </Button>
-                        <Button fx:id="btn_Toolbar_Employees" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
+                        <Button fx:id="btn_Toolbar_Employees" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_Employees_Action">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -196,18 +196,6 @@
                               <Font size="23.0" />
                            </font>
                         </TextField>
-                        <Button alignment="CENTER" mnemonicParsing="false" text="Date and Time" textAlignment="CENTER">
-                           <graphic>
-                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/gcrontab.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip contentDisplay="TOP" text="Date and Time" textAlignment="CENTER" />
-                           </tooltip>
-                        </Button>
                         <Button fx:id="btn_Toolbar_User_Logout" alignment="CENTER" mnemonicParsing="false" onAction="#userLogOutAction" text="Đoàn Thanh Nhân" textAlignment="CENTER">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">

@@ -476,7 +476,13 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_Toolbar_CheckOut_Action(ActionEvent event) {
         System.out.println("CheckOut clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLCheckOut.fxml", "checkOut_Tab", "Check Out");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "checkOut_Tab", "Check Out");
+    }
+
+    @FXML
+    private void menuItem_Settings_Action(ActionEvent event) {
+        System.out.println("Settings menu item clicked!");
+        formLoader_With_Close_Action("/fxml/FXMLSettings.fxml", "/images/KAN Logo.png", "Settings");
     }
 
     @FXML
@@ -494,6 +500,30 @@ public class FXMLMainFormController implements Initializable {
     private void handle_Chart_Button_Action(ActionEvent event) {
         System.out.println("Chart button clicked!");
         formLoader("/fxml/FXMLBillReport.fxml", "/images/KAN Logo.png", "Bill report");
+    }
+
+    @FXML
+    private void handle_Toolbar_Booking_Action(ActionEvent event) {
+        System.out.println("Toolbar booking button clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListBooking.fxml", "listBooking_Tab", "List Booking");
+    }
+
+    @FXML
+    private void handle_Toolbar_Services_Action(ActionEvent event) {
+        System.out.println("Toolbar Services button clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listServiceOrder_Tab", "List Services");
+    }
+
+    @FXML
+    private void handle_Toolbar_Employees_Action(ActionEvent event) {
+        System.out.println("Toolbar Employees button clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListEmployee.fxml", "listEmployees_Tab", "List Employees");
+    }
+
+    @FXML
+    private void toolbar_Settings_Action(ActionEvent event) {
+        System.out.println("Settings toolbar clicked!");
+        formLoader_With_Close_Action("/fxml/FXMLSettings.fxml", "/images/KAN Logo.png", "Settings");
     }
     // =============== END TOOLBAR ACTIONS ===============
 
@@ -539,11 +569,13 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List Booking menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListBooking.fxml", "List Booking", "List Booking Informations");
     }
+
     @FXML
     private void handle_MenuItem_List_Booking_Virtual_Action(ActionEvent event) {
         System.out.println("List Booking Virtual menu item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListBookingVirtual.fxml", "List Booking Virtual", "List Booking Virtual Informations");
     }
+
     @FXML
     private void handle_MenuItem_List_Department_Action(ActionEvent event) {
         System.out.println("List Department menu item clicked!");
@@ -859,18 +891,6 @@ public class FXMLMainFormController implements Initializable {
 
             new Thread(loadOverview).start();
         });
-    }
-
-    @FXML
-    private void menuItem_Settings_Action(ActionEvent event) {
-        System.out.println("Settings menu item clicked!");
-        formLoader_With_Close_Action("/fxml/FXMLSettings.fxml", "/images/KAN Logo.png", "Settings");
-    }
-
-    @FXML
-    private void toolbar_Settings_Action(ActionEvent event) {
-        System.out.println("Settings toolbar clicked!");
-        formLoader_With_Close_Action("/fxml/FXMLSettings.fxml", "/images/KAN Logo.png", "Settings");
     }
 
 }

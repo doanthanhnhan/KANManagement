@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns2:setting xmlns:ns2="https://www.google.com/">
-    <chooseServer>nMRlPLHIWZU=</chooseServer>
-    <smtpServer>p/w1WZ7LBiiYlBtZN5KtMA==</smtpServer>
-    <smtpPort>ijW8taqLEcA=</smtpPort>
-    <emailAdress>GOMqkeVnLQ0u4x3z6emdUIBtII2uUqa/cmooMFJMF0U=</emailAdress>
-    <emailPassword>GZupYL0nlKLhmD6cjIOhmw==</emailPassword>
-    <localServer_DB_URL>eQimPqtolE5pOsH05jrNIw7Se7wQWKEHInCGlEIInPE0qFnGz2OGlg==</localServer_DB_URL>
-    <localServer_DB_Name>GOMqkeVnLQ16bSS/3//UDQ==</localServer_DB_Name>
-    <localServer_User>7fCZv5B8VLM=</localServer_User>
-    <localServer_Password>7fCZv5B8VLM=</localServer_Password>
-    <remoteServer_DB_URL>eQimPqtolE5pOsH05jrNI/fRog/WQdxDFuaamcFlni4bYjNvxXKh230t3Pr+YH+cRlz3Rh90gkPn&#xD;
-wXE+ssE9uldEkpN1Xe5sVA7H9czHoamWgEij6jdl+ltdCgadDg8en1oXIXdZQUFDbysLDFXHRpFy&#xD;
-4VjE6HTmcPFkNXQAsoiyR7zY/+JCqw00EyhhPV2TNKcLixr/HFKhxYMGN30N+ZpIuCknJcgacgxa&#xD;
-xdoFxu/ZlTXlsJWoFUEEv+Eq9Ttb+kN841QpjCWbnsYQQ6AXswTFpzAWcUxAgVrZINcRfqIj6Tiy&#xD;
-2D12nWzxODmDE+CK</remoteServer_DB_URL>
-    <remoteServer_DB_Name>GOMqkeVnLQ16bSS/3//UDQ==</remoteServer_DB_Name>
-    <remoteServer_User>0rft/btBCYqYhPgbrOmI9Q==</remoteServer_User>
-    <remoteServer_Password>ogQevLtRiFs0qFnGz2OGlg==</remoteServer_Password>
-    <secretKey>x3NA9G5nSmE=</secretKey>
+    <chooseServer>8XVgltUiLtM=</chooseServer>
+    <smtpServer>qNrpc6kgERkPbEHrD7uifg==</smtpServer>
+    <smtpPort>9KFBswHYcIM=</smtpPort>
+    <emailAdress>urH6hsMXL7txhpm2km20saYmxeFV7DhrVuRjhX9i5ss=</emailAdress>
+    <emailPassword>8IQW15ca/EvobjDzWP6hEQ==</emailPassword>
+    <localServer_DB_URL>HhVf6zF7HCJyyU0sWgQ6NaXv4A+i+2mRv7Zug0wZd8oxR1f5RYDBNA==</localServer_DB_URL>
+    <localServer_DB_Name>urH6hsMXL7u4cC5+pj79Gg==</localServer_DB_Name>
+    <localServer_User>Q1CaDo1elWU=</localServer_User>
+    <localServer_Password>Q1CaDo1elWU=</localServer_Password>
+    <remoteServer_DB_URL>HhVf6zF7HCJyyU0sWgQ6Nc4ETW2a46EgvWUwxi5X4gbIVPd4uasYEdxYVdTMNy0aRYseSGslmHr6&#xD;
+3f8bOchg0QaEisH2pPgvkyysnlcVWHTeaVWMrLi+01JAMvj5FULo/3xNcWOQ2ojxl0OtacKpVi5r&#xD;
+m3oK5ylxvDcJkCwsdzx/I2z2fT/hivJFXdkuX3vkKlJT/c9hPeW1/0wxw9vfh1YCmI+vzWx9mxmk&#xD;
+rAqAVoxgG98f5BekgzxV6t93KUBUm3HC6J3BRQh+wRcRD+poRWDdgo6YKL2S9sopZO0HEuN+vNr+&#xD;
+vwWYSyV0pN9D/T3u</remoteServer_DB_URL>
+    <remoteServer_DB_Name>urH6hsMXL7u4cC5+pj79Gg==</remoteServer_DB_Name>
+    <remoteServer_User>puzn3hs/AIT/LWIewKMPBg==</remoteServer_User>
+    <remoteServer_Password>vdcQPST/o+kxR1f5RYDBNA==</remoteServer_Password>
+    <secretKey>RrWi/me8hoo=</secretKey>
 </ns2:setting>

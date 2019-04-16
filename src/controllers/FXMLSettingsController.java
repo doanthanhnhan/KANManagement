@@ -135,7 +135,11 @@ public class FXMLSettingsController implements Initializable {
             if (newValue.equals("Local")) {
                 btn_Create_Local_DB.setDisable(false);
                 btn_ReLogIn_Local.setDisable(true);
+                btn_Create_Remote_DB.setDisable(true);
+                btn_ReLogin_Remote.setDisable(true);
             } else if (newValue.equals("Remote")) {
+                btn_Create_Local_DB.setDisable(true);
+                btn_ReLogIn_Local.setDisable(true);
                 btn_Create_Remote_DB.setDisable(false);
                 btn_ReLogin_Remote.setDisable(true);
             }
@@ -266,6 +270,8 @@ public class FXMLSettingsController implements Initializable {
             connectDB.createSQLDatabase();
             connectDB.createTables();
             connectDB.createViews();
+            btn_Create_Local_DB.setDisable(true);
+            btn_ReLogIn_Local.setDisable(false);            
         } else {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -282,6 +288,8 @@ public class FXMLSettingsController implements Initializable {
         if (!connectDB.checkDBExists()) {
             connectDB.createTables();
             connectDB.createViews();
+            btn_Create_Remote_DB.setDisable(true);
+            btn_ReLogin_Remote.setDisable(false);
         } else {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
