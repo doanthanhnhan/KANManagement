@@ -62,7 +62,7 @@ CREATE TABLE BookingInfo (
 	Note nvarchar(1000),	
 	NumberGuest tinyint not null,
 	DateBook date not null,
-	DateLeave datetime null,
+	DateLeave date null,
 	CustomerName nvarchar(100) null,
 	Active bit DEFAULT 1	
 	-- Create constraint

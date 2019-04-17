@@ -941,9 +941,12 @@ public class DAOCustomerBookingCheckIn {
         // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
         ResultSet rs = pt.executeQuery();
         while (rs.next()) {
+            bk.setBookID(rs.getString("BookingID"));
             bk.setCusID(rs.getString("CustomerID"));
             bk.setRoomID(rs.getString("RoomID"));
             bk.setNumGuest(rs.getInt("NumberGuest"));
+            bk.setDate(rs.getDate("DateBook").toString());
+            bk.setDateLeave(rs.getDate("DateLeave").toString());            
         }
         return bk;
     }
