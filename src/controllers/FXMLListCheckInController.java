@@ -7,14 +7,12 @@ package controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
-import static controllers.ConnectControllers.fXMLMainFormController;
+import static controllers.FXMLListBookingVirtualController.checkformBookingVirtual;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -30,7 +28,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.MenuItem;
@@ -43,38 +40,30 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.BookingInfo;
-import models.DAO;
+import models.CheckIn;
 import models.DAOCustomerBookingCheckIn;
-import models.DAOcheckRole;
 import models.InfoEmployee;
-import models.RoleDAOImpl;
-import models.boolDecentralizationModel;
 import models.formatCalender;
-import utils.AlertLoginAgain;
-import utils.GetInetAddress;
-import utils.showFXMLLogin;
 
 /**
  * FXML Controller class
  *
  * @author Admin
  */
-public class FXMLListBookingVirtualController implements Initializable {
+public class FXMLListCheckInController implements Initializable {
 
     private static final int ROWS_PER_PAGE = 20;
-    private FilteredList<BookingInfo> filteredData;
-    ObservableList<BookingInfo> listBooking = FXCollections.observableArrayList();
-    public boolDecentralizationModel userRole;
-    RoleDAOImpl roleDAOImpl;
+    private FilteredList<CheckIn> filteredData;
+    ObservableList<CheckIn> listCheckIn = FXCollections.observableArrayList();
+    public static CheckIn ci;
     @FXML
     private AnchorPane main_AnchorPane;
     @FXML
     private Pagination pagination;
     @FXML
-    private TableView<BookingInfo> table_ListBookingVirtual;
+    private TableView<CheckIn> table_ListCheckIn;
     @FXML
     private ContextMenu contextMenu_Main;
     @FXML
@@ -85,7 +74,6 @@ public class FXMLListBookingVirtualController implements Initializable {
     private MenuItem menuItem_Delete;
     @FXML
     private MenuItem menuItem_Refresh;
-    public static BookingInfo bk;
     @FXML
     private JFXDatePicker FromDate;
     @FXML
@@ -93,15 +81,13 @@ public class FXMLListBookingVirtualController implements Initializable {
     @FXML
     private JFXButton btnSubmit;
     private boolean checkSubmit = false;
-    private showFXMLLogin showFormLogin = new showFXMLLogin();
-    public static boolean checkformBookingVirtual = false;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ConnectControllers.setfXMLListBookingVirtualController(this);
+        ConnectControllers.setfXMLListCheckInController(this);
         checkformBookingVirtual = true;
         ToDate.valueProperty().addListener((obs, oldItem, newItem) -> {
             ToDate.setStyle("-jfx-default-color: #6447cd;");
@@ -140,16 +126,16 @@ public class FXMLListBookingVirtualController implements Initializable {
         });
         contextMenu_Main.getItems().remove(menuItem_Add);
         contextMenu_Main.getItems().remove(menuItem_Edit);
+        contextMenu_Main.getItems().remove(menuItem_Delete);
         setColumns();
         showUsersData();
-        roleDAOImpl = new RoleDAOImpl();
         // Check item when click on table
-        table_ListBookingVirtual.setOnMouseClicked((MouseEvent event) -> {
+        table_ListCheckIn.setOnMouseClicked((MouseEvent event) -> {
             if ((event.getButton().equals(MouseButton.PRIMARY) || event.getButton().equals(MouseButton.SECONDARY))
-                    && table_ListBookingVirtual.getSelectionModel().getSelectedItem() != null) {
+                    && table_ListCheckIn.getSelectionModel().getSelectedItem() != null) {
                 menuItem_Edit.setDisable(false);
                 menuItem_Delete.setDisable(false);
-                bk = table_ListBookingVirtual.getSelectionModel().getSelectedItem();
+                ci = table_ListCheckIn.getSelectionModel().getSelectedItem();
             } else {
                 menuItem_Edit.setDisable(true);
                 menuItem_Delete.setDisable(true);
@@ -158,77 +144,83 @@ public class FXMLListBookingVirtualController implements Initializable {
         //Get user role from Mainform
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
         //userRole = mainFormController.getUserRole();
-        userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
-        //11.SERVICE TYPE CRUD
-        if (!userRole.ischeckBooking_Delete()) {
-            contextMenu_Main.getItems().remove(menuItem_Delete);
-        }
+//        userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
+//        //11.SERVICE TYPE CRUD
+//        if (!userRole.ischeckBooking_Delete()) {
+//            contextMenu_Main.getItems().remove(menuItem_Delete);
+//        }
     }
 
     private void changeTableView(int index, int limit) {
 
         int fromIndex = index * limit;
-        int toIndex = Math.min(fromIndex + limit, listBooking.size());
+        int toIndex = Math.min(fromIndex + limit, listCheckIn.size());
 
         int minIndex = Math.min(toIndex, filteredData.size());
 
-        SortedList<BookingInfo> sortedData = new SortedList<>(
+        SortedList<CheckIn> sortedData = new SortedList<>(
                 FXCollections.observableArrayList(filteredData.subList(Math.min(fromIndex, minIndex), minIndex)));
 
-        sortedData.comparatorProperty().bind(table_ListBookingVirtual.comparatorProperty());
+        sortedData.comparatorProperty().bind(table_ListCheckIn.comparatorProperty());
 
-        table_ListBookingVirtual.setItems(sortedData);
+        table_ListCheckIn.setItems(sortedData);
 
     }
 
     private void setColumns() {
-        TableColumn<BookingInfo, String> bkIdCol = new TableColumn<>("Booking ID");
-        TableColumn<BookingInfo, String> cusIdCol = new TableColumn<>("Customer ID");
-        TableColumn<BookingInfo, String> cusNameCol = new TableColumn<>("Customer Name");
-        TableColumn<BookingInfo, String> roomIdCol = new TableColumn<>("Room ID");
-        TableColumn<BookingInfo, String> userCol = new TableColumn<>("User Booking");
-        TableColumn<BookingInfo, String> dateCol = new TableColumn<>("Date Booking");
-        TableColumn<BookingInfo, String> dateLeaveCol = new TableColumn<>("Date Leave");
-        TableColumn<BookingInfo, String> noteCol = new TableColumn<>("Note");
-        TableColumn<BookingInfo, Integer> numberGuestCol = new TableColumn<>("Number Guest");
+        TableColumn<CheckIn, String> ciIdCol = new TableColumn<>("CheckIn ID");
+        TableColumn<CheckIn, String> ciIdBookCol = new TableColumn<>("Booking ID");
+        TableColumn<CheckIn, String> ciIdCusCol = new TableColumn<>("Customer ID");
+        TableColumn<CheckIn, String> ciroomIdCol = new TableColumn<>("Room ID");
+        TableColumn<CheckIn, String> ciuserCol = new TableColumn<>("User CheckIn");
+        TableColumn<CheckIn, String> cusPackCol = new TableColumn<>("Customer Package");
+        TableColumn<CheckIn, String> ciCheckTypeCol = new TableColumn<>("CheckType");
+        TableColumn<CheckIn, String> cidateCol = new TableColumn<>("Date In");
+        TableColumn<CheckIn, String> cidateLeaveCol = new TableColumn<>("Date Out");
+        TableColumn<CheckIn, Integer> cinumberGuestCol = new TableColumn<>("Number Guest");
         TableColumn numberCol = new TableColumn("#");
         numberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<InfoEmployee, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<InfoEmployee, String> p) {
-                return new ReadOnlyObjectWrapper((table_ListBookingVirtual.getItems().indexOf(p.getValue()) + 1) + "");
+                return new ReadOnlyObjectWrapper((table_ListCheckIn.getItems().indexOf(p.getValue()) + 1) + "");
             }
         });
         numberCol.setSortable(false);
 
         // Định nghĩa cách để lấy dữ liệu cho mỗi ô.
         // Lấy giá trị từ các thuộc tính của ServiceType.
-        bkIdCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
-        cusIdCol.setCellValueFactory(new PropertyValueFactory<>("CusID"));
-        roomIdCol.setCellValueFactory(new PropertyValueFactory<>("RoomID"));
-        cusNameCol.setCellValueFactory(new PropertyValueFactory<>("CusName"));
-        userCol.setCellValueFactory(new PropertyValueFactory<>("User"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<>("Date"));
-        dateLeaveCol.setCellValueFactory(new PropertyValueFactory<>("DateLeave"));
-        noteCol.setCellValueFactory(new PropertyValueFactory<>("Note"));
-        numberGuestCol.setCellValueFactory(new PropertyValueFactory<>("NumGuest"));
-        bkIdCol.setPrefWidth(200);
-        cusIdCol.setPrefWidth(200);
-        cusNameCol.setPrefWidth(120);
-        dateCol.setPrefWidth(120);
-        numberGuestCol.setPrefWidth(150);
+        ciIdCol.setCellValueFactory(new PropertyValueFactory<>("CheckID"));
+        ciIdBookCol.setCellValueFactory(new PropertyValueFactory<>("BookID"));
+        ciIdCusCol.setCellValueFactory(new PropertyValueFactory<>("CusID"));
+        ciroomIdCol.setCellValueFactory(new PropertyValueFactory<>("RoomID"));
+        ciuserCol.setCellValueFactory(new PropertyValueFactory<>("User"));
+        cidateCol.setCellValueFactory(new PropertyValueFactory<>("DateIn"));
+        cidateLeaveCol.setCellValueFactory(new PropertyValueFactory<>("DateOut"));
+        ciCheckTypeCol.setCellValueFactory(new PropertyValueFactory<>("CheckType"));
+        cusPackCol.setCellValueFactory(new PropertyValueFactory<>("CusPack"));
+        cinumberGuestCol.setCellValueFactory(new PropertyValueFactory<>("NumberOfCustomer"));
+        ciIdCol.setPrefWidth(150);
+        ciIdBookCol.setPrefWidth(150);
+        ciIdCusCol.setPrefWidth(150);
+        ciIdCusCol.setPrefWidth(150);
+        cidateCol.setPrefWidth(120);
+        cidateLeaveCol.setPrefWidth(120);
+        cinumberGuestCol.setPrefWidth(150);
+        cusPackCol.setPrefWidth(150);
         numberCol.setStyle("-fx-alignment: CENTER;");
-        bkIdCol.setStyle("-fx-alignment: CENTER;");
-        cusIdCol.setStyle("-fx-alignment: CENTER;");
-        roomIdCol.setStyle("-fx-alignment: CENTER;");
-        userCol.setStyle("-fx-alignment: CENTER;");
-        dateCol.setStyle("-fx-alignment: CENTER;");
-        numberGuestCol.setStyle("-fx-alignment: CENTER;");
-        noteCol.setStyle("-fx-alignment: CENTER;");
-        cusNameCol.setStyle("-fx-alignment: CENTER;");
-        dateLeaveCol.setStyle("-fx-alignment: CENTER;");
+        ciIdCol.setStyle("-fx-alignment: CENTER;");
+        ciIdBookCol.setStyle("-fx-alignment: CENTER;");
+        ciIdCusCol.setStyle("-fx-alignment: CENTER;");
+        ciroomIdCol.setStyle("-fx-alignment: CENTER;");
+        ciuserCol.setStyle("-fx-alignment: CENTER;");
+        cidateCol.setStyle("-fx-alignment: CENTER;");
+        cidateLeaveCol.setStyle("-fx-alignment: CENTER;");
+        ciCheckTypeCol.setStyle("-fx-alignment: CENTER;");
+        cusPackCol.setStyle("-fx-alignment: CENTER;");
+        cinumberGuestCol.setStyle("-fx-alignment: CENTER;");
         // Thêm cột vào bảng
-        table_ListBookingVirtual.getColumns().clear();
-        table_ListBookingVirtual.getColumns().addAll(numberCol, bkIdCol, cusIdCol, cusNameCol, roomIdCol, userCol, dateCol, dateLeaveCol, noteCol, numberGuestCol);
+        table_ListCheckIn.getColumns().clear();
+        table_ListCheckIn.getColumns().addAll(numberCol, ciIdCol, ciIdBookCol, ciIdCusCol, ciuserCol, ciroomIdCol, ciCheckTypeCol, cidateCol, cidateLeaveCol, cinumberGuestCol, cusPackCol);
 
         // Xét xắp xếp theo userName
         //userNameCol.setSortType(TableColumn.SortType.DESCENDING);
@@ -237,38 +229,39 @@ public class FXMLListBookingVirtualController implements Initializable {
     public void showUsersData() {
         try {
             if (!checkSubmit) {
-                listBooking = DAOCustomerBookingCheckIn.getListBookingVirtual();
+                listCheckIn = DAOCustomerBookingCheckIn.getListCheckIn();
             } else {
                 String fromdate = "";
                 if (FromDate.getValue() != null) {
                     fromdate = String.valueOf(FromDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
                 }
-                listBooking = DAOCustomerBookingCheckIn.getListBookingVirtual(fromdate, String.valueOf(ToDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+                listCheckIn = DAOCustomerBookingCheckIn.getListCheckInForDate(fromdate, String.valueOf(ToDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLListCheckInController.class.getName()).log(Level.SEVERE, null, ex);
         }
         //table_ServiceType.getItems().clear();
-        table_ListBookingVirtual.setItems(listBooking);
+        table_ListCheckIn.setItems(listCheckIn);
 
         //Set filterData and Pagination
-        filteredData = new FilteredList<>(listBooking, list -> true);
+        filteredData = new FilteredList<>(listCheckIn, list -> true);
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
         mainFormController.getTxt_Search().textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(
-                    bk -> newValue == null || newValue.isEmpty()
-                    || bk.getBookID().toLowerCase().contains(newValue.toLowerCase())
-                    || bk.getCusID().toLowerCase().contains(newValue.toLowerCase())
-                    || bk.getCusName().toLowerCase().contains(newValue.toLowerCase())
-                    || bk.getDateLeave().toLowerCase().contains(newValue.toLowerCase())
-                    || bk.getDate().toLowerCase().contains(newValue.toLowerCase())
-                    || bk.getNumGuest().toString().toLowerCase().contains(newValue.toLowerCase())
-                    || bk.getRoomID().toLowerCase().contains(newValue.toLowerCase())
-                    || bk.getUser().toLowerCase().contains(newValue.toLowerCase()));
+                    ci -> newValue == null || newValue.isEmpty()
+                    || ci.getBookID().toLowerCase().contains(newValue.toLowerCase())
+                    || ci.getCusID().toLowerCase().contains(newValue.toLowerCase())
+                    || ci.getCheckID().toLowerCase().contains(newValue.toLowerCase())
+                    || ci.getDateIn().toLowerCase().contains(newValue.toLowerCase())
+                    || ci.getDateOut().toLowerCase().contains(newValue.toLowerCase())
+                    || ci.getNumberOfCustomer().toString().toLowerCase().contains(newValue.toLowerCase())
+                    || ci.getRoomID().toLowerCase().contains(newValue.toLowerCase())
+                    || ci.getCheckType().toLowerCase().contains(newValue.toLowerCase())
+                    || ci.getUser().toLowerCase().contains(newValue.toLowerCase()));
             pagination.setPageCount((int) (Math.ceil(filteredData.size() * 1.0 / ROWS_PER_PAGE)));
             changeTableView(pagination.getCurrentPageIndex(), ROWS_PER_PAGE);
         });
-        int totalPage = (int) (Math.ceil(listBooking.size() * 1.0 / ROWS_PER_PAGE));
+        int totalPage = (int) (Math.ceil(listCheckIn.size() * 1.0 / ROWS_PER_PAGE));
         pagination.setPageCount(totalPage);
         pagination.setCurrentPageIndex(0);
         changeTableView(0, ROWS_PER_PAGE);
@@ -286,43 +279,7 @@ public class FXMLListBookingVirtualController implements Initializable {
     }
 
     @FXML
-    private void handle_MenuItem_Delete_Action(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
-        if (!DAOcheckRole.checkRoleDecentralization(FXMLLoginController.User_Login, "Booking_Delete")) {
-            AlertLoginAgain.alertLogin();
-            fXMLMainFormController = ConnectControllers.getfXMLMainFormController();
-            Stage stageMainForm = (Stage) fXMLMainFormController.AnchorPaneMainForm.getScene().getWindow();
-            Stage stage = (Stage) main_AnchorPane.getScene().getWindow();
-            stage.close();
-            stageMainForm.close();
-            showFormLogin.showFormLogin();
-        } else {
-            System.out.println("Kien");
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Comfirm");
-            alert.setContentText("Do you want to delete " + bk.getBookID() + "?");
-            alert.showAndWait();
-            System.out.println(alert.getResult());
-            if (alert.getResult() == ButtonType.OK) {
-                try {
-                    DAOCustomerBookingCheckIn.deleteBooking(bk.getBookID());
-                    DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Delete Booking ID = " + bk.getBookID() + " Customer ID = " + bk.getCusID() + " Customer Name = " + bk.getCusName(),
-                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
-                    System.out.println("Delete successful");
-                    showUsersData();
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
-
-    @FXML
-    private void handle_MenuItem_Refresh_Action(ActionEvent event) {
-        ToDate.setValue(null);
-        FromDate.setValue(null);
-        ToDate.setPromptText("To Date");
-        FromDate.setPromptText("From Date");
-        showUsersData();
+    private void handle_MenuItem_Delete_Action(ActionEvent event) {
     }
 
     public void Format_Show_Booking_Date_Calender() {
@@ -355,9 +312,12 @@ public class FXMLListBookingVirtualController implements Initializable {
     }
 
     @FXML
-    private void Format_Show_ToDate_Calender() {
-        String pattern = "dd-MM-yyyy";
-        formatCalender.format(pattern, ToDate);
+    private void handle_MenuItem_Refresh_Action(ActionEvent event) {
+        ToDate.setValue(null);
+        FromDate.setValue(null);
+        ToDate.setPromptText("To Date");
+        FromDate.setPromptText("From Date");
+        showUsersData();
     }
 
     @FXML
@@ -365,4 +325,11 @@ public class FXMLListBookingVirtualController implements Initializable {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, FromDate);
     }
+
+    @FXML
+    private void Format_Show_ToDate_Calender() {
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, ToDate);
+    }
+
 }

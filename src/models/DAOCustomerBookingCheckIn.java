@@ -376,6 +376,43 @@ public class DAOCustomerBookingCheckIn {
     }
 
     //    get list booking Virtual with from date and todate
+    public static ObservableList<CheckIn> getListCheckInForDate(String FromDate, String ToDate) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<CheckIn> list_CheckIn = FXCollections.observableArrayList();
+        String sql;
+        if (FromDate.equals("")) {
+            sql = "select * from CheckIn where  DateBook<=? And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+        } else {
+            sql = "select * from CheckIn where  ?<=DateBook AND DateBook<=? And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+        }
+        PreparedStatement pt = connection.prepareStatement(sql);
+        if (FromDate.equals("")) {
+            pt.setString(1, ToDate);
+        } else {
+            pt.setString(1, FromDate);
+            pt.setString(2, ToDate);
+        }
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            CheckIn ci = new CheckIn();
+            ci.setCheckID(rs.getString("CheckInID"));
+            ci.setBookID(rs.getString("BookingID"));
+            ci.setCusID(rs.getString("CustomerID"));
+            ci.setRoomID(rs.getString("RoomID"));
+            ci.setUser(rs.getString("UserName"));
+            ci.setCheckType(rs.getString("CheckInType"));
+            ci.setNumberOfCustomer(rs.getInt("NumberOfCustomer"));
+            ci.setDateIn(rs.getString("CheckInDate"));
+            ci.setDateOut(rs.getString("LeaveDate"));
+            ci.setCusPack(rs.getString("CustomerPackage"));
+            list_CheckIn.add(ci);
+            list_CheckIn.add(ci);
+        }
+        return list_CheckIn;
+    }
+
+    //    get list booking Virtual with from date and todate
     public static ObservableList<BookingInfo> getListBookingVirtual(String FromDate, String ToDate) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         ObservableList<BookingInfo> list_Booking = FXCollections.observableArrayList();
@@ -406,6 +443,31 @@ public class DAOCustomerBookingCheckIn {
             list_Booking.add(bk);
         }
         return list_Booking;
+    }
+    //    get list booking Virtual
+
+    public static ObservableList<CheckIn> getListCheckIn() throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<CheckIn> list_CheckIn = FXCollections.observableArrayList();
+        String sql = "select * from CheckInOrders";
+        PreparedStatement pt = connection.prepareStatement(sql);
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            CheckIn ci = new CheckIn();
+            ci.setCheckID(rs.getString("CheckInID"));
+            ci.setBookID(rs.getString("BookingID"));
+            ci.setCusID(rs.getString("CustomerID"));
+            ci.setRoomID(rs.getString("RoomID"));
+            ci.setUser(rs.getString("UserName"));
+            ci.setCheckType(rs.getString("CheckInType"));
+            ci.setNumberOfCustomer(rs.getInt("NumberOfCustomer"));
+            ci.setDateIn(rs.getString("CheckInDate"));
+            ci.setDateOut(rs.getString("LeaveDate"));
+            ci.setCusPack(rs.getString("CustomerPackage"));
+            list_CheckIn.add(ci);
+        }
+        return list_CheckIn;
     }
     //    get list booking Virtual
 
@@ -946,7 +1008,7 @@ public class DAOCustomerBookingCheckIn {
             bk.setRoomID(rs.getString("RoomID"));
             bk.setNumGuest(rs.getInt("NumberGuest"));
             bk.setDate(rs.getDate("DateBook").toString());
-            bk.setDateLeave(rs.getDate("DateLeave").toString());            
+            bk.setDateLeave(rs.getDate("DateLeave").toString());
         }
         return bk;
     }
