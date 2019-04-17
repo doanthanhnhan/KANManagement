@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -33,6 +35,7 @@ import models.DAOCustomerBookingCheckIn;
 import models.RoomDAOImpl;
 import models.Room;
 import models.RoomEX;
+import models.RoomTypeDAOImpl;
 import utils.FormatName;
 import utils.PatternValided;
 import utils.StageLoader;
@@ -49,7 +52,7 @@ public class FXMLAddNewRoomController implements Initializable {
     private FXMLListRoomsController listRoomsController;
     private FXMLMainFormController mainFormController;
     private FXMLMainOverViewPaneController mainOverViewPaneController;
-    private Boolean check_Validate;
+    private boolean check_Validate;
 
     @FXML
     private AnchorPane anchorPaneAddEmployee;
@@ -285,7 +288,8 @@ public class FXMLAddNewRoomController implements Initializable {
         ObservableList<String> list_Type = FXCollections.observableArrayList();
         ObservableList<String> list_CustomerID = FXCollections.observableArrayList();
         list_Status.addAll("Available", "Reserved", "Occupied", "Out");
-        list_Type.addAll("Single", "Double", "Triple", "Family", "Deluxe");
+        RoomTypeDAOImpl roomTypeDAOImpl = new RoomTypeDAOImpl();
+        list_Type = roomTypeDAOImpl.getAllStringRoomType();
         DAOCustomerBookingCheckIn.addCTMFree();
         if (listRoomsController != null) {
             if (listRoomsController.check_Edit_Action) {
@@ -303,7 +307,6 @@ public class FXMLAddNewRoomController implements Initializable {
     }
 
     public void submit_Add_New_Room() {
-        btnAddNew.setDisable(true);
         if (listRoomsController != null) {
             listRoomsController.check_Add_New = true;
             listRoomsController.new_Room_ID = txt_Room_ID.getText();
@@ -311,7 +314,7 @@ public class FXMLAddNewRoomController implements Initializable {
 
         //Calling loading form and thread task
         StageLoader stageLoader = new StageLoader();
-        stageLoader.loadingIndicator("Adding Room");
+        stageLoader.loadingIndicator("Adding new Room");
         Task loadOverview;
         loadOverview = new Task() {
             @Override
@@ -330,6 +333,7 @@ public class FXMLAddNewRoomController implements Initializable {
                             + FormatName.format(txt_Room_ID.getText()),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Add successful!");
+                    return true;
                 }
                 return null;
             }
@@ -339,7 +343,6 @@ public class FXMLAddNewRoomController implements Initializable {
             @Override
             public void handle(Event event) {
                 Platform.runLater(() -> {
-                    btnAddNew.setDisable(false);
                     stageLoader.stopTimeline();
                     stageLoader.closeStage();
                     System.out.println("Form check validate: " + check_Validate);
@@ -365,6 +368,97 @@ public class FXMLAddNewRoomController implements Initializable {
                 System.out.println("Finished");
             }
         });
+        new Thread(loadOverview).start();
+
+        //Calling loading form and thread task
+//        StageLoader stageLoader = new StageLoader();
+//        stageLoader.loadingIndicator("Adding Room");
+//        Task loadOverview;
+//        loadOverview = new Task() {
+//            @Override
+//            protected Object call() throws Exception {
+//                System.out.println("Loading...");
+//                Platform.runLater(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        hBoxContent.getChildren().clear();
+//                    }
+//                });
+//                validateForm();
+//                if (check_Validate) {
+//                    addNewRoom();
+//                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new room: "
+//                            + FormatName.format(txt_Room_ID.getText()),
+//                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+//                    System.out.println("Add successful!");
+//                    return true;
+//                }
+//                return null;
+//            }
+//        };
+//        loadOverview.valueProperty().addListener(new ChangeListener<Task>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Task> obs, Task oldValue, Task newValue) {
+//                if (newValue != null) {
+//                    Platform.runLater(() -> {
+//                        stageLoader.stopTimeline();
+//                        stageLoader.closeStage();
+//                        System.out.println("Form check validate: " + check_Validate);
+//                        if (check_Validate) {
+//                            if (listRoomsController != null) {
+//                                listRoomsController.check_Add_Action = false;
+//                                listRoomsController.showRoomsData();
+//                                Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+//                                stageUpdate.close();
+//                            } else if (mainFormController.checkAddNewRoom) {
+//                                mainFormController.checkAddNewRoom = false;
+//                                mainOverViewPaneController.refreshForm();
+//                                Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+//                                stageUpdate.close();
+//                            } else {
+//                                listRoomsController.check_Add_Action = false;
+//                                mainFormController.checkAddNewRoom = false;
+//                                Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+//                                stageUpdate.close();
+//                            }
+//                        }
+//                    });
+//                    System.out.println("Finished");
+//                } else {
+//                    Platform.runLater(() -> {
+//                        stageLoader.stopTimeline();
+//                        stageLoader.closeStage();
+//                    });
+//                    System.out.println("Not Finished");
+//                }
+//            }
+//        });
+//        loadOverview.setOnSucceeded((event) -> {
+//            Platform.runLater(() -> {
+//                stageLoader.stopTimeline();
+//                stageLoader.closeStage();
+//                System.out.println("Form check validate: " + check_Validate);
+//                if (check_Validate) {
+//                    if (listRoomsController != null) {
+//                        listRoomsController.check_Add_Action = false;
+//                        listRoomsController.showRoomsData();
+//                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+//                        stageUpdate.close();
+//                    } else if (mainFormController.checkAddNewRoom) {
+//                        mainFormController.checkAddNewRoom = false;
+//                        mainOverViewPaneController.refreshForm();
+//                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+//                        stageUpdate.close();
+//                    } else {
+//                        listRoomsController.check_Add_Action = false;
+//                        mainFormController.checkAddNewRoom = false;
+//                        Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
+//                        stageUpdate.close();
+//                    }
+//                }
+//            });
+//            System.out.println("Finished");
+//        });
         new Thread(loadOverview).start();
     }
 
@@ -458,9 +552,13 @@ public class FXMLAddNewRoomController implements Initializable {
                 "PHONE NUMBER MUST CONTAIN NUMBER \nAND MUST BE CORRECT PHONE NUMBER FORMAT !!!")) {
             System.out.println("Room on floor false");
             check_Validate = false;
-        } else if (comboBox_Room_Type.getValue() == null) {
+        } else if (comboBox_Room_Type.getValue() == null || comboBox_Room_Type.getValue().isEmpty()) {
             System.out.println("Room type is not selected");
             check_Validate = false;
+            Platform.runLater(() -> {
+                comboBox_Room_Type.getStyleClass().add("jfx-combo-box-fault");
+                comboBox_Room_Type.requestFocus();
+            });
         } else {
             System.out.println("Validate finished");
             System.out.println("Add finished");

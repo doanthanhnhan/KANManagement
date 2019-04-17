@@ -260,6 +260,7 @@ public class FXMLListRoomsController implements Initializable {
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
         check_Edit_Action = true;
         check_Add_Action = false;
+        mainFormController.checkAddNewRoom = false;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Edit Room Informations");
 
@@ -269,6 +270,7 @@ public class FXMLListRoomsController implements Initializable {
     private void handle_MenuItem_Add_Action(ActionEvent event) {
         check_Edit_Action = false;
         check_Add_Action = true;
+        mainFormController.checkAddNewRoom = false;
         StageLoader stageLoader = new StageLoader();
         stageLoader.formLoader("/fxml/FXMLAddNewRoom.fxml", "/images/KAN Logo.png", "Add new Room Informations");
     }

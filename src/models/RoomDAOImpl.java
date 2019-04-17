@@ -609,11 +609,10 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public void deleteRoomEX(RoomEX roomEX) {
-        String sql = "UPDATE Rooms SET Active=? WHERE RoomID=?";
+        String sql = "DELETE FROM Rooms WHERE RoomID=?";
         try {
-            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setBoolean(1, false);
-                stmt.setString(2, roomEX.getRoomID());
+            try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {                
+                stmt.setString(1, roomEX.getRoomID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -622,7 +621,7 @@ public class RoomDAOImpl implements RoomDAO {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Message");
                 alert.setHeaderText("Error Querry");
-                alert.setContentText("Can't connect to Database");
+                alert.setContentText("Can't delete this room");
                 alert.show();
             });
         }
@@ -654,7 +653,29 @@ public class RoomDAOImpl implements RoomDAO {
         return listRooms;
     }
 
-//public 
+    public boolean checkDeleteRoom(String roomID) {
+        String sql = "SELECT * FROM view_RoomProperty";
+        try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {                
+                return true;
+            }
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error Querry");
+                alert.setContentText("Don't have any rooms in Database or Can't connect to Database");
+                alert.show();
+                Logger.getLogger(RoomDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            });
+        }
+
+        return false;
+    }
+
+    //public 
     public static void main(String[] args) {
         RoomDAOImpl roomDAOImpl = new RoomDAOImpl();
         ObservableList<Room> listRooms = FXCollections.observableArrayList();

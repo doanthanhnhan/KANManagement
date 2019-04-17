@@ -42,7 +42,7 @@ public class StageLoader {
     }
 
     public void stopTimeline() {
-        timeline.stop();
+        this.timeline.stop();
     }
 
     public Stage getStage() {
@@ -54,7 +54,7 @@ public class StageLoader {
     }
     
     public void closeStage() {
-        stage.close();
+        this.stage.close();
     }
 
     /**
