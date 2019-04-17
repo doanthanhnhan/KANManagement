@@ -290,6 +290,9 @@ public class FXMLAddNewRoomController implements Initializable {
         list_Status.addAll("Available", "Reserved", "Occupied", "Out");
         RoomTypeDAOImpl roomTypeDAOImpl = new RoomTypeDAOImpl();
         list_Type = roomTypeDAOImpl.getAllStringRoomType();
+        if(list_Type.isEmpty()){
+            roomTypeDAOImpl.addInitRoomType();
+        }
         DAOCustomerBookingCheckIn.addCTMFree();
         if (listRoomsController != null) {
             if (listRoomsController.check_Edit_Action) {
