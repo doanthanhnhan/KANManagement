@@ -42,7 +42,7 @@
                            <items>
                               <MenuItem fx:id="menuItem_List_Booking" mnemonicParsing="false" onAction="#handle_MenuItem_List_Booking_Action" text="List Booking" />
                               <MenuItem fx:id="menuItem_List_Booking_Virtual" mnemonicParsing="false" onAction="#handle_MenuItem_List_Booking_Virtual_Action" text="List Booking Virtual" />
-                              <MenuItem fx:id="menuItem_List_Check_In" mnemonicParsing="false" text="List Check in" />
+                              <MenuItem fx:id="menuItem_List_Check_In" mnemonicParsing="false" onAction="#handle_MenuItem_List_Check_In_Action" text="List Check in" />
                               <MenuItem fx:id="menuItem_List_Check_Out" mnemonicParsing="false" onAction="#handle_MenuItem_List_CheckOut_Action" text="List Check out" />
                               <MenuItem fx:id="menuItem_List_Customers" mnemonicParsing="false" onAction="#handle_MenuItem_List_Customer_Action" text="List Customers" />
                               <MenuItem fx:id="menuItem_List_Department" mnemonicParsing="false" onAction="#handle_MenuItem_List_Department_Action" text="List Departments" />

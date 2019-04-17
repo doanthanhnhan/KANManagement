@@ -25,7 +25,7 @@ public class ConnectControllers {
     public static FXMLListServiceTypeController fXMLListServiceTypeController;
     public static FXMLListServiceOrderController fXMLListServiceOrderController;
     public static FXMLListServiceOrderDetailController fXMLListServiceOrderDetailController;
-    public static FXMLListEmployeeController fXMLListEmployeeController;    
+    public static FXMLListEmployeeController fXMLListEmployeeController;
     public static FXMLListRoomTypeController fXMLListRoomTypeController;
     public static FXMLListRoomsController fXMLListRoomsController;
     public static FXMLInfoEmployeeController fXMLInfoEmployeeController;
@@ -42,6 +42,15 @@ public class ConnectControllers {
     public static FXMLInfoBookingVirtualController fXMLInfoBookingVirtualController;
     public static FXMLEditBookingController fXMLEditBookingController;
     public static FXMLRoomTypeController fXMLRoomTypeController;
+    public static FXMLListCheckInController fXMLListCheckInController;
+
+    public static FXMLListCheckInController getfXMLListCheckInController() {
+        return fXMLListCheckInController;
+    }
+
+    public static void setfXMLListCheckInController(FXMLListCheckInController fXMLListCheckInController) {
+        ConnectControllers.fXMLListCheckInController = fXMLListCheckInController;
+    }
 
     public static FXMLEditBookingController getfXMLEditBookingController() {
         return fXMLEditBookingController;

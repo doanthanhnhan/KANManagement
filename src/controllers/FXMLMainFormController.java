@@ -628,6 +628,12 @@ public class FXMLMainFormController implements Initializable {
         System.out.println("List Room type item clicked!");
         task_Insert_Tab_With_Indicator("/fxml/FXMLListRoomType.fxml", "listRoomType_Tab", "List Room Type");
     }
+
+    @FXML
+    private void handle_MenuItem_List_Check_In_Action(ActionEvent event) {
+        System.out.println("List Check In type item clicked!");
+        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckIn.fxml", "listCheckIn_Tab", "List Check In");
+    }
     // ############### END VIEW ACTIONS ###############
 
     // =============== START ADD ACTIONS ===============
