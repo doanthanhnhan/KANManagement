@@ -60,8 +60,8 @@ public class BillDAOImpl implements BillDAO{
         String sql = "INSERT INTO Bill (RoomID, CustomerID, UserName, CheckInID, CheckOutID, "
                 + "CheckInDate, CheckOutDate, NoOfDay, RoomPrice, RoomCharge, ServiceCharge, RoomDiscount, "
                 + "ServiceDiscount, CustomerDiscount, TotalBillAmount, VATAmount, PayableAmount, "
-                + "CustomerGive, CustomerChange, QRCode) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "CustomerGive, CustomerChange, QRCode, Note) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, bill.getRoomID());
@@ -84,7 +84,7 @@ public class BillDAOImpl implements BillDAO{
                 stmt.setBigDecimal(18, bill.getCustomerGive());
                 stmt.setBigDecimal(19, bill.getCustomerChange());                
                 stmt.setBlob(20, bill.getBillQRCode());
-                
+                stmt.setString(21, bill.getNote());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {

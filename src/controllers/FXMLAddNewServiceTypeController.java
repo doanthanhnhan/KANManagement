@@ -20,6 +20,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +39,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -115,6 +117,16 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
         System.out.println("Check edit action = " + listServiceTypeController.getCheck_Edit_Action() + " adress: " + listServiceTypeController.getCheck_Edit_Action().hashCode());
+
+        //Initial date picker
+        serviceImportDate.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
         //Check form was call from List ServiceType Form
         if (listServiceTypeController.getCheck_Edit_Action()) {
             //Setting values for new form
@@ -156,7 +168,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 } catch (SQLException | IOException ex) {
                     Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
                 submit_Update_Service_Type();
             });
 
@@ -360,6 +372,29 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                 "PRICE MUST CONTAIN NUMBER \nAND MUST BE CORRECT NUMBER FORMAT !!!")) {
             System.out.println("servicePrice false");
             check_Validate = false;
+        } else if (validateTextField(serviceInventory, "^[1-9][\\d]{0,8}$", "SERVICE INVENTORY MUST NOT BE EMPTY !!!",
+                "INVENTORY MUST CONTAIN NUMBER \nAND MUST BE CORRECT NUMBER FORMAT !!!")) {
+            System.out.println("serviceInventory false");
+            check_Validate = false;
+        } else if (serviceImportDate.getValue() == null) {
+            System.out.println("trong datebook null: " + FXMLInfoCustomerController.checkInfoCustomer);
+            Platform.runLater(() -> {
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");                
+                Label label = new Label();
+                label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+                label.setPrefSize(465, 35);
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setText("DATE BOOK MUST NOT EMPTY !!!");
+                serviceImportDate.setStyle("-jfx-default-color: RED;");
+                hBoxContent.setAlignment(Pos.CENTER_LEFT);
+                hBoxContent.setSpacing(10);
+                hBoxContent.getChildren().clear();
+                hBoxContent.getChildren().add(icon);
+                hBoxContent.getChildren().add(label);
+                serviceImportDate.requestFocus();
+            });
         } else if (imgService.getImage() == null) {
             System.out.println("imgService is null");
             Platform.runLater(() -> {

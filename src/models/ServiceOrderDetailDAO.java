@@ -19,6 +19,10 @@ public interface ServiceOrderDetailDAO {
 
     List<ServiceOrderDetail> get_All_Details_Of_CheckInRoom(String roomID, String checkInDate);
 
+    List<ServiceOrderDetail> get_All_Details_Of_CheckIn_Customer(String customerID);
+    
+    List<CheckIn> get_All_CheckIn_Of_Customer(String customerID);
+
     void addServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail);
 
     void editServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail, Boolean active);
@@ -28,7 +32,7 @@ public interface ServiceOrderDetailDAO {
     void updateSODCheckOut(boolean checkout, String serviceOrderID, String serviceID);
 
     void update_CheckIN_SOD_CheckOut(String checkInID);
-    
+
     boolean check_SOD_Per_SO_Finish(String serviceOrderID);
 
     void deleteServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail);

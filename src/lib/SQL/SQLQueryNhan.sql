@@ -373,6 +373,7 @@ CREATE TABLE Bill (
 	CustomerGive decimal(18,3) NOT NULL,
 	CustomerChange decimal(18,3) NOT NULL,
 	QRCode varbinary(MAX),
+	Note nvarchar(1000),
 	Active bit DEFAULT 1
 	-- Create constraint
 	CONSTRAINT pk_ID_Bill PRIMARY KEY (ID)

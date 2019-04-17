@@ -80,6 +80,8 @@ public class FXMLCheckOutController implements Initializable {
     private ObservableList<String> list_Payment_Method;
     private ObservableList<Room> list_Rooms;
     private ObservableList<ServiceOrderDetail> list_Service_Order_Details;
+    private ObservableList<ServiceOrderDetail> list_Service_Order_Details_All_Rooms;
+    private ObservableList<CheckIn> list_Check_In_Of_Customer;
 
     private CheckOutDAOImpl checkOutDAOImpl;
     private RoomDAOImpl roomDAOImpl;
@@ -87,6 +89,7 @@ public class FXMLCheckOutController implements Initializable {
     private ServiceOrderDAOImpl serviceOrderDAOImpl;
     private ServiceOrderDetailDAOImpl serviceOrderDetailDAOImpl;
     private StringBuilder string_Total_Bill;
+    private StringBuilder all_string_Total_Bill;
     private Room roomCheckOut;
     private CheckIn checkInRoom;
 
@@ -102,6 +105,19 @@ public class FXMLCheckOutController implements Initializable {
     public Double total = 0.0;
     public Double total_VAT = 0.0;
     public int day_Stay_Print = 0;
+
+    public Double all_total_Service = 0.0;
+    public Double all_total_Service_Discount = 0.0;
+    public Double all_total_Room = 0.0;
+    public Double all_total_Room_Discount = 0.0;
+    public Double all_charge_Room_1st_Day = 0.0;
+    public Double all_charge_Room_Last_Day = 0.0;
+    public Double all_total_Bill = 0.0;
+    public Double all_total_Without_CusDiscount = 0.0;
+    public Double all_total_With_Customer_Discount = 0.0;
+    public Double all_total = 0.0;
+    public Double all_total_VAT = 0.0;
+    public int all_day_Stay_Print = 0;
 
     FXMLMainFormController mainFormController;
     FXMLMainOverViewPaneController mainOverViewPaneController;
@@ -192,7 +208,7 @@ public class FXMLCheckOutController implements Initializable {
         comboBox_Payment_Method.setValue("Cash");
         // Init stringbuilder     
         string_Total_Bill = new StringBuilder();
-
+        all_string_Total_Bill = new StringBuilder();
         //Init textfield
         txt_Check_In_ID.setText(checkInRoom.getCheckID());
         txt_Check_Out_ID.setText("CO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")));
@@ -210,9 +226,16 @@ public class FXMLCheckOutController implements Initializable {
             if (newValue != null) {
                 if (!newValue.isEmpty()) {
                     if (PatternValided.PatternSalary(newValue)) {
-                        Double changeMoney = Double.valueOf(newValue) - total_Bill;
-                        txt_Customer_Change.setText(String.format("%.3f", changeMoney));
-                        txt_Customer_Give.getStyleClass().removeAll("text-field-fault");
+                        if (checkBox_All_Rooms.isSelected()) {
+                            Double changeMoney = Double.valueOf(newValue) - all_total_Bill;
+                            txt_Customer_Change.setText(String.format("%.3f", changeMoney));
+                            txt_Customer_Give.getStyleClass().removeAll("text-field-fault");
+                        } else {
+                            Double changeMoney = Double.valueOf(newValue) - total_Bill;
+                            txt_Customer_Change.setText(String.format("%.3f", changeMoney));
+                            txt_Customer_Give.getStyleClass().removeAll("text-field-fault");
+                        }
+
                     } else {
                         txt_Customer_Give.setText(oldValue);
                         txt_Customer_Give.getStyleClass().add("text-field-fault");
@@ -301,9 +324,179 @@ public class FXMLCheckOutController implements Initializable {
     }
 
     public void showUsersData() {
-        list_Service_Order_Details = serviceOrderDetailDAOImpl.get_All_Details_Of_CheckInRoom(txt_Room_ID.getText(), txt_Check_In_ID.getText());
-        //table_ServiceType.getItems().clear();
-        tableView_Service_Order.setItems(list_Service_Order_Details);
+        if (!checkBox_All_Rooms.isSelected()) {
+            list_Service_Order_Details = serviceOrderDetailDAOImpl.get_All_Details_Of_CheckInRoom(txt_Room_ID.getText(), txt_Check_In_ID.getText());
+            //Load checkout room again to prevent Check out All Rooms case
+            roomCheckOut = roomDAOImpl.getRoom(txt_Room_ID.getText());
+            //table_ServiceType.getItems().clear();
+            tableView_Service_Order.setItems(list_Service_Order_Details);
+            for (ServiceOrderDetail list_Service_Order_Detail : list_Service_Order_Details) {
+                total_Service = total_Service + list_Service_Order_Detail.getServicePriceTotal().doubleValue();
+                total_Service_Discount = total_Service_Discount + list_Service_Order_Detail.getServicePriceTotal().doubleValue()
+                        * list_Service_Order_Detail.getServiceDiscount().doubleValue();
+                System.out.println("Total service = " + total_Service);
+            }
+            //Calculate room charge
+            int check_In_Hour = roomCheckOut.getCheckInDate().getHour();
+            int check_Out_Hour = LocalDateTime.now().getHour();
+            Long hours_Stay = ChronoUnit.HOURS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
+            Long days_Stay = ChronoUnit.DAYS.between(roomCheckOut.getCheckInDate(), LocalDateTime.now());
+            Double total_Room_Normal = 0.0;
+            //Check checkin time
+            if (check_In_Hour >= 5 && check_In_Hour < 9) {
+                charge_Room_1st_Day = charge_Room_1st_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.5;
+            } else if (check_In_Hour >= 9 && check_In_Hour < 14) {
+                charge_Room_1st_Day = charge_Room_1st_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.3;
+            } else {
+                charge_Room_1st_Day = charge_Room_1st_Day + roomCheckOut.getRoomPrice().doubleValue();
+            }
+            //Check checkout time
+            if (checkBox_Allow_OverTime_CO.isSelected()) {
+                charge_Room_Last_Day = 0.0;
+            } else {
+                if (check_Out_Hour >= 12 && check_Out_Hour < 15 && !roomCheckOut.getCheckInDate().toLocalDate().equals(LocalDate.now())) {
+                    charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.3;
+                } else if (check_Out_Hour >= 15 && check_Out_Hour < 18 && !roomCheckOut.getCheckInDate().toLocalDate().equals(LocalDate.now())) {
+                    charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue() * 0.5;
+                } else if (check_Out_Hour >= 18 && !roomCheckOut.getCheckInDate().toLocalDate().equals(LocalDate.now())) {
+                    charge_Room_Last_Day = charge_Room_Last_Day + roomCheckOut.getRoomPrice().doubleValue();
+                } else {
+                    charge_Room_Last_Day = 0.0;
+                }
+            }
+            //Charge left days
+            day_Stay_Print = 0;
+            if (hours_Stay >= 24) {
+                total_Room_Normal = days_Stay * roomCheckOut.getRoomPrice().doubleValue();
+                day_Stay_Print = days_Stay.intValue() + 2;
+                total_Room = total_Room_Normal + charge_Room_1st_Day + charge_Room_Last_Day;
+                total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
+            } else if (charge_Room_Last_Day != 0) {
+                day_Stay_Print = 2;
+                days_Stay = Long.valueOf(0);
+                total_Room = charge_Room_1st_Day + charge_Room_Last_Day;
+                total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
+            } else {
+                day_Stay_Print = 1;
+                days_Stay = Long.valueOf(0);
+                total_Room = charge_Room_1st_Day;
+                total_Room_Discount = total_Room * roomCheckOut.getRoomDiscount().doubleValue();
+            }
+
+            total_Without_CusDiscount = total_Room + total_Service;
+            total_With_Customer_Discount = total_Without_CusDiscount * roomCheckOut.getCusDiscount().doubleValue();
+            total = total_Without_CusDiscount - total_With_Customer_Discount - total_Room_Discount - total_Service_Discount;
+            total_VAT = total * 0.1;
+            total_Bill = total + total_VAT;
+
+            //IMPORTANT NOTE: To display string.format, setting TextArea with: -fx-font-family: monospace
+            string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+            string_Total_Bill.append(String.format("| %-35s | %19s |%n", "Check in time", roomCheckOut.getCheckInDate()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
+            string_Total_Bill.append(String.format("| %-35s | %19s |%n", "Check out time", LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
+            string_Total_Bill.append(String.format("| %-35s | %19d |%n", "No. Of Days", day_Stay_Print));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Rent per day", roomCheckOut.getRoomPrice()));
+            string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Room charge 1st day", charge_Room_1st_Day));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Room charge x " + days_Stay + " f.days", total_Room_Normal));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Room charge last day", charge_Room_Last_Day));
+            string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Total Room charge", total_Room));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Services charge", total_Service));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "(-) Room discount (" + roomCheckOut.getRoomDiscount().multiply(BigDecimal.valueOf(100)) + "%)", total_Room_Discount));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "(-) Services discount", total_Service_Discount));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "(-) Customer discount (" + roomCheckOut.getCusDiscount().multiply(BigDecimal.valueOf(100)) + "%)", total_With_Customer_Discount));
+            string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Total bill amount", total));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "(+) VAT (10%)", total_VAT));
+            string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Payable amount", total_Bill));
+            string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+
+            System.out.println(string_Total_Bill);
+            txt_Area_Total_Bill.setText(string_Total_Bill.toString());
+            txt_Total_Bill.setText(String.format("%.3f", total_Bill));
+            txt_Total_Bill.setDisable(true);
+            txt_Tax.setText("0.1");
+            txt_Tax.setDisable(true);
+            txt_Discount.setText(roomCheckOut.getCusDiscount().toString());
+            txt_Discount.setDisable(true);
+        } else {
+            list_Service_Order_Details_All_Rooms = serviceOrderDetailDAOImpl.get_All_Details_Of_CheckIn_Customer(txt_Customer_ID.getText());
+            //Setting data for tableview
+            tableView_Service_Order.setItems(list_Service_Order_Details_All_Rooms);
+
+            list_Check_In_Of_Customer = serviceOrderDetailDAOImpl.get_All_CheckIn_Of_Customer(txt_Customer_ID.getText());
+            for (CheckIn check_In : list_Check_In_Of_Customer) {
+                string_Total_Bill = new StringBuilder();
+                total_Service = 0.0;
+                total_Service_Discount = 0.0;
+                total_Room = 0.0;
+                total_Room_Discount = 0.0;
+                charge_Room_1st_Day = 0.0;
+                charge_Room_Last_Day = 0.0;
+                total_Bill = 0.0;
+                total_Without_CusDiscount = 0.0;
+                total_With_Customer_Discount = 0.0;
+                total = 0.0;
+                total_VAT = 0.0;
+                day_Stay_Print = 0;
+
+                showUsersData_All_Room(check_In.getRoomID(), check_In.getCheckID());
+
+                all_total_Service = all_total_Service + total_Service;
+                all_total_Service_Discount = all_total_Service_Discount + total_Service_Discount;
+                all_total_Room = all_total_Room + total_Room;
+                all_total_Room_Discount = all_total_Room_Discount + total_Room_Discount;
+                all_charge_Room_1st_Day = all_charge_Room_1st_Day + charge_Room_1st_Day;
+                all_charge_Room_Last_Day = all_charge_Room_Last_Day + charge_Room_Last_Day;
+                all_total_Bill = all_total_Bill + total_Bill;
+                all_total_Without_CusDiscount = all_total_Without_CusDiscount + total_Without_CusDiscount;
+                all_total_With_Customer_Discount = all_total_With_Customer_Discount + total_With_Customer_Discount;
+                all_total = all_total + total;
+                all_total_VAT = all_total_VAT + total_VAT;
+                all_day_Stay_Print = all_day_Stay_Print + day_Stay_Print;
+                all_string_Total_Bill.append(string_Total_Bill);
+            }
+            //IMPORTANT NOTE: To display string.format, setting TextArea with: -fx-font-family: monospace
+            all_string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+            all_string_Total_Bill.append(String.format("| %-57s |%n", "TOTAL ALL ROOMS"));
+            all_string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+            all_string_Total_Bill.append(String.format("| %-35s | %19s |%n", "Check in time", roomCheckOut.getCheckInDate()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
+            all_string_Total_Bill.append(String.format("| %-35s | %19s |%n", "Check out time", LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
+            all_string_Total_Bill.append(String.format("| %-35s | %19d |%n", "No. Of Days", all_day_Stay_Print));
+            all_string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+//            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Room charge 1st day", charge_Room_1st_Day));
+//            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Room charge x " + days_Stay + " f.days", total_Room_Normal));
+//            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Room charge last day", charge_Room_Last_Day));
+            all_string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Total Room charge", all_total_Room));
+            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Services charge", all_total_Service));
+            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "(-) Room discount (" + roomCheckOut.getRoomDiscount().multiply(BigDecimal.valueOf(100)) + "%)", all_total_Room_Discount));
+            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "(-) Services discount", all_total_Service_Discount));
+            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "(-) Customer discount (" + roomCheckOut.getCusDiscount().multiply(BigDecimal.valueOf(100)) + "%)", all_total_With_Customer_Discount));
+            all_string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Total bill amount", all_total));
+            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "(+) VAT (10%)", all_total_VAT));
+            all_string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Payable amount", all_total_Bill));
+            all_string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+
+            System.out.println(all_string_Total_Bill);
+            txt_Area_Total_Bill.setText(all_string_Total_Bill.toString());
+            txt_Total_Bill.setText(String.format("%.3f", all_total_Bill));
+            txt_Total_Bill.setDisable(true);
+            txt_Tax.setText("0.1");
+            txt_Tax.setDisable(true);
+            txt_Discount.setText(roomCheckOut.getCusDiscount().toString());
+            txt_Discount.setDisable(true);
+        }
+    }
+
+    public void showUsersData_All_Room(String roomID, String checkInID) {
+        list_Service_Order_Details = serviceOrderDetailDAOImpl.get_All_Details_Of_CheckInRoom(roomID, checkInID);
+        roomCheckOut = roomDAOImpl.getRoom(roomID);
         for (ServiceOrderDetail list_Service_Order_Detail : list_Service_Order_Details) {
             total_Service = total_Service + list_Service_Order_Detail.getServicePriceTotal().doubleValue();
             total_Service_Discount = total_Service_Discount + list_Service_Order_Detail.getServicePriceTotal().doubleValue()
@@ -365,6 +558,9 @@ public class FXMLCheckOutController implements Initializable {
 
         //IMPORTANT NOTE: To display string.format, setting TextArea with: -fx-font-family: monospace
         string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
+        string_Total_Bill.append(String.format("| %-57s |%n", "Room: " + roomID));
+        string_Total_Bill.append(String.format("| %-57s |%n", "Check in ID: " + checkInID));
+        string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
         string_Total_Bill.append(String.format("| %-35s | %19s |%n", "Check in time", roomCheckOut.getCheckInDate()
                 .format(DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm:ss"))));
         string_Total_Bill.append(String.format("| %-35s | %19s |%n", "Check out time", LocalDateTime.now()
@@ -387,14 +583,14 @@ public class FXMLCheckOutController implements Initializable {
         string_Total_Bill.append(String.format("| %-35s | %19.3f |%n", "Payable amount", total_Bill));
         string_Total_Bill.append(String.format("-------------------------------------------------------------%n"));
 
-        System.out.println(string_Total_Bill);
-        txt_Area_Total_Bill.setText(string_Total_Bill.toString());
-        txt_Total_Bill.setText(String.format("%.3f", total_Bill));
-        txt_Total_Bill.setDisable(true);
-        txt_Tax.setText("0.1");
-        txt_Tax.setDisable(true);
-        txt_Discount.setText(roomCheckOut.getCusDiscount().toString());
-        txt_Discount.setDisable(true);
+//        System.out.println(string_Total_Bill);
+//        txt_Area_Total_Bill.setText(string_Total_Bill.toString());
+//        txt_Total_Bill.setText(String.format("%.3f", total_Bill));
+//        txt_Total_Bill.setDisable(true);
+//        txt_Tax.setText("0.1");
+//        txt_Tax.setDisable(true);
+//        txt_Discount.setText(roomCheckOut.getCusDiscount().toString());
+//        txt_Discount.setDisable(true);
     }
 
     private CheckOut get_Check_Out_Data() {
@@ -408,6 +604,22 @@ public class FXMLCheckOutController implements Initializable {
         checkOut.setCustomerPayment(comboBox_Payment_Method.getValue());
         checkOut.setDiscount(BigDecimal.valueOf(Double.valueOf(txt_Discount.getText())));
         checkOut.setRoomID(txt_Room_ID.getText());
+        checkOut.setTax(BigDecimal.valueOf(Double.valueOf(txt_Tax.getText())));
+        checkOut.setUserName(mainFormController.userRole.getEmployee_ID());
+        return checkOut;
+    }
+
+    private CheckOut get_Check_Out_Data_All(String roomID, String checkInID, String checkOutID) {
+        CheckOut checkOut = new CheckOut();
+        checkOut.setCheckInDate(LocalDateTime.of(datePicker_Check_In.getValue(), LocalTime.now()));
+        checkOut.setCheckInID(checkInID);
+        checkOut.setCheckOutDate(LocalDateTime.now());
+        checkOut.setCheckOutID(checkOutID);
+        checkOut.setCustomerBill(BigDecimal.valueOf(all_total_Bill));
+        checkOut.setCustomerID(txt_Customer_ID.getText());
+        checkOut.setCustomerPayment(comboBox_Payment_Method.getValue());
+        checkOut.setDiscount(BigDecimal.valueOf(Double.valueOf(txt_Discount.getText())));
+        checkOut.setRoomID(roomID);
         checkOut.setTax(BigDecimal.valueOf(Double.valueOf(txt_Tax.getText())));
         checkOut.setUserName(mainFormController.userRole.getEmployee_ID());
         return checkOut;
@@ -452,6 +664,45 @@ public class FXMLCheckOutController implements Initializable {
         return bill;
     }
 
+    private Bill get_Bill_Data_All(String roomID, String checkInID, String checkOutID) {
+        Bill bill = new Bill();
+
+        //Setting bill QRCode
+        String qrCodeData = checkOutID + ";" + txt_Customer_ID.getText();
+        Image imageQRCode = QRCreate.creatQRCode(qrCodeData);
+        BufferedImage bImage = SwingFXUtils.fromFXImage(imageQRCode, null);
+        byte[] res;
+        try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
+            ImageIO.write(bImage, "png", s);
+            res = s.toByteArray();
+            Blob blob = new SerialBlob(res);
+            bill.setBillQRCode(blob);
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        bill.setCheckInDate(LocalDateTime.of(datePicker_Check_In.getValue(), LocalTime.now()));
+        bill.setCheckInID(checkInID);
+        bill.setCheckOutDate(LocalDateTime.now());
+        bill.setCheckOutID(checkOutID);
+        bill.setCustomerChange(BigDecimal.valueOf(Double.valueOf(txt_Customer_Change.getText())));
+        bill.setCustomerDiscount(BigDecimal.valueOf(all_total_With_Customer_Discount));
+        bill.setCustomerGive(BigDecimal.valueOf(Double.valueOf(txt_Customer_Give.getText())));
+        bill.setCustomerID(txt_Customer_ID.getText());
+        bill.setNoOfDay(day_Stay_Print);
+        bill.setPayableAmount(BigDecimal.valueOf(all_total_Bill));
+        bill.setRoomCharge(BigDecimal.valueOf(all_total_Room));
+        bill.setRoomDiscount(BigDecimal.valueOf(all_total_Room_Discount));
+        bill.setRoomID(roomID);
+        bill.setRoomPrice(roomCheckOut.getRoomPrice());
+        bill.setServiceCharge(BigDecimal.valueOf(all_total_Service));
+        bill.setServiceDiscount(BigDecimal.valueOf(all_total_Service_Discount));
+        bill.setTotalBillAmount(BigDecimal.valueOf(all_total));
+        bill.setUserName(mainFormController.userRole.getEmployee_ID());
+        bill.setVATAmount(BigDecimal.valueOf(all_total_VAT));
+        return bill;
+    }
+
     private void submit_Check_Out() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Message");
@@ -466,33 +717,72 @@ public class FXMLCheckOutController implements Initializable {
                 @Override
                 protected Object call() throws Exception {
                     Platform.runLater(() -> {
-                        //Update services orders
-                        serviceOrderDAOImpl.update_CheckIn_SO_CheckOut(txt_Check_In_ID.getText());
-                        serviceOrderDetailDAOImpl.update_CheckIN_SOD_CheckOut(txt_Check_In_ID.getText());
-                        //Add checkout
-                        CheckOut checkOut = get_Check_Out_Data();
-                        checkOutDAOImpl.addCheckOut(checkOut);
-                        DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new CheckOutID: "
-                                + FormatName.format(checkOut.getCheckOutID()),
-                                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+                        if (checkBox_All_Rooms.isSelected()) {
+                            StringBuilder bill_Note = new StringBuilder("This bill for these rooms: ");
+                            for (CheckIn check_In : list_Check_In_Of_Customer) {
+                                bill_Note.append(check_In.getRoomID() + ";" + check_In.getCheckID() + ";");
+                            }
 
-                        //Getting Room infomations to update room Status after checking in - Nhan edit here
-                        Room room = new Room();
-                        room.setRoomID(txt_Room_ID.getText());
-                        room.setCustomerID("CTM-000000000");
-                        room.setUserName(mainFormController.getUserRole().getEmployee_ID());
-                        room.setRoomStatus("Out");
-                        room.setLeaveDate(LocalDateTime.now());
-                        room.setDayRemaining(0);
-                        roomDAOImpl.editCheckOutRoom(room, true);
-                        mainOverViewPaneController.refreshForm();
-                        //Writing Bill to DB
-                        Bill bill = get_Bill_Data();
-                        billDAOImpl.addBill(bill);
+                            for (CheckIn check_In : list_Check_In_Of_Customer) {
+                                String roomID = check_In.getRoomID();
+                                String checkInID = check_In.getCheckID();
+                                String checkOutID = "CO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+                                roomCheckOut = roomDAOImpl.getRoom(roomID);
+                                //Update services orders
+                                serviceOrderDAOImpl.update_CheckIn_SO_CheckOut(checkInID);
+                                serviceOrderDetailDAOImpl.update_CheckIN_SOD_CheckOut(checkInID);
+
+                                //Add checkout                                
+                                CheckOut checkOut = get_Check_Out_Data_All(roomID, checkInID, checkOutID);
+                                checkOutDAOImpl.addCheckOut(checkOut);
+                                DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new CheckOutID: "
+                                        + FormatName.format(checkOut.getCheckOutID()),
+                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+
+                                //Getting Room infomations to update room Status after checking in - Nhan edit here
+                                Room room = new Room();
+                                room.setRoomID(roomID);
+                                room.setCustomerID("CTM-000000000");
+                                room.setUserName(mainFormController.getUserRole().getEmployee_ID());
+                                room.setRoomStatus("Out");
+                                room.setLeaveDate(LocalDateTime.now());
+                                room.setDayRemaining(0);
+                                roomDAOImpl.editCheckOutRoom(room, true);
+                                mainOverViewPaneController.refreshForm();
+                                //Writing Bill to DB
+                                Bill bill = get_Bill_Data_All(roomID, checkInID, checkOutID);
+                                bill.setNote(bill_Note.toString());
+                                billDAOImpl.addBill(bill);
+                            }
+                        } else {
+                            //Update services orders
+                            serviceOrderDAOImpl.update_CheckIn_SO_CheckOut(txt_Check_In_ID.getText());
+                            serviceOrderDetailDAOImpl.update_CheckIN_SOD_CheckOut(txt_Check_In_ID.getText());
+                            //Add checkout
+                            CheckOut checkOut = get_Check_Out_Data();
+                            checkOutDAOImpl.addCheckOut(checkOut);
+                            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new CheckOutID: "
+                                    + FormatName.format(checkOut.getCheckOutID()),
+                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+
+                            //Getting Room infomations to update room Status after checking in - Nhan edit here
+                            Room room = new Room();
+                            room.setRoomID(txt_Room_ID.getText());
+                            room.setCustomerID("CTM-000000000");
+                            room.setUserName(mainFormController.getUserRole().getEmployee_ID());
+                            room.setRoomStatus("Out");
+                            room.setLeaveDate(LocalDateTime.now());
+                            room.setDayRemaining(0);
+                            roomDAOImpl.editCheckOutRoom(room, true);
+                            mainOverViewPaneController.refreshForm();
+                            //Writing Bill to DB
+                            Bill bill = get_Bill_Data();
+                            bill.setNote("This bill for only one room.");
+                            billDAOImpl.addBill(bill);
+                        }
                         //Calling bill report
                         PrintReport viewReport = new PrintReport();
                         viewReport.showReport_Customer_Bill("/src/reports/Bill.jrxml", txt_Check_Out_ID.getText());
-
                         Stage stage = (Stage) btn_Save.getScene().getWindow();
                         stage.close();
                     });
@@ -555,6 +845,39 @@ public class FXMLCheckOutController implements Initializable {
         total = 0.0;
         total_VAT = 0.0;
         day_Stay_Print = 0;
+        showUsersData();
+    }
+
+    @FXML
+    private void handle_All_Rooms_CO_Action(ActionEvent event) {
+        string_Total_Bill = new StringBuilder();
+        total_Service = 0.0;
+        total_Service_Discount = 0.0;
+        total_Room = 0.0;
+        total_Room_Discount = 0.0;
+        charge_Room_1st_Day = 0.0;
+        charge_Room_Last_Day = 0.0;
+        total_Bill = 0.0;
+        total_Without_CusDiscount = 0.0;
+        total_With_Customer_Discount = 0.0;
+        total = 0.0;
+        total_VAT = 0.0;
+        day_Stay_Print = 0;
+
+        all_string_Total_Bill = new StringBuilder();
+        all_total_Service = 0.0;
+        all_total_Service_Discount = 0.0;
+        all_total_Room = 0.0;
+        all_total_Room_Discount = 0.0;
+        all_charge_Room_1st_Day = 0.0;
+        all_charge_Room_Last_Day = 0.0;
+        all_total_Bill = 0.0;
+        all_total_Without_CusDiscount = 0.0;
+        all_total_With_Customer_Discount = 0.0;
+        all_total = 0.0;
+        all_total_VAT = 0.0;
+        all_day_Stay_Print = 0;
+
         showUsersData();
     }
 

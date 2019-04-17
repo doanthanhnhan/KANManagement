@@ -37,11 +37,12 @@ public class Bill {
     private BigDecimal CustomerChange;
     private Blob billQRCode;
     private ImageView imageView_Bill_QR_Code;
+    private String note;
 
     public Bill() {
     }
 
-    public Bill(String roomID, String customerID, String userName, String checkInID, String checkOutID, LocalDateTime checkInDate, LocalDateTime checkOutDate, int noOfDay, BigDecimal roomPrice, BigDecimal roomCharge, BigDecimal serviceCharge, BigDecimal roomDiscount, BigDecimal serviceDiscount, BigDecimal customerDiscount, BigDecimal totalBillAmount, BigDecimal VATAmount, BigDecimal payableAmount, BigDecimal CustomerGive, BigDecimal CustomerChange, Blob billQRCode, ImageView imageView_Bill_QR_Code) {
+    public Bill(String roomID, String customerID, String userName, String checkInID, String checkOutID, LocalDateTime checkInDate, LocalDateTime checkOutDate, int noOfDay, BigDecimal roomPrice, BigDecimal roomCharge, BigDecimal serviceCharge, BigDecimal roomDiscount, BigDecimal serviceDiscount, BigDecimal customerDiscount, BigDecimal totalBillAmount, BigDecimal VATAmount, BigDecimal payableAmount, BigDecimal CustomerGive, BigDecimal CustomerChange, Blob billQRCode, ImageView imageView_Bill_QR_Code, String note) {
         this.roomID = roomID;
         this.customerID = customerID;
         this.userName = userName;
@@ -63,6 +64,7 @@ public class Bill {
         this.CustomerChange = CustomerChange;
         this.billQRCode = billQRCode;
         this.imageView_Bill_QR_Code = imageView_Bill_QR_Code;
+        this.note = note;
     }
 
     public String getRoomID() {
@@ -231,6 +233,14 @@ public class Bill {
 
     public void setImageView_Bill_QR_Code(ImageView imageView_Bill_QR_Code) {
         this.imageView_Bill_QR_Code = imageView_Bill_QR_Code;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
 }

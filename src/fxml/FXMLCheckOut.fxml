@@ -132,7 +132,7 @@
                                                 <Font name="System Bold" size="15.0" />
                                              </font>
                                           </JFXCheckBox>
-                                          <JFXCheckBox fx:id="checkBox_All_Rooms" checkedColor="#6747cd" onAction="#handle_Allow_OverTime_CO_Action" prefWidth="600.0" text="All rooms" textFill="#6467cd" unCheckedColor="#6747cd">
+                                          <JFXCheckBox fx:id="checkBox_All_Rooms" checkedColor="#6747cd" onAction="#handle_All_Rooms_CO_Action" prefWidth="600.0" text="All rooms" textFill="#6467cd" unCheckedColor="#6747cd">
                                              <font>
                                                 <Font name="System Bold" size="15.0" />
                                              </font>

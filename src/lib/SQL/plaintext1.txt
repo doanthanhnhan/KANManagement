@@ -62,7 +62,7 @@ CREATE TABLE BookingInfo (
 	Note nvarchar(1000),	
 	NumberGuest tinyint not null,
 	DateBook date not null,
-	DateLeave datetime null,
+	DateLeave date null,
 	CustomerName nvarchar(100) null,
 	Active bit DEFAULT 1	
 	-- Create constraint
@@ -373,6 +373,7 @@ CREATE TABLE Bill (
 	CustomerGive decimal(18,3) NOT NULL,
 	CustomerChange decimal(18,3) NOT NULL,
 	QRCode varbinary(MAX),
+	Note nvarchar(1000),
 	Active bit DEFAULT 1
 	-- Create constraint
 	CONSTRAINT pk_ID_Bill PRIMARY KEY (ID)

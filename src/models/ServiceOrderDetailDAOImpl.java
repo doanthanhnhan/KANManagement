@@ -296,6 +296,108 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
     }
 
     @Override
+    public ObservableList<ServiceOrderDetail> get_All_Details_Of_CheckIn_Customer(String customerID) {
+        String sql = "SELECT SOD.OrderID , SOD.ServiceID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, SOD.Finish, ST.*, "
+                + "SO.ServiceOrderDate, SO.CustomerID, SO.RoomID, \n"
+                + "	CIO.CheckInDate, CIO.CheckInID,\n"
+                + "	CASE WHEN C.CustomerMidName <> '' THEN C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName\n"
+                + "	ELSE C.CustomerFirstName+' ' +C.CustomerLastName END AS 'CustomerFullName'\n"
+                + "FROM ServicesOrderDetails SOD\n"
+                + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID\n"
+                + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID \n"
+                + "INNER JOIN CheckInOrders CIO ON SO.RoomID = CIO.RoomID\n"
+                + "INNER JOIN Customers C ON C.CustomerID = CIO.CustomerID\n"
+                + "WHERE CIO.CustomerID='"
+                + customerID
+                + "' AND SOD.Finish=1 AND SOD.CheckOut=0";
+        ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
+
+        try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail();
+                serviceOrderDetail.setOrderID(rs.getString("OrderID"));
+                serviceOrderDetail.setCustomerID(rs.getString("CustomerID"));
+                serviceOrderDetail.setRoomID(rs.getString("RoomID"));
+                serviceOrderDetail.setServiceID(rs.getString("ServiceID"));
+                serviceOrderDetail.setUserName(rs.getString("UserName"));
+                serviceOrderDetail.setServiceQuantity(rs.getInt("ServiceQuantity"));
+                serviceOrderDetail.setServicePriceTotal(rs.getBigDecimal("Price"));
+                serviceOrderDetail.setServiceDiscount(rs.getBigDecimal("Discount"));
+                serviceOrderDetail.setActive(rs.getBoolean("Active"));
+                serviceOrderDetail.setServiceFinish(rs.getBoolean("Finish"));
+
+                serviceOrderDetail.setServiceName(rs.getNString("ServiceName"));
+                serviceOrderDetail.setServiceUnit(rs.getNString("ServiceUnit"));
+                serviceOrderDetail.setServicePrice(rs.getBigDecimal("ServicePrice"));
+                if (rs.getBlob("Image") != null) {
+                    serviceOrderDetail.setServiceImage(rs.getBlob("Image"));
+                }
+                serviceOrderDetail.setServiceDescription(rs.getNString("ServiceDescription"));
+                if (serviceOrderDetail.getServiceImage() != null) {
+                    byte[] bytes = serviceOrderDetail.getServiceImage().getBytes(1l, (int) serviceOrderDetail.getServiceImage().length());
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+                    Image image = SwingFXUtils.toFXImage(img, null);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(50);
+                    imageView.setFitWidth(50);
+                    serviceOrderDetail.setImageView(imageView);
+                }
+                serviceOrderDetail.setServiceInventory(rs.getInt("ServiceInventory"));
+                serviceOrderDetail.setServiceImportQuantity(rs.getInt("ImportQuantity"));
+                serviceOrderDetail.setServiceImportDate(rs.getTimestamp("ImportDate").toLocalDateTime());
+                serviceOrderDetail.setServiceExportQuantity(rs.getInt("ExportQuantity"));
+                serviceOrderDetail.setServiceExportDate(rs.getTimestamp("ExportDate").toLocalDateTime());
+                serviceOrderDetail.setServiceOrderDate(rs.getTimestamp("ServiceOrderDate").toLocalDateTime());
+
+                listServiceOrderDetails.add(serviceOrderDetail);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+            alert.show();
+        } catch (IOException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listServiceOrderDetails;
+    }
+
+    @Override
+    public ObservableList<CheckIn> get_All_CheckIn_Of_Customer(String customerID) {
+        String sql = "SELECT SO.RoomID, CIO.CheckInID\n"
+                + "FROM ServicesOrderDetails SOD\n"
+                + "INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID\n"
+                + "INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID \n"
+                + "INNER JOIN CheckInOrders CIO ON SO.RoomID = CIO.RoomID\n"
+                + "INNER JOIN Customers C ON C.CustomerID = CIO.CustomerID\n"
+                + "WHERE CIO.CustomerID='"
+                + customerID
+                + "' AND SOD.Finish=1 AND SOD.CheckOut=0\n"
+                + "GROUP BY SO.RoomID, CIO.CheckInID";
+        ObservableList<CheckIn> listCheckIn = FXCollections.observableArrayList();
+
+        try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                CheckIn checkIn = new CheckIn();
+                checkIn.setCheckID(rs.getString("CheckInID"));
+                checkIn.setRoomID(rs.getString("RoomID"));
+
+                listCheckIn.add(checkIn);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ServiceOrderDetailDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Message");
+            alert.setHeaderText("Error");
+            alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+            alert.show();
+        }
+        return listCheckIn;
+    }
+
+    @Override
     public void addServiceOrdersDetail(ServiceOrderDetail serviceOrderDetail) {
         String sql = "INSERT INTO ServicesOrderDetails (OrderID, ServiceID, UserName, ServiceQuantity, Price, Discount, Active) "
                 + "VALUES (?,?,?,?,?,?,?)";
@@ -422,11 +524,11 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
 
     @Override
     public boolean check_SOD_Per_SO_Finish(String serviceOrderID) {
-        String sql = "SELECT * FROM ServicesOrderDetails WHERE OrderID=? AND Finish=0";        
+        String sql = "SELECT * FROM ServicesOrderDetails WHERE OrderID=? AND Finish=0";
         try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, serviceOrderID);
             ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 return true;
             }
         } catch (SQLException | ClassNotFoundException ex) {

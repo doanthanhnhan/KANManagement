@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="52b88ae2-7505-48e9-b022-3debb285cec2">
 	<property name="ireport.zoom" value="1.6500000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="162"/>
 	<parameter name="checkOutID" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -36,14 +36,15 @@ WHERE B.CustomerID = C.CustomerID AND B.CheckOutID = $P{checkOutID}]]>
 	<field name="PayableAmount" class="java.math.BigDecimal"/>
 	<field name="CustomerGive" class="java.math.BigDecimal"/>
 	<field name="CustomerChange" class="java.math.BigDecimal"/>
-	<field name="Active" class="java.lang.Boolean"/>
 	<field name="QRCode" class="java.lang.Object"/>
+	<field name="Active" class="java.lang.Boolean"/>
+	<field name="Note" class="java.lang.String"/>
 	<field name="CustomerFullName" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="499" splitType="Stretch">
+		<band height="550" splitType="Stretch">
 			<staticText>
 				<reportElement x="274" y="198" width="135" height="20" uuid="2428a9b3-546d-4e18-9262-3ceed73b3cad"/>
 				<box leftPadding="5" rightPadding="5">
@@ -492,7 +493,7 @@ WHERE B.CustomerID = C.CustomerID AND B.CheckOutID = $P{checkOutID}]]>
 				</box>
 			</frame>
 			<staticText>
-				<reportElement x="66" y="384" width="135" height="20" uuid="c41db823-a08d-4dc8-82b4-7b5b64d85998"/>
+				<reportElement x="66" y="434" width="135" height="20" uuid="c41db823-a08d-4dc8-82b4-7b5b64d85998"/>
 				<box leftPadding="5" rightPadding="5">
 					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.0"/>
@@ -503,7 +504,7 @@ WHERE B.CustomerID = C.CustomerID AND B.CheckOutID = $P{checkOutID}]]>
 				<text><![CDATA[Billing instructions]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="66" y="454" width="135" height="20" uuid="850d22f5-7900-49dc-9ffb-34321d685ac2"/>
+				<reportElement x="66" y="504" width="135" height="20" uuid="850d22f5-7900-49dc-9ffb-34321d685ac2"/>
 				<box leftPadding="5" rightPadding="5">
 					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.0"/>
@@ -514,7 +515,7 @@ WHERE B.CustomerID = C.CustomerID AND B.CheckOutID = $P{checkOutID}]]>
 				<text><![CDATA[Cashier's Signature ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="347" y="454" width="135" height="20" uuid="e7062966-1932-4d65-8710-6bf3b3cfc7e2"/>
+				<reportElement x="347" y="504" width="135" height="20" uuid="e7062966-1932-4d65-8710-6bf3b3cfc7e2"/>
 				<box leftPadding="5" rightPadding="5">
 					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.0"/>
@@ -525,12 +526,36 @@ WHERE B.CustomerID = C.CustomerID AND B.CheckOutID = $P{checkOutID}]]>
 				<text><![CDATA[Customer's Signature ]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yy">
-				<reportElement x="333" y="384" width="160" height="20" uuid="82bde459-5f2f-48c4-9b74-763966c9d33b"/>
+				<reportElement x="333" y="434" width="160" height="20" uuid="82bde459-5f2f-48c4-9b74-763966c9d33b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="13" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="66" y="363" width="478" height="20" uuid="0dcbe77d-24ae-4c16-855b-bd5b0e66c210"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Note}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="363" width="57" height="20" uuid="9e87b0f8-3435-434d-9e3f-82d4a4a7f7fd"/>
+				<box leftPadding="5" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[*Note: ]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>
