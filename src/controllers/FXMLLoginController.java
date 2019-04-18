@@ -271,7 +271,7 @@ public class FXMLLoginController implements Initializable {
                                     Scene scene1;
                                     scene1 = new Scene(rootAdd);
                                     if (userRole.getFirst_Name() != null) {
-                                        if (userRole.getEmployee_ID().equals("admin")) {
+                                        if (userRole.getFirst_Name().equals("Kiên")) {
                                             stageEdit.getIcons().add(new Image("/images/crown.png"));
                                         } else if (userRole.getFirst_Name().equals("Nhân")) {
                                             stageEdit.getIcons().add(new Image("/images/female.jpg"));
