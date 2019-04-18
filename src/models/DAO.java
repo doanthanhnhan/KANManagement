@@ -323,7 +323,7 @@ public class DAO {
     }
 //    checkMacAddress
 
-    public static void check_MacAddress(String Time, String MACAddress) throws SQLException, ClassNotFoundException {
+    public static void check_MacAddress(String Time, String MACAddress,String user) throws SQLException, ClassNotFoundException {
         if (!check_invalid(MACAddress)) {
             Connection connection = connectDB.connectSQLServer();
             String sql = "Insert Into CheckBlockMacAddress(MACAddress,Times) values(?,?)";
@@ -360,7 +360,7 @@ public class DAO {
             p.setString(2, MACAddress);
             p.execute();
             p.close();
-            DAO.setUserLogs_With_MAC(MACAddress, "MacAddress is Locked",
+            DAO.setUserLogs_With_MAC(MACAddress, "MacAddress is Locked by USERNAME: "+user,
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), MACAddress);
             p.close();
             Alert alert = new Alert(Alert.AlertType.ERROR);
