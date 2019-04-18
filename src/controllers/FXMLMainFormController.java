@@ -6,6 +6,8 @@
 package controllers;
 
 import com.jfoenix.controls.JFXTabPane;
+
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -43,7 +45,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.RoleDAOImpl;
 import models.boolDecentralizationModel;
-import utils.FormatName;
 import utils.GetInetAddress;
 
 import utils.MyTimer;
@@ -87,7 +88,6 @@ public class FXMLMainFormController implements Initializable {
     private Button btn_Toolbar_Accounting;
     @FXML
     private Button btn_Toolbar_Settings;
-    @FXML
     private Button btn_Toolbar_User_Logout;
     @FXML
     private ProgressBar progressBar_MainTask;
@@ -179,6 +179,8 @@ public class FXMLMainFormController implements Initializable {
     private ToolBar main_Toolbar;
     @FXML
     private MenuItem menuItem_List_Room_Type;
+    @FXML
+    private HBox userLogin;
 
     /**
      * Initializes the controller class.
@@ -397,8 +399,8 @@ public class FXMLMainFormController implements Initializable {
         //ENDING SETTING ROLE TO FORM
 
         //Setting logout button
-        String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
-        btn_Toolbar_User_Logout.setText(FormatName.format(userFullName));
+//        String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
+//        btn_Toolbar_User_Logout.setText(FormatName.format(userFullName));
     }
 
     public boolDecentralizationModel getUserRole() {
@@ -465,7 +467,7 @@ public class FXMLMainFormController implements Initializable {
     }
 
     @FXML
-    private void userLogOutAction(ActionEvent event) {
+    public void userLogOutAction() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Log out confirm");
         alert.setHeaderText("Warning");

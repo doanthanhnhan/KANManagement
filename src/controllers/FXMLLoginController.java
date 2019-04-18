@@ -43,6 +43,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.DAOReActive;
+import models.RoleDAOImpl;
+import models.boolDecentralizationModel;
 import models.notificationFunction;
 import utils.GetInetAddress;
 import utils.MD5Encrypt;
@@ -54,6 +56,8 @@ import utils.StageLoader;
  */
 public class FXMLLoginController implements Initializable {
 
+    RoleDAOImpl roleDAOImpl;
+    public boolDecentralizationModel userRole;
     public static String User_Login;
     public StringProperty user_Login_Sucessful;
     private InfoEmployee Emp = new InfoEmployee();
@@ -254,17 +258,27 @@ public class FXMLLoginController implements Initializable {
                                         stageEdit.initStyle(StageStyle.UNDECORATED);
 
                                     } else {
-
                                         DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "User: " + FXMLLoginController.User_Login + " login successful",
                                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());
                                         DAO.reset_CheckLogin(txtUserName.getText(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
                                         DAO.reset_CheckMac(GetInetAddress.getMacAddress());
                                         rootAdd = FXMLLoader.load(FXMLLoginController.this.getClass().getResource("/fxml/FXMLMainForm.fxml"));
-                                        stageEdit.setTitle("KANManagement");
+                                        roleDAOImpl = new RoleDAOImpl();
+                                        userRole = roleDAOImpl.getEmployeeRole(txtUserName.getText());
+                                        String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
+                                        stageEdit.setTitle(userFullName);
                                     }
                                     Scene scene1;
                                     scene1 = new Scene(rootAdd);
-                                    stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                                    if (userRole.getFirst_Name() != null) {
+                                        if (userRole.getEmployee_ID().equals("admin")) {
+                                            stageEdit.getIcons().add(new Image("/images/crown.png"));
+                                        } else if (userRole.getFirst_Name().equals("Nhân")) {
+                                            stageEdit.getIcons().add(new Image("/images/female.jpg"));
+                                        }
+                                    } else {
+                                        stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+                                    }
                                     stageEdit.setScene(scene1);
                                     stageEdit.show();
                                 } catch (ClassNotFoundException | SQLException | IOException ex) {
