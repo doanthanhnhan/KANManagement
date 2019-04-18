@@ -645,6 +645,37 @@ public class DAOCustomerBookingCheckIn {
         pt.close();
         connection.close();
     }
+
+    //    get list Userlog with from date and todate
+    public static ObservableList<UserLogs> getListUserLogsForDate(String FromDate, String ToDate) throws ClassNotFoundException, SQLException {
+        Connection connection = connectDB.connectSQLServer();
+        ObservableList<UserLogs> list_UserLogs = FXCollections.observableArrayList();
+        String sql;
+        if (FromDate.equals("")) {
+            sql = "select * from Userlogs where  LogTime<=?";
+        } else {
+            sql = "select * from Userlogs where  ?<=LogTime AND LogTime<=?";
+        }
+        PreparedStatement pt = connection.prepareStatement(sql);
+        if (FromDate.equals("")) {
+            pt.setString(1, ToDate);
+        } else {
+            pt.setString(1, FromDate);
+            pt.setString(2, ToDate);
+        }
+        // Thực thi câu lệnh SQL trả về đối tượng ResultSet.
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            UserLogs Ul = new UserLogs();
+            Ul.setID(rs.getInt("ID"));
+            Ul.setUserName(rs.getString("Username"));
+            Ul.setMacAddress(rs.getString("MACAddress"));
+            Ul.setLogContent(rs.getString("LogContent"));
+            Ul.setLogTime(rs.getTimestamp("LogTime").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+            list_UserLogs.add(Ul);
+        }
+        return list_UserLogs;
+    }
 //    get all info UserLogs
 
     public static ObservableList<UserLogs> getAllUserLogs() throws ClassNotFoundException, SQLException {

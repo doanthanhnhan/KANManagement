@@ -323,6 +323,7 @@ public class FXMLListCheckInController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Refresh_Action(ActionEvent event) {
+        checkSubmit=false;
         ToDate.setValue(null);
         FromDate.setValue(null);
         ToDate.setPromptText("To Date");

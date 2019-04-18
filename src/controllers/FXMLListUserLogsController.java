@@ -5,14 +5,19 @@
  */
 package controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
 import static controllers.ConnectControllers.fXMLMainFormController;
 import static controllers.FXMLListCustomerController.ctm;
 import static controllers.FXMLListEmployeeController.Emp;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -31,12 +36,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -49,6 +57,7 @@ import models.InfoEmployee;
 import models.RoleDAOImpl;
 import models.UserLogs;
 import models.boolDecentralizationModel;
+import models.formatCalender;
 import utils.AlertLoginAgain;
 import utils.GetInetAddress;
 import utils.showFXMLLogin;
@@ -79,12 +88,54 @@ public class FXMLListUserLogsController implements Initializable {
     private MenuItem menuItem_Delete;
     @FXML
     private MenuItem menuItem_Refresh;
+    @FXML
+    private JFXDatePicker FromDate;
+    @FXML
+    private JFXDatePicker ToDate;
+    @FXML
+    private JFXButton btnSubmit;
+    private boolean checkSubmit = false;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ToDate.valueProperty().addListener((obs, oldItem, newItem) -> {
+            ToDate.setStyle("-jfx-default-color: #6447cd;");
+        });
+        ToDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                Format_Show_Booking_Date_Calender();
+            }
+        });
+        FromDate.valueProperty().addListener((obs, oldItem, newItem) -> {
+            FromDate.setStyle("-jfx-default-color: #6447cd;");
+        });
+        FromDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                Format_Show_Booking_Date_Calender();
+            }
+        });
+        btnSubmit.setOnAction((event) -> {
+            Format_Show_Booking_Date_Calender();
+        });
+        ToDate.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) > 0);
+            }
+        });
+        FromDate.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) > 0);
+            }
+        });
         // TODO
         setColumns();
         showUsersData();
@@ -164,9 +215,33 @@ public class FXMLListUserLogsController implements Initializable {
 
     public void showUsersData() {
         try {
-            listUL = DAOCustomerBookingCheckIn.getAllUserLogs();
+            if (!checkSubmit) {
+                listUL = DAOCustomerBookingCheckIn.getAllUserLogs();
+            } else {
+                String fromdate = "";
+                String today = "";
+                if (ToDate.getValue() == null && FromDate.getValue() == null) {
+                    today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    ToDate.setValue(LocalDate.now());
+                    Format_Show_ToDate_Calender();
+                    listUL = DAOCustomerBookingCheckIn.getListUserLogsForDate(fromdate, today);
+                } else if (FromDate.getValue() != null && ToDate.getValue() == null) {
+                    today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    ToDate.setValue(LocalDate.now());
+                    Format_Show_ToDate_Calender();
+                    fromdate = String.valueOf(FromDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) + " 00:00:00";
+                    listUL = DAOCustomerBookingCheckIn.getListUserLogsForDate(fromdate, today);
+                } else if (FromDate.getValue() != null && ToDate.getValue() != null) {
+                    today = String.valueOf(ToDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) + " 23:59:59";
+                    fromdate = String.valueOf(FromDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) + " 00:00:00";
+                    listUL = DAOCustomerBookingCheckIn.getListUserLogsForDate(fromdate, today);
+                } else if (FromDate.getValue() == null && ToDate.getValue() != null) {
+                    today = String.valueOf(ToDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) + " 23:59:59";
+                    listUL = DAOCustomerBookingCheckIn.getListUserLogsForDate(fromdate, today);
+                }
+            }
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(FXMLListEmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLListCheckInController.class.getName()).log(Level.SEVERE, null, ex);
         }
         //table_ServiceType.getItems().clear();
         table_ListUserLogs.setItems(listUL);
@@ -225,10 +300,53 @@ public class FXMLListUserLogsController implements Initializable {
         }
     }
 
+    public void Format_Show_Booking_Date_Calender() {
+        boolean check_OK = true;
+        if (FromDate.getValue() != null && ToDate.getValue() != null) {
+            if (ToDate.getValue().compareTo(FromDate.getValue()) < 0) {
+                Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                alert1.setTitle("Error");
+                alert1.setHeaderText("You have no right to do this !!!");
+                alert1.setContentText("Because From Date Cannot Be Bigger Than Today !!!");
+                alert1.showAndWait();
+                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+                icon.setSize("16");
+                icon.setStyleClass("jfx-glyhp-icon");
+                ToDate.setStyle("-jfx-default-color: RED;");
+                ToDate.requestFocus();
+                check_OK = false;
+            }
+        }
+        if (check_OK) {
+            checkSubmit = true;
+            showUsersData();
+        }
+    }
+
     @FXML
-    private void handle_MenuItem_Refresh_Action(ActionEvent event
-    ) {
+    private void handle_MenuItem_Refresh_Action(ActionEvent event) {
+        checkSubmit=false;
+        ToDate.setValue(null);
+        FromDate.setValue(null);
+        ToDate.setPromptText("To Date");
+        FromDate.setPromptText("From Date");
         showUsersData();
+    }
+
+    @FXML
+    private void Format_Show_FromDate_Calender() {
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, FromDate);
+        ToDate.setPromptText("To Date");
+        FromDate.setPromptText("From Date");
+    }
+
+    @FXML
+    private void Format_Show_ToDate_Calender() {
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, ToDate);
+        ToDate.setPromptText("To Date");
+        FromDate.setPromptText("From Date");
     }
 
 }
