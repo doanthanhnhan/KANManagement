@@ -74,7 +74,7 @@ public class FXMLLoginController implements Initializable {
     private JFXButton btnLogin;
     @FXML
     private HBox hboxContent;
-
+    private boolean checkLoginComplete=false;
     public static Boolean checkLoginRegis = false;
 
     @Override
@@ -267,10 +267,11 @@ public class FXMLLoginController implements Initializable {
                                         userRole = roleDAOImpl.getEmployeeRole(txtUserName.getText());
                                         String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
                                         stageEdit.setTitle(userFullName);
+                                        checkLoginComplete=true;
                                     }
                                     Scene scene1;
                                     scene1 = new Scene(rootAdd);
-                                    if (userRole.getFirst_Name() != null) {
+                                    if (checkLoginComplete) {
                                         if (userRole.getFirst_Name().equals("Kiên")) {
                                             stageEdit.getIcons().add(new Image("/images/crown.png"));
                                         } else if (userRole.getFirst_Name().equals("Nhân")) {
