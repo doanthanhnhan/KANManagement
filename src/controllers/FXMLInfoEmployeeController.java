@@ -11,9 +11,6 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import static controllers.ConnectControllers.fXMLMainFormController;
-import static controllers.FXMLListCustomerController.ctm;
-import static controllers.FXMLListEmployeeController.Emp;
-import static controllers.FXMLMainFormController.checkRegisInfoEmployee;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.awt.image.BufferedImage;
@@ -33,8 +30,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
@@ -67,14 +62,11 @@ import models.DAO;
 import models.DAOCustomerBookingCheckIn;
 import models.DAODepartMentReActive;
 import models.DAOReActive;
-import static models.DAOReActive.check_InfoEmployeeReactive;
-import static models.DAOReActive.update_Active;
 import models.DAOcheckRole;
 import models.InfoEmployee;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
-import utils.Email;
 import utils.FormatName;
 import utils.GetInetAddress;
 import utils.MD5Encrypt;
@@ -193,6 +185,12 @@ public class FXMLInfoEmployeeController implements Initializable {
 
             }
         });
+        birthday.setValue(LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear()));
+        String pattern = "dd-MM-yyyy";
+        formatCalender.format(pattern, birthday);
+        birthday.getEditor().setText("Date Of Birth");
+        birthday.setPromptText(null);
+        birthday.getStyleClass().add("jfx-date-picker-fix");
 
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif, *.bmp)", "*.jpg", "*.png", "*.gif", "*.bmp");
         fileChooser.getExtensionFilters().add(extFilter);
@@ -514,12 +512,15 @@ public class FXMLInfoEmployeeController implements Initializable {
     private void Format_Show_Calender() {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, birthday);
+        birthday.setPromptText("Date Of Birth");
+        birthday.getStyleClass().remove("jfx-date-picker-fix");
     }
 
     @FXML
     private void Format_Show_Calender_Hiredate() {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, Hiredate);
+        Hiredate.setPromptText("Hiredate");
     }
 
     @FXML

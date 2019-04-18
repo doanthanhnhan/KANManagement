@@ -234,11 +234,12 @@ public class FXMLEditBookingController implements Initializable {
         formatCalender.format(pattern, DateBook);
         formatCalender.format(pattern, DateLeave);
         // TODO
+        DateBook.setPromptText("Date Book");
+        DateLeave.setPromptText("Date Leave");
     }
 
     @FXML
     private void Format_Show_Calender(ActionEvent event) {
-        DateBook.setPromptText("Date Book");
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, DateBook);
         boolean check_OK = true;
@@ -266,12 +267,12 @@ public class FXMLEditBookingController implements Initializable {
                 Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        DateBook.setPromptText("Date Book");
+        DateLeave.setPromptText("Date Leave");
     }
 
     @FXML
     private void Format_Show_Calender_DateLeave(ActionEvent event) {
-        DateLeave.setPromptText("Date Leave");
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, DateLeave);
         boolean check_OK = true;
@@ -299,6 +300,8 @@ public class FXMLEditBookingController implements Initializable {
                 Logger.getLogger(FXMLInfoBookingController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        DateBook.setPromptText("Date Book");
+        DateLeave.setPromptText("Date Leave");
     }
 
     @FXML

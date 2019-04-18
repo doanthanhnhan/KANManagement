@@ -407,7 +407,6 @@ public class DAOCustomerBookingCheckIn {
             ci.setDateOut(rs.getString("LeaveDate"));
             ci.setCusPack(rs.getString("CustomerPackage"));
             list_CheckIn.add(ci);
-            list_CheckIn.add(ci);
         }
         return list_CheckIn;
     }

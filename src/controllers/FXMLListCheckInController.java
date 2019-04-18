@@ -13,6 +13,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -199,7 +200,7 @@ public class FXMLListCheckInController implements Initializable {
         ciCheckTypeCol.setCellValueFactory(new PropertyValueFactory<>("CheckType"));
         cusPackCol.setCellValueFactory(new PropertyValueFactory<>("CusPack"));
         cinumberGuestCol.setCellValueFactory(new PropertyValueFactory<>("NumberOfCustomer"));
-        ciIdCol.setPrefWidth(190);
+        ciIdCol.setPrefWidth(220);
         ciIdBookCol.setPrefWidth(190);
         ciIdCusCol.setPrefWidth(190);
         cidateCol.setPrefWidth(180);
@@ -231,10 +232,26 @@ public class FXMLListCheckInController implements Initializable {
                 listCheckIn = DAOCustomerBookingCheckIn.getListCheckIn();
             } else {
                 String fromdate = "";
-                if (FromDate.getValue() != null) {
-                    fromdate = String.valueOf(FromDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                String today = "";
+                if (ToDate.getValue() == null && FromDate.getValue() == null) {
+                    today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    ToDate.setValue(LocalDate.now());
+                    Format_Show_ToDate_Calender();
+                    listCheckIn = DAOCustomerBookingCheckIn.getListCheckInForDate(fromdate, today);
+                } else if (FromDate.getValue() != null && ToDate.getValue() == null) {
+                    today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    ToDate.setValue(LocalDate.now());
+                    Format_Show_ToDate_Calender();
+                    fromdate = String.valueOf(FromDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) + " 00:00:00";
+                    listCheckIn = DAOCustomerBookingCheckIn.getListCheckInForDate(fromdate, today);
+                } else if (FromDate.getValue() != null && ToDate.getValue() != null) {
+                    today = String.valueOf(ToDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) + " 23:59:59";
+                    fromdate = String.valueOf(FromDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) + " 00:00:00";
+                    listCheckIn = DAOCustomerBookingCheckIn.getListCheckInForDate(fromdate, today);
+                } else if (FromDate.getValue() == null && ToDate.getValue() != null) {
+                    today = String.valueOf(ToDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) + " 23:59:59";
+                    listCheckIn = DAOCustomerBookingCheckIn.getListCheckInForDate(fromdate, today);
                 }
-                listCheckIn = DAOCustomerBookingCheckIn.getListCheckInForDate(fromdate, String.valueOf(ToDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FXMLListCheckInController.class.getName()).log(Level.SEVERE, null, ex);
@@ -283,13 +300,7 @@ public class FXMLListCheckInController implements Initializable {
 
     public void Format_Show_Booking_Date_Calender() {
         boolean check_OK = true;
-        if (ToDate.getValue() == null) {
-            LocalDate today = LocalDate.now();
-            LocalDate yesterday = today.minus(Period.ofDays(0));
-            ToDate.setValue(yesterday);
-            Format_Show_ToDate_Calender();
-        }
-        if (FromDate.getValue() != null) {
+        if (FromDate.getValue() != null && ToDate.getValue() != null) {
             if (ToDate.getValue().compareTo(FromDate.getValue()) < 0) {
                 Alert alert1 = new Alert(Alert.AlertType.ERROR);
                 alert1.setTitle("Error");
@@ -323,12 +334,16 @@ public class FXMLListCheckInController implements Initializable {
     private void Format_Show_FromDate_Calender() {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, FromDate);
+        ToDate.setPromptText("To Date");
+        FromDate.setPromptText("From Date");
     }
 
     @FXML
     private void Format_Show_ToDate_Calender() {
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, ToDate);
+        ToDate.setPromptText("To Date");
+        FromDate.setPromptText("From Date");
     }
 
 }
