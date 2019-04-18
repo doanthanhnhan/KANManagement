@@ -481,7 +481,7 @@ public class FXMLMainFormController implements Initializable {
             } catch (IOException ex) {
                 Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Stage stage = (Stage) btn_Toolbar_User_Logout.getScene().getWindow();
+            Stage stage = (Stage) AnchorPaneMainForm.getScene().getWindow();
             stage.close();
         }
     }

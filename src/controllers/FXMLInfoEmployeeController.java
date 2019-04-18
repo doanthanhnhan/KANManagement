@@ -185,7 +185,7 @@ public class FXMLInfoEmployeeController implements Initializable {
 
             }
         });
-        birthday.setValue(LocalDate.ofYearDay(LocalDate.now().getYear() - 18, LocalDate.now().getDayOfYear()));
+        birthday.setValue(LocalDate.ofYearDay(LocalDate.now().getYear() - 16, LocalDate.now().getDayOfYear()));
         String pattern = "dd-MM-yyyy";
         formatCalender.format(pattern, birthday);
         birthday.getEditor().setText("Date Of Birth");

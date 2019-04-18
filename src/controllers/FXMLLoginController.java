@@ -74,7 +74,7 @@ public class FXMLLoginController implements Initializable {
     private JFXButton btnLogin;
     @FXML
     private HBox hboxContent;
-    private boolean checkLoginComplete=false;
+    private boolean checkLoginComplete = false;
     public static Boolean checkLoginRegis = false;
 
     @Override
@@ -267,15 +267,17 @@ public class FXMLLoginController implements Initializable {
                                         userRole = roleDAOImpl.getEmployeeRole(txtUserName.getText());
                                         String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
                                         stageEdit.setTitle(userFullName);
-                                        checkLoginComplete=true;
+                                        checkLoginComplete = true;
                                     }
                                     Scene scene1;
                                     scene1 = new Scene(rootAdd);
                                     if (checkLoginComplete) {
-                                        if (userRole.getFirst_Name().equals("Kiên")) {
+                                        if (userRole.getEmployee_ID().equals("admin")) {
                                             stageEdit.getIcons().add(new Image("/images/crown.png"));
-                                        } else if (userRole.getFirst_Name().equals("Nhân")) {
-                                            stageEdit.getIcons().add(new Image("/images/female.jpg"));
+                                        } else if (userRole.getFirst_Name().equals("Nhân") || userRole.getLast_Name().equals("Nhân")) {
+                                            stageEdit.getIcons().add(new Image("/images/female.png"));
+                                        } else {
+                                            stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
                                         }
                                     } else {
                                         stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
