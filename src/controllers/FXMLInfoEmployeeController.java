@@ -64,6 +64,8 @@ import models.DAODepartMentReActive;
 import models.DAOReActive;
 import models.DAOcheckRole;
 import models.InfoEmployee;
+import models.RoleDAOImpl;
+import models.boolDecentralizationModel;
 import models.formatCalender;
 import models.notificationFunction;
 import utils.AlertLoginAgain;
@@ -160,6 +162,8 @@ public class FXMLInfoEmployeeController implements Initializable {
     private FXMLListEmployeeController fXMLListEmployeeController;
     private String Department = null;
     public static boolean InfoEmployeeReActive = false;
+    RoleDAOImpl roleDAOImpl;
+    public boolDecentralizationModel userRole;
 
     /**
      * Initializes the controller class.
@@ -483,8 +487,17 @@ public class FXMLInfoEmployeeController implements Initializable {
                             Stage stage = new Stage();
                             Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLMainForm.fxml"));
                             Scene scene = new Scene(root);
-                            stage.setTitle("KANManagement");
-                            stage.getIcons().add(new Image("/images/KAN Logo.png"));
+                            roleDAOImpl = new RoleDAOImpl();
+                            userRole = roleDAOImpl.getEmployeeRole(FXMLLoginController.User_Login);
+                            String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
+                            stage.setTitle(userFullName);
+                            if (userRole.getEmployee_ID().equals("admin")) {
+                                stage.getIcons().add(new Image("/images/crown.png"));
+                            } else if (userRole.getFirst_Name().equals("Nhân") || userRole.getLast_Name().equals("Nhân")) {
+                                stage.getIcons().add(new Image("/images/female.png"));
+                            } else {
+                                stage.getIcons().add(new Image("/images/KAN Logo.png"));
+                            }
                             stage.setScene(scene);
                             stage.show();
                             FXMLLoginController.checkLoginRegis = false;
