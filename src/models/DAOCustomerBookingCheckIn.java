@@ -381,9 +381,9 @@ public class DAOCustomerBookingCheckIn {
         ObservableList<CheckIn> list_CheckIn = FXCollections.observableArrayList();
         String sql;
         if (FromDate.equals("")) {
-            sql = "select * from CheckIn where  DateBook<=? And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+            sql = "select * from CheckInOrders where  CheckInDate<=?";
         } else {
-            sql = "select * from CheckIn where  ?<=DateBook AND DateBook<=? And BookingID NOT IN (SELECT BookingID FROM CheckInOrders)";
+            sql = "select * from CheckInOrders where  ?<=CheckInDate AND CheckInDate<=?";
         }
         PreparedStatement pt = connection.prepareStatement(sql);
         if (FromDate.equals("")) {

@@ -113,7 +113,7 @@ public class FXMLListCheckInController implements Initializable {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 LocalDate today = LocalDate.now();
-                setDisable(empty || date.compareTo(today) > -1);
+                setDisable(empty || date.compareTo(today) > 0);
             }
         });
         FromDate.setDayCellFactory(picker -> new DateCell() {
@@ -121,7 +121,7 @@ public class FXMLListCheckInController implements Initializable {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 LocalDate today = LocalDate.now();
-                setDisable(empty || date.compareTo(today) > -1);
+                setDisable(empty || date.compareTo(today) > 0);
             }
         });
         contextMenu_Main.getItems().remove(menuItem_Add);
@@ -199,14 +199,13 @@ public class FXMLListCheckInController implements Initializable {
         ciCheckTypeCol.setCellValueFactory(new PropertyValueFactory<>("CheckType"));
         cusPackCol.setCellValueFactory(new PropertyValueFactory<>("CusPack"));
         cinumberGuestCol.setCellValueFactory(new PropertyValueFactory<>("NumberOfCustomer"));
-        ciIdCol.setPrefWidth(150);
-        ciIdBookCol.setPrefWidth(150);
-        ciIdCusCol.setPrefWidth(150);
-        ciIdCusCol.setPrefWidth(150);
-        cidateCol.setPrefWidth(120);
-        cidateLeaveCol.setPrefWidth(120);
-        cinumberGuestCol.setPrefWidth(150);
-        cusPackCol.setPrefWidth(150);
+        ciIdCol.setPrefWidth(190);
+        ciIdBookCol.setPrefWidth(190);
+        ciIdCusCol.setPrefWidth(190);
+        cidateCol.setPrefWidth(180);
+        cidateLeaveCol.setPrefWidth(180);
+        cinumberGuestCol.setPrefWidth(130);
+        cusPackCol.setPrefWidth(130);
         numberCol.setStyle("-fx-alignment: CENTER;");
         ciIdCol.setStyle("-fx-alignment: CENTER;");
         ciIdBookCol.setStyle("-fx-alignment: CENTER;");
@@ -286,7 +285,7 @@ public class FXMLListCheckInController implements Initializable {
         boolean check_OK = true;
         if (ToDate.getValue() == null) {
             LocalDate today = LocalDate.now();
-            LocalDate yesterday = today.minus(Period.ofDays(1));
+            LocalDate yesterday = today.minus(Period.ofDays(0));
             ToDate.setValue(yesterday);
             Format_Show_ToDate_Calender();
         }
