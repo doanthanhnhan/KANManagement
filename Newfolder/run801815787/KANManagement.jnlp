@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="KANManagement.jnlp">
+  <information>
+    <title>KANManagement</title>
+    <vendor>dakuw</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="KANManagement.jar" size="81690369" download="eager" />
+    <jar href="lib\ant-1.7.1.jar" size="1323005" download="eager" />
+    <jar href="lib\antlr-2.7.5.jar" size="435563" download="eager" />
+    <jar href="lib\barbecue-1.5-beta1.jar" size="91079" download="eager" />
+    <jar href="lib\barcode4j-2.1.jar" size="274404" download="eager" />
+    <jar href="lib\batik-anim-1.9.jar" size="478686" download="eager" />
+    <jar href="lib\batik-awt-util-1.9.jar" size="421002" download="eager" />
+    <jar href="lib\batik-bridge-1.9.jar" size="695031" download="eager" />
+    <jar href="lib\batik-constants-1.9.jar" size="8243" download="eager" />
+    <jar href="lib\batik-css-1.9.jar" size="324858" download="eager" />
+    <jar href="lib\batik-dom-1.9.jar" size="184081" download="eager" />
+    <jar href="lib\batik-gvt-1.9.jar" size="190589" download="eager" />
+    <jar href="lib\batik-i18n-1.9.jar" size="11285" download="eager" />
+    <jar href="lib\batik-svg-dom-1.9.jar" size="232616" download="eager" />
+    <jar href="lib\batik-svggen-1.9.jar" size="224365" download="eager" />
+    <jar href="lib\batik-util-1.9.jar" size="126821" download="eager" />
+    <jar href="lib\bridj-0.7.0.jar" size="935929" download="eager" />
+    <jar href="lib\castor-core-1.4.1.jar" size="48080" download="eager" />
+    <jar href="lib\castor-xml-1.4.1.jar" size="910963" download="eager" />
+    <jar href="lib\commons-beanutils-1.9.3.jar" size="246174" download="eager" />
+    <jar href="lib\commons-codec-1.5.jar" size="73098" download="eager" />
+    <jar href="lib\commons-collections-3.2.2.jar" size="588337" download="eager" />
+    <jar href="lib\commons-collections4-4.2.jar" size="752798" download="eager" />
+    <jar href="lib\commons-digester-2.1.jar" size="196768" download="eager" />
+    <jar href="lib\commons-lang-2.6.jar" size="284220" download="eager" />
+    <jar href="lib\commons-lang3-3.8.1.jar" size="501879" download="eager" />
+    <jar href="lib\commons-logging-1.1.1.jar" size="60686" download="eager" />
+    <jar href="lib\commons-pool2-2.4.2.jar" size="111969" download="eager" />
+    <jar href="lib\controlsfx-8.40.11.jar" size="985420" download="eager" />
+    <jar href="lib\core-3.2.1.jar" size="544403" download="eager" />
+    <jar href="lib\core-3.3.3-javadoc.jar" size="1078167" download="eager" />
+    <jar href="lib\core-3.3.3.jar" size="543115" download="eager" />
+    <jar href="lib\ecj-4.4.2.jar" size="2310271" download="eager" />
+    <jar href="lib\fontawesomefx-commons-8.15.jar" size="20957" download="eager" />
+    <jar href="lib\fontawesomefx-controls-8.15.jar" size="3369" download="eager" />
+    <jar href="lib\fontawesomefx-emojione-2.2.7-2.jar" size="3642164" download="eager" />
+    <jar href="lib\fontawesomefx-fontawesome-4.7.0-5.jar" size="136891" download="eager" />
+    <jar href="lib\fontawesomefx-glyphsbrowser-1.3.0.jar" size="68461" download="eager" />
+    <jar href="lib\fontawesomefx-icons525-3.0.0-4.jar" size="110545" download="eager" />
+    <jar href="lib\fontawesomefx-materialdesignfont-1.7.22-4.jar" size="197373" download="eager" />
+    <jar href="lib\fontawesomefx-materialicons-2.2.0-5.jar" size="103686" download="eager" />
+    <jar href="lib\fontawesomefx-octicons-4.3.0-5.jar" size="37157" download="eager" />
+    <jar href="lib\fontawesomefx-weathericons-2.0.10-5.jar" size="83098" download="eager" />
+    <jar href="lib\groovy-all-2.4.5.jar" size="6997394" download="eager" />
+    <jar href="lib\hibernate-core-3.3.2.GA.jar" size="2309955" download="eager" />
+    <jar href="lib\httpclient-4.3.6.jar" size="592008" download="eager" />
+    <jar href="lib\httpcore-4.3.3.jar" size="282793" download="eager" />
+    <jar href="lib\icu4j-57.1.jar" size="11289823" download="eager" />
+    <jar href="lib\itext-2.1.7.js6.jar" size="1131480" download="eager" />
+    <jar href="lib\jackson-annotations-2.9.8.jar" size="66894" download="eager" />
+    <jar href="lib\jackson-core-2.9.8.jar" size="325619" download="eager" />
+    <jar href="lib\jackson-databind-2.9.8.jar" size="1347236" download="eager" />
+    <jar href="lib\jasperreports-6.8.0.jar" size="5590295" download="eager" />
+    <jar href="lib\jasperreports-fonts-6.8.0.jar" size="2480412" download="eager" />
+    <jar href="lib\jasperreports-javaflow-6.8.0.jar" size="5538189" download="eager" />
+    <jar href="lib\jasperreports-metadata-6.8.0.jar" size="9944" download="eager" />
+    <jar href="lib\javase-3.3.3-javadoc.jar" size="78788" download="eager" />
+    <jar href="lib\javase-3.3.3.jar" size="41671" download="eager" />
+    <jar href="lib\javax.mail.jar" size="608084" download="eager" />
+    <jar href="lib\javax.xml.soap-api-1.4.0.jar" size="46111" download="eager" />
+    <jar href="lib\jaxen-1.1.1.jar" size="226915" download="eager" />
+    <jar href="lib\jcommander-1.27.jar" size="55585" download="eager" />
+    <jar href="lib\jcommon-1.0.23.jar" size="330246" download="eager" />
+    <jar href="lib\jfoenix-8.0.8.jar" size="2708772" download="eager" />
+    <jar href="lib\jfreechart-1.0.19.jar" size="1565065" download="eager" />
+    <jar href="lib\log4j-api-2.8.2.jar" size="228154" download="eager" />
+    <jar href="lib\log4j-core-2.8.2.jar" size="1407853" download="eager" />
+    <jar href="lib\log4j-jcl-2.8.2.jar" size="12670" download="eager" />
+    <jar href="lib\lucene-analyzers-common-7.3.0.jar" size="1624181" download="eager" />
+    <jar href="lib\lucene-core-7.3.0.jar" size="2846283" download="eager" />
+    <jar href="lib\lucene-queryparser-7.3.0.jar" size="384582" download="eager" />
+    <jar href="lib\mondrian-3.1.1.12687.jar" size="2643646" download="eager" />
+    <jar href="lib\net.tascalate.asmx-7.0.1.jar" size="115767" download="eager" />
+    <jar href="lib\net.tascalate.asmx.analysis-7.0.1.jar" size="35526" download="eager" />
+    <jar href="lib\net.tascalate.asmx.tree-7.0.1.jar" size="52619" download="eager" />
+    <jar href="lib\net.tascalate.javaflow.api-2.6.0.jar" size="28297" download="eager" />
+    <jar href="lib\net.tascalate.javaflow.providers.asm5-2.6.0.jar" size="57295" download="eager" />
+    <jar href="lib\net.tascalate.javaflow.providers.asmx-2.6.0.jar" size="60088" download="eager" />
+    <jar href="lib\net.tascalate.javaflow.spi-2.6.0.jar" size="37432" download="eager" />
+    <jar href="lib\net.tascalate.javaflow.tools.ant-2.6.0.jar" size="6114" download="eager" />
+    <jar href="lib\net.tascalate.javaflow.tools.jar-2.6.0.jar" size="11716" download="eager" />
+    <jar href="lib\olap4j-0.9.7.309-JS-3.jar" size="445343" download="eager" />
+    <jar href="lib\persistence-api-1.0.jar" size="52150" download="eager" />
+    <jar href="lib\poi-4.0.1.jar" size="2718209" download="eager" />
+    <jar href="lib\poi-ooxml-4.0.1.jar" size="1766188" download="eager" />
+    <jar href="lib\rhino-1.7.6.jar" size="1188593" download="eager" />
+    <jar href="lib\servlet-api-2.4.jar" size="97693" download="eager" />
+    <jar href="lib\slf4j-api-1.6.1.jar" size="25496" download="eager" />
+    <jar href="lib\slf4j-api-1.8.0-beta4.jar" size="44213" download="eager" />
+    <jar href="lib\slf4j-nop-1.7.26.jar" size="4010" download="eager" />
+    <jar href="lib\slf4j-simple-1.8.0-beta4.jar" size="15420" download="eager" />
+    <jar href="lib\spring-beans-5.1.4.RELEASE.jar" size="672301" download="eager" />
+    <jar href="lib\spring-core-5.1.4.RELEASE.jar" size="1293220" download="eager" />
+    <jar href="lib\sqljdbc42.jar" size="891490" download="eager" />
+    <jar href="lib\testng-6.8.1.jar" size="833741" download="eager" />
+    <jar href="lib\velocity-1.7.jar" size="449505" download="eager" />
+    <jar href="lib\webcam-capture-0.3.12.jar" size="428314" download="eager" />
+    <jar href="lib\xalan-2.7.2.jar" size="3154938" download="eager" />
+    <jar href="lib\xml-apis-ext-1.3.04.jar" size="85686" download="eager" />
+    <jar href="lib\xmpcore-5.1.3.jar" size="91822" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="KANManagement" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="view.Login"  name="KANManagement" />
+  <update check="always"/>
+</jnlp>
