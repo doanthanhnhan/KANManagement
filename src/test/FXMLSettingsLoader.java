@@ -12,6 +12,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -27,7 +28,8 @@ public class FXMLSettingsLoader extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLSettings.fxml"));
 
             Scene scene = new Scene(root);
-
+            stage.setTitle("Settings");
+            stage.getIcons().add(new Image("/images/KAN Logo.png"));
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {

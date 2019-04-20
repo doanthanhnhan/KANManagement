@@ -6,12 +6,10 @@
 package view;
 
 import com.sun.javafx.application.LauncherImpl;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,8 +18,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.DAO;
-import models.DAODepartMentReActive;
-import utils.FormatName;
 import utils.GetInetAddress;
 import utils.connectDB;
 
@@ -72,14 +68,15 @@ public class Login extends Application {
 
     @Override
     public void init() throws Exception {
+        //Get URL (Connection string) for DB
+        connectDB cnDB = new connectDB();
         Thread checkDB = new Thread(() -> {
             try {
-                //Get URL (Connection string) for DB
-                connectDB cnDB = new connectDB();
+
                 checkLogin = DAO.checkFirstLogin();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {                
+            } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -90,8 +87,8 @@ public class Login extends Application {
             //System.out.println(progress);
         }
     }
-    
-    public static void reLogin(){
+
+    public static void reLogin() {
         LauncherImpl.launchApplication(Login.class, MainFXPreloader.class, null);
     }
 

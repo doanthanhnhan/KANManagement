@@ -8,6 +8,7 @@ package utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ import models.Setting;
 public class SettingXML {
 
     private static final String XML_FILE = "/src/xml/settings.xml";
+    private static final URL url = ClassLoader.class.getResource(XML_FILE);
 
     public static void writeXML(Setting setting) {
         try {
@@ -66,9 +68,7 @@ public class SettingXML {
             m.marshal(setting, outFile);
 
             System.err.println("Write to file: " + outFile.getAbsolutePath());
-        } catch (JAXBException ex) {
-            Logger.getLogger(SettingXML.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
+        } catch (JAXBException | NoSuchAlgorithmException ex) {
             Logger.getLogger(SettingXML.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

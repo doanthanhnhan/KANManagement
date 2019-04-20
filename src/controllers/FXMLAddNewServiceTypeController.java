@@ -116,7 +116,6 @@ public class FXMLAddNewServiceTypeController implements Initializable {
         // Set path for fileChooser
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
         fileChooser.setInitialDirectory(new File(currentPath + "/src/images"));
-        System.out.println("Check edit action = " + listServiceTypeController.getCheck_Edit_Action() + " adress: " + listServiceTypeController.getCheck_Edit_Action().hashCode());
 
         //Initial date picker
         serviceImportDate.setDayCellFactory(picker -> new DateCell() {
@@ -128,50 +127,140 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             }
         });
         //Check form was call from List ServiceType Form
-        if (listServiceTypeController.getCheck_Edit_Action()) {
-            //Setting values for new form
-            serviceID.setDisable(true);
-            label_Title.setText("EDITING SERVICE TYPE");
-            label_Description.setText("Filling the infomations for editting service type");
-            serviceTypeUpdate = FXMLListServiceTypeController.serviceTypeItem;
-            serviceID.setText(serviceTypeUpdate.getServiceID());
-            serviceName.setText(serviceTypeUpdate.getServiceName());
-            serviceUnit.setText(serviceTypeUpdate.getServiceUnit());
-            servicePrice.setText(serviceTypeUpdate.getServicePrice().toString());
-            serviceImportDate.setValue(serviceTypeUpdate.getServiceImportDate().toLocalDate());
-            serviceInventory.setText(serviceTypeUpdate.getServiceImportQuantity().toString());
-            if (serviceTypeUpdate.getImageView() != null) {
-                imgService.setImage(serviceTypeUpdate.getImageView().getImage());
-            }
-            txtArea_Service_Description.setText(serviceTypeUpdate.getServiceDescription());
-            btnAddNew.setText("Update");
-
-            //Setting Update button function
-            btnAddNew.setOnAction((event) -> {
-                serviceTypeUpdate.setServiceID(FormatName.format(serviceID.getText()));
-                serviceTypeUpdate.setServiceName(FormatName.format(serviceName.getText()));
-                serviceTypeUpdate.setUserName(FormatName.format(mainFormController.userRole.getEmployee_ID()));
-                serviceTypeUpdate.setServiceUnit(FormatName.format(serviceUnit.getText()));
-                serviceTypeUpdate.setServiceInventory(serviceTypeUpdate.getServiceInventory() + Integer.valueOf(serviceInventory.getText()));
-                serviceTypeUpdate.setServiceImportQuantity(serviceTypeUpdate.getServiceImportQuantity() + Integer.valueOf(serviceInventory.getText()));
-                //Setting localdatetime (DatePicker + LocalTime.now())
-                serviceTypeUpdate.setServiceImportDate(LocalDateTime.of(serviceImportDate.getValue(), LocalTime.now()));
-                serviceTypeUpdate.setServiceDescription(FormatName.format_Trim_Space(txtArea_Service_Description.getText()));
-                serviceTypeUpdate.setServicePrice(BigDecimal.valueOf(Double.valueOf(servicePrice.getText())));
-                BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
-                byte[] res;
-                try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
-                    ImageIO.write(bImage, "png", s);
-                    res = s.toByteArray();
-                    Blob blob = new SerialBlob(res);
-                    serviceTypeUpdate.setServiceImage(blob);
-                } catch (SQLException | IOException ex) {
-                    Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+        if (listServiceTypeController != null) {
+            if (listServiceTypeController.getCheck_Edit_Action()) {
+                //Setting values for new form
+                serviceID.setDisable(true);
+                label_Title.setText("EDITING SERVICE TYPE");
+                label_Description.setText("Filling the infomations for editting service type");
+                serviceTypeUpdate = FXMLListServiceTypeController.serviceTypeItem;
+                serviceID.setText(serviceTypeUpdate.getServiceID());
+                serviceName.setText(serviceTypeUpdate.getServiceName());
+                serviceUnit.setText(serviceTypeUpdate.getServiceUnit());
+                servicePrice.setText(serviceTypeUpdate.getServicePrice().toString());
+                serviceImportDate.setValue(serviceTypeUpdate.getServiceImportDate().toLocalDate());
+                serviceInventory.setText(serviceTypeUpdate.getServiceImportQuantity().toString());
+                if (serviceTypeUpdate.getImageView() != null) {
+                    imgService.setImage(serviceTypeUpdate.getImageView().getImage());
                 }
+                txtArea_Service_Description.setText(serviceTypeUpdate.getServiceDescription());
+                btnAddNew.setText("Update");
 
-                submit_Update_Service_Type();
-            });
+                //Setting Update button function
+                btnAddNew.setOnAction((event) -> {
+                    serviceTypeUpdate.setServiceID(FormatName.format(serviceID.getText()));
+                    serviceTypeUpdate.setServiceName(FormatName.format(serviceName.getText()));
+                    serviceTypeUpdate.setUserName(FormatName.format(mainFormController.userRole.getEmployee_ID()));
+                    serviceTypeUpdate.setServiceUnit(FormatName.format(serviceUnit.getText()));
+                    serviceTypeUpdate.setServiceInventory(serviceTypeUpdate.getServiceInventory() + Integer.valueOf(serviceInventory.getText()));
+                    serviceTypeUpdate.setServiceImportQuantity(serviceTypeUpdate.getServiceImportQuantity() + Integer.valueOf(serviceInventory.getText()));
+                    //Setting localdatetime (DatePicker + LocalTime.now())
+                    serviceTypeUpdate.setServiceImportDate(LocalDateTime.of(serviceImportDate.getValue(), LocalTime.now()));
+                    serviceTypeUpdate.setServiceDescription(FormatName.format_Trim_Space(txtArea_Service_Description.getText()));
+                    serviceTypeUpdate.setServicePrice(BigDecimal.valueOf(Double.valueOf(servicePrice.getText())));
+                    BufferedImage bImage = SwingFXUtils.fromFXImage(imgService.getImage(), null);
+                    byte[] res;
+                    try (ByteArrayOutputStream s = new ByteArrayOutputStream()) {
+                        ImageIO.write(bImage, "png", s);
+                        res = s.toByteArray();
+                        Blob blob = new SerialBlob(res);
+                        serviceTypeUpdate.setServiceImage(blob);
+                    } catch (SQLException | IOException ex) {
+                        Logger.getLogger(FXMLAddNewServiceTypeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
+                    submit_Update_Service_Type();
+                });
+
+                // Setting keypress ENTER for updating function
+                serviceID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceID.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                serviceName.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                serviceImportDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                serviceInventory.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                servicePrice.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                txtArea_Service_Description.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+            } else {
+                // Setting keypress ENTER for updating function
+                serviceID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceID.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                serviceName.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                serviceImportDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                serviceInventory.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                servicePrice.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+                txtArea_Service_Description.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    serviceName.getStyleClass().remove("text-field-fault");
+                    hBoxContent.getChildren().clear();
+                    if (event.getCode() == KeyCode.ENTER) {
+                        submit_Update_Service_Type();
+                    }
+                });
+            }
+        } else {
             // Setting keypress ENTER for updating function
             serviceID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 serviceID.getStyleClass().remove("text-field-fault");
@@ -187,20 +276,32 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                     submit_Update_Service_Type();
                 }
             });
-        } else {
-            // Setting keypress ENTER for adding function
-            serviceID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                serviceID.getStyleClass().remove("text-field-fault");
-                hBoxContent.getChildren().clear();
-                if (event.getCode() == KeyCode.ENTER) {
-                    submit_Add_New_Service_Type();
-                }
-            });
-            serviceName.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            serviceImportDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 serviceName.getStyleClass().remove("text-field-fault");
                 hBoxContent.getChildren().clear();
                 if (event.getCode() == KeyCode.ENTER) {
-                    submit_Add_New_Service_Type();
+                    submit_Update_Service_Type();
+                }
+            });
+            serviceInventory.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                serviceName.getStyleClass().remove("text-field-fault");
+                hBoxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    submit_Update_Service_Type();
+                }
+            });
+            servicePrice.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                serviceName.getStyleClass().remove("text-field-fault");
+                hBoxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    submit_Update_Service_Type();
+                }
+            });
+            txtArea_Service_Description.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                serviceName.getStyleClass().remove("text-field-fault");
+                hBoxContent.getChildren().clear();
+                if (event.getCode() == KeyCode.ENTER) {
+                    submit_Update_Service_Type();
                 }
             });
         }
@@ -272,7 +373,9 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                     stageLoader.closeStage();
                     System.out.println("Form check validate: " + check_Validate);
                     if (check_Validate) {
-                        listServiceTypeController.showUsersData();
+                        if (listServiceTypeController != null) {
+                            listServiceTypeController.showUsersData();
+                        }
                         Stage stageUpdate = (Stage) btnAddNew.getScene().getWindow();
                         stageUpdate.close();
                     }
@@ -381,7 +484,7 @@ public class FXMLAddNewServiceTypeController implements Initializable {
             Platform.runLater(() -> {
                 FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
                 icon.setSize("16");
-                icon.setStyleClass("jfx-glyhp-icon");                
+                icon.setStyleClass("jfx-glyhp-icon");
                 Label label = new Label();
                 label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
                 label.setPrefSize(465, 35);

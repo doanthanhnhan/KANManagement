@@ -240,7 +240,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 + checkInID
                 + "' AND CIO.RoomID='"
                 + roomID
-                + "' AND SOD.Active=1 AND SOD.Finish=1";
+                + "' AND SOD.Active=1 AND SOD.Finish=1 AND SO.Finish=1";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
         try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -309,7 +309,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 + "INNER JOIN Customers C ON C.CustomerID = CIO.CustomerID\n"
                 + "WHERE CIO.CustomerID='"
                 + customerID
-                + "' AND SOD.Finish=1 AND SOD.CheckOut=0";
+                + "' AND SOD.Finish=1 AND SO.Finish=1 AND SOD.CheckOut=0";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
         try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {

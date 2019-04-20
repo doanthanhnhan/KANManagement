@@ -19,10 +19,14 @@ import javafx.stage.Stage;
 public class showFXMLLogin {
 
     public void showFormLogin() throws IOException {
+        //Reading new settings
+        connectDB cn = new connectDB();
+        //End reading new settings
         Stage stageEdit = new Stage();
         stageEdit.resizableProperty().setValue(Boolean.FALSE);
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/FXMLLogin.fxml"));
         stageEdit.getIcons().add(new Image("/images/KAN Logo.png"));
+        stageEdit.setTitle("Login");
         Scene scene = new Scene(root);
         stageEdit.setScene(scene);
         stageEdit.show();

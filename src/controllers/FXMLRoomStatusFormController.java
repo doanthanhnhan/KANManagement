@@ -7,7 +7,6 @@ package controllers;
 
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import fxml.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
