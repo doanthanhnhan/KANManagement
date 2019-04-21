@@ -710,6 +710,9 @@ public class FXMLInfoBookingController implements Initializable {
                         room.setLeaveDate(LocalDateTime.of(DateLeave.getValue(), LocalTime.now()));
                         roomDAOImpl.editBookingRoom(room, true);
                     }
+                    if (mainOverViewPaneController != null) {
+                        mainOverViewPaneController.refreshForm();
+                    }
                     //END UNDATE ROOM
                     //CREATE QR CODE FILE AND SEND EMAIL
                     String customerEmail = DAOCustomerBookingCheckIn.getCustomerEmail(boxIdCustomer.getValue());
@@ -753,6 +756,9 @@ public class FXMLInfoBookingController implements Initializable {
                                 room.setBookingDate(LocalDateTime.of(DateBook.getValue(), LocalTime.now()));
                                 room.setLeaveDate(LocalDateTime.of(DateLeave.getValue(), LocalTime.now()));
                                 roomDAOImpl.editBookingRoom(room, true);
+                            }
+                            if (mainOverViewPaneController != null) {
+                                mainOverViewPaneController.refreshForm();
                             }
                             //END UNDATE ROOM
                         } catch (ClassNotFoundException | SQLException ex) {
