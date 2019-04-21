@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -73,11 +74,13 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Message");
-                alert.setHeaderText("Error");
-                alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
-                alert.show();
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Message");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Don't have any Service Type in Database or Can't connect to Database");
+                    alert.show();
+                });                
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -120,18 +123,20 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
                 stmt.setInt(7, serviceType.getServiceInventory());
                 stmt.setInt(8, serviceType.getServiceImportQuantity());
                 //Convert LocalDateTime to Timestamp
-                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceImportDate()));               
+                stmt.setTimestamp(9, Timestamp.valueOf(serviceType.getServiceImportDate()));
                 stmt.setString(10, serviceType.getUserName());
                 stmt.setBoolean(11, true);
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
@@ -164,30 +169,33 @@ public class ServiceTypeDAOImpl implements ServiceTypeDAO {
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Duplicated Service Type in Database or Can't connect to Database");
+                alert.show();
+            });
         }
     }
 
     @Override
     public void deleteServiceType(ServiceType serviceType) {
-        String sql = "UPDATE ServiceType SET Active=? WHERE ServiceID=?";
+        String sql = "DELETE FROM ServiceType WHERE ServiceID=?";
         try {
             try (Connection conn = connectDB.connectSQLServer(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setBoolean(1, false);
-                stmt.setString(2, serviceType.getServiceID());
+                stmt.setString(1, serviceType.getServiceID());
                 stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServiceTypeDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Message");
-            alert.setHeaderText("Error");
-            alert.setContentText("Can't connect to Database");
-            alert.show();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Message");
+                alert.setHeaderText("Error");
+                alert.setContentText("Can't not delete this service");
+                alert.show();
+            });
         }
     }
 

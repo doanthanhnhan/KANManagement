@@ -704,36 +704,64 @@ public class FXMLCheckOutController implements Initializable {
     }
 
     private void submit_Check_Out() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Message");
-        alert.setHeaderText("Check out confirmation");
-        alert.setContentText("Do you want to check out room: " + txt_Room_ID.getText() + " ?");
-        alert.showAndWait();
-        if (alert.getResult() == ButtonType.OK) {
-            // Khai báo stage nhìn xuyên thấu
-            StageLoader stageLoader = new StageLoader();
-            stageLoader.loadingIndicator("Calculating and report");
-            Task loadOverview = new Task() {
-                @Override
-                protected Object call() throws Exception {
-                    Platform.runLater(() -> {
-                        if (checkBox_All_Rooms.isSelected()) {
-                            StringBuilder bill_Note = new StringBuilder("This bill for these rooms: ");
-                            for (CheckIn check_In : list_Check_In_Of_Customer) {
-                                bill_Note.append(check_In.getRoomID() + ";" + check_In.getCheckID() + ";");
-                            }
+        if (Double.valueOf(txt_Customer_Change.getText()) >= 0) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText("Check out confirmation");
+            alert.setContentText("Do you want to check out room: " + txt_Room_ID.getText() + " ?");
+            alert.showAndWait();
 
-                            for (CheckIn check_In : list_Check_In_Of_Customer) {
-                                String roomID = check_In.getRoomID();
-                                String checkInID = check_In.getCheckID();
-                                String checkOutID = "CO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
-                                roomCheckOut = roomDAOImpl.getRoom(roomID);
+            if (alert.getResult() == ButtonType.OK) {
+                // Khai báo stage nhìn xuyên thấu
+                StageLoader stageLoader = new StageLoader();
+                stageLoader.loadingIndicator("Calculating and report");
+                Task loadOverview = new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        Platform.runLater(() -> {
+                            if (checkBox_All_Rooms.isSelected()) {
+                                StringBuilder bill_Note = new StringBuilder("This bill for these rooms: ");
+                                for (CheckIn check_In : list_Check_In_Of_Customer) {
+                                    bill_Note.append(check_In.getRoomID() + ";" + check_In.getCheckID() + ";");
+                                }
+
+                                for (CheckIn check_In : list_Check_In_Of_Customer) {
+                                    String roomID = check_In.getRoomID();
+                                    String checkInID = check_In.getCheckID();
+                                    String checkOutID = "CO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+                                    roomCheckOut = roomDAOImpl.getRoom(roomID);
+                                    //Update services orders
+                                    serviceOrderDAOImpl.update_CheckIn_SO_CheckOut(checkInID);
+                                    serviceOrderDetailDAOImpl.update_CheckIN_SOD_CheckOut(checkInID);
+
+                                    //Add checkout                                
+                                    CheckOut checkOut = get_Check_Out_Data_All(roomID, checkInID, checkOutID);
+                                    checkOutDAOImpl.addCheckOut(checkOut);
+                                    DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new CheckOutID: "
+                                            + FormatName.format(checkOut.getCheckOutID()),
+                                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+
+                                    //Getting Room infomations to update room Status after checking in - Nhan edit here
+                                    Room room = new Room();
+                                    room.setRoomID(roomID);
+                                    room.setCustomerID("CTM-000000000");
+                                    room.setUserName(mainFormController.getUserRole().getEmployee_ID());
+                                    room.setRoomStatus("Out");
+                                    room.setLeaveDate(LocalDateTime.now());
+                                    room.setDayRemaining(0);
+                                    roomDAOImpl.editCheckOutRoom(room, true);
+                                    mainOverViewPaneController.refreshForm();
+                                    //Writing Bill to DB
+                                    Bill bill = get_Bill_Data_All(roomID, checkInID, checkOutID);
+                                    bill.setNote(bill_Note.toString());
+                                    billDAOImpl.addBill(bill);
+                                }
+                            } else {
                                 //Update services orders
-                                serviceOrderDAOImpl.update_CheckIn_SO_CheckOut(checkInID);
-                                serviceOrderDetailDAOImpl.update_CheckIN_SOD_CheckOut(checkInID);
-
-                                //Add checkout                                
-                                CheckOut checkOut = get_Check_Out_Data_All(roomID, checkInID, checkOutID);
+                                serviceOrderDAOImpl.update_CheckIn_SO_CheckOut(txt_Check_In_ID.getText());
+                                serviceOrderDetailDAOImpl.update_CheckIN_SOD_CheckOut(txt_Check_In_ID.getText());
+                                //Add checkout
+                                CheckOut checkOut = get_Check_Out_Data();
                                 checkOutDAOImpl.addCheckOut(checkOut);
                                 DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new CheckOutID: "
                                         + FormatName.format(checkOut.getCheckOutID()),
@@ -741,7 +769,7 @@ public class FXMLCheckOutController implements Initializable {
 
                                 //Getting Room infomations to update room Status after checking in - Nhan edit here
                                 Room room = new Room();
-                                room.setRoomID(roomID);
+                                room.setRoomID(txt_Room_ID.getText());
                                 room.setCustomerID("CTM-000000000");
                                 room.setUserName(mainFormController.getUserRole().getEmployee_ID());
                                 room.setRoomStatus("Out");
@@ -750,58 +778,36 @@ public class FXMLCheckOutController implements Initializable {
                                 roomDAOImpl.editCheckOutRoom(room, true);
                                 mainOverViewPaneController.refreshForm();
                                 //Writing Bill to DB
-                                Bill bill = get_Bill_Data_All(roomID, checkInID, checkOutID);
-                                bill.setNote(bill_Note.toString());
+                                Bill bill = get_Bill_Data();
+                                bill.setNote("This bill for only one room.");
                                 billDAOImpl.addBill(bill);
                             }
-                        } else {
-                            //Update services orders
-                            serviceOrderDAOImpl.update_CheckIn_SO_CheckOut(txt_Check_In_ID.getText());
-                            serviceOrderDetailDAOImpl.update_CheckIN_SOD_CheckOut(txt_Check_In_ID.getText());
-                            //Add checkout
-                            CheckOut checkOut = get_Check_Out_Data();
-                            checkOutDAOImpl.addCheckOut(checkOut);
-                            DAO.setUserLogs_With_MAC(mainFormController.getUserRole().getEmployee_ID(), "Add new CheckOutID: "
-                                    + FormatName.format(checkOut.getCheckOutID()),
-                                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
+                            //Calling bill report
+                            PrintReport viewReport = new PrintReport();
+                            viewReport.showReport_Customer_Bill("/src/reports/Bill.jrxml", txt_Check_Out_ID.getText());
+                            Stage stage = (Stage) btn_Save.getScene().getWindow();
+                            stage.close();
+                        });
+                        return null;
+                    }
+                };
 
-                            //Getting Room infomations to update room Status after checking in - Nhan edit here
-                            Room room = new Room();
-                            room.setRoomID(txt_Room_ID.getText());
-                            room.setCustomerID("CTM-000000000");
-                            room.setUserName(mainFormController.getUserRole().getEmployee_ID());
-                            room.setRoomStatus("Out");
-                            room.setLeaveDate(LocalDateTime.now());
-                            room.setDayRemaining(0);
-                            roomDAOImpl.editCheckOutRoom(room, true);
-                            mainOverViewPaneController.refreshForm();
-                            //Writing Bill to DB
-                            Bill bill = get_Bill_Data();
-                            bill.setNote("This bill for only one room.");
-                            billDAOImpl.addBill(bill);
-                        }
-                        //Calling bill report
-                        PrintReport viewReport = new PrintReport();
-                        viewReport.showReport_Customer_Bill("/src/reports/Bill.jrxml", txt_Check_Out_ID.getText());
-                        Stage stage = (Stage) btn_Save.getScene().getWindow();
-                        stage.close();
-                    });
-                    return null;
-                }
-            };
-
-            loadOverview.setOnSucceeded(new EventHandler<Event>() {
-                @Override
-                public void handle(Event event) {
-                    System.out.println("Finished");
-                    Platform.runLater(() -> {
-                        stageLoader.stopTimeline();
-                        stageLoader.closeStage();
-                    });
-                }
-            });
-            new Thread(loadOverview).start();
+                loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                    @Override
+                    public void handle(Event event) {
+                        System.out.println("Finished");
+                        Platform.runLater(() -> {
+                            stageLoader.stopTimeline();
+                            stageLoader.closeStage();
+                        });
+                    }
+                });
+                new Thread(loadOverview).start();
+            }
+        } else {
+            txt_Customer_Give.requestFocus();
         }
+
     }
 
     @FXML

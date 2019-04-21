@@ -216,92 +216,92 @@ public class FXMLAddNewServiceTypeController implements Initializable {
                     }
                 });
             } else {
-                // Setting keypress ENTER for updating function
+                // Setting keypress ENTER for Adding function
                 serviceID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                     serviceID.getStyleClass().remove("text-field-fault");
                     hBoxContent.getChildren().clear();
                     if (event.getCode() == KeyCode.ENTER) {
-                        submit_Update_Service_Type();
+                        submit_Add_New_Service_Type();
                     }
                 });
                 serviceName.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                     serviceName.getStyleClass().remove("text-field-fault");
                     hBoxContent.getChildren().clear();
                     if (event.getCode() == KeyCode.ENTER) {
-                        submit_Update_Service_Type();
+                        submit_Add_New_Service_Type();
                     }
                 });
                 serviceImportDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                     serviceName.getStyleClass().remove("text-field-fault");
                     hBoxContent.getChildren().clear();
                     if (event.getCode() == KeyCode.ENTER) {
-                        submit_Update_Service_Type();
+                        submit_Add_New_Service_Type();
                     }
                 });
                 serviceInventory.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                     serviceName.getStyleClass().remove("text-field-fault");
                     hBoxContent.getChildren().clear();
                     if (event.getCode() == KeyCode.ENTER) {
-                        submit_Update_Service_Type();
+                        submit_Add_New_Service_Type();
                     }
                 });
                 servicePrice.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                     serviceName.getStyleClass().remove("text-field-fault");
                     hBoxContent.getChildren().clear();
                     if (event.getCode() == KeyCode.ENTER) {
-                        submit_Update_Service_Type();
+                        submit_Add_New_Service_Type();
                     }
                 });
                 txtArea_Service_Description.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                     serviceName.getStyleClass().remove("text-field-fault");
                     hBoxContent.getChildren().clear();
                     if (event.getCode() == KeyCode.ENTER) {
-                        submit_Update_Service_Type();
+                        submit_Add_New_Service_Type();
                     }
                 });
             }
         } else {
-            // Setting keypress ENTER for updating function
+            // Setting keypress ENTER for adding function
             serviceID.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 serviceID.getStyleClass().remove("text-field-fault");
                 hBoxContent.getChildren().clear();
                 if (event.getCode() == KeyCode.ENTER) {
-                    submit_Update_Service_Type();
+                    submit_Add_New_Service_Type();
                 }
             });
             serviceName.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 serviceName.getStyleClass().remove("text-field-fault");
                 hBoxContent.getChildren().clear();
                 if (event.getCode() == KeyCode.ENTER) {
-                    submit_Update_Service_Type();
+                    submit_Add_New_Service_Type();
                 }
             });
             serviceImportDate.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 serviceName.getStyleClass().remove("text-field-fault");
                 hBoxContent.getChildren().clear();
                 if (event.getCode() == KeyCode.ENTER) {
-                    submit_Update_Service_Type();
+                    submit_Add_New_Service_Type();
                 }
             });
             serviceInventory.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 serviceName.getStyleClass().remove("text-field-fault");
                 hBoxContent.getChildren().clear();
                 if (event.getCode() == KeyCode.ENTER) {
-                    submit_Update_Service_Type();
+                    submit_Add_New_Service_Type();
                 }
             });
             servicePrice.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 serviceName.getStyleClass().remove("text-field-fault");
                 hBoxContent.getChildren().clear();
                 if (event.getCode() == KeyCode.ENTER) {
-                    submit_Update_Service_Type();
+                    submit_Add_New_Service_Type();
                 }
             });
             txtArea_Service_Description.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 serviceName.getStyleClass().remove("text-field-fault");
                 hBoxContent.getChildren().clear();
                 if (event.getCode() == KeyCode.ENTER) {
-                    submit_Update_Service_Type();
+                    submit_Add_New_Service_Type();
                 }
             });
         }
