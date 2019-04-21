@@ -205,7 +205,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" spacing="10.0">
                                        <children>
-                                          <JFXButton fx:id="btn_OverView_Submit" onAction="#submit_Loading_Overview" text="Submit" />
+                                          <JFXButton fx:id="btn_OverView_Submit" onAction="#submit_Loading_Overview" styleClass="loginBtn" text="Refresh" />
                                        </children>
                                     </HBox>
                                             </children>

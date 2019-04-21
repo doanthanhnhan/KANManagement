@@ -78,7 +78,7 @@
                         </Menu>
                         <Menu fx:id="About" mnemonicParsing="false" text="About">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="About Us" />
+                              <MenuItem fx:id="menu_AboutUs" mnemonicParsing="false" onAction="#handle_About_Us_Action" text="About Us" />
                            </items>
                         </Menu>
                      </menus>
@@ -96,6 +96,9 @@
                            <tooltip>
                               <Tooltip contentDisplay="TOP" text="Home" textAlignment="CENTER" />
                            </tooltip>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                         <Button fx:id="btn_Toolbar_Booking" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_Booking_Action">
                            <graphic>
@@ -108,6 +111,9 @@
                            <tooltip>
                               <Tooltip contentDisplay="TOP" text="Booking" textAlignment="CENTER" />
                            </tooltip>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                         <Button fx:id="btn_Toolbar_Checkin" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_CheckIn_Action">
                            <graphic>
@@ -120,6 +126,9 @@
                            <tooltip>
                               <Tooltip contentDisplay="TOP" text="Check in" textAlignment="CENTER" />
                            </tooltip>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                         <Button fx:id="btn_Toolbar_Checkout" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_CheckOut_Action">
                            <graphic>
@@ -132,6 +141,9 @@
                            <tooltip>
                               <Tooltip contentDisplay="TOP" text="Check out" textAlignment="CENTER" />
                            </tooltip>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                         <Button fx:id="btn_Toolbar_Services" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_Services_Action">
                            <graphic>
@@ -144,6 +156,9 @@
                            <tooltip>
                               <Tooltip contentDisplay="TOP" text="Services" textAlignment="CENTER" />
                            </tooltip>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                         <Button fx:id="btn_Toolbar_Employees" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Toolbar_Employees_Action">
                            <graphic>
@@ -156,20 +171,11 @@
                            <tooltip>
                               <Tooltip contentDisplay="TOP" text="Employees" textAlignment="CENTER" />
                            </tooltip>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                         <Button fx:id="btn_Toolbar_Charts" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handle_Chart_Button_Action">
-                           <graphic>
-                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/gnumeric.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip contentDisplay="TOP" text="Charts" textAlignment="CENTER" />
-                           </tooltip>
-                        </Button>
-                        <Button fx:id="btn_Toolbar_Accounting" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false">
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -178,8 +184,11 @@
                               </ImageView>
                            </graphic>
                            <tooltip>
-                              <Tooltip contentDisplay="TOP" text="Accounting" textAlignment="CENTER" />
+                              <Tooltip contentDisplay="TOP" text="Reports" textAlignment="CENTER" />
                            </tooltip>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                         <Button fx:id="btn_Toolbar_Settings" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#toolbar_Settings_Action" textAlignment="CENTER">
                            <graphic>
@@ -192,6 +201,9 @@
                            <tooltip>
                               <Tooltip contentDisplay="TOP" text="Settings" textAlignment="CENTER" />
                            </tooltip>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                         <Pane HBox.hgrow="ALWAYS" />
                         <TextField fx:id="txt_Search" promptText="Search...">

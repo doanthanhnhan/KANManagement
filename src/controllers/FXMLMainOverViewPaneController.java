@@ -290,20 +290,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
 
     @FXML
     private void submit_Loading_Overview(ActionEvent event) {
-        listRooms = roomDAOImpl.getAllRoom();
-        filteredRoom = new FilteredList<>(listRooms, list -> true);
-        System.out.println("Button clicked.");
-        Predicate<Room> roomStatus = i -> {
-            for (String status : list_Status) {
-                if (i.getRoomStatus().contains(status)) {
-                    return i.getRoomStatus().contains(status);
-                }
-            }
-            return false;
-        };
-        filteredRoom.setPredicate(roomStatus);
-        add_Rooms_With_Condition(filteredRoom, flowPane_Rooms, list_Status, list_Type, list_HouseKeeping);
-
+        refreshForm();
     }
 
     public void init_Label_Room_Property() {

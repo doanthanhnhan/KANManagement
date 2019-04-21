@@ -356,6 +356,37 @@
     -fx-fill: -fx-secondarycolor;
 }
 
+/*ABOUT US*/
+.background-about-us{
+    -fx-background-color: #2A2E37;
+}
+.label-about-us{
+    -fx-text-fill: #FFFF8D;    
+}
+.image-view-about-us {
+    -fx-effect: dropshadow(three-pass-box, #FFFF8D, 10, 0, 0, 0);
+    -fx-stroke-width: 2.0; 
+    -fx-padding: 10;
+    -fx-background-color: firebrick;
+    -fx-background-radius: 5;
+    -fx-border-radius: 20 20 20 20;
+}
+.label-about-us:hover .image-view-about-us {
+    -fx-effect: dropshadow(three-pass-box, #00ffff, 30, 0, 0, 0);
+    -fx-stroke-width: 2.0; 
+    -fx-padding: 10;
+    -fx-background-color: firebrick;
+    -fx-background-radius: 5;
+    -fx-border-radius: 20 20 20 20;
+}
+
+.label-about-us:hover .image-view-about-us:border {
+    -fx-border-color: #6747CD;
+    -fx-border-style: solid;
+    -fx-border-width: 5;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-radius: 5;
+}
 /*TableView Default*/
 /*.table-view{
     -fx-background-color: derive(-fx-primarycolor, 10%);

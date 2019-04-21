@@ -85,8 +85,6 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private Button btn_Toolbar_Charts;
     @FXML
-    private Button btn_Toolbar_Accounting;
-    @FXML
     private Button btn_Toolbar_Settings;
     private Button btn_Toolbar_User_Logout;
     @FXML
@@ -180,7 +178,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private MenuItem menuItem_List_Room_Type;
     @FXML
-    private HBox userLogin;
+    private MenuItem menu_AboutUs;
 
     /**
      * Initializes the controller class.
@@ -916,6 +914,12 @@ public class FXMLMainFormController implements Initializable {
 
             new Thread(loadOverview).start();
         });
+    }
+
+    @FXML
+    private void handle_About_Us_Action(ActionEvent event) {
+        System.out.println("About use menu item clicked!");
+        formLoader("/fxml/FXMLAboutUs.fxml", "/images/KAN Logo.png", "About us");
     }
 
 }
