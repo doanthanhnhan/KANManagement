@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="anchorPaneCheckInOrders" stylesheets="@../css/cssLogin.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FXMLEditCheckInController">
+   <children>
+      <VBox fx:id="vBox_Employee_Info" layoutX="-6.0" layoutY="-7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="HboxHeader">
+               <children>
+                  <HBox prefHeight="129.0" prefWidth="560.0">
+                     <children>
+                        <VBox prefHeight="129.0">
+                           <children>
+                              <HBox prefHeight="53.0" prefWidth="400.0">
+                                 <children>
+                                    <Label prefHeight="53.0" styleClass="label-text" stylesheets="@../css/cssLogin.css" text="FORM CHECK IN ORDER">
+                                       <font>
+                                          <Font name="System Bold" size="27.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="60.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label prefHeight="27.0" styleClass="label-color" stylesheets="@../css/cssLogin.css" text="Fill the form for check in order">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox fx:id="hBox_Info_Parent">
+               <children>
+                  <VBox fx:id="vBox_Info_Left">
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="Username" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Username" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="20.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="CheckInID" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Check In Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <HBox fx:id="HboxBoxId" alignment="CENTER" prefHeight="35.0" prefWidth="400.0" spacing="10.0">
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                                 <children>
+                                    <JFXTextField fx:id="BookingID" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Booking Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="CustomerID" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Customer Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="RoomID" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Room Id" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="vBox_Info_Right">
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="NumberOfCustomer" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Number Of Customer" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="20.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="DateIn" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Date In" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="DateOut" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Date Out" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="CheckInType" disable="true" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Check In Type" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="CustomerPackage" focusColor="#6447cd" labelFloat="true" prefHeight="35.0" prefWidth="400.0" promptText="Customer Package" styleClass="text-field" stylesheets="@../css/cssLogin.css" unFocusColor="#6447cd">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox fx:id="HboxContent" alignment="CENTER_LEFT">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="20.0" left="80.0" top="20.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="Hboxbtn" alignment="CENTER">
+               <children>
+                  <JFXButton fx:id="btnInfo" buttonType="RAISED" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Submit">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="80.0" right="80.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="btnCancel" buttonType="RAISED" onAction="#Cancel" prefHeight="50.0" prefWidth="400.0" ripplerFill="#6447cd" styleClass="loginBtn" stylesheets="@../css/cssLogin.css" text="Cancel">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="50.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

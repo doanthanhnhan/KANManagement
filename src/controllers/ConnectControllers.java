@@ -43,6 +43,15 @@ public class ConnectControllers {
     public static FXMLEditBookingController fXMLEditBookingController;
     public static FXMLRoomTypeController fXMLRoomTypeController;
     public static FXMLListCheckInController fXMLListCheckInController;
+    public static FXMLEditCheckInController fXMLEditCheckInController;
+
+    public static FXMLEditCheckInController getfXMLEditCheckInController() {
+        return fXMLEditCheckInController;
+    }
+
+    public static void setfXMLEditCheckInController(FXMLEditCheckInController fXMLEditCheckInController) {
+        ConnectControllers.fXMLEditCheckInController = fXMLEditCheckInController;
+    }
 
     public static FXMLListCheckInController getfXMLListCheckInController() {
         return fXMLListCheckInController;

@@ -28,8 +28,21 @@ import utils.connectDB;
  * @author Admin
  */
 public class DAOCustomerBookingCheckIn {
-//    update bookking if dateleave checkin change
 
+    public static void Update_BookingWithCheckInEdit(String idBooking,String idCheckIn, String Number, String CustomerPackage) throws ClassNotFoundException, SQLException {
+        Update_NumbercustomerOfBooking(idBooking,Integer.valueOf(Number));
+        Connection connection = connectDB.connectSQLServer();
+        String exp = "UPDATE CheckInOrders SET NumberOfCustomer = ?,CustomerPackage=? WHERE CheckInID = ?";
+        PreparedStatement pt = connection.prepareStatement(exp);
+        pt.setInt(1, Integer.valueOf(Number));
+        pt.setString(2, CustomerPackage);
+        pt.setString(3, idCheckIn);
+        pt.execute();
+        pt.close();
+        connection.close();
+    }
+
+//    update bookking if dateleave checkin change
     public static void Update_BookingLeave(String id, String RoomID, String DateLeave) throws ClassNotFoundException, SQLException {
         Connection connection = connectDB.connectSQLServer();
         String exp = "UPDATE BookingInfo SET RoomID = ?,DateLeave=? WHERE BookingID = ?";

@@ -14,7 +14,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -42,11 +41,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
-import models.BookingInfo;
 import models.CheckIn;
 import models.DAOCustomerBookingCheckIn;
 import models.InfoEmployee;
+import models.RoleDAOImpl;
+import models.boolDecentralizationModel;
 import models.formatCalender;
+import utils.StageLoader;
 
 /**
  * FXML Controller class
@@ -82,13 +83,18 @@ public class FXMLListCheckInController implements Initializable {
     @FXML
     private JFXButton btnSubmit;
     private boolean checkSubmit = false;
+    public static boolean checkAction = false;
+    public boolDecentralizationModel userRole;
+    RoleDAOImpl roleDAOImpl;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        checkAction = true;
         ConnectControllers.setfXMLListCheckInController(this);
+        roleDAOImpl = new RoleDAOImpl();
         checkformBookingVirtual = true;
         ToDate.valueProperty().addListener((obs, oldItem, newItem) -> {
             ToDate.setStyle("-jfx-default-color: #6447cd;");
@@ -126,7 +132,6 @@ public class FXMLListCheckInController implements Initializable {
             }
         });
         contextMenu_Main.getItems().remove(menuItem_Add);
-        contextMenu_Main.getItems().remove(menuItem_Edit);
         contextMenu_Main.getItems().remove(menuItem_Delete);
         setColumns();
         showUsersData();
@@ -144,12 +149,12 @@ public class FXMLListCheckInController implements Initializable {
         });
         //Get user role from Mainform
         FXMLMainFormController mainFormController = ConnectControllers.getfXMLMainFormController();
-        //userRole = mainFormController.getUserRole();
-//        userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
-//        //11.SERVICE TYPE CRUD
-//        if (!userRole.ischeckBooking_Delete()) {
-//            contextMenu_Main.getItems().remove(menuItem_Delete);
-//        }
+        userRole = mainFormController.getUserRole();
+        userRole = roleDAOImpl.getEmployeeRole(mainFormController.userRole.getEmployee_ID());
+        //11.SERVICE TYPE CRUD
+        if (!userRole.ischeckCheckIn_Edit()) {
+            contextMenu_Main.getItems().remove(menuItem_Edit);
+        }
     }
 
     private void changeTableView(int index, int limit) {
@@ -288,6 +293,8 @@ public class FXMLListCheckInController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Edit_Action(ActionEvent event) {
+        StageLoader stageLoader = new StageLoader();
+        stageLoader.formLoader("/fxml/FXMLEditCheckIn.fxml", "/images/KAN Logo.png", "Edit Check In Informations");
     }
 
     @FXML
@@ -323,7 +330,7 @@ public class FXMLListCheckInController implements Initializable {
 
     @FXML
     private void handle_MenuItem_Refresh_Action(ActionEvent event) {
-        checkSubmit=false;
+        checkSubmit = false;
         ToDate.setValue(null);
         FromDate.setValue(null);
         ToDate.setPromptText("To Date");
