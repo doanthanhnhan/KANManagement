@@ -7,7 +7,6 @@ package controllers;
 
 import com.jfoenix.controls.JFXTabPane;
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -200,9 +199,6 @@ public class FXMLMainFormController implements Initializable {
         //Set close button for all TAB
         mainTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
-        //Initialize OverView Pane
-        task_Insert_Tab_With_Indicator("/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
-
         //SETTING ROLE TO FORM
         //Get user role        
         userRole = new boolDecentralizationModel();
@@ -321,6 +317,10 @@ public class FXMLMainFormController implements Initializable {
         }
         if (!userRole.ischeckRoom_View()) {
             menu_View.getItems().remove(menuItem_List_Rooms);
+            main_Toolbar.getItems().remove(btn_Toolbar_Home);
+        } else {
+            //Initialize OverView Pane
+            task_Insert_Tab_With_Indicator("/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
         }
         //09.SERVICES ORDERS CRUD
         if (!userRole.ischeckSODer_Add()) {

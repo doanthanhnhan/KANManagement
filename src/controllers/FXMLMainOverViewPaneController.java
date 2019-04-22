@@ -452,6 +452,7 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 FontAwesomeIconView icon_Repaired_Status = (FontAwesomeIconView) pane.lookup("#icon_Repaired_Status");
                 //System.out.println(pane.lookup("#label_Customer_Name"));
                 JFXButton btn_CheckIn = (JFXButton) pane.lookup("#btn_CheckIn");
+                btn_CheckIn.setDisable(true);
                 btn_CheckIn.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " check in!");
                     check_Check_In_Button_Clicked = true;
@@ -477,6 +478,17 @@ public class FXMLMainOverViewPaneController implements Initializable {
                 });
                 JFXButton btn_CheckOut = (JFXButton) pane.lookup("#btn_CheckOut");
                 JFXButton btn_Services = (JFXButton) pane.lookup("#btn_Services");
+                btn_CheckOut.setDisable(true);
+                btn_Services.setDisable(true);
+                if(mainFormController.userRole.ischeckCheckOut_Add()){
+                    btn_CheckOut.setDisable(false);
+                }
+                if(mainFormController.userRole.ischeckCheckIn_Add()){
+                    btn_CheckIn.setDisable(false);
+                }
+                if(mainFormController.userRole.ischeckSODer_Add() || mainFormController.userRole.ischeckSODetail_Add()){
+                    btn_Services.setDisable(false);
+                }
                 btn_Services.setOnAction((event) -> {
                     System.out.println("Room " + label_Room_Number.getText() + " services!");
                     check_Services_Button_Clicked = true;
