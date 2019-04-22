@@ -320,7 +320,7 @@ public class FXMLMainFormController implements Initializable {
             main_Toolbar.getItems().remove(btn_Toolbar_Home);
         } else {
             //Initialize OverView Pane
-            task_Insert_Tab_With_Indicator("/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
+            task_Insert_Tab_With_Indicator_Button(btn_Toolbar_Home, "/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
         }
         //09.SERVICES ORDERS CRUD
         if (!userRole.ischeckSODer_Add()) {
@@ -460,7 +460,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void homeAction(ActionEvent event) {
         btn_Toolbar_Home.setDisable(true);
-        task_Insert_Tab_With_Indicator("/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
+        task_Insert_Tab_With_Indicator_Button(btn_Toolbar_Home, "/fxml/FXMLMainOverViewPane.fxml", "mainOverView_Tab", "Over view");
         btn_Toolbar_Home.setDisable(false);
     }
 
@@ -487,7 +487,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_Toolbar_CheckOut_Action(ActionEvent event) {
         System.out.println("CheckOut clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "checkOut_Tab", "Check Out");
+        task_Insert_Tab_With_Indicator_Button(btn_Toolbar_Checkout, "/fxml/FXMLListCheckOut.fxml", "checkOut_Tab", "Check Out");
     }
 
     @FXML
@@ -504,7 +504,7 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_Toolbar_CheckIn_Action(ActionEvent event) {
         System.out.println("List service orders details item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
+        task_Insert_Tab_With_Indicator_Button(btn_Toolbar_Checkin, "/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
     }
 
     @FXML
@@ -516,19 +516,19 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_Toolbar_Booking_Action(ActionEvent event) {
         System.out.println("Toolbar booking button clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListBooking.fxml", "listBooking_Tab", "List Booking");
+        task_Insert_Tab_With_Indicator_Button(btn_Toolbar_Booking, "/fxml/FXMLListBooking.fxml", "listBooking_Tab", "List Booking");
     }
 
     @FXML
     private void handle_Toolbar_Services_Action(ActionEvent event) {
         System.out.println("Toolbar Services button clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listServiceOrder_Tab", "List Services");
+        task_Insert_Tab_With_Indicator_Button(btn_Toolbar_Services, "/fxml/FXMLListServiceOrder.fxml", "listServiceOrder_Tab", "List Services");
     }
 
     @FXML
     private void handle_Toolbar_Employees_Action(ActionEvent event) {
         System.out.println("Toolbar Employees button clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListEmployee.fxml", "listEmployees_Tab", "List Employees");
+        task_Insert_Tab_With_Indicator_Button(btn_Toolbar_Employees, "/fxml/FXMLListEmployee.fxml", "listEmployees_Tab", "List Employees");
     }
 
     @FXML
@@ -542,97 +542,97 @@ public class FXMLMainFormController implements Initializable {
     @FXML
     private void handle_MenuItem_List_Service_Type_Action(ActionEvent event) {
         System.out.println("List Service Type menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceType.fxml", "listServiceType_Tab", "Service type");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Service_Type, "/fxml/FXMLListServiceType.fxml", "listServiceType_Tab", "Service type");
     }
 
     @FXML
     private void handle_MenuItem_List_Employee_Action(ActionEvent event) {
         System.out.println("List Service Type menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListEmployee.fxml", "listEmployees_Tab", "Employees Infomations");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Employees, "/fxml/FXMLListEmployee.fxml", "listEmployees_Tab", "Employees Infomations");
     }
 
     @FXML
     private void handle_MenuItem_List_Customer_Action(ActionEvent event) {
         System.out.println("List Customer menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListCustomer.fxml", "listCustomers_Tab", "Customers");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Customers, "/fxml/FXMLListCustomer.fxml", "listCustomers_Tab", "Customers");
     }
 
     @FXML
     private void handle_MenuItem_List_Rooms_Action(ActionEvent event) {
         System.out.println("List rooms menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListRooms.fxml", "listRooms_Tab", "Rooms");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Rooms, "/fxml/FXMLListRooms.fxml", "listRooms_Tab", "Rooms");
     }
 
     @FXML
     private void handle_MenuItem_List_Role_Action(ActionEvent event) {
         System.out.println("List Role menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLDecentralization.fxml", "Users role", "Decentralization Informations");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Role, "/fxml/FXMLDecentralization.fxml", "Users role", "Decentralization Informations");
     }
 
     @FXML
     private void handle_MenuItem_List_UserLogs_Action(ActionEvent event) {
         System.out.println("List UserLogs menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLUserLogs.fxml", "UserLogs", "UserLogs Informations");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Users_Log, "/fxml/FXMLUserLogs.fxml", "UserLogs", "UserLogs Informations");
     }
 
     @FXML
     private void handle_MenuItem_List_Booking_Action(ActionEvent event) {
         System.out.println("List Booking menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListBooking.fxml", "List Booking", "List Booking Informations");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Booking, "/fxml/FXMLListBooking.fxml", "List Booking", "List Booking Informations");
     }
 
     @FXML
     private void handle_MenuItem_List_Booking_Virtual_Action(ActionEvent event) {
         System.out.println("List Booking Virtual menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListBookingVirtual.fxml", "List Booking Virtual", "List Booking Virtual Informations");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Booking_Virtual, "/fxml/FXMLListBookingVirtual.fxml", "List Booking Virtual", "List Booking Virtual Informations");
     }
 
     @FXML
     private void handle_MenuItem_List_Department_Action(ActionEvent event) {
         System.out.println("List Department menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListDepartment.fxml", "List Department", "Department Informations");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Department, "/fxml/FXMLListDepartment.fxml", "List Department", "Department Informations");
     }
 
     @FXML
     private void handle_MenuItem_List_ReActive_Action(ActionEvent event) {
         System.out.println("List Department menu item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLReActive.fxml", "List ReActive", "ReActive Informations");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_ReActive, "/fxml/FXMLReActive.fxml", "List ReActive", "ReActive Informations");
     }
 
     @FXML
     private void handle_MenuItem_List_Service_Orders_Action(ActionEvent event) {
         System.out.println("List service orders item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrder.fxml", "listServiceOrders_Tab", "Service Orders");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Service_Orders, "/fxml/FXMLListServiceOrder.fxml", "listServiceOrders_Tab", "Service Orders");
     }
 
     @FXML
     private void handle_MenuItem_List_Service_Orders_Details_Action(ActionEvent event) {
         System.out.println("List service orders details item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Service_Orders_Details, "/fxml/FXMLListServiceOrderDetail.fxml", "listServiceOrdersDetails_Tab", "Service orders details");
     }
 
     @FXML
     private void handle_MenuItem_List_ReActiveMacAddress_Action(ActionEvent event) {
         System.out.println("List check out item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLReActiveMacAddress.fxml", "listReActiveMacAddress", "List ReActive MacAddress");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_ReActiveMacAddress, "/fxml/FXMLReActiveMacAddress.fxml", "listReActiveMacAddress", "List ReActive MacAddress");
     }
 
     @FXML
     private void handle_MenuItem_List_CheckOut_Action(ActionEvent event) {
         System.out.println("List check out item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Check_Out, "/fxml/FXMLListCheckOut.fxml", "listCheckOut_Tab", "List Check out");
     }
 
     @FXML
     private void handle_MenuItem_List_Room_Type_Action(ActionEvent event) {
         System.out.println("List Room type item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListRoomType.fxml", "listRoomType_Tab", "List Room Type");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Room_Type, "/fxml/FXMLListRoomType.fxml", "listRoomType_Tab", "List Room Type");
     }
 
     @FXML
     private void handle_MenuItem_List_Check_In_Action(ActionEvent event) {
         System.out.println("List Check In type item clicked!");
-        task_Insert_Tab_With_Indicator("/fxml/FXMLListCheckIn.fxml", "listCheckIn_Tab", "List Check In");
+        task_Insert_Tab_With_Indicator_MenuItem(menuItem_List_Check_In, "/fxml/FXMLListCheckIn.fxml", "listCheckIn_Tab", "List Check In");
     }
     // ############### END VIEW ACTIONS ###############
 
@@ -849,28 +849,32 @@ public class FXMLMainFormController implements Initializable {
      * @param formPath
      * @param tabName
      */
-    public void task_Insert_Tab_With_Indicator(String formPath, String tabID, String tabName) {
+    public void task_Insert_Tab_With_Indicator_Button(Button btn, String formPath, String tabID, String tabName) {
         Platform.runLater(() -> {
-            Label label_Task_Status = new Label();
-            //Set timer and start
-            MyTimer myTimer = new MyTimer();
-            myTimer.create_myTimer(label_Task_Status);
+            if (openTabs.containsKey(formPath)) {
+                mainTabPane.getSelectionModel().select(openTabs.get(formPath));
+            } else {
+                btn.setDisable(true);
+                Label label_Task_Status = new Label();
+                //Set timer and start
+                MyTimer myTimer = new MyTimer();
+                myTimer.create_myTimer(label_Task_Status);
 
-            //Add label to bottom
-            hbox_Bottom.getChildren().add(0, label_Task_Status);
-            //Setting progressBar
-            progressBar_MainTask.setVisible(true);
-            progressBar_MainTask.progressProperty().unbind();
-            //Create new task
-            Task loadOverview = new Task() {
-                @Override
-                protected Object call() throws Exception {
-                    System.out.println("Loading tab...");
+                //Add label to bottom
+                hbox_Bottom.getChildren().add(0, label_Task_Status);
+                //Setting progressBar
+                progressBar_MainTask.setVisible(true);
+                progressBar_MainTask.progressProperty().unbind();
+                //Create new task
+                Task loadOverview = new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        System.out.println("Loading tab...");
 
-                    //Checking existing tab
-                    if (openTabs.containsKey(formPath)) {
-                        mainTabPane.getSelectionModel().select(openTabs.get(formPath));
-                    } else {
+                        //Checking existing tab
+//                        if (openTabs.containsKey(formPath)) {
+//                            mainTabPane.getSelectionModel().select(openTabs.get(formPath));
+//                        } else {
                         try {
                             // Get content from fxml file
                             AnchorPane subPane = (AnchorPane) FXMLLoader.load(getClass().getResource(formPath));
@@ -887,32 +891,109 @@ public class FXMLMainFormController implements Initializable {
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        //}
+
+                        //Stop timer
+                        myTimer.stop_Timer(label_Task_Status);
+                        return null;
                     }
+                };
+                //Binding progress bar with task
+                progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
 
-                    //Stop timer
-                    myTimer.stop_Timer(label_Task_Status);
-                    return null;
-                }
-            };
-            //Binding progress bar with task
-            progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
+                loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                    @Override
+                    public void handle(Event event) {
+                        System.out.println("Finished");
+                        Platform.runLater(() -> {
+                            label_Task_Status.setText("Finished");
+                            //Hide progressBar
+                            progressBar_MainTask.progressProperty().unbind();
+                            progressBar_MainTask.setProgress(0);
+                            progressBar_MainTask.setVisible(false);
+                            hbox_Bottom.getChildren().remove(label_Task_Status);
+                            btn.setDisable(false);
+                        });
+                    }
+                });
 
-            loadOverview.setOnSucceeded(new EventHandler<Event>() {
-                @Override
-                public void handle(Event event) {
-                    System.out.println("Finished");
-                    Platform.runLater(() -> {
-                        label_Task_Status.setText("Finished");
-                        //Hide progressBar
-                        progressBar_MainTask.progressProperty().unbind();
-                        progressBar_MainTask.setProgress(0);
-                        progressBar_MainTask.setVisible(false);
-                        hbox_Bottom.getChildren().remove(label_Task_Status);
-                    });
-                }
-            });
+                new Thread(loadOverview).start();
 
-            new Thread(loadOverview).start();
+            }
+        });
+    }
+
+    public void task_Insert_Tab_With_Indicator_MenuItem(MenuItem menuItem, String formPath, String tabID, String tabName) {
+        Platform.runLater(() -> {
+            if (openTabs.containsKey(formPath)) {
+                mainTabPane.getSelectionModel().select(openTabs.get(formPath));
+            } else {
+                menuItem.setDisable(true);
+                Label label_Task_Status = new Label();
+                //Set timer and start
+                MyTimer myTimer = new MyTimer();
+                myTimer.create_myTimer(label_Task_Status);
+
+                //Add label to bottom
+                hbox_Bottom.getChildren().add(0, label_Task_Status);
+                //Setting progressBar
+                progressBar_MainTask.setVisible(true);
+                progressBar_MainTask.progressProperty().unbind();
+                //Create new task
+                Task loadOverview = new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        System.out.println("Loading tab...");
+
+                        //Checking existing tab
+//                        if (openTabs.containsKey(formPath)) {
+//                            mainTabPane.getSelectionModel().select(openTabs.get(formPath));
+//                        } else {
+                        try {
+                            // Get content from fxml file
+                            AnchorPane subPane = (AnchorPane) FXMLLoader.load(getClass().getResource(formPath));
+                            // Add fxml content to a tab
+                            Tab subTab = new Tab(tabName);
+                            subTab.setContent(subPane);
+                            subTab.setId(tabID);
+                            Platform.runLater(() -> {
+                                mainTabPane.getTabs().add(subTab);
+                            });
+                            mainTabPane.getSelectionModel().select(subTab);
+                            openTabs.put(formPath, subTab);
+                            subTab.setOnClosed(e -> openTabs.remove(formPath));
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLMainFormController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        //}
+
+                        //Stop timer
+                        myTimer.stop_Timer(label_Task_Status);
+                        return null;
+                    }
+                };
+                //Binding progress bar with task
+                progressBar_MainTask.progressProperty().bind(loadOverview.progressProperty());
+
+                loadOverview.setOnSucceeded(new EventHandler<Event>() {
+                    @Override
+                    public void handle(Event event) {
+                        System.out.println("Finished");
+                        Platform.runLater(() -> {
+                            label_Task_Status.setText("Finished");
+                            //Hide progressBar
+                            progressBar_MainTask.progressProperty().unbind();
+                            progressBar_MainTask.setProgress(0);
+                            progressBar_MainTask.setVisible(false);
+                            hbox_Bottom.getChildren().remove(label_Task_Status);
+                            menuItem.setDisable(false);
+                        });
+                    }
+                });
+
+                new Thread(loadOverview).start();
+
+            }
         });
     }
 
