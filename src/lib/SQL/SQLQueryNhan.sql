@@ -716,6 +716,19 @@ SELECT COUNT(BookingID) AS 'NoOfBooking' FROM BookingInfo WHERE BookingID NOT IN
 AND RoomID = 'R-0101';
 SELECT * FROM BookingInfo WHERE DateBook IN (SELECT MIN(DateBook) FROM BookingInfo WHERE DateBook > GETDATE())
 
+SELECT SOD.OrderID , SOD.ServiceID, SOD.ServiceQuantity, SOD.Price, SOD.Discount, SOD.Finish, ST.*,
+                SO.ServiceOrderDate, SO.CustomerID, SO.RoomID,
+                CIO.CheckInDate, CIO.CheckInID,
+                CASE WHEN C.CustomerMidName <> '' THEN C.CustomerFirstName+' '+C.CustomerMidName+ ' ' +C.CustomerLastName
+            	ELSE C.CustomerFirstName+' ' +C.CustomerLastName END AS 'CustomerFullName'
+                FROM ServicesOrderDetails SOD
+                INNER JOIN ServiceType ST ON SOD.ServiceID = ST.ServiceID
+                INNER JOIN ServicesOrders SO ON SOD.OrderID = SO.OrderID 
+                INNER JOIN CheckInOrders CIO ON SO.RoomID = CIO.RoomID
+                INNER JOIN Customers C ON C.CustomerID = CIO.CustomerID
+                WHERE CIO.CustomerID=''                
+                AND SOD.Finish=1 AND SO.Finish=1 AND SOD.CheckOut=0;
+
 
 -- Design by Gosu
 DELETE FROM ServicesOrderDetails

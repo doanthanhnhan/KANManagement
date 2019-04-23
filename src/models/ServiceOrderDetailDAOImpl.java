@@ -309,7 +309,7 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 + "INNER JOIN Customers C ON C.CustomerID = CIO.CustomerID\n"
                 + "WHERE CIO.CustomerID='"
                 + customerID
-                + "' AND SOD.Finish=1 AND SO.Finish=1 AND SOD.CheckOut=0";
+                + "' AND SOD.Finish=1 AND SO.Finish=1 AND SOD.CheckOut=0 AND CIO.CheckInID NOT IN (SELECT CheckInID FROM CheckOutOrders)";
         ObservableList<ServiceOrderDetail> listServiceOrderDetails = FXCollections.observableArrayList();
 
         try (Connection conn = connectDB.connectSQLServer(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -374,7 +374,8 @@ public class ServiceOrderDetailDAOImpl implements ServiceOrderDetailDAO {
                 + "INNER JOIN Customers C ON C.CustomerID = CIO.CustomerID\n"
                 + "WHERE CIO.CustomerID='"
                 + customerID
-                + "' AND SOD.Finish=1 AND SOD.CheckOut=0\n"
+                //+ "' AND SOD.Finish=1 AND SOD.CheckOut=0\n" Wrong query if Customer check in 1 room
+                + "' AND CIO.CheckInID NOT IN (SELECT CheckInID FROM CheckOutOrders)\n"
                 + "GROUP BY SO.RoomID, CIO.CheckInID";
         ObservableList<CheckIn> listCheckIn = FXCollections.observableArrayList();
 

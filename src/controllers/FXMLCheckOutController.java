@@ -328,7 +328,7 @@ public class FXMLCheckOutController implements Initializable {
             list_Service_Order_Details = serviceOrderDetailDAOImpl.get_All_Details_Of_CheckInRoom(txt_Room_ID.getText(), txt_Check_In_ID.getText());
             //Load checkout room again to prevent Check out All Rooms case
             roomCheckOut = roomDAOImpl.getRoom(txt_Room_ID.getText());
-            //table_ServiceType.getItems().clear();
+            tableView_Service_Order.getItems().clear();
             tableView_Service_Order.setItems(list_Service_Order_Details);
             for (ServiceOrderDetail list_Service_Order_Detail : list_Service_Order_Details) {
                 total_Service = total_Service + list_Service_Order_Detail.getServicePriceTotal().doubleValue();
@@ -424,6 +424,7 @@ public class FXMLCheckOutController implements Initializable {
         } else {
             list_Service_Order_Details_All_Rooms = serviceOrderDetailDAOImpl.get_All_Details_Of_CheckIn_Customer(txt_Customer_ID.getText());
             //Setting data for tableview
+            tableView_Service_Order.getItems().clear();
             tableView_Service_Order.setItems(list_Service_Order_Details_All_Rooms);
 
             list_Check_In_Of_Customer = serviceOrderDetailDAOImpl.get_All_CheckIn_Of_Customer(txt_Customer_ID.getText());
@@ -729,6 +730,7 @@ public class FXMLCheckOutController implements Initializable {
                                     String roomID = check_In.getRoomID();
                                     String checkInID = check_In.getCheckID();
                                     String checkOutID = "CO-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+                                    txt_Check_Out_ID.setText(checkOutID);
                                     roomCheckOut = roomDAOImpl.getRoom(roomID);
                                     //Update services orders
                                     serviceOrderDAOImpl.update_CheckIn_SO_CheckOut(checkInID);
@@ -838,6 +840,20 @@ public class FXMLCheckOutController implements Initializable {
 
     @FXML
     private void handle_Allow_OverTime_CO_Action(ActionEvent event) {
+//        string_Total_Bill = new StringBuilder();
+//        total_Service = 0.0;
+//        total_Service_Discount = 0.0;
+//        total_Room = 0.0;
+//        total_Room_Discount = 0.0;
+//        charge_Room_1st_Day = 0.0;
+//        charge_Room_Last_Day = 0.0;
+//        total_Bill = 0.0;
+//        total_Without_CusDiscount = 0.0;
+//        total_With_Customer_Discount = 0.0;
+//        total = 0.0;
+//        total_VAT = 0.0;
+//        day_Stay_Print = 0;
+
         string_Total_Bill = new StringBuilder();
         total_Service = 0.0;
         total_Service_Discount = 0.0;
@@ -851,6 +867,21 @@ public class FXMLCheckOutController implements Initializable {
         total = 0.0;
         total_VAT = 0.0;
         day_Stay_Print = 0;
+
+        all_string_Total_Bill = new StringBuilder();
+        all_total_Service = 0.0;
+        all_total_Service_Discount = 0.0;
+        all_total_Room = 0.0;
+        all_total_Room_Discount = 0.0;
+        all_charge_Room_1st_Day = 0.0;
+        all_charge_Room_Last_Day = 0.0;
+        all_total_Bill = 0.0;
+        all_total_Without_CusDiscount = 0.0;
+        all_total_With_Customer_Discount = 0.0;
+        all_total = 0.0;
+        all_total_VAT = 0.0;
+        all_day_Stay_Print = 0;
+        
         showUsersData();
     }
 
