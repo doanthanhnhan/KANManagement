@@ -292,6 +292,7 @@ public class FXMLAddNewRoomController implements Initializable {
         list_Type = roomTypeDAOImpl.getAllStringRoomType();
         if(list_Type.isEmpty()){
             roomTypeDAOImpl.addInitRoomType();
+            list_Type = roomTypeDAOImpl.getAllStringRoomType();
         }
         DAOCustomerBookingCheckIn.addCTMFree();
         if (listRoomsController != null) {
