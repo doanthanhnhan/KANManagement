@@ -17,6 +17,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -365,6 +366,19 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                                 DAODepartmentDecentralization.update_DepartmentDecentralization("DPM-Admin", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,
                                         true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
                             }
+//                            Create Password
+                            String list_pass;
+                            String random_pass = "";
+                            list_pass = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                            if (DAO.checkFirstLogin().equals(0)) {
+                                random_pass = "admin";
+                            } else {
+                                Random rand = new Random();
+                                for (int i = 0; i < 8; i++) {
+                                    int randomIndex = rand.nextInt(list_pass.length());
+                                    random_pass = random_pass + list_pass.charAt(randomIndex);
+                                }
+                            }
                             Boolean Sex;
                             Sex = sexMale.selectedProperty().getValue();
                             InfoEmployee Emp = new InfoEmployee();
@@ -379,12 +393,18 @@ public class FXMLAddNewEmloyeeController implements Initializable {
                             String Username = newId.getText();
                             MD5Encrypt m;
                             m = new MD5Encrypt();
-                            String Password = m.hashPass("123456");
+                            String Password = m.hashPass(random_pass);
                             DAO.AddUser(newId.getText(), Username, Password, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
                             DAO.setRoleUser(newId.getText());
                             DAO.Set_Role_Employee(Emp.getWork_Dept(), newId.getText());
-                            String content = "Username: " + newId.getText() + ", Password: 123456";
-                            Email.send_Email_Without_Attach(newGmail.getText(), "Default username and password", content);
+
+                            if (DAO.checkFirstLogin().equals(1)) {
+                                String content = "Username: " + newId.getText() + ", Password: admin";
+                                Email.send_Email_Without_Attach(newGmail.getText(), "Default username and password", content);
+                            } else {
+                                String content = "Username: " + newId.getText() + ", Password: " + random_pass;
+                                Email.send_Email_Without_Attach(newGmail.getText(), "Default username and password", content);
+                            }
                             if (!DAO.checkFirstLogin().equals(1)) {
                                 DAO.setUserLogs_With_MAC(FXMLLoginController.User_Login, "Create " + newId.getText(),
                                         LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress());

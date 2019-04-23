@@ -185,7 +185,7 @@ public class FXMLLoginController implements Initializable {
                         @Override
                         public void run() {
                             try {
-                                DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress(),txtUserName.getText());
+                                DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress(), txtUserName.getText());
                             } catch (SQLException | ClassNotFoundException ex) {
                                 Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -207,7 +207,7 @@ public class FXMLLoginController implements Initializable {
                             @Override
                             public void run() {
                                 try {
-                                    DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress(),txtUserName.getText());
+                                    DAO.check_MacAddress(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), GetInetAddress.getMacAddress(), txtUserName.getText());
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     Calendar cal = Calendar.getInstance();
                                     String logtime;
@@ -266,7 +266,12 @@ public class FXMLLoginController implements Initializable {
                                         roleDAOImpl = new RoleDAOImpl();
                                         userRole = roleDAOImpl.getEmployeeRole(txtUserName.getText());
                                         String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
-                                        stageEdit.setTitle(userFullName);
+                                        if (userRole.getEmployee_ID().equals("admin")) {
+                                            stageEdit.setTitle(userFullName +" (C)");
+                                        } else {
+                                            stageEdit.setTitle(userFullName);
+                                        }
+
                                         checkLoginComplete = true;
                                     }
                                     Scene scene1;

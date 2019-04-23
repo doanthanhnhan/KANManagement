@@ -490,12 +490,14 @@ public class FXMLInfoEmployeeController implements Initializable {
                             roleDAOImpl = new RoleDAOImpl();
                             userRole = roleDAOImpl.getEmployeeRole(FXMLLoginController.User_Login);
                             String userFullName = userRole.getFirst_Name() + " " + userRole.getMid_Name() + " " + userRole.getLast_Name();
-                            stage.setTitle(userFullName);
                             if (userRole.getEmployee_ID().equals("admin")) {
+                                stage.setTitle(userFullName + " (C)");
                                 stage.getIcons().add(new Image("/images/crown.png"));
                             } else if (userRole.getFirst_Name().equals("Nhân") || userRole.getLast_Name().equals("Nhân")) {
+                                stage.setTitle(userFullName);
                                 stage.getIcons().add(new Image("/images/female.png"));
                             } else {
+                                stage.setTitle(userFullName);
                                 stage.getIcons().add(new Image("/images/KAN Logo.png"));
                             }
                             stage.setScene(scene);
