@@ -290,7 +290,7 @@ public class FXMLAddNewRoomController implements Initializable {
         list_Status.addAll("Available", "Reserved", "Occupied", "Out");
         RoomTypeDAOImpl roomTypeDAOImpl = new RoomTypeDAOImpl();
         list_Type = roomTypeDAOImpl.getAllStringRoomType();
-        if(list_Type.isEmpty()){
+        if (list_Type.isEmpty()) {
             roomTypeDAOImpl.addInitRoomType();
             list_Type = roomTypeDAOImpl.getAllStringRoomType();
         }
@@ -337,6 +337,11 @@ public class FXMLAddNewRoomController implements Initializable {
                             + FormatName.format(txt_Room_ID.getText()),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Add successful!");
+                    Platform.runLater(() -> {
+                        if (mainOverViewPaneController != null) {
+                            mainOverViewPaneController.refreshForm();
+                        }
+                    });
                     return true;
                 }
                 return null;
@@ -486,6 +491,11 @@ public class FXMLAddNewRoomController implements Initializable {
                             + FormatName.format(txt_Room_ID.getText()),
                             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")), mainFormController.macAdress);
                     System.out.println("Updating successful!");
+                    Platform.runLater(() -> {
+                        if (mainOverViewPaneController != null) {
+                            mainOverViewPaneController.refreshForm();
+                        }
+                    });
                 }
                 return null;
             }
@@ -541,9 +551,9 @@ public class FXMLAddNewRoomController implements Initializable {
                 "DAY MUST CONTAIN 1-4 NUMBERS, \nMUST BE NOT CONTAIN CHARACTER OR CHARACTER SPECIAL !!!")) {
             System.out.println("Room day remaining false");
             check_Validate = false;
-        } else if (PatternValided.validateTextField(hBoxContent, txt_Room_ID, "^(?=.{1,20}$)[a-zA-Z][a-zA-Z0-9_-]+$",
+        } else if (PatternValided.validateTextField(hBoxContent, txt_Room_ID, "^(?=.{3,20}$)[a-zA-Z][a-zA-Z0-9_-]+$",
                 "ROOM ID MUST NOT BE EMPTY !!!",
-                "ID MUST CONTAIN 1-20 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR SPECIAL CHARACTER  !!!")) {
+                "ID MUST CONTAIN 3-20 CHARACTER, \nBEGINNING CHAR MUST NOT BE NUMBER OR SPECIAL CHARACTER  !!!")) {
             System.out.println("Room ID false");
             check_Validate = false;
         } else if (PatternValided.validateTextField(hBoxContent, txt_Room_On_Floor, "[\\d]{1,4}",

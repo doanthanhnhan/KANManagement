@@ -206,22 +206,22 @@ public class FXMLAccountController implements Initializable {
             HboxContent.getChildren().add(label);
             newSerectQuestion.requestFocus();
         } else if (newSerectAnswer.getText().equals("")) {
-            notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "SERECT ANSWER MUST NOT EMPTY !!!");
+            notificationFunction.notificationPasswordAccount(newSerectAnswer, HboxContent, "SERECT ANSWER MUST NOT EMPTY !!!");
 
         } else if (ConfirmAnswer.getText().equals("")) {
-            notificationFunction.notificationPassword(ConfirmAnswer, HboxContent, "CONFIRM SERECT ANSWER MUST NOT EMPTY !!!");
+            notificationFunction.notificationPasswordAccount(ConfirmAnswer, HboxContent, "CONFIRM SERECT ANSWER MUST NOT EMPTY !!!");
 
         } else if (!PatternValided.PatternPassword(newPassword.getText())) {
-            notificationFunction.notificationPassword(newPassword, HboxContent, "PASSWORD INCORRECT (EXAM:Abc12345,...(6-20 CHARACTERS) !!!");
+            notificationFunction.notificationPasswordAccount(newPassword, HboxContent, "PASSWORD INCORRECT (EXAM:Abc12345,...(8-20 CHARACTERS) !!!");
 
         } else if (!newPassword.getText().equals(newConfirmPassword.getText())) {
-            notificationFunction.notificationPassword(newPassword, HboxContent, "PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
+            notificationFunction.notificationPasswordAccount(newPassword, HboxContent, "PASSWORD AND PASSWORD CONFIRM DID NOT MATCH !!!");
 
         } else if (!PatternValided.PatternAnswer(newSerectAnswer.getText())) {
-            notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "ANSWER INCORRECT (ANSWER MUST HAVE 4-20 CHARACTER) !!!");
+            notificationFunction.notificationPasswordAccount(newSerectAnswer, HboxContent, "ANSWER INCORRECT (ANSWER MUST HAVE 4-20 CHARACTER) !!!");
 
         } else if (!newSerectAnswer.getText().equals(ConfirmAnswer.getText())) {
-            notificationFunction.notificationPassword(newSerectAnswer, HboxContent, "ANSWER AND ANSWER CONFIRM DID NOT MATCH !!!");
+            notificationFunction.notificationPasswordAccount(newSerectAnswer, HboxContent, "ANSWER AND ANSWER CONFIRM DID NOT MATCH !!!");
 
         } else {
             MD5Encrypt m;

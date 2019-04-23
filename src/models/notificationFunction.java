@@ -50,4 +50,20 @@ public class notificationFunction {
         hboxContent.getChildren().add(label);
         textField.requestFocus();
     }
+
+    public static void notificationPasswordAccount(JFXPasswordField textField, HBox hboxContent, String content) {
+        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+        icon.setSize("16");
+        icon.setStyleClass("jfx-glyhp-icon");
+        Label label = new Label();
+        label.setStyle("-fx-text-fill: red; -fx-font-size : 11px;-fx-font-weight: bold;");
+        label.setPrefSize(649, 35);
+        label.setText(content);
+        textField.setStyle("-jfx-focus-color: #FF2625;-jfx-unfocus-color: #FF2625;");
+        hboxContent.setSpacing(10);
+        hboxContent.getChildren().clear();
+        hboxContent.getChildren().add(icon);
+        hboxContent.getChildren().add(label);
+        textField.requestFocus();
+    }
 }
